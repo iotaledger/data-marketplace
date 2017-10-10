@@ -97,14 +97,21 @@ export default class extends React.Component {
                 {" "}
                 {deviceInfo.owner ? deviceInfo.owner : `--`}
               </DetailValue>
-            </DetailRow>
+            </DetailRow>{" "}
             <DetailRow>
+              <DetailKey>Manufacturer:</DetailKey>
+              <DetailValue>
+                {" "}
+                {deviceInfo.company ? deviceInfo.company : `--`}
+              </DetailValue>
+            </DetailRow>
+            {/* <DetailRow>
               <DetailKey>Data Types:</DetailKey>
               {deviceInfo.dataTypes &&
                 deviceInfo.dataTypes.map((type, i) => (
-                  <DetailValue>{` - ${type.name}`}</DetailValue>
+                  <DetailValue key={i}>{` - ${type.name}`}</DetailValue>
                 ))}
-            </DetailRow>
+            </DetailRow> */}
           </div>
         </Details>
         {/* <Details className="sensor-data-wrapper">
