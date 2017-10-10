@@ -83,8 +83,10 @@ export default props => (
         src="/static/icons/icon-drops.svg"
         alt="Weather sensor icon"
       />
-      <Desc>Soil Sensor</Desc>
-      <DeviceID>ID-34199</DeviceID>
+      <Desc>{props.deviceInfo.type && props.deviceInfo.type}</Desc>
+      <DeviceID>
+        {props.deviceInfo.sensorId && props.deviceInfo.sensorId}
+      </DeviceID>
     </Header>
     <RightHeader>
       <NavGraphics
