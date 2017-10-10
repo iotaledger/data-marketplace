@@ -68,6 +68,8 @@ const DetailValue = styled.p`
 
 export default class extends React.Component {
   render() {
+    console.log(this.props.deviceInfo)
+    var { deviceInfo } = this.props
     return (
       <Sidebar>
         <Details>
@@ -75,19 +77,33 @@ export default class extends React.Component {
           <div>
             <DetailRow>
               <DetailKey>Total data packets sent</DetailKey>
-              <DetailValue>21829</DetailValue>
+              <DetailValue>
+                {deviceInfo.totalPackets ? deviceInfo.totalPackets : `--`}
+              </DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailKey>Location:</DetailKey>
-              <DetailValue>Germany, Berlin</DetailValue>
+              <DetailValue>
+                {" "}
+                {deviceInfo.location
+                  ? `${deviceInfo.location.city}, ${deviceInfo.location
+                      .country} `
+                  : `--`}
+              </DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailKey>Owner:</DetailKey>
-              <DetailValue>Patrick Moore</DetailValue>
+              <DetailValue>
+                {" "}
+                {deviceInfo.owner ? deviceInfo.owner : `--`}
+              </DetailValue>
             </DetailRow>
             <DetailRow>
-              <DetailKey>Data Entry:</DetailKey>
-              <DetailValue>Lorem ipsum</DetailValue>
+              <DetailKey>Data Types:</DetailKey>
+              {deviceInfo.dataTypes &&
+                deviceInfo.dataTypes.map((type, i) => (
+                  <DetailValue>{` - ${type.name}`}</DetailValue>
+                ))}
             </DetailRow>
           </div>
         </Details>

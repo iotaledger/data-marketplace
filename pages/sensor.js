@@ -5,43 +5,20 @@ import FB from "../lib/db"
 import SensorNav from "../components/sensor-nav"
 import Modal from "../components/modal"
 import Sidebar from "../components/side-bar"
+import DataStream from "../components/data-stream"
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
     return { id: query.id }
   }
 
+  state = { deviceInfo: {}, packets: [] }
   async componentDidMount() {
-    console.log(this.props)
     var firebase = await FB()
     this.store = firebase.firestore
-    console.log(firebase.user.uid)
 
     var userRef = this.store.collection("users").doc(firebase.user.uid)
     var deviceRef = this.store.collection("devices").doc(this.props.id)
-
-    // var data = {
-    //   name: "Ada",
-    //   purchases: 1815
-    // }
-    // userRef.set(data)
-
-    var query = this.store.collection("devices").where("company", "==", "Bosch")
-    query.get().then(function(doc) {
-      console.log(doc)
-      if (doc.exists) {
-        console.log("Document data:", doc.data())
-      } else {
-        console.log("No such document!")
-      }
-    })
-    deviceRef.get().then(function(doc) {
-      if (doc.exists) {
-        console.log("Document data:", doc.data())
-      } else {
-        console.log("No such document!")
-      }
-    })
 
     userRef.get().then(function(doc) {
       if (doc.exists) {
@@ -51,25 +28,46 @@ export default class extends React.Component {
       }
     })
 
+    deviceRef.get().then(doc => {
+      if (doc.exists) {
+        console.log("Device Info:", doc.data())
+        this.setState({ deviceInfo: doc.data() })
+      } else {
+        console.log("No such document!")
+      }
+    })
     userRef
       .collection("purchases")
       .doc(this.props.id)
       .get()
-      .then(function(doc) {
+      .then(doc => {
         if (doc.exists) {
-          console.log("Document data:", doc.data())
+          console.log("Data Packets", doc.data())
+          this.setState({ packets: doc.data() })
         } else {
           console.log("No such document!")
         }
       })
+
+    // var query = this.store.collection("devices").where("company", "==", "Bosch")
+    // query.get().then(function(doc) {
+    //   console.log(doc)
+    //   if (doc.exists) {
+    //     console.log("Document data:", doc.data())
+    //   } else {
+    //     console.log("No such document!")
+    //   }
+    // })
   }
 
   render() {
+    var { deviceInfo, packets } = this.state
     return (
       <main>
-        <SensorNav />
+        <SensorNav {...this.state} />
         <Data>
-          <Sidebar />
+          <Sidebar {...this.state} />
+          <DataStream {...this.state} />
         </Data>
         {/* <Modal /> */}
       </main>
