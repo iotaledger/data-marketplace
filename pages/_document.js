@@ -1,8 +1,6 @@
 import Document, { Head, Main, NextScript } from "next/document"
 import { ServerStyleSheet, injectGlobal } from "styled-components"
 
-const GA_TRACKING_ID = "PUTHERE"
-
 export default class MyDocument extends Document {
   render() {
     const sheet = new ServerStyleSheet()
@@ -13,7 +11,8 @@ export default class MyDocument extends Document {
         <Head>
           <script
             async
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env
+              .GA_TRACKING_ID}`}
           />
           <script
             dangerouslySetInnerHTML={{
@@ -21,7 +20,7 @@ export default class MyDocument extends Document {
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments)};
                 gtag('js', new Date());
-                gtag('config', '${GA_TRACKING_ID}');
+                gtag('config', '${process.env.GA_TRACKING_ID}');
               `
             }}
           />
