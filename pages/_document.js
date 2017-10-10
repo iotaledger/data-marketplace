@@ -70,4 +70,25 @@ injectGlobal`
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
   }
+
+  @font-face {
+    font-family: 'Nunito Sans';
+    src: url('/static/fonts/NunitoSans-ExtraLight.ttf');
+    font-weight: 200;    
+  }
+  @font-face {
+    font-family: 'Nunito Sans';
+    src: url('/static/fonts/NunitoSans-Regular.ttf');
+    font-weight: 400;    
+  }
+  @font-face {
+    font-family: 'Nunito Sans';
+    src: url('/static/fonts/NunitoSans-Bold.ttf');
+    font-weight: 600;    
+  }  
+  @font-face {
+    font-family: 'Nunito Sans';
+    src: url('/static/fonts/NunitoSans-ExtraBold.ttf');
+    font-weight: 800;    
+  }
 `
