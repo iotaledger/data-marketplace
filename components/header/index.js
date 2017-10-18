@@ -13,8 +13,12 @@ export default class extends React.Component {
               <img src="/static/logotypes/logo-header.svg" alt="Logo IOTA" />
             </a>
             <Heading>
-              IOTA makes it possible to securely store, sell, and access data
-              streams.
+              IOTA makes it<br className="desktop-hidden-later mobile-hidden-later" />{" "}
+              possible<br className="tablet-hidden-later mobile-hidden-later" />{" "}
+              to securely<br className="desktop-hidden-later mobile-hidden-later" />{" "}
+              store, sell,<br className="tablet-hidden-later mobile-hidden-later" />{" "}
+              and access<br className="desktop-hidden-later mobile-hidden" />{" "}
+              data streams.
             </Heading>
             <Tagline>
               Never has getting access to diverse, fine-granular data been this
@@ -273,7 +277,7 @@ const Graphic = styled.img`
 const Graphic1 = Graphic.extend`
   top: 30px;
   left: 75%;
-  animation: 10s ${float(3)} ease infinite 0s;
+  animation: 5s ${float(3)} ease infinite 0s;
   @media (max-width: 1120px) {
     top: 10px;
     left: 110%;
@@ -283,7 +287,7 @@ const Graphic1 = Graphic.extend`
   }
 `
 const Graphic2 = Graphic.extend`
-  animation: 10s ${float(2)} ease infinite 0s;
+  animation: 5s ${float(2)} ease infinite 0s;
 
   @media (max-width: 1120px) {
     top: -65px;
@@ -310,7 +314,7 @@ const Graphic2 = Graphic.extend`
 const Graphic3 = Graphic.extend`
   top: 20px;
   left: 115px;
-  animation: 10s ${float(1)} ease ${Math.random() * 5 + "s"} infinite 0s;
+  animation: 5s ${float(1)} ease ${Math.random() * 5 + "s"} infinite 0s;
 
   @media (max-width: 1120px) {
     top: 10px;
