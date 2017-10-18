@@ -43,16 +43,11 @@ const CardWrapper = styled.div`
   }
 `
 
-export default class extends React.Component {
-  render() {
-    return (
-      <InfoCol>
-        <CardWrapper>
-          {Array(10)
-            .fill()
-            .map((_, i) => <SensorCard index={i} key={i} />)}
-        </CardWrapper>
-      </InfoCol>
-    )
-  }
-}
+export default props => (
+  <InfoCol>
+    <CardWrapper>
+      {props.packets[0] &&
+        props.packets.map((_, i) => <SensorCard index={i} key={i} />)}
+    </CardWrapper>
+  </InfoCol>
+)
