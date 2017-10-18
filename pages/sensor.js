@@ -13,6 +13,7 @@ export default class extends React.Component {
   }
 
   state = { deviceInfo: {}, packets: [] }
+
   async componentDidMount() {
     var firebase = await FB()
     this.store = firebase.firestore
@@ -36,18 +37,19 @@ export default class extends React.Component {
         console.log("No such document!")
       }
     })
-    userRef
-      .collection("purchases")
-      .doc(this.props.id)
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          console.log("Data Packets", doc.data())
-          this.setState({ packets: doc.data() })
-        } else {
-          console.log("No such document!")
-        }
-      })
+
+    try {
+      var data = await this.getPackets(userRef)
+      data.packets.map(ref =>
+        ref.get().then(item => {
+          console.log(item.data())
+          return item.data()
+        })
+      )
+    } catch (e) {
+      // alert(e)
+      console.log(e)
+    }
 
     // var query = this.store.collection("devices").where("company", "==", "Bosch")
     // query.get().then(function(doc) {
@@ -58,6 +60,25 @@ export default class extends React.Component {
     //     console.log("No such document!")
     //   }
     // })
+    this.setState({ userRef, deviceRef })
+  }
+
+  getPackets = userRef => {
+    return new Promise((resolve, reject) => {
+      userRef
+        .collection("purchases")
+        .doc(this.props.id)
+        .get()
+        .then(doc => {
+          if (doc.exists) {
+            console.log("Data Packets", doc.data())
+            resolve(doc.data())
+          } else {
+            console.log("No such document!")
+            reject("No packets purchased")
+          }
+        })
+    })
   }
 
   render() {
