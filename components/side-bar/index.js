@@ -68,7 +68,6 @@ const DetailValue = styled.p`
 
 export default class extends React.Component {
   render() {
-    console.log(this.props.deviceInfo)
     var { deviceInfo } = this.props
     return (
       <Sidebar>
