@@ -72,27 +72,27 @@ injectGlobal`
 
   
   .tablet-hidden {
-    display: block;
-    @media (max-width: 1120px){
+    display: inline;
+    @media screen and (max-width: 1120px){
       display: none;      
     }
   }
   .mobile-hidden {
-    display: block;  
-    @media (max-width: 760px){
+    display: inline;  
+    @media screen and (max-width: 760px){
       display: none;      
     }
   }
-  .desktop-hidden-later {
-    display: block;
-    @media (min-width: 970px){
+  .desktop-hidden {
+    display: inline;
+    @media screen and  (max-width: 970px){
       display: none;      
     }
   }
 
   .tablet-hidden-later {
-    display: block;
-    @media (max-width: 970px){
+    display: inline;
+    @media screen and (max-width: 970px){
       display: none;      
     }
   }
