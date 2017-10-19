@@ -7,7 +7,9 @@ const Container = styled.section`
   padding: 0 15px;
   margin-right: auto;
   margin-left: auto;
-  margin: 40px 0 20px;
+  @media (max-width: 760px) {
+    margin: 40px 0 20px;
+  }
 `
 const Header = styled.h3`
   @media (max-width: 760px) {
@@ -38,9 +40,11 @@ const InfoRow = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-bottom: none;
   }
   display: flex;
   justify-content: space-between;
+  margin-bottom: 100px;
 `
 const InfoCol = styled.div`
   @media (max-width: 760px) {
