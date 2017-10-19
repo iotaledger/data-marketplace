@@ -1,6 +1,62 @@
 import React from "react"
 import styled from "styled-components"
 
+export default props => (
+  <SensorCard>
+    <CardHeader>
+      <HeaderRow>
+        <HeaderAccent>Wednesday</HeaderAccent> 14 June, 2017 2:30 pm
+      </HeaderRow>
+    </CardHeader>
+    <Row>
+      <RowHalf>
+        <RowDesc>Temperature:</RowDesc>
+        <RowValue>
+          68 <RowUnit>°F</RowUnit>
+        </RowValue>
+      </RowHalf>
+      <RowHalf>
+        <RowDesc>Humidity:</RowDesc>
+        <RowValue>
+          20 <RowUnit>%</RowUnit>
+        </RowValue>
+      </RowHalf>
+    </Row>
+    <Row>
+      <RowHalf>
+        <RowDesc>Wind derection:</RowDesc>
+        <RowValue>
+          <WindIcon
+            src="/static/icons/icon-wind-dir.svg"
+            className="icon-wind-dir"
+            alt="Icon wind direction"
+          />
+          <RowUnit>NNE</RowUnit>
+        </RowValue>
+      </RowHalf>
+      <RowHalf>
+        <RowDesc>Wind speed:</RowDesc>
+        <RowValue>
+          10,5 <RowUnit>m/s</RowUnit>
+        </RowValue>
+      </RowHalf>
+    </Row>
+    <Row>
+      <RowHalf>
+        <RowDesc>Pressure:</RowDesc>
+        <RowValue>
+          1033 <RowUnit>hPa</RowUnit>
+        </RowValue>
+      </RowHalf>
+      <RowHalf>
+        <RowDesc>Rain:</RowDesc>
+        <RowValue>
+          200,5 <RowUnit>mm</RowUnit>
+        </RowValue>
+      </RowHalf>
+    </Row>
+  </SensorCard>
+)
 const SensorCard = styled.div`
   position: relative;
   width: 360px;
@@ -171,60 +227,3 @@ const WindIcon = styled.img`
   position: relative;
   top: -2px;
 `
-
-export default props => (
-  <SensorCard>
-    <CardHeader>
-      <HeaderRow>
-        <HeaderAccent>Wednesday</HeaderAccent> 14 June, 2017 2:30 pm
-      </HeaderRow>
-    </CardHeader>
-    <Row>
-      <RowHalf>
-        <RowDesc>Temperature:</RowDesc>
-        <RowValue>
-          68 <RowUnit>°F</RowUnit>
-        </RowValue>
-      </RowHalf>
-      <RowHalf>
-        <RowDesc>Humidity:</RowDesc>
-        <RowValue>
-          20 <RowUnit>%</RowUnit>
-        </RowValue>
-      </RowHalf>
-    </Row>
-    <Row>
-      <RowHalf>
-        <RowDesc>Wind derection:</RowDesc>
-        <RowValue>
-          <WindIcon
-            src="/static/icons/icon-wind-dir.svg"
-            className="icon-wind-dir"
-            alt="Icon wind direction"
-          />
-          <RowUnit>NNE</RowUnit>
-        </RowValue>
-      </RowHalf>
-      <RowHalf>
-        <RowDesc>Wind speed:</RowDesc>
-        <RowValue>
-          10,5 <RowUnit>m/s</RowUnit>
-        </RowValue>
-      </RowHalf>
-    </Row>
-    <Row>
-      <RowHalf>
-        <RowDesc>Pressure:</RowDesc>
-        <RowValue>
-          1033 <RowUnit>hPa</RowUnit>
-        </RowValue>
-      </RowHalf>
-      <RowHalf>
-        <RowDesc>Rain:</RowDesc>
-        <RowValue>
-          200,5 <RowUnit>mm</RowUnit>
-        </RowValue>
-      </RowHalf>
-    </Row>
-  </SensorCard>
-)
