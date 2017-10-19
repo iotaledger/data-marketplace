@@ -24,9 +24,13 @@ export default class MyDocument extends Document {
               `
             }}
           />
-          <title>My page</title>
+          <title>IOTA Data Market</title>
           {styleTags}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link
+            href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <div className="root">{main}</div>
@@ -70,7 +74,14 @@ injectGlobal`
     -webkit-font-smoothing: antialiased;
   }
 
+  .tablet-hidden-later {
+    display: inline;
+    @media screen and (max-width: 970px){
+      display: none;      
+    }
+  }
   
+
   .tablet-hidden {
     display: inline;
     @media screen and (max-width: 1120px){
@@ -85,17 +96,32 @@ injectGlobal`
   }
   .desktop-hidden {
     display: inline;
-    @media screen and  (max-width: 970px){
-      display: none;      
-    }
-  }
-
-  .tablet-hidden-later {
-    display: inline;
     @media screen and (max-width: 970px){
       display: none;      
     }
   }
+  .desktop-hidden-later {
+    display: inline;    
+    @media (min-width: 970px){
+      display: none;
+      
+    }
+  }
+ 
+  .mapboxgl-popup-tip {
+    color: transparent !important;
+    border-bottom-color:transparent !important;
+    border-right-color:transparent !important;
+    border-left-color:transparent !important;
+    border-top-color:transparent !important;
+  }
+  .mapboxgl-popup-content {
+    position: relative;
+    background: none !important;
+    border-radius: none !important;
+    box-shadow: none !important;
+    padding: none !important;
+    pointer-events: auto;
   @font-face {
     font-family: 'Nunito Sans';
     src: url('/static/fonts/NunitoSans-ExtraLight.ttf');
