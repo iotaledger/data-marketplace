@@ -3,6 +3,8 @@ import styled from "styled-components"
 
 import Header from "../components/header"
 import Features from "../components/feature-section"
+import Map from "../components/map"
+import SensorList from "../components/sensor-list"
 
 export default class extends React.Component {
   componentDidMount = async () => {}
@@ -12,6 +14,8 @@ export default class extends React.Component {
       <Main>
         <Header />
         <Features />
+        <Map />
+        <SensorList />
       </Main>
     )
   }
