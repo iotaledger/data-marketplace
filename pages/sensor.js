@@ -1,11 +1,14 @@
-import React from "react"
-import styled from "styled-components"
-import FB from "../lib/db"
+import React from 'react'
+import styled from 'styled-components'
+import FB, { getData } from '../lib/db'
+import IOTA from 'iota.lib.js'
 
-import SensorNav from "../components/sensor-nav"
-import Modal from "../components/modal"
-import Sidebar from "../components/side-bar"
-import DataStream from "../components/data-stream"
+import SensorNav from '../components/sensor-nav'
+import Modal from '../components/modal'
+import Sidebar from '../components/side-bar'
+import DataStream from '../components/data-stream'
+
+const iota = new IOTA({ provider: `http://p103.iotaledger.net:14700/` })
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
@@ -15,70 +18,20 @@ export default class extends React.Component {
   state = { deviceInfo: {}, packets: [] }
 
   async componentDidMount() {
-    var firebase = await FB()
-    this.store = firebase.firestore
+    const firebase = await FB()
+    const store = firebase.firestore
+    var userRef = store.collection('users').doc(`vwaiTFNKJAR9U30hrT8OCA1RgJF3`)
+    var deviceRef = store.collection('devices').doc(this.props.id)
+    var data = await getData(deviceRef, userRef, this.props.id)
 
-    var userRef = this.store.collection("users").doc(firebase.user.uid)
-    var deviceRef = this.store.collection("devices").doc(this.props.id)
-
-    userRef.get().then(function(doc) {
-      if (doc.exists) {
-        console.log("Document data:", doc.data())
-      } else {
-        console.log("No such document!")
-      }
-    })
-
-    deviceRef.get().then(doc => {
-      if (doc.exists) {
-        console.log("Device Info:", doc.data())
-        this.setState({ deviceInfo: doc.data() })
-      } else {
-        console.log("No such document!")
-      }
-    })
-
-    try {
-      var data = await this.getPackets(userRef)
-      data.packets.map(ref =>
-        ref.get().then(item => {
-          console.log(item.data())
-          return item.data()
-        })
+    var mamState = Mam.init(iota)
+    console.log(mamState)
+    this.setState({ userRef, deviceRef, deviceInfo: data.device })
+    console.log(
+      await Mam.fetch(
+        `KEFZPXMCXIMEUTWZAHEUK9UUXGDPTREMWQHKKFZLPBLBFJMDESQDFHBHCKQHAUUCPJXFIYLPVRUEBIWHO`
       )
-    } catch (e) {
-      // alert(e)
-      console.log(e)
-    }
-
-    // var query = this.store.collection("devices").where("company", "==", "Bosch")
-    // query.get().then(function(doc) {
-    //   console.log(doc)
-    //   if (doc.exists) {
-    //     console.log("Document data:", doc.data())
-    //   } else {
-    //     console.log("No such document!")
-    //   }
-    // })
-    this.setState({ userRef, deviceRef })
-  }
-
-  getPackets = userRef => {
-    return new Promise((resolve, reject) => {
-      userRef
-        .collection("purchases")
-        .doc(this.props.id)
-        .get()
-        .then(doc => {
-          if (doc.exists) {
-            console.log("Data Packets", doc.data())
-            resolve(doc.data())
-          } else {
-            console.log("No such document!")
-            reject("No packets purchased")
-          }
-        })
-    })
+    )
   }
 
   render() {
