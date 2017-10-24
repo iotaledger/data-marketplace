@@ -1,5 +1,5 @@
-import React from "react"
-import styled, { keyframes } from "styled-components"
+import React from 'react'
+import styled, { keyframes } from 'styled-components'
 
 export default class extends React.Component {
   state = {}
@@ -13,11 +13,11 @@ export default class extends React.Component {
               <img src="/static/logotypes/logo-header.svg" alt="Logo IOTA" />
             </a>
             <Heading>
-              IOTA makes it<br className="desktop-hidden-later mobile-hidden-later" />{" "}
-              possible<br className="tablet-hidden-later mobile-hidden-later" />{" "}
-              to securely<br className="desktop-hidden-later mobile-hidden-later" />{" "}
-              store, sell,<br className="tablet-hidden-later mobile-hidden-later" />{" "}
-              and access<br className="desktop-hidden-later mobile-hidden" />{" "}
+              IOTA makes it<br className="desktop-hidden-later mobile-hidden-later" />{' '}
+              possible<br className="tablet-hidden-later mobile-hidden-later" />{' '}
+              to securely<br className="desktop-hidden-later mobile-hidden-later" />{' '}
+              store, sell,<br className="tablet-hidden-later mobile-hidden-later" />{' '}
+              and access<br className="desktop-hidden-later mobile-hidden" />{' '}
               data streams.
             </Heading>
             <Tagline>
@@ -26,20 +26,20 @@ export default class extends React.Component {
             </Tagline>
             <Button type="button">Try it yourself</Button>
           </Info>
-          <Graphics class="hero-header-graphics">
+          <Graphics>
             <Graphic1
               src="/static/ilustrations/header-image-3.png"
-              srcset="/static/ilustrations/header-image-3@2x.png 2x"
+              srcSet="/static/ilustrations/header-image-3@2x.png 2x"
               alt="IOTA sensor data image"
             />
             <Graphic2
               src="/static/ilustrations/header-image-1.png"
-              srcset="/static/ilustrations/header-image-1@2x.png 2x"
+              srcSet="/static/ilustrations/header-image-1@2x.png 2x"
               alt="IOTA sensor data image"
             />
             <Graphic3
               src="/static/ilustrations/header-image-2.png"
-              srcset="/static/ilustrations/header-image-2@2x.png 2x"
+              srcSet="/static/ilustrations/header-image-2@2x.png 2x"
               alt="IOTA sensor data image"
             />
             <GraphicBlock />
@@ -150,7 +150,7 @@ const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  font: 15px "Nunito Sans", sans-serif;
+  font: 15px 'Nunito Sans', sans-serif;
   letter-spacing: 0.47px;
   padding: 20px 38px;
   border-radius: 100px;
@@ -182,7 +182,7 @@ const Graphics = styled.div`
     left: 60px;
     width: 135px;
     height: 50px;
-    content: "";
+    content: '';
     background-image: linear-gradient(-206deg, #42e4d6 0%, #00b0fd 100%);
     position: absolute;
     border-radius: 6px;
@@ -212,7 +212,7 @@ const Graphics = styled.div`
     left: 255px;
     width: 110px;
     height: 40px;
-    content: "";
+    content: '';
     background-image: linear-gradient(-206deg, #42e4d6 0%, #00b0fd 100%);
     position: absolute;
     border-radius: 6px;
@@ -266,7 +266,7 @@ const float = num => {
   return keyframes`
       0% {transform: translateY(0px) translateX(0px);}
       50% {transform: translateY(${Math.random() * -5 +
-        "px"}) translateX(${Math.random() * -3 + "px"});}
+        'px'}) translateX(${Math.random() * -3 + 'px'});}
       100% {transform: translateY(0px) translateX(0px);}`
 }
 
@@ -314,7 +314,7 @@ const Graphic2 = Graphic.extend`
 const Graphic3 = Graphic.extend`
   top: 20px;
   left: 115px;
-  animation: 5s ${float(1)} ease ${Math.random() * 5 + "s"} infinite 0s;
+  animation: 5s ${float(1)} ease ${Math.random() * 5 + 's'} infinite 0s;
 
   @media (max-width: 1120px) {
     top: 10px;
