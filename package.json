@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "firebase": "^4.5.2",
+    "iota.lib.js": "l3wi/iota.lib.js",
     "next": "3.2.2",
     "next-routes": "^1.1.0",
     "react": "^15.5.4",
