@@ -1,8 +1,6 @@
 import Document, { Head, Main, NextScript } from "next/document"
 import { ServerStyleSheet, injectGlobal } from "styled-components"
 
-const GA_TRACKING_ID = "PUTHERE"
-
 export default class MyDocument extends Document {
   render() {
     const sheet = new ServerStyleSheet()
@@ -13,7 +11,8 @@ export default class MyDocument extends Document {
         <Head>
           <script
             async
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env
+              .GA_TRACKING_ID}`}
           />
           <script
             dangerouslySetInnerHTML={{
@@ -21,13 +20,17 @@ export default class MyDocument extends Document {
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments)};
                 gtag('js', new Date());
-                gtag('config', '${GA_TRACKING_ID}');
+                gtag('config', '${process.env.GA_TRACKING_ID}');
               `
             }}
           />
-          <title>My page</title>
+          <title>IOTA Data Market</title>
           {styleTags}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link
+            href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css"
+            rel="stylesheet"
+          />
         </Head>
         <body>
           <div className="root">{main}</div>
@@ -69,5 +72,74 @@ injectGlobal`
   * {
     box-sizing: border-box;
     -webkit-font-smoothing: antialiased;
+  }
+
+  .tablet-hidden-later {
+    display: inline;
+    @media screen and (max-width: 970px){
+      display: none;      
+    }
+  }
+  
+
+  .tablet-hidden {
+    display: inline;
+    @media screen and (max-width: 1120px){
+      display: none;      
+    }
+  }
+  .mobile-hidden {
+    display: inline;  
+    @media screen and (max-width: 760px){
+      display: none;      
+    }
+  }
+  .desktop-hidden {
+    display: inline;
+    @media screen and (max-width: 970px){
+      display: none;      
+    }
+  }
+  .desktop-hidden-later {
+    display: inline;    
+    @media (min-width: 970px){
+      display: none;
+      
+    }
+  }
+ 
+  .mapboxgl-popup-tip {
+    color: transparent !important;
+    border-bottom-color:transparent !important;
+    border-right-color:transparent !important;
+    border-left-color:transparent !important;
+    border-top-color:transparent !important;
+  }
+  .mapboxgl-popup-content {
+    position: relative;
+    background: none !important;
+    border-radius: none !important;
+    box-shadow: none !important;
+    padding: none !important;
+    pointer-events: auto;
+  @font-face {
+    font-family: 'Nunito Sans';
+    src: url('/static/fonts/NunitoSans-ExtraLight.ttf');
+    font-weight: 200;    
+  }
+  @font-face {
+    font-family: 'Nunito Sans';
+    src: url('/static/fonts/NunitoSans-Regular.ttf');
+    font-weight: 400;    
+  }
+  @font-face {
+    font-family: 'Nunito Sans';
+    src: url('/static/fonts/NunitoSans-Bold.ttf');
+    font-weight: 600;    
+  }  
+  @font-face {
+    font-family: 'Nunito Sans';
+    src: url('/static/fonts/NunitoSans-ExtraBold.ttf');
+    font-weight: 800;    
   }
 `

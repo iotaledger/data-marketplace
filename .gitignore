@@ -30,3 +30,4 @@ node_modules
 .env.production
 .next/
 .DS_Store
+now.json
