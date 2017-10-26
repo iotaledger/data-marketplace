@@ -34,6 +34,15 @@ export default class extends React.Component {
     )
   }
 
+  saveData = data => {
+    console.log(JSON.parse(iota.utils.fromTrytes(data)))
+    var packets = [
+      ...this.state.packets,
+      JSON.parse(iota.utils.fromTrytes(data))
+    ]
+    this.setState({ packets })
+  }
+
   render() {
     var { deviceInfo, packets } = this.state
     return (
