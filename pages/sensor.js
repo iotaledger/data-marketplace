@@ -18,22 +18,30 @@ export default class extends React.Component {
   state = { deviceInfo: {}, packets: [] }
 
   async componentDidMount() {
+    // Firebase
     const firebase = await FB()
     const store = firebase.firestore
+    // Get data
     var userRef = store.collection('users').doc(`vwaiTFNKJAR9U30hrT8OCA1RgJF3`)
     var deviceRef = store.collection('devices').doc(this.props.id)
     var data = await getData(deviceRef, userRef, this.props.id)
 
+    // Manipulate array to get the data in.
+    var layout = []
+    data.device.dataTypes.map((item, i) => {
+      if (!layout[Math.floor(i / 2)]) layout[Math.floor(i / 2)] = []
+      layout[Math.floor(i / 2)].push(item)
+    })
+    this.setState({ userRef, deviceRef, deviceInfo: data.device, layout })
+    // MAM
     var mamState = Mam.init(iota)
-    console.log(mamState)
-    this.setState({ userRef, deviceRef, deviceInfo: data.device })
-    console.log(
-      await Mam.fetch(
-        `KEFZPXMCXIMEUTWZAHEUK9UUXGDPTREMWQHKKFZLPBLBFJMDESQDFHBHCKQHAUUCPJXFIYLPVRUEBIWHO`
-      )
-    )
+    var packets = data.packets.map(async (packet, i) => {
+      var packet = await Mam.fetchSingle(packet.root, null)
+      console.log(packet)
+      this.saveData(packet.payload)
+    })
   }
-
+  // Append datax
   saveData = data => {
     console.log(JSON.parse(iota.utils.fromTrytes(data)))
     var packets = [
