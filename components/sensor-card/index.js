@@ -5,7 +5,6 @@ import { format } from 'date-fns'
 export default props => (
   <SensorCard>
     <CardHeader>
-      {console.log(props)}
       <HeaderRow>
         <HeaderAccent>{format(props.packet.time, 'dddd')}</HeaderAccent>{' '}
         {format(props.packet.time, 'DD MMMM, YYYY H:mm a ')}
