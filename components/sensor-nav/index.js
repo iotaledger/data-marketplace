@@ -1,5 +1,5 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
 const Main = styled.nav`
   display: flex;
@@ -34,7 +34,7 @@ const Back = styled.a`
 `
 
 const Desc = styled.span`
-  font: 12px/16px "Nunito Sans", sans-serif;
+  font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
   position: absolute;
 `
@@ -89,11 +89,11 @@ export default props => (
       </DeviceID>
     </Header>
     <RightHeader>
-      <NavGraphics
+      {/* <NavGraphics
         src="/static/ilustrations/sensor-image.png"
         srcSet="/static/ilustrations/sensor-image@2x.png 2x"
         alt="IOTA sensor ilustration"
-      />
+      /> */}
       <NavGraphics
         src="/static/ilustrations/sensor-location-image.png"
         srcSet="/static/ilustrations/sensor-location-image@2x.png 2x"

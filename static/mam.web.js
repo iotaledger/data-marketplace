@@ -31806,6 +31806,12 @@ var pify = __webpack_require__(539);
 var iota = {};
 var Mam = {};
 
+/**
+ * Initialisation function which returns a state object
+ * @param  {object} externalIOTA
+ * @param  {string} seed
+ * @param  {integer} security
+ */
 var init = function init() {
   var externalIOTA = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
   var seed = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : keyGen(81);
@@ -31832,7 +31838,12 @@ var init = function init() {
     seed: seed
   };
 };
-
+/**
+ * Add a subscription to your state object
+ * @param  {object} state
+ * @param  {string} channelRoot
+ * @param  {string} channelKey
+ */
 var subscribe = function subscribe(state, channelRoot) {
   var channelKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
 
@@ -31845,10 +31856,14 @@ var subscribe = function subscribe(state, channelRoot) {
   };
   return state;
 };
-
-var create = function create(state, message) {
+/**
+ * cretae 
+ * @param  {object} state
+ * @param  {sting} message // Tryte encoded string
+ */
+var create = function create(state, message, sidekey) {
   var channel = state.channel;
-  var mam = Mam.createMessage(state.seed, message, null, channel);
+  var mam = Mam.createMessage(state.seed, message, sidekey || channel.side_key, channel);
   // If the tree is exhausted.
   if (channel.index == channel.count - 1) {
     // change start to begining of next tree.
@@ -31878,15 +31893,16 @@ var decode = function decode(payload, side_key, root) {
 };
 
 var fetch = function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(address) {
-    var consumedAll, messages, nextRoot, transactionCount, messageCount, hashes, messagesGen, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, message, payload, unmasked;
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(address, sidekey, callback) {
+    var consumedAll, messages, nextRoot, transactionCount, messageCount, hashes, messagesGen, _iteratorNormalCompletion, _didIteratorError, _iteratorError, _iterator, _step, message, unmasked, resp;
 
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
             consumedAll = false;
-            messages = [];
+
+            if (!callback) messages = [];
             nextRoot = address;
             transactionCount = 0;
             messageCount = 0;
@@ -31933,10 +31949,15 @@ var fetch = function () {
               message = _step.value;
 
               try {
-                payload = message;
-                unmasked = decode(payload, null, nextRoot);
+                // Unmask the message
+                unmasked = decode(message, sidekey, nextRoot);
+                // Push payload into the messages array
 
-                messages.push(unmasked.payload);
+                if (!callback) {
+                  messages.push(unmasked.payload);
+                } else {
+                  callback(unmasked.payload);
+                }
                 nextRoot = unmasked.next_root;
               } catch (e) {
                 console.error('failed to parse: ', e);
@@ -31983,12 +32004,13 @@ var fetch = function () {
 
             console.log('Total transaction count: ', transactionCount);
 
-            return _context.abrupt('return', {
-              nextRoot: nextRoot,
-              messages: messages
-            });
+            resp = {};
 
-          case 41:
+            resp.nextRoot = nextRoot;
+            if (!callback) resp.messages = messages;
+            return _context.abrupt('return', resp);
+
+          case 44:
           case 'end':
             return _context.stop();
         }
@@ -31996,45 +32018,144 @@ var fetch = function () {
     }, _callee, undefined, [[21, 25, 29, 37], [30,, 32, 36]]);
   }));
 
-  return function fetch(_x5) {
+  return function fetch(_x5, _x6, _x7) {
     return _ref.apply(this, arguments);
+  };
+}();
+
+var fetchSingle = function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(address, sidekey) {
+    var hashes, messagesGen, _iteratorNormalCompletion2, _didIteratorError2, _iteratorError2, _iterator2, _step2, message, unmasked;
+
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.next = 2;
+            return pify(iota.api.findTransactions.bind(iota.api))({
+              addresses: [address]
+            });
+
+          case 2:
+            hashes = _context2.sent;
+            _context2.next = 5;
+            return txHashesToMessages(hashes);
+
+          case 5:
+            messagesGen = _context2.sent;
+            _iteratorNormalCompletion2 = true;
+            _didIteratorError2 = false;
+            _iteratorError2 = undefined;
+            _context2.prev = 9;
+            _iterator2 = messagesGen[Symbol.iterator]();
+
+          case 11:
+            if (_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done) {
+              _context2.next = 24;
+              break;
+            }
+
+            message = _step2.value;
+            _context2.prev = 13;
+
+            // Unmask the message
+            unmasked = decode(message, sidekey, address);
+            // Return payload
+
+            return _context2.abrupt('return', { payload: unmasked.payload, nextRoot: unmasked.next_root });
+
+          case 18:
+            _context2.prev = 18;
+            _context2.t0 = _context2['catch'](13);
+
+            console.error('failed to parse: ', _context2.t0);
+
+          case 21:
+            _iteratorNormalCompletion2 = true;
+            _context2.next = 11;
+            break;
+
+          case 24:
+            _context2.next = 30;
+            break;
+
+          case 26:
+            _context2.prev = 26;
+            _context2.t1 = _context2['catch'](9);
+            _didIteratorError2 = true;
+            _iteratorError2 = _context2.t1;
+
+          case 30:
+            _context2.prev = 30;
+            _context2.prev = 31;
+
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+              _iterator2.return();
+            }
+
+          case 33:
+            _context2.prev = 33;
+
+            if (!_didIteratorError2) {
+              _context2.next = 36;
+              break;
+            }
+
+            throw _iteratorError2;
+
+          case 36:
+            return _context2.finish(33);
+
+          case 37:
+            return _context2.finish(30);
+
+          case 38:
+          case 'end':
+            return _context2.stop();
+        }
+      }
+    }, _callee2, undefined, [[9, 26, 30, 38], [13, 18], [31,, 33, 37]]);
+  }));
+
+  return function fetchSingle(_x8, _x9) {
+    return _ref2.apply(this, arguments);
   };
 }();
 
 var listen = function listen(channel, callback) {
   var root = channel.root;
-  return setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+  return setTimeout(_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
     var resp;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             console.log('Fetching');
-            _context2.next = 3;
+            _context3.next = 3;
             return fetch(root);
 
           case 3:
-            resp = _context2.sent;
+            resp = _context3.sent;
 
             root = resp.nextRoot;
             callback(resp.messages);
 
           case 6:
           case 'end':
-            return _context2.stop();
+            return _context3.stop();
         }
       }
-    }, _callee2, undefined);
+    }, _callee3, undefined);
   })), channel.timeout);
 };
 
-// Sync requests
+// Parse bundles and
 var txHashesToMessages = function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(hashes) {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(hashes) {
     var bundles, processTx, objs;
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
             bundles = {};
 
@@ -32061,12 +32182,12 @@ var txHashesToMessages = function () {
               }
             };
 
-            _context3.next = 4;
+            _context4.next = 4;
             return pify(iota.api.getTransactionsObjects.bind(iota.api))(hashes);
 
           case 4:
-            objs = _context3.sent;
-            return _context3.abrupt('return', objs.map(function (result) {
+            objs = _context4.sent;
+            return _context4.abrupt('return', objs.map(function (result) {
               return processTx(result);
             }).filter(function (item) {
               return item !== undefined;
@@ -32074,23 +32195,23 @@ var txHashesToMessages = function () {
 
           case 6:
           case 'end':
-            return _context3.stop();
+            return _context4.stop();
         }
       }
-    }, _callee3, undefined);
+    }, _callee4, undefined);
   }));
 
-  return function txHashesToMessages(_x6) {
-    return _ref3.apply(this, arguments);
+  return function txHashesToMessages(_x10) {
+    return _ref4.apply(this, arguments);
   };
 }();
 
 var attach = function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(trytes, root) {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(trytes, root) {
     var transfers, objs;
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context5.prev = _context5.next) {
           case 0:
             transfers = [{
               address: root,
@@ -32099,31 +32220,31 @@ var attach = function () {
             }];
             // if (isClient) curl.overrideAttachToTangle(iota)
 
-            _context4.prev = 1;
-            _context4.next = 4;
+            _context5.prev = 1;
+            _context5.next = 4;
             return pify(iota.api.sendTransfer.bind(iota.api))(keyGen(81), 5, 9, transfers);
 
           case 4:
-            objs = _context4.sent;
+            objs = _context5.sent;
 
             console.log('Message attached');
-            return _context4.abrupt('return', objs);
+            return _context5.abrupt('return', objs);
 
           case 9:
-            _context4.prev = 9;
-            _context4.t0 = _context4['catch'](1);
-            return _context4.abrupt('return', console.error('failed to attach message:', '\n', _context4.t0));
+            _context5.prev = 9;
+            _context5.t0 = _context5['catch'](1);
+            return _context5.abrupt('return', console.error('failed to attach message:', '\n', _context5.t0));
 
           case 12:
           case 'end':
-            return _context4.stop();
+            return _context5.stop();
         }
       }
-    }, _callee4, undefined, [[1, 9]]);
+    }, _callee5, undefined, [[1, 9]]);
   }));
 
-  return function attach(_x7, _x8) {
-    return _ref4.apply(this, arguments);
+  return function attach(_x11, _x12) {
+    return _ref5.apply(this, arguments);
   };
 }();
 
@@ -32148,6 +32269,7 @@ module.exports = {
   create: create,
   decode: decode,
   fetch: fetch,
+  fetchSingle: fetchSingle,
   attach: attach,
   listen: listen,
   getRoot: getRoot,
