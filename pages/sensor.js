@@ -37,7 +37,6 @@ export default class extends React.Component {
     var mamState = Mam.init(iota)
     var packets = data.packets.map(async (packet, i) => {
       var packet = await Mam.fetchSingle(packet.root, null)
-      console.log(packet)
       this.saveData(packet.payload)
     })
   }
