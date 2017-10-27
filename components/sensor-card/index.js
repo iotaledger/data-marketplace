@@ -1,28 +1,31 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
+import { format } from 'date-fns'
 
 export default props => (
   <SensorCard>
     <CardHeader>
       <HeaderRow>
-        <HeaderAccent>Wednesday</HeaderAccent> 14 June, 2017 2:30 pm
+        <HeaderAccent>{format(props.packet.time, 'dddd')}</HeaderAccent>{' '}
+        {format(props.packet.time, 'DD MMMM, YYYY H:mm a ')}
       </HeaderRow>
     </CardHeader>
-    <Row>
-      <RowHalf>
-        <RowDesc>Temperature:</RowDesc>
-        <RowValue>
-          68 <RowUnit>°F</RowUnit>
-        </RowValue>
-      </RowHalf>
-      <RowHalf>
-        <RowDesc>Humidity:</RowDesc>
-        <RowValue>
-          20 <RowUnit>%</RowUnit>
-        </RowValue>
-      </RowHalf>
-    </Row>
-    <Row>
+    {props.layout.map((row, i) => (
+      <Row key={`sensor-${i}`}>
+        {row.map((item, i) => (
+          <RowHalf key={`item-${i}`}>
+            <RowDesc>{item.name}:</RowDesc>
+            <RowValue>
+              {(props.packet && props.packet.data[item.id.toLowerCase()]) ||
+                '--'}
+              <RowUnit>{item.unit}</RowUnit>
+            </RowValue>
+          </RowHalf>
+        ))}
+      </Row>
+    ))}
+
+    {/* <Row>
       <RowHalf>
         <RowDesc>Wind derection:</RowDesc>
         <RowValue>
@@ -40,21 +43,7 @@ export default props => (
           10,5 <RowUnit>m/s</RowUnit>
         </RowValue>
       </RowHalf>
-    </Row>
-    <Row>
-      <RowHalf>
-        <RowDesc>Pressure:</RowDesc>
-        <RowValue>
-          1033 <RowUnit>hPa</RowUnit>
-        </RowValue>
-      </RowHalf>
-      <RowHalf>
-        <RowDesc>Rain:</RowDesc>
-        <RowValue>
-          200,5 <RowUnit>mm</RowUnit>
-        </RowValue>
-      </RowHalf>
-    </Row>
+    </Row> */}
   </SensorCard>
 )
 const SensorCard = styled.div`
@@ -75,7 +64,7 @@ const SensorCard = styled.div`
     top: 70px;
   }
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     right: -12px;
     top: 0;
@@ -95,7 +84,7 @@ const SensorCard = styled.div`
     left: -12px;
   }
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     top: -5px;
     right: -41px;
@@ -140,7 +129,7 @@ const CardHeader = styled.header`
   border-bottom: 1px solid #eaecee;
 `
 const HeaderRow = styled.p`
-  font: 12px/16px "Nunito Sans", sans-serif;
+  font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
 `
 const HeaderAccent = styled.span`
@@ -196,7 +185,7 @@ const RowHalf = styled.div`
   }
 `
 const RowDesc = styled.span`
-  font: 12px/16px "Nunito Sans", sans-serif;
+  font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
   margin: 0;
 `
@@ -216,6 +205,7 @@ const RowUnit = styled.span`
   line-height: 42px;
   position: relative;
   top: -8px;
+  right: -4px;
   @media (max-width: 470px) {
     line-height: 30px;
     top: -4px;
