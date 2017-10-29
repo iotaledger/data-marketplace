@@ -8,7 +8,7 @@ import Modal from '../components/modal'
 import Sidebar from '../components/side-bar'
 import DataStream from '../components/data-stream'
 
-const iota = new IOTA({ provider: `http://p103.iotaledger.net:14700/` })
+const iota = new IOTA({ provider: `https://testnet140.tangle.works/` })
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
@@ -22,7 +22,8 @@ export default class extends React.Component {
     const firebase = await FB()
     const store = firebase.firestore
     // Get data
-    var userRef = store.collection('users').doc(`vwaiTFNKJAR9U30hrT8OCA1RgJF3`)
+    console.log(firebase.user.uid)
+    var userRef = store.collection('users').doc()
     var deviceRef = store.collection('devices').doc(this.props.id)
     var data = await getData(deviceRef, userRef, this.props.id)
 
@@ -37,7 +38,7 @@ export default class extends React.Component {
     var mamState = Mam.init(iota)
     var packets = data.packets.map(async (packet, i) => {
       var packet = await Mam.fetchSingle(packet.root, null)
-      this.saveData(packet.payload)
+      if (packet) this.saveData(packet.payload)
     })
   }
   // Append datax
