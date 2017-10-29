@@ -13,15 +13,17 @@ app.prepare().then(() => {
   const server = express()
   server.use(bodyParser.json())
 
-  server.post('/purchase', (req, res) => {
-    console.log(req.body)
+  server.post('/purchase', async (req, res) => {
     var packet = req.body
+    console.log(packet)
+    if (!packet || !packet.id || !packet.device)
+      return res.json('Malformed Request')
+
     if (packet.full) {
-      Firebase.full(packet.id, packet.device)
+      return await Firebase.full(packet.id, packet.device)
     } else {
-      Firebase.partial(packet.id, packet.device)
+      return await Firebase.partial(packet.id, packet.device)
     }
-    return true
   })
 
   server.get('*', (req, res) => {
