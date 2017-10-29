@@ -1,5 +1,5 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
 const Modal = styled.div`
   position: fixed;
@@ -44,7 +44,7 @@ const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  font: 15px "Nunito Sans", sans-serif;
+  font: 15px 'Nunito Sans', sans-serif;
   letter-spacing: 0.47px;
   padding: 20px 38px;
   border-radius: 100px;
@@ -74,6 +74,7 @@ export default class extends React.Component {
           <Button
             type="button"
             className="btn btn-accent txt-bold modal-trigger"
+            onClick={() => this.props.purchase()}
           >
             Purchase Access for $0.01
           </Button>
