@@ -15,7 +15,7 @@ export default class extends React.Component {
     return { id: query.id }
   }
 
-  state = { deviceInfo: {}, packets: [] }
+  state = { deviceInfo: {}, packets: [], purchase: false, loading: true }
 
   async componentDidMount() {
     // Firebase
@@ -46,7 +46,7 @@ export default class extends React.Component {
 
   fetch = async (deviceRef, userRef) => {
     var data = await getData(deviceRef, userRef, this.props.id)
-    if (!data) return
+    if (typeof data == 'string') return this.setState({ loading: false })
 
     var mamState = Mam.init(iota)
     var packets = data.map(async (packet, i) => {
@@ -62,7 +62,7 @@ export default class extends React.Component {
       ...this.state.packets,
       JSON.parse(iota.utils.fromTrytes(data))
     ]
-    this.setState({ packets })
+    this.setState({ packets, purchase: true, loading: false })
   }
 
   purchase = async () => {
@@ -76,12 +76,16 @@ export default class extends React.Component {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(packet)
     })
-    console.log(await resp.json())
-    this.fetch(deviceRef, userRef)
+    var message = JSON.parse(await resp.json())
+    console.log(message)
+    if (message._writeTime) {
+      this.fetch(this.state.deviceRef, this.state.userRef)
+      this.setState({ loading: true, purchase: true })
+    }
   }
 
   render() {
-    var { deviceInfo, packets } = this.state
+    var { deviceInfo, packets, purchase, loading } = this.state
     return (
       <main>
         <SensorNav {...this.state} />
@@ -89,7 +93,7 @@ export default class extends React.Component {
           <Sidebar {...this.state} />
           <DataStream {...this.state} />
         </Data>
-        {<Modal purchase={this.purchase} />}
+        <Modal purchase={this.purchase} show={!purchase} loading={loading} />
       </main>
     )
   }
