@@ -20,9 +20,12 @@ app.prepare().then(() => {
       return res.json('Malformed Request')
 
     if (packet.full) {
-      return await Firebase.full(packet.id, packet.device)
+      var resp = await Firebase.full(packet.id, packet.device)
+      console.log(resp)
+      return res.json(JSON.stringify(resp))
     } else {
-      return await Firebase.partial(packet.id, packet.device)
+      var resp = await Firebase.partial(packet.id, packet.device)
+      return res.json(JSON.stringify(resp))
     }
   })
 
