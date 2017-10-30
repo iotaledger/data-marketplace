@@ -1,12 +1,16 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
+import { Link } from '../../routes'
 
 const Modal = styled.div`
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
+  width: 100vw;
+  height: 100vh;
+  visibility: ${props => (props.show ? 'visible' : 'hidden')};
+  opacity: ${props => (props.show ? 1 : 0)};
+  transition: all 0.5s ease;
   background-color: rgba(14, 56, 160, 0.6);
 `
 const AccessBox = styled.div`
@@ -44,7 +48,7 @@ const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-  font: 15px "Nunito Sans", sans-serif;
+  font: 15px 'Nunito Sans', sans-serif;
   letter-spacing: 0.47px;
   padding: 20px 38px;
   border-radius: 100px;
@@ -53,32 +57,104 @@ const Button = styled.button`
   font-size: 12px;
   letter-spacing: 0.38px;
   padding: 12px 21px;
+  margin: 30px 0 0;
   box-shadow: 0 10px 20px 0 #0a2056;
   font-weight: 700;
   background-color: #009fff;
 `
+const Internal = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`
+
 export default class extends React.Component {
   render() {
     return (
-      <Modal className="access-modal-wrapper">
-        <AccessBox className="access-modal">
-          <img
-            src="/static/icons/icon-padlock.png"
-            srcSet="/static/icons/icon-padlock@2x.png 2x"
-            alt="Icon padlock"
-          />
-          <Heading>Access Required</Heading>
-          <Info>
-            Mauris non tempor quam, et lacinia sapien. Mauris accumsan.
-          </Info>
-          <Button
-            type="button"
-            className="btn btn-accent txt-bold modal-trigger"
-          >
-            Purchase Access for $0.01
-          </Button>
-        </AccessBox>
+      <Modal className="access-modal-wrapper" show={this.props.show}>
+        {!this.props.loading ? (
+          <AccessBox>
+            {!this.props.error ? (
+              <Internal>
+                <img
+                  src="/static/icons/icon-padlock.png"
+                  srcSet="/static/icons/icon-padlock@2x.png 2x"
+                  alt="Icon padlock"
+                />
+                <Heading>Purchase device stream</Heading>
+                <Info>
+                  Mauris non tempor quam, et lacinia sapien. Mauris accumsan.
+                </Info>
+                <Button
+                  type="button"
+                  className="btn btn-accent txt-bold modal-trigger"
+                  onClick={() => this.props.purchase()}
+                >
+                  Purchase Access for $0.20
+                </Button>
+              </Internal>
+            ) : (
+              <Internal>
+                <img
+                  src="/static/icons/icon-padlock.png"
+                  srcSet="/static/icons/icon-padlock@2x.png 2x"
+                  alt="Icon padlock"
+                />
+                <Heading>{this.props.error.heading}</Heading>
+                <Info>{this.props.error.body}</Info>
+                <Link route={'/'}>
+                  <Button
+                    type="button"
+                    className="btn btn-accent txt-bold modal-trigger"
+                    onClick={() => this.props.purchase()}
+                  >
+                    Go back
+                  </Button>
+                </Link>
+              </Internal>
+            )}
+          </AccessBox>
+        ) : (
+          <AccessBox className="access-modal">
+            <Heading>Loading Device </Heading>
+            <Info>Fetching device information and your purchase history.</Info>
+            <Loading />
+          </AccessBox>
+        )}
       </Modal>
     )
   }
+}
+
+const Loading = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="80"
+      height="80"
+      viewBox="0 0 38 38"
+      stroke="#fff"
+    >
+      <g fill="none" fillRule="evenodd">
+        <g transform="translate(1 1)" strokeWidth="2">
+          <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
+          <path
+            d="M36 18c0-9.94-8.06-18-18-18"
+            transform="rotate(319.698 18 18)"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 18 18"
+              to="360 18 18"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </g>
+      </g>
+    </svg>
+  )
 }

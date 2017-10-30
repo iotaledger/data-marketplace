@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from '../../routes'
 
 const Main = styled.nav`
   display: flex;
@@ -17,8 +18,8 @@ const Main = styled.nav`
   }
 `
 const Header = styled.header`
-  margin: 5px auto 0 30px;
-  display: block;
+  margin: 10px auto 0 30px;
+  display: flex;
 `
 
 const Back = styled.a`
@@ -36,7 +37,6 @@ const Back = styled.a`
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
-  position: absolute;
 `
 
 const DeviceID = styled.span`
@@ -47,16 +47,24 @@ const DeviceID = styled.span`
   color: #009fff;
   @media (max-width: 760px) {
     font-size: 15px;
-    line-height: 42px;
-    top: 4px;
+    top: -4px;
   }
 `
 
 const RightHeader = styled.div`
-  display: flex;
-  height: 100%;
+  margin: 5px 30px 0 30px;
+  display: block;
+  width: 150px;
+  text-align: right;
+  @media (max-width: 760px) {
+    margin: 5px 10px 0 30px;
+    width: 120px;
+  }
 `
-
+const Block = styled.div`
+  display: flex;
+  flex-direction: column;
+`
 const NavGraphics = styled.img`
   height: 100%;
   width: auto;
@@ -75,30 +83,27 @@ const SensorIcon = styled.img`
 
 export default props => (
   <Main>
-    <Back href="/">
-      <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
-    </Back>
+    <Link route={`/`} prefetch>
+      <Back>
+        <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
+      </Back>
+    </Link>
+
     <Header>
-      <SensorIcon
-        src="/static/icons/icon-drops.svg"
-        alt="Weather sensor icon"
-      />
-      <Desc>{props.deviceInfo.type && props.deviceInfo.type}</Desc>
-      <DeviceID>
-        {props.deviceInfo.sensorId && props.deviceInfo.sensorId}
-      </DeviceID>
+      <Block>
+        <Desc>{props.deviceInfo.type && props.deviceInfo.type}</Desc>
+        <DeviceID>
+          {props.deviceInfo.sensorId
+            ? props.deviceInfo.sensorId
+            : 'Loading Device'}
+        </DeviceID>
+      </Block>
     </Header>
     <RightHeader>
-      {/* <NavGraphics
-        src="/static/ilustrations/sensor-image.png"
-        srcSet="/static/ilustrations/sensor-image@2x.png 2x"
-        alt="IOTA sensor ilustration"
-      /> */}
-      <NavGraphics
-        src="/static/ilustrations/sensor-location-image.png"
-        srcSet="/static/ilustrations/sensor-location-image@2x.png 2x"
-        alt="IOTA sensor location graphic"
-      />
+      <Block>
+        <Desc>IOTA Wallet Balance:</Desc>
+        <DeviceID>4000i</DeviceID>
+      </Block>
     </RightHeader>
   </Main>
 )
