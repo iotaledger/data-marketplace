@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
+import { Link } from '../../routes'
 
 const Modal = styled.div`
   position: fixed;
   top: 0;
-  right: 0;
-  bottom: 0;
   left: 0;
+  width: 100vw;
+  height: 100vh;
   visibility: ${props => (props.show ? 'visible' : 'hidden')};
   opacity: ${props => (props.show ? 1 : 0)};
   transition: all 0.5s ease;
@@ -56,32 +57,64 @@ const Button = styled.button`
   font-size: 12px;
   letter-spacing: 0.38px;
   padding: 12px 21px;
+  margin: 30px 0 0;
   box-shadow: 0 10px 20px 0 #0a2056;
   font-weight: 700;
   background-color: #009fff;
 `
+const Internal = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`
+
 export default class extends React.Component {
   render() {
     return (
       <Modal className="access-modal-wrapper" show={this.props.show}>
         {!this.props.loading ? (
           <AccessBox>
-            <img
-              src="/static/icons/icon-padlock.png"
-              srcSet="/static/icons/icon-padlock@2x.png 2x"
-              alt="Icon padlock"
-            />
-            <Heading>Purchase device stream</Heading>
-            <Info>
-              Mauris non tempor quam, et lacinia sapien. Mauris accumsan.
-            </Info>
-            <Button
-              type="button"
-              className="btn btn-accent txt-bold modal-trigger"
-              onClick={() => this.props.purchase()}
-            >
-              Purchase Access for $0.20
-            </Button>
+            {!this.props.error ? (
+              <Internal>
+                <img
+                  src="/static/icons/icon-padlock.png"
+                  srcSet="/static/icons/icon-padlock@2x.png 2x"
+                  alt="Icon padlock"
+                />
+                <Heading>Purchase device stream</Heading>
+                <Info>
+                  Mauris non tempor quam, et lacinia sapien. Mauris accumsan.
+                </Info>
+                <Button
+                  type="button"
+                  className="btn btn-accent txt-bold modal-trigger"
+                  onClick={() => this.props.purchase()}
+                >
+                  Purchase Access for $0.20
+                </Button>
+              </Internal>
+            ) : (
+              <Internal>
+                <img
+                  src="/static/icons/icon-padlock.png"
+                  srcSet="/static/icons/icon-padlock@2x.png 2x"
+                  alt="Icon padlock"
+                />
+                <Heading>{this.props.error.heading}</Heading>
+                <Info>{this.props.error.body}</Info>
+                <Link route={'/'}>
+                  <Button
+                    type="button"
+                    className="btn btn-accent txt-bold modal-trigger"
+                    onClick={() => this.props.purchase()}
+                  >
+                    Go back
+                  </Button>
+                </Link>
+              </Internal>
+            )}
           </AccessBox>
         ) : (
           <AccessBox className="access-modal">

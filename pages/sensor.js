@@ -15,7 +15,13 @@ export default class extends React.Component {
     return { id: query.id }
   }
 
-  state = { deviceInfo: {}, packets: [], purchase: false, loading: true }
+  state = {
+    deviceInfo: {},
+    packets: [],
+    purchase: false,
+    loading: true,
+    error: false
+  }
 
   async componentDidMount() {
     // Firebase
@@ -26,6 +32,7 @@ export default class extends React.Component {
     var userRef = store.collection('users').doc(firebase.user.uid)
     var deviceRef = store.collection('devices').doc(this.props.id)
     var device = await deviceInfo(deviceRef, this.props.id)
+    if (typeof device == 'string') return this.throw()
     // Manipulate array to get the data in.
     var layout = []
     device.dataTypes.map((item, i) => {
@@ -42,6 +49,16 @@ export default class extends React.Component {
 
     // MAM
     this.fetch(deviceRef, userRef)
+  }
+  throw = () => {
+    this.setState({
+      loading: false,
+      error: {
+        body: ` The device you are looking for doesn't exist, check the device
+  ID and try again`,
+        heading: `Device doesn't exist`
+      }
+    })
   }
 
   fetch = async (deviceRef, userRef) => {
@@ -62,7 +79,7 @@ export default class extends React.Component {
       ...this.state.packets,
       JSON.parse(iota.utils.fromTrytes(data))
     ]
-    this.setState({ packets, purchase: true, loading: false })
+    this.setState({ packets, purchase: true })
   }
 
   purchase = async () => {
@@ -85,7 +102,7 @@ export default class extends React.Component {
   }
 
   render() {
-    var { deviceInfo, packets, purchase, loading } = this.state
+    var { deviceInfo, packets, purchase, loading, error } = this.state
     return (
       <main>
         <SensorNav {...this.state} />
@@ -93,7 +110,12 @@ export default class extends React.Component {
           <Sidebar {...this.state} />
           <DataStream {...this.state} />
         </Data>
-        <Modal purchase={this.purchase} show={!purchase} loading={loading} />
+        <Modal
+          purchase={this.purchase}
+          show={!purchase}
+          loading={loading}
+          error={error}
+        />
       </main>
     )
   }
