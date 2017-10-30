@@ -1,5 +1,6 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
+import { Link } from '../../routes'
 
 export default class extends React.Component {
   state = {}
@@ -24,7 +25,9 @@ export default class extends React.Component {
               Never has getting access to diverse, fine-granular data been this
               easy!
             </Tagline>
-            <Button type="button">Try it yourself</Button>
+            <Link route={'/sensor/test'} prefetch>
+              <Button type="button">Try it yourself</Button>
+            </Link>
           </Info>
           <Graphics>
             <Graphic1
