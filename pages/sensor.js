@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import FB, { getData } from '../lib/db'
+import FB, { getData, deviceInfo } from '../lib/db'
 import IOTA from 'iota.lib.js'
 
 import SensorNav from '../components/sensor-nav'
@@ -8,38 +8,70 @@ import Modal from '../components/modal'
 import Sidebar from '../components/side-bar'
 import DataStream from '../components/data-stream'
 
-const iota = new IOTA({ provider: `http://p103.iotaledger.net:14700/` })
+const iota = new IOTA({ provider: `https://testnet140.tangle.works/` })
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
     return { id: query.id }
   }
 
-  state = { deviceInfo: {}, packets: [] }
+  state = {
+    deviceInfo: {},
+    packets: [],
+    purchase: false,
+    loading: true,
+    error: false
+  }
 
   async componentDidMount() {
     // Firebase
     const firebase = await FB()
     const store = firebase.firestore
     // Get data
-    var userRef = store.collection('users').doc(`vwaiTFNKJAR9U30hrT8OCA1RgJF3`)
+    console.log(firebase.user.uid)
+    var userRef = store.collection('users').doc(firebase.user.uid)
     var deviceRef = store.collection('devices').doc(this.props.id)
-    var data = await getData(deviceRef, userRef, this.props.id)
-
+    var device = await deviceInfo(deviceRef, this.props.id)
+    if (typeof device == 'string') return this.throw()
     // Manipulate array to get the data in.
     var layout = []
-    data.device.dataTypes.map((item, i) => {
+    device.dataTypes.map((item, i) => {
       if (!layout[Math.floor(i / 2)]) layout[Math.floor(i / 2)] = []
       layout[Math.floor(i / 2)].push(item)
     })
-    this.setState({ userRef, deviceRef, deviceInfo: data.device, layout })
+    this.setState({
+      userRef,
+      deviceRef,
+      deviceInfo: device,
+      layout,
+      uid: firebase.user.uid
+    })
+
     // MAM
-    var mamState = Mam.init(iota)
-    var packets = data.packets.map(async (packet, i) => {
-      var packet = await Mam.fetchSingle(packet.root, null)
-      this.saveData(packet.payload)
+    this.fetch(deviceRef, userRef)
+  }
+  throw = () => {
+    this.setState({
+      loading: false,
+      error: {
+        body: ` The device you are looking for doesn't exist, check the device
+  ID and try again`,
+        heading: `Device doesn't exist`
+      }
     })
   }
+
+  fetch = async (deviceRef, userRef) => {
+    var data = await getData(deviceRef, userRef, this.props.id)
+    if (typeof data == 'string') return this.setState({ loading: false })
+
+    var mamState = Mam.init(iota)
+    var packets = data.map(async (packet, i) => {
+      var packet = await Mam.fetchSingle(packet.root, null)
+      if (packet) this.saveData(packet.payload)
+    })
+  }
+
   // Append datax
   saveData = data => {
     console.log(JSON.parse(iota.utils.fromTrytes(data)))
@@ -47,11 +79,30 @@ export default class extends React.Component {
       ...this.state.packets,
       JSON.parse(iota.utils.fromTrytes(data))
     ]
-    this.setState({ packets })
+    this.setState({ packets, purchase: true })
+  }
+
+  purchase = async () => {
+    var packet = {
+      id: this.state.uid,
+      device: this.props.id,
+      full: true
+    }
+    var resp = await fetch('/purchase', {
+      method: 'post',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(packet)
+    })
+    var message = JSON.parse(await resp.json())
+    console.log(message)
+    if (message._writeTime) {
+      this.fetch(this.state.deviceRef, this.state.userRef)
+      this.setState({ loading: true, purchase: true })
+    }
   }
 
   render() {
-    var { deviceInfo, packets } = this.state
+    var { deviceInfo, packets, purchase, loading, error } = this.state
     return (
       <main>
         <SensorNav {...this.state} />
@@ -59,7 +110,12 @@ export default class extends React.Component {
           <Sidebar {...this.state} />
           <DataStream {...this.state} />
         </Data>
-        {/* <Modal /> */}
+        <Modal
+          purchase={this.purchase}
+          show={!purchase}
+          loading={loading}
+          error={error}
+        />
       </main>
     )
   }

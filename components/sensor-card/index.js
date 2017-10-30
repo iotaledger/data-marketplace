@@ -2,50 +2,62 @@ import React from 'react'
 import styled from 'styled-components'
 import { format } from 'date-fns'
 
-export default props => (
-  <SensorCard>
-    <CardHeader>
-      <HeaderRow>
-        <HeaderAccent>{format(props.packet.time, 'dddd')}</HeaderAccent>{' '}
-        {format(props.packet.time, 'DD MMMM, YYYY H:mm a ')}
-      </HeaderRow>
-    </CardHeader>
-    {props.layout.map((row, i) => (
-      <Row key={`sensor-${i}`}>
-        {row.map((item, i) => (
-          <RowHalf key={`item-${i}`}>
-            <RowDesc>{item.name}:</RowDesc>
+export default class extends React.Component {
+  state = {}
+  componentDidMount = () => {
+    setTimeout(() => this.setState({ visible: true }), 300)
+  }
+
+  render() {
+    return (
+      <SensorCard visible={this.state.visible}>
+        <CardHeader>
+          <HeaderRow>
+            <HeaderAccent>
+              {format(this.props.packet.time, 'dddd')}
+            </HeaderAccent>{' '}
+            {format(this.props.packet.time, 'DD MMMM, YYYY H:mm a ')}
+          </HeaderRow>
+        </CardHeader>
+        {this.props.layout.map((row, i) => (
+          <Row key={`sensor-${i}`}>
+            {row.map((item, i) => (
+              <RowHalf key={`item-${i}`}>
+                <RowDesc>{item.name}:</RowDesc>
+                <RowValue>
+                  {(this.props.packet &&
+                    this.props.packet.data[item.id.toLowerCase()]) ||
+                    '--'}
+                  <RowUnit>{item.unit}</RowUnit>
+                </RowValue>
+              </RowHalf>
+            ))}
+          </Row>
+        ))}
+
+        {/* <Row>
+          <RowHalf>
+            <RowDesc>Wind derection:</RowDesc>
             <RowValue>
-              {(props.packet && props.packet.data[item.id.toLowerCase()]) ||
-                '--'}
-              <RowUnit>{item.unit}</RowUnit>
+              <WindIcon
+                src="/static/icons/icon-wind-dir.svg"
+                className="icon-wind-dir"
+                alt="Icon wind direction"
+              />
+              <RowUnit>NNE</RowUnit>
             </RowValue>
           </RowHalf>
-        ))}
-      </Row>
-    ))}
-
-    {/* <Row>
-      <RowHalf>
-        <RowDesc>Wind derection:</RowDesc>
-        <RowValue>
-          <WindIcon
-            src="/static/icons/icon-wind-dir.svg"
-            className="icon-wind-dir"
-            alt="Icon wind direction"
-          />
-          <RowUnit>NNE</RowUnit>
-        </RowValue>
-      </RowHalf>
-      <RowHalf>
-        <RowDesc>Wind speed:</RowDesc>
-        <RowValue>
-          10,5 <RowUnit>m/s</RowUnit>
-        </RowValue>
-      </RowHalf>
-    </Row> */}
-  </SensorCard>
-)
+          <RowHalf>
+            <RowDesc>Wind speed:</RowDesc>
+            <RowValue>
+              10,5 <RowUnit>m/s</RowUnit>
+            </RowValue>
+          </RowHalf>
+        </Row> */}
+      </SensorCard>
+    )
+  }
+}
 const SensorCard = styled.div`
   position: relative;
   width: 360px;
@@ -60,6 +72,9 @@ const SensorCard = styled.div`
   border: none;
   cursor: default;
   box-shadow: 0 10px 24px 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.6s ease;
+  opacity: ${props => (props.visible ? 1 : 0)};
+  transform: ${props => (props.visible ? 'translateY(0)' : `translateY(50px)`)};
   &:nth-child(2n) {
     top: 70px;
   }

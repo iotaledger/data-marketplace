@@ -1,5 +1,5 @@
-import React from "react"
-import styled from "styled-components"
+import React from 'react'
+import styled from 'styled-components'
 
 const Sidebar = styled.aside`
   background-image: linear-gradient(-189deg, #0d3497 1%, #1857eb 95%);
@@ -28,7 +28,7 @@ const Details = styled.div`
     width: 100%;
   }
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     right: -30px;
     bottom: 0;
@@ -83,24 +83,24 @@ export default class extends React.Component {
             <DetailRow>
               <DetailKey>Location:</DetailKey>
               <DetailValue>
-                {" "}
+                {' '}
                 {deviceInfo.location
                   ? `${deviceInfo.location.city}, ${deviceInfo.location
                       .country} `
                   : `--`}
               </DetailValue>
             </DetailRow>
-            <DetailRow>
+            {/* <DetailRow>
               <DetailKey>Owner:</DetailKey>
               <DetailValue>
                 {" "}
                 {deviceInfo.owner ? deviceInfo.owner : `--`}
               </DetailValue>
-            </DetailRow>{" "}
+            </DetailRow>{" "} */}
             <DetailRow>
               <DetailKey>Manufacturer:</DetailKey>
               <DetailValue>
-                {" "}
+                {' '}
                 {deviceInfo.company ? deviceInfo.company : `--`}
               </DetailValue>
             </DetailRow>
