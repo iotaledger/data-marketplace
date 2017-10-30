@@ -47,9 +47,16 @@ export default props => (
   <InfoCol>
     <CardWrapper>
       {props.packets &&
-        props.packets.map((packet, i) => (
-          <SensorCard index={i} key={i} layout={props.layout} packet={packet} />
-        ))}
+        props.packets
+          .sort((a, b) => a.time - b.time)
+          .map((packet, i) => (
+            <SensorCard
+              index={i}
+              key={i}
+              layout={props.layout}
+              packet={packet}
+            />
+          ))}
     </CardWrapper>
   </InfoCol>
 )
