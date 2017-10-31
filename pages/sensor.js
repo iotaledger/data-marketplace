@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import FB, { getData, deviceInfo } from '../lib/db'
 import IOTA from 'iota.lib.js'
+import { initWallet, purchase, reducer } from '../lib/iota'
 
 import SensorNav from '../components/sensor-nav'
 import Modal from '../components/modal'
@@ -24,16 +25,22 @@ export default class extends React.Component {
   }
 
   async componentDidMount() {
+    // Init Wallet
+    this.fetchWallet()
     // Firebase
     const firebase = await FB()
     const store = firebase.firestore
     // Get data
-    console.log(firebase.user.uid)
     var userRef = store.collection('users').doc(firebase.user.uid)
     var deviceRef = store.collection('devices').doc(this.props.id)
     var device = await deviceInfo(deviceRef, this.props.id)
-    if (typeof device == 'string') return this.throw()
-    // Manipulate array to get the data in.
+    if (typeof device == 'string')
+      return this.throw({
+        body: ` The device you are looking for doesn't exist, check the device
+ID and try again`,
+        heading: `Device doesn't exist`
+      })
+    // Organise data for layout
     var layout = []
     device.dataTypes.map((item, i) => {
       if (!layout[Math.floor(i / 2)]) layout[Math.floor(i / 2)] = []
@@ -46,18 +53,13 @@ export default class extends React.Component {
       layout,
       uid: firebase.user.uid
     })
-
     // MAM
     this.fetch(deviceRef, userRef)
   }
-  throw = () => {
+  throw = error => {
     this.setState({
       loading: false,
-      error: {
-        body: ` The device you are looking for doesn't exist, check the device
-  ID and try again`,
-        heading: `Device doesn't exist`
-      }
+      error
     })
   }
 
@@ -82,7 +84,56 @@ export default class extends React.Component {
     this.setState({ packets, purchase: true })
   }
 
-  purchase = async () => {
+  fetchWallet = async () => {
+    var wallet = JSON.parse(await localStorage.getItem('wallet'))
+    if (!wallet) {
+      this.setState({ desc: 'Wallet not funded', walletLoading: false })
+    } else {
+      this.setState({
+        desc: 'IOTA wallet balance:',
+        wallet,
+        walletInit: true,
+        walletLoading: false
+      })
+    }
+  }
+
+  fund = async () => {
+    this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
+      var wallet = await initWallet()
+      console.log(wallet)
+      await localStorage.setItem('wallet', JSON.stringify(wallet))
+      this.setState({
+        walletInit: true,
+        desc: 'IOTA wallet balance:',
+        walletLoading: false,
+        wallet
+      })
+    })
+  }
+
+  purchase = async (address, value) => {
+    // Make sure we have wallet
+    var wallet = JSON.parse(await localStorage.getItem('wallet'))
+    if (!wallet)
+      return this.throw({
+        body: ` Setup wallet by clicking the top right, to get a prefunded IOTA wallet.`,
+        heading: `Wallet doesn't exist`
+      })
+    if (wallet.amount < value)
+      return this.throw({
+        body: `You have run out of IOTA. Click below to refill you wallet with IOTA.`,
+        heading: `Not enough Balance`
+      })
+    // Try purchase
+    try {
+      var purchase = await purchase(wallet.seed, address, value)
+    } catch (e) {
+      return this.throw({
+        body: e,
+        heading: `Purchase Failed`
+      })
+    }
     var packet = {
       id: this.state.uid,
       device: this.props.id,
@@ -94,10 +145,11 @@ export default class extends React.Component {
       body: JSON.stringify(packet)
     })
     var message = JSON.parse(await resp.json())
-    console.log(message)
+
     if (message._writeTime) {
+      wallet.amount = wallet.amount - value
       this.fetch(this.state.deviceRef, this.state.userRef)
-      this.setState({ loading: true, purchase: true })
+      this.setState({ loading: true, purchase: true, wallet })
     }
   }
 
@@ -105,7 +157,7 @@ export default class extends React.Component {
     var { deviceInfo, packets, purchase, loading, error } = this.state
     return (
       <main>
-        <SensorNav {...this.state} />
+        <SensorNav {...this.state} fund={this.fund} />
         <Data>
           <Sidebar {...this.state} />
           <DataStream {...this.state} />
