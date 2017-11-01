@@ -1,15 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import FB, { getData, deviceInfo } from '../lib/db'
-import IOTA from 'iota.lib.js'
-import { initWallet, purchase, reducer } from '../lib/iota'
+import {
+  iota,
+  initWallet,
+  purchaseData,
+  reducer,
+  getBalance
+} from '../lib/iota'
 
 import SensorNav from '../components/sensor-nav'
 import Modal from '../components/modal'
 import Sidebar from '../components/side-bar'
 import DataStream from '../components/data-stream'
-
-const iota = new IOTA({ provider: `https://testnet140.tangle.works/` })
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
@@ -20,7 +23,10 @@ export default class extends React.Component {
     deviceInfo: {},
     packets: [],
     purchase: false,
-    loading: true,
+    loading: {
+      heading: `Loading Device`,
+      body: `Fetching device information and your purchase history. `
+    },
     error: false
   }
 
@@ -31,9 +37,11 @@ export default class extends React.Component {
     const firebase = await FB()
     const store = firebase.firestore
     // Get data
-    var userRef = store.collection('users').doc(firebase.user.uid)
-    var deviceRef = store.collection('devices').doc(this.props.id)
-    var device = await deviceInfo(deviceRef, this.props.id)
+    let userRef = store.collection('users').doc(firebase.user.uid)
+    let deviceRef = store.collection('devices').doc(this.props.id)
+    let device = await deviceInfo(deviceRef, this.props.id)
+    device.balance = await getBalance(device.address)
+    console.log(device)
     if (typeof device == 'string')
       return this.throw({
         body: ` The device you are looking for doesn't exist, check the device
@@ -112,45 +120,67 @@ ID and try again`,
     })
   }
 
-  purchase = async (address, value) => {
+  purchase = async () => {
+    const device = this.state.deviceInfo
     // Make sure we have wallet
-    var wallet = JSON.parse(await localStorage.getItem('wallet'))
+    let wallet = JSON.parse(await localStorage.getItem('wallet'))
     if (!wallet)
       return this.throw({
         body: ` Setup wallet by clicking the top right, to get a prefunded IOTA wallet.`,
         heading: `Wallet doesn't exist`
       })
-    if (wallet.amount < value)
+    if (wallet.amount < device.value)
       return this.throw({
         body: `You have run out of IOTA. Click below to refill you wallet with IOTA.`,
         heading: `Not enough Balance`
       })
-    // Try purchase
-    try {
-      var purchase = await purchase(wallet.seed, address, value)
-    } catch (e) {
-      return this.throw({
-        body: e,
-        heading: `Purchase Failed`
-      })
-    }
-    var packet = {
-      id: this.state.uid,
-      device: this.props.id,
-      full: true
-    }
-    var resp = await fetch('/purchase', {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(packet)
-    })
-    var message = JSON.parse(await resp.json())
 
-    if (message._writeTime) {
-      wallet.amount = wallet.amount - value
-      this.fetch(this.state.deviceRef, this.state.userRef)
-      this.setState({ loading: true, purchase: true, wallet })
-    }
+    this.setState(
+      {
+        loading: {
+          heading: `Purchasing Stream`,
+          body: `You are doing Proof of Work to attach this purchase to the network.`
+        }
+      },
+      async () => {
+        // Try purchase
+        try {
+          let response = await purchaseData(
+            wallet.seed,
+            device.address,
+            device.value
+          )
+          this.setState({
+            loading: {
+              heading: `Success!`,
+              body: `Your purchase was successful. Fetching MAM stream and decoding data.`
+            }
+          })
+        } catch (e) {
+          return this.throw({
+            body: e.error,
+            heading: `Purchase Failed`
+          })
+        }
+        var packet = {
+          id: this.state.uid,
+          device: this.props.id,
+          full: true
+        }
+        var resp = await fetch('/purchase', {
+          method: 'post',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(packet)
+        })
+        var message = JSON.parse(await resp.json())
+        if (message._writeTime) {
+          wallet.amount = wallet.amount - device.value
+          this.fetch(this.state.deviceRef, this.state.userRef)
+          this.setState({ loading: true, purchase: true, wallet })
+          await localStorage.setItem('wallet', JSON.stringify(wallet))
+        }
+      }
+    )
   }
 
   render() {
