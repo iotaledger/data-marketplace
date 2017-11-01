@@ -118,8 +118,8 @@ export default class extends React.Component {
           </AccessBox>
         ) : (
           <AccessBox className="access-modal">
-            <Heading>Loading Device </Heading>
-            <Info>Fetching device information and your purchase history.</Info>
+            <Heading>{this.props.loading.heading || '--'} </Heading>
+            <Info>{this.props.loading.body || '--'}</Info>
             <Loading />
           </AccessBox>
         )}
