@@ -1,5 +1,5 @@
 import React from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import SensorCard from '../sensor-card'
 
 const InfoCol = styled.main`
@@ -26,6 +26,46 @@ const InfoCol = styled.main`
     }
   }
 `
+const Pulse = keyframes`
+0% {
+   opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+`
+const Loader = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 300px;
+  width: 100%;
+  opacity: 0;
+  animation: ${props =>
+    !props.show ? `${Pulse} 1s alternate infinite` : `none`};
+  z-index: 0;
+  background-image: radial-gradient(
+    ellipse at top,
+    rgba(116, 209, 234, 0.3),
+    rgba(116, 209, 234, 0) 50%
+  );
+  @media (max-width: 1200px) {
+    width: calc(100% + 30px);
+    background-image: radial-gradient(
+      ellipse at top left,
+      rgba(116, 209, 234, 0.3),
+      rgba(116, 209, 234, 0) 50%
+    );
+  }
+  @media (max-width: 760px) {
+    width: 100%;
+    background-image: radial-gradient(
+      ellipse at top,
+      rgba(116, 209, 234, 0.3),
+      rgba(116, 209, 234, 0) 50%
+    );
+  }
+`
 const CardWrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
@@ -45,6 +85,7 @@ const CardWrapper = styled.div`
 
 export default props => (
   <InfoCol>
+    <Loader show={props.packets[0]} />
     <CardWrapper>
       {props.packets &&
         props.packets
