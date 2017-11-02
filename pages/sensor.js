@@ -23,6 +23,7 @@ export default class extends React.Component {
     deviceInfo: {},
     packets: [],
     purchase: false,
+    button: true,
     loading: {
       heading: `Loading Device`,
       body: `Fetching device information and your purchase history. `
@@ -41,7 +42,6 @@ export default class extends React.Component {
     let deviceRef = store.collection('devices').doc(this.props.id)
     let device = await deviceInfo(deviceRef, this.props.id)
     device.balance = await getBalance(device.address)
-    console.log(device)
     if (typeof device == 'string')
       return this.throw({
         body: ` The device you are looking for doesn't exist, check the device
@@ -64,10 +64,12 @@ ID and try again`,
     // MAM
     this.fetch(deviceRef, userRef)
   }
-  throw = error => {
+
+  throw = (error, button) => {
     this.setState({
       loading: false,
-      error
+      error,
+      button
     })
   }
 
@@ -115,7 +117,8 @@ ID and try again`,
         walletInit: true,
         desc: 'IOTA wallet balance:',
         walletLoading: false,
-        wallet
+        wallet,
+        error: false
       })
     })
   }
@@ -125,10 +128,13 @@ ID and try again`,
     // Make sure we have wallet
     let wallet = JSON.parse(await localStorage.getItem('wallet'))
     if (!wallet)
-      return this.throw({
-        body: ` Setup wallet by clicking the top right, to get a prefunded IOTA wallet.`,
-        heading: `Wallet doesn't exist`
-      })
+      return this.throw(
+        {
+          body: ` Setup wallet by clicking the top right, to get a prefunded IOTA wallet.`,
+          heading: `Wallet doesn't exist`
+        },
+        false
+      )
     if (wallet.amount < device.value)
       return this.throw({
         body: `You have run out of IOTA. Click below to refill you wallet with IOTA.`,
@@ -184,7 +190,7 @@ ID and try again`,
   }
 
   render() {
-    var { deviceInfo, packets, purchase, loading, error } = this.state
+    var { deviceInfo, packets, purchase, loading, error, button } = this.state
     return (
       <main>
         <SensorNav {...this.state} fund={this.fund} />
@@ -193,6 +199,7 @@ ID and try again`,
           <DataStream {...this.state} />
         </Data>
         <Modal
+          button={button}
           purchase={this.purchase}
           show={!purchase}
           loading={loading}
