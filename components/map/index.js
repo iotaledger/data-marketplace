@@ -1,28 +1,29 @@
-import React from "react"
-import styled, { css } from "styled-components"
-import MapGL, { Marker, Popup, NavigationControl } from "react-map-gl"
-
+import React from 'react'
+import styled, { css } from 'styled-components'
+import MapGL, { Marker, Popup, NavigationControl } from 'react-map-gl'
+import { Link } from '../../routes'
+import { getBalance } from '../../lib/iota'
 export default class extends React.Component {
   state = {
     viewport: {
-      //   latitude: 52.23,
-      //   longitude: 11.16,
-      latitude: 37.785164,
-      longitude: -100,
+      latitude: 52.23,
+      longitude: 11.16,
+      // latitude: 37.785164,
+      // longitude: -100,
       zoom: 3.74,
       bearing: 0,
-      pitch: 0,
+      pitch: 30,
       width: 800
     },
     popupInfo: null
   }
   componentDidMount() {
-    window.addEventListener("resize", this._resize)
+    window.addEventListener('resize', this._resize)
     this._resize()
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this._resize)
+    window.removeEventListener('resize', this._resize)
   }
 
   _resize = () => {
@@ -38,62 +39,70 @@ export default class extends React.Component {
     this.setState({ viewport })
   }
 
-  _renderCityMarker = (city, index) => {
+  _renderCityMarker = (device, index) => {
     return (
       <Marker
-        key={`marker-${index}`}
-        longitude={city.longitude}
-        latitude={city.latitude}
+        key={`marker-${device.sensorId}`}
+        longitude={Number(device.lon)}
+        latitude={Number(device.lat)}
       >
-        <Pin onClick={() => this.setState({ popupInfo: city })} />
+        {<Pin onClick={() => this.setState({ popupInfo: device })} />}
       </Marker>
     )
   }
 
-  _renderPopup() {
+  _renderPopup = () => {
     const { popupInfo } = this.state
     return (
       popupInfo && (
         <Popup
-          tipSize={5}
+          tipSize={10}
           anchor="bottom-left"
-          offsetTop={10}
+          offsetTop={-30}
+          offsetLeft={10}
           closeButton={false}
-          longitude={popupInfo.longitude}
-          latitude={popupInfo.latitude}
+          longitude={Number(popupInfo.lon)}
+          latitude={Number(popupInfo.lat)}
+          closeOnClick={true}
           onClose={() => this.setState({ popupInfo: null })}
         >
-          <SensorCard href="./sensor-data.html">
-            <CardHeader>
-              <CardIcon
-                src="/static/icons/icon-weather-small.svg"
-                alt="Weather sensor icon"
-              />
-              <SensorType>
-                Weather{" "}
-                <LocationIcon
-                  src="/static/icons/icon-small-location-dark.svg"
-                  alt="Icon location pin"
-                />{" "}
-                <span>Berlin</span>
-              </SensorType>
-              <SensorId>ID-27281</SensorId>
-            </CardHeader>
-            <CardFooter>
-              <FootRow>
-                <InfoKey>Owner:</InfoKey>
-                <InfoValue>Patrick Moore</InfoValue>
-              </FootRow>
-              <FootRow>
-                <InfoKey>Data entries:</InfoKey>
-                <InfoValue>Lorem ipsum</InfoValue>
-              </FootRow>
-              <FootRow>
-                <InfoKey>Data price:</InfoKey>
-                <InfoValue>$0.01</InfoValue>
-              </FootRow>
-            </CardFooter>
-          </SensorCard>
+          <Link route={`/sensor/${popupInfo.sensorId}`} prefetch>
+            <SensorCard href="">
+              <CardHeader>
+                <CardIcon
+                  src="/static/icons/icon-weather-small.svg"
+                  alt="Weather sensor icon"
+                />
+                <SensorType>
+                  Weather{' '}
+                  <LocationIcon
+                    src="/static/icons/icon-small-location-dark.svg"
+                    alt="Icon location pin"
+                  />{' '}
+                  <span>{popupInfo.location.city}</span>
+                </SensorType>
+                <SensorId>
+                  {popupInfo.sensorId.length > 12
+                    ? `${popupInfo.sensorId.substring(0, 13)}...`
+                    : popupInfo.sensorId}
+                </SensorId>
+              </CardHeader>
+              <CardFooter>
+                <FootRow>
+                  <InfoKey>Owner:</InfoKey>
+                  <InfoValue>{popupInfo.company}</InfoValue>
+                </FootRow>
+                <FootRow>
+                  <InfoKey>Device Balance:</InfoKey>
+                  <InfoValue>Lorem ipsum</InfoValue>
+                </FootRow>
+                <FootRow>
+                  <InfoKey>Data price:</InfoKey>
+                  <InfoValue>{popupInfo.value}i</InfoValue>
+                </FootRow>
+              </CardFooter>
+            </SensorCard>
+          </Link>
         </Popup>
       )
     )
@@ -101,12 +110,12 @@ export default class extends React.Component {
 
   render() {
     const { viewport } = this.state
-
+    const { devices } = this.props
     return (
-      <Main id={"map"}>
+      <Main id={'map'}>
         <Header>
           <Heading>Sensor map</Heading>
-          <Subtitle>Lorem ipsum dolor sit amet sramet blablamet</Subtitle>
+          <Subtitle>Click on a pin to view the sensor information.</Subtitle>
         </Header>
         <MapGL
           maxZoom={11.5}
@@ -117,13 +126,14 @@ export default class extends React.Component {
           onViewportChange={this._updateViewport}
           mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}
         >
-          {data.map(this._renderCityMarker)}
+          <div style={{ position: 'absolute', right: 0 }}>
+            <NavigationControl onViewportChange={this._updateViewport} />
+          </div>
+          {devices
+            .filter(device => device.lon && device.lat)
+            .map(this._renderCityMarker)}
 
           {this._renderPopup()}
-
-          <Nav className="nav" style={navStyle}>
-            <NavigationControl onViewportChange={this._updateViewport} />
-          </Nav>
         </MapGL>
         {/* <Pin>
           <SensorCard href="./sensor-data.html">
@@ -177,7 +187,7 @@ export default class extends React.Component {
 const Main = styled.main`
   position: relative;
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 74px;
     left: 0;
@@ -207,14 +217,16 @@ const Header = styled.div`
 
 const Nav = styled.div`
   position: absolute;
-  top: 20;
-  right: 30;
+  top: 0px;
+  left: 0px;
   padding: 10px;
+  z-index: 100;
 `
 const navStyle = {
-  position: "absolute",
-  top: 20,
-  right: 30
+  // zIndex: 99,
+  // position: 'absolute',
+  // top: 20,
+  // right: 30
 }
 
 const Heading = styled.h3`
@@ -322,6 +334,8 @@ const Pin = styled.div`
   position: absolute;
   height: 20px;
   width: 20px;
+  top: -20px;
+  right: -10px;
   transform: rotate(-45deg);
   border-radius: 50% 50% 50% 0;
   cursor: pointer !important;
@@ -351,7 +365,7 @@ const FootRow = styled.div`
 const InfoKey = styled.span`
   color: #738fd4;
   text-transform: capitalize;
-  font: 12px/16px "Nunito Sans", sans-serif;
+  font: 12px/16px 'Nunito Sans', sans-serif;
 `
 
 const InfoValue = styled.span`
@@ -363,7 +377,7 @@ const InfoValue = styled.span`
 const CardIcon = styled.img`margin-right: 10px;`
 const LocationIcon = styled.img`margin: 0 6px 0 13px;`
 const SensorType = styled.span`
-  font: 12px/16px "Nunito Sans", sans-serif;
+  font: 12px/16px 'Nunito Sans', sans-serif;
   position: absolute;
   top: -8px;
   color: #738fd4;
@@ -375,41 +389,3 @@ const SensorId = styled.span`
   line-height: 42px;
   position: relative;
 `
-const data = [
-  {
-    city: "New York",
-    population: "8,175,133",
-    image:
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b9/Above_Gotham.jpg/240px-Above_Gotham.jpg",
-    state: "New York",
-    latitude: 40.6643,
-    longitude: -73.9385
-  },
-  {
-    city: "Los Angeles",
-    population: "3,792,621",
-    image:
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/5/57/LA_Skyline_Mountains2.jpg/240px-LA_Skyline_Mountains2.jpg",
-    state: "California",
-    latitude: 34.0194,
-    longitude: -118.4108
-  },
-  {
-    city: "Chicago",
-    population: "2,695,598",
-    image:
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/8/85/2008-06-10_3000x1000_chicago_skyline.jpg/240px-2008-06-10_3000x1000_chicago_skyline.jpg",
-    state: "Illinois",
-    latitude: 41.8376,
-    longitude: -87.6818
-  },
-  {
-    city: "Houston",
-    population: "2,100,263",
-    image:
-      "http://upload.wikimedia.org/wikipedia/commons/thumb/6/60/Aerial_views_of_the_Houston%2C_Texas%2C_28005u.jpg/240px-Aerial_views_of_the_Houston%2C_Texas%2C_28005u.jpg",
-    state: "Texas",
-    latitude: 29.7805,
-    longitude: -95.3863
-  }
-]
