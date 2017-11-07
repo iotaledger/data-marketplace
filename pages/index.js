@@ -9,15 +9,24 @@ import Partners from '../components/partners'
 import Benefits from '../components/benefits'
 import Footer from '../components/footer'
 
+import FB, { allDevices } from '../lib/db'
+
 export default class extends React.Component {
-  componentDidMount = async () => {}
+  state = { devices: [] }
+  componentDidMount = async () => {
+    // Firebase
+    const firebase = await FB()
+    var devices = await allDevices(firebase.firestore)
+    console.log(devices)
+    this.setState({ devices })
+  }
   render() {
     return (
       <Main>
         <Header />
         <Features />
-        <Map />
-        <SensorList />
+        <Map {...this.state} />
+        <SensorList {...this.state} />
         <Partners />
         <Benefits />
         <Footer />
