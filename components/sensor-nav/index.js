@@ -2,6 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { Link } from '../../routes'
 
+import Wallet from '../wallet'
+
 const Main = styled.nav`
   display: flex;
   justify-content: space-between;
@@ -64,6 +66,7 @@ const RightHeader = styled.div`
 const Block = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
 `
 const NavGraphics = styled.img`
   height: 100%;
@@ -91,19 +94,16 @@ export default props => (
 
     <Header>
       <Block>
-        <Desc>{props.deviceInfo.type && props.deviceInfo.type}</Desc>
+        <Desc>
+          {props.deviceInfo.type ? props.deviceInfo.type : 'Loading Device'}
+        </Desc>
         <DeviceID>
-          {props.deviceInfo.sensorId
-            ? props.deviceInfo.sensorId
-            : 'Loading Device'}
+          {props.deviceInfo.sensorId && props.deviceInfo.sensorId}
         </DeviceID>
       </Block>
     </Header>
     <RightHeader>
-      <Block>
-        <Desc>IOTA Wallet Balance:</Desc>
-        <DeviceID>4000i</DeviceID>
-      </Block>
+      <Wallet {...props} />
     </RightHeader>
   </Main>
 )

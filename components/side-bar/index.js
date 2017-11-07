@@ -1,5 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
+import { reducer, getBalance } from '../../lib/iota'
 
 const Sidebar = styled.aside`
   background-image: linear-gradient(-189deg, #0d3497 1%, #1857eb 95%);
@@ -75,9 +76,9 @@ export default class extends React.Component {
           <Label>Sensor details:</Label>
           <div>
             <DetailRow>
-              <DetailKey>Total data packets sent</DetailKey>
+              <DetailKey>Device Balance:</DetailKey>
               <DetailValue>
-                {deviceInfo.totalPackets ? deviceInfo.totalPackets : `--`}
+                {deviceInfo.balance ? reducer(deviceInfo.balance) : `--`}
               </DetailValue>
             </DetailRow>
             <DetailRow>

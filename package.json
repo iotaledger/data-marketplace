@@ -12,6 +12,7 @@
     "firebase": "^4.5.2",
     "firebase-admin": "^5.4.3",
     "iota.lib.js": "l3wi/iota.lib.js",
+    "isomorphic-fetch": "^2.2.1",
     "next": "3.2.2",
     "next-routes": "^1.1.0",
     "react": "^15.5.4",

@@ -11,7 +11,6 @@ import Footer from '../components/footer'
 
 export default class extends React.Component {
   componentDidMount = async () => {}
-
   render() {
     return (
       <Main>

@@ -104,22 +104,23 @@ export default class extends React.Component {
                 />
                 <Heading>{this.props.error.heading}</Heading>
                 <Info>{this.props.error.body}</Info>
-                <Link route={'/'}>
-                  <Button
-                    type="button"
-                    className="btn btn-accent txt-bold modal-trigger"
-                    onClick={() => this.props.purchase()}
-                  >
-                    Go back
-                  </Button>
-                </Link>
+                {this.props.button && (
+                  <Link route={'/'}>
+                    <Button
+                      type="button"
+                      className="btn btn-accent txt-bold modal-trigger"
+                    >
+                      Go back
+                    </Button>
+                  </Link>
+                )}
               </Internal>
             )}
           </AccessBox>
         ) : (
           <AccessBox className="access-modal">
-            <Heading>Loading Device </Heading>
-            <Info>Fetching device information and your purchase history.</Info>
+            <Heading>{this.props.loading.heading || '--'} </Heading>
+            <Info>{this.props.loading.body || '--'}</Info>
             <Loading />
           </AccessBox>
         )}
