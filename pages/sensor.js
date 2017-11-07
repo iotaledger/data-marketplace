@@ -41,7 +41,7 @@ export default class extends React.Component {
     let userRef = store.collection('users').doc(firebase.user.uid)
     let deviceRef = store.collection('devices').doc(this.props.id)
     let device = await deviceInfo(deviceRef, this.props.id)
-    device.balance = await getBalance(device.address)
+    if (device.address) device.balance = await getBalance(device.address)
     if (typeof device == 'string')
       return this.throw({
         body: ` The device you are looking for doesn't exist, check the device
