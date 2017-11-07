@@ -29,6 +29,7 @@ const Back = styled.a`
   justify-content: center;
   height: 100%;
   width: 90px;
+  cursor: pointer;
   border-right: 1px solid #eaecee;
   @media (max-width: 760px) {
     width: 46px;
@@ -86,7 +87,7 @@ const SensorIcon = styled.img`
 
 export default props => (
   <Main>
-    <Link route={`/`} prefetch>
+    <Link route={`/#map`} prefetch>
       <Back>
         <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
       </Back>
