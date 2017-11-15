@@ -60,14 +60,14 @@ const RightHeader = styled.div`
   width: 150px;
   text-align: right;
   @media (max-width: 760px) {
-    margin: 5px 10px 0 30px;
+    margin: 10px 20px 0 30px;
     width: 120px;
   }
 `
 const Block = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
 `
 const NavGraphics = styled.img`
   height: 100%;

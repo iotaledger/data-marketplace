@@ -68,6 +68,10 @@ const DetailValue = styled.p`
 `
 
 export default class extends React.Component {
+  componentWillReceiveProps = props => {
+    this.setState(props)
+  }
+
   render() {
     var { deviceInfo } = this.props
     return (
@@ -99,7 +103,7 @@ export default class extends React.Component {
               </DetailValue>
             </DetailRow>{" "} */}
             <DetailRow>
-              <DetailKey>Manufacturer:</DetailKey>
+              <DetailKey>Owner:</DetailKey>
               <DetailValue>
                 {' '}
                 {deviceInfo.company ? deviceInfo.company : `--`}
@@ -142,7 +146,63 @@ export default class extends React.Component {
             </div>
           </div>
         </Details> */}
+        <Fetcher>
+          {this.props.dataEnd && <More>{`End of data reached`}</More>}
+          {this.props.fetching &&
+          this.props.packets[0] &&
+          !this.props.dataEnd ? (
+            <Loading />
+          ) : null}
+        </Fetcher>
       </Sidebar>
     )
   }
+}
+
+const More = styled.div`
+  color: white;
+  padding: 20px 20px 10px;
+  margin: 10px 0 20px;
+`
+
+const Fetcher = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 760px) {
+    display: none;
+  }
+`
+
+const Loading = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="80"
+      height="80"
+      viewBox="0 0 38 38"
+      stroke="#fff"
+    >
+      <g fill="none" fillRule="evenodd">
+        <g transform="translate(1 1)" strokeWidth="2">
+          <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
+          <path
+            d="M36 18c0-9.94-8.06-18-18-18"
+            transform="rotate(319.698 18 18)"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 18 18"
+              to="360 18 18"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </g>
+      </g>
+    </svg>
+  )
 }
