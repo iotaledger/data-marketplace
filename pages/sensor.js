@@ -28,7 +28,8 @@ export default class extends React.Component {
       heading: `Loading Device`,
       body: `Fetching device information and your purchase history. `
     },
-    error: false
+    error: false,
+    fetching: false
   }
 
   async componentDidMount() {
@@ -73,25 +74,32 @@ ID and try again`,
     })
   }
 
-  fetch = async (deviceRef, userRef) => {
-    var data = await getData(deviceRef, userRef, this.props.id)
-    if (typeof data == 'string') return this.setState({ loading: false })
+  fetch = async (deviceRef, userRef, time) => {
+    try {
+      var data = await getData(deviceRef, userRef, this.props.id, time)
+      if (typeof data == 'string') return this.setState({ loading: false })
 
-    var mamState = Mam.init(iota)
-    var packets = data.map(async (packet, i) => {
-      var packet = await Mam.fetchSingle(packet.root, null)
-      if (packet) this.saveData(packet.payload)
-    })
+      var mamState = Mam.init(iota)
+      var packets = data.map(async (packet, i) => {
+        var packet = await Mam.fetchSingle(packet.root, null)
+        if (packet) this.saveData(packet.payload)
+      })
+    } catch (e) {
+      this.setState({ dataEnd: true })
+    }
   }
 
   // Append datax
   saveData = data => {
-    console.log(JSON.parse(iota.utils.fromTrytes(data)))
-    var packets = [
-      ...this.state.packets,
-      JSON.parse(iota.utils.fromTrytes(data))
-    ]
-    this.setState({ packets, purchase: true })
+    var packet = JSON.parse(iota.utils.fromTrytes(data))
+    console.log(packet)
+    var packets = [...this.state.packets, packet]
+    this.setState({
+      packets,
+      purchase: true,
+      fetching: false,
+      lastTime: packet.time
+    })
   }
 
   fetchWallet = async () => {
@@ -189,14 +197,27 @@ ID and try again`,
     )
   }
 
+  loadMore = () => {
+    if (this.state.packets[0] && !this.state.fetching) {
+      console.log('Fired')
+      this.setState({ fetching: true }, () => {
+        this.fetch(
+          this.state.deviceRef,
+          this.state.userRef,
+          this.state.lastTime
+        )
+      })
+    }
+  }
+
   render() {
     var { deviceInfo, packets, purchase, loading, error, button } = this.state
     return (
-      <main>
+      <Main>
         <SensorNav {...this.state} fund={this.fund} />
         <Data>
           <Sidebar {...this.state} />
-          <DataStream {...this.state} />
+          <DataStream {...this.state} func={this.loadMore} />
         </Data>
         <Modal
           button={button}
@@ -205,10 +226,15 @@ ID and try again`,
           loading={loading}
           error={error}
         />
-      </main>
+      </Main>
     )
   }
 }
+const Main = styled.main`
+  width: 100vw;
+  height: 100vh;
+`
+
 const Data = styled.section`
   background-image: linear-gradient(-189deg, #06236c 1%, #1449c6 95%);
   min-height: 90vh;
