@@ -17,7 +17,6 @@ export default class extends React.Component {
     // Firebase
     const firebase = await FB()
     var devices = await allDevices(firebase.firestore)
-    console.log(devices)
     this.setState({ devices })
   }
   render() {
