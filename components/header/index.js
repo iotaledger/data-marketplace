@@ -10,7 +10,7 @@ export default class extends React.Component {
       <Header>
         <Container>
           <Info>
-            <a href="/">
+            <a href="https://iota.org">
               <img src="/static/logotypes/logo-header.svg" alt="Logo IOTA" />
             </a>
             <Heading>
@@ -25,7 +25,7 @@ export default class extends React.Component {
               Never has getting access to diverse, fine-granular data been this
               easy!
             </Tagline>
-            <Link route={'/sensor/test'} prefetch>
+            <Link route={'/#map'} prefetch>
               <Button type="button">Try it yourself</Button>
             </Link>
           </Info>
