@@ -32,13 +32,22 @@ export default class extends React.Component {
 
   render() {
     var { devices, slideIndex } = this.state
-    console.log(slideIndex)
-    console.log(slideIndex < Object.keys(devices).length)
     return (
       <Section>
         <Header>
-          <Heading>Sensor overview</Heading>
+          <Heading>Marketplace Sensors</Heading>
         </Header>
+        <Companies>
+          {Object.keys(devices).map((company, i) => (
+            <Tab
+              onClick={() => this.setState({ slideIndex: i })}
+              active={slideIndex === i}
+              key={company}
+            >
+              {company}
+            </Tab>
+          ))}
+        </Companies>
         <SlideWrapper index={slideIndex}>
           {Object.keys(devices).map((company, i) => (
             <Slide index={i} slide={slideIndex} key={`company-${i}`}>
@@ -46,14 +55,15 @@ export default class extends React.Component {
                 <Link
                   route={`/sensor/${item.sensorId}`}
                   key={`sensor-${index}`}
+                  prefetch
                 >
                   <Card data-component="SensorCard">
                     <CardHeader>
-                      <CardIcon
+                      {/* <CardIcon
                         src="/static/icons/icon-weather.svg"
                         alt="Weather sensor icon"
-                      />
-                      <SensorType>Weather sensor</SensorType>
+                      /> */}
+                      <SensorType>{item.type}</SensorType>
                       <SensorId>{item.sensorId || '--'}</SensorId>
                     </CardHeader>
                     <RowHalf>
@@ -78,8 +88,8 @@ export default class extends React.Component {
                         <InfoValue>{item.company || '--'}</InfoValue>
                       </FootRow>
                       <FootRow>
-                        <InfoKey>Data entries:</InfoKey>
-                        <InfoValue>Lorem ipsum</InfoValue>
+                        <InfoKey>Sensor streams collected:</InfoKey>
+                        <InfoValue>{item.dataTypes.length}</InfoValue>
                       </FootRow>
                       <FootRow>
                         <InfoKey>Data price:</InfoKey>
@@ -98,22 +108,47 @@ export default class extends React.Component {
           <Button
             type="button"
             onClick={() => slideIndex > 0 && this.shift('left')}
-            active={slideIndex > 0}
           >
-            <img src="/static/icons/icon-arrow-left.svg" alt="Icon arrow" />
+            <Arrow active={slideIndex > 0}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+              >
+                <polygon
+                  fill="#CEDBE2"
+                  fillRule="evenodd"
+                  points="36.867 22.18 36.867 23.82 26.707 23.82 31.367 28.5 30.188 29.68 23.508 23 30.188 16.32 31.367 17.5 26.707 22.18"
+                  transform="translate(-23 -16)"
+                />
+              </svg>
+            </Arrow>
           </Button>
           <Button
             type="button"
             onClick={() =>
               slideIndex < Object.keys(devices).length - 1 &&
               this.shift('right')}
-            active={slideIndex < Object.keys(devices).length - 1}
           >
-            <img
+            <Arrow
               style={{ transform: 'rotate(180deg)' }}
-              src="/static/icons/icon-arrow-left.svg"
-              alt="Icon arrow"
-            />
+              active={slideIndex < Object.keys(devices).length - 1}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 14 14"
+              >
+                <polygon
+                  fill="#CEDBE2"
+                  fillRule="evenodd"
+                  points="36.867 22.18 36.867 23.82 26.707 23.82 31.367 28.5 30.188 29.68 23.508 23 30.188 16.32 31.367 17.5 26.707 22.18"
+                  transform="translate(-23 -16)"
+                />
+              </svg>
+            </Arrow>
           </Button>
         </Nav>
         <Shape
@@ -127,7 +162,7 @@ export default class extends React.Component {
 }
 const Shape = styled.img`
   position: absolute;
-  bottom: -40px;
+  bottom: 0px;
   left: 70vw;
   z-index: -100;
   @media (max-width: 1120px) {
@@ -139,10 +174,40 @@ const Shape = styled.img`
   }
 `
 
+const Companies = styled.nav`
+  display: flex;
+  justify-content: center;
+  margin: 0 0 3rem;
+  flex-wrap: wrap;
+`
+
+const Tab = styled.span`
+  border-radius: 100px;
+  font-size: 80%;
+  margin: 10px 5px;
+  border: none;
+  padding: 0.5rem 0.6rem 0.3rem;
+  outline: none;
+  cursor: pointer;
+  ${props =>
+    props.active
+      ? css`
+          color: #fff;
+          background-color: #009fff;
+          box-shadow: 0 16px 25px 0 rgba(0, 159, 255, 0.27);
+        `
+      : css`
+          border: 1px solid #eaecee;
+          color: #808b92;
+          background-color: #fff;
+        `};
+`
+
 const Section = styled.section`
   position: relative;
   padding-top: 90px;
   border-top: 1px solid #eaecee;
+  padding-bottom: 90px;
   margin-bottom: 120px;
   overflow-y: hidden;
   @media (max-width: 760px) {
@@ -154,7 +219,7 @@ const Section = styled.section`
   }
 `
 const Header = styled.header`
-  margin-bottom: 50px;
+  margin-bottom: 30px;
   @media (max-width: 760px) {
     margin-bottom: 20px;
   }
@@ -196,7 +261,7 @@ const Slide = styled.div`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   position: ${props => (props.index === props.slide ? 'relative' : 'absolute')};
   top: 0;
   left: ${props => slide(props.index, props.slide)};
@@ -304,7 +369,7 @@ const SensorType = styled.span`
 `
 const SensorId = styled.span`
   font-size: 24px;
-  top: -4px;
+  top: 6px;
   line-height: 42px;
   position: relative;
   color: #009fff;
@@ -327,17 +392,24 @@ const Button = styled.button`
   padding: 0;
   outline: none;
   cursor: pointer;
-  ${props =>
-    props.active
-      ? css`
-          background-color: #009fff;
-          box-shadow: 0 16px 25px 0 rgba(0, 159, 255, 0.27);
-        `
-      : css`
-          border: 1px solid #eaecee;
-          color: #808b92;
-          background-color: #fff;
-        `};
+  &:active {
+    background-color: #009fff;
+    box-shadow: 0 16px 25px 0 rgba(0, 159, 255, 0.27);
+    svg {
+      polygon {
+        fill: #fff;
+      }
+    }
+  }
+  border: 1px solid #eaecee;
+  color: #808b92;
+  background-color: #fff;
+`
+
+const Arrow = styled.div`
+  polygon {
+    fill: ${props => (props.active ? '#009fff' : '#cedbe2')};
+  }
 `
 
 // const data = `[{"address":"RKWYXENMHNBVAZJEBXNILEFGUYQLUYRGGGSJBMIKCCLWOQVEERIXVOIFFMOIEUTYEIOSELCACNQFWTGCEJJNT9QMGC","company":"DNVGL","dataTypes":[{"id":"temp","name":"temp","unit":"C"}],"lat":"63.36243","location":{"city":"Trondheim","country":"Norway"},"lon":"10.372489","sensorId":"DNVGLTEST","type":"RaspberryPI","value":350},{"address":"MUCVUD9HANLWGQWXC9XEU9CLMDTQNLORYQSCKERZONXCFNFJ9JTC9BSFZJMRFTBFJZQWKRTYTFFVACQDJGUMONEKCX","company":"DNV GL","dataTypes":[{"id":"temp","name":"temp","unit":"C"}],"lat":"63.36243","location":{"city":"Trondheim","country":"Norway"},"lon":"10.372489","sensorId":"DNVGLTRD","type":"temp sensor","value":350},{"address":"R9ZSOBUZVNUMSBNIDRPLLQLGABQSR9TRIAJQ9BHPBMULEUUOQTBEJLRTINHMOIFFWTCFJYYTBEY9LCO99","company":"SAP","dataTypes":[{"id":"temp","name":"Temperature","unit":"C"},{"id":"pres","name":"Pressure","unit":"pHa"}],"lat":"52.525870","location":{"city":"Berlin","country":"Germany"},"lon":"13.403037","sensorId":"SAP_sensor","type":"weather","value":340},{"company":"Bosch","dataTypes":[{"id":"temp","name":"Temperature","unit":"°C"},{"id":"poll","name":"Pollution","unit":"G"},{"id":"pres","name":"Pressure","unit":"W"}],"location":{"city":"Berlin","country":"Germany"},"sensorId":"XYZ","type":"Weather Station"},{"address":"R9ZSOBUZVNUMSBNIDRPLLQLGABQSR9TRIAJQ9BHPBMULEUUOQTBEJLRTINHMOIFFWTCFJYYTBEY9LCO99","company":"BMW","dataTypes":[{"id":"temp","name":"Temperature","unit":"c"}],"lat":"48.176927","location":{"city":"Garching","country":"München"},"lon":"11.559996","sensorId":"bmw-1","type":"Weather Station inside","value":305},{"address":"NMBBMJACNALUMSLXHPFRGLYRZW9KHUUFBOHREUONOKXVTZOMTYZ9BRWQWLCRDQEUJUNDGATMUEGTJXNEKGRGPEJSHX","company":"BMW","dataTypes":[{"id":"temp","name":"Temperature","unit":"c"}],"lat":"12","location":{"city":"Berlin","country":"Germany"},"lon":"52","sensorId":"bmw-2","type":"Temp Sensor","value":350},{"address":"CZFKMTQFQVYRXBJ9ZAZTRMKOSGXNROCERURIQNNWLEIHGHBWYPCEIC9KTFVMEGZS9HNOIM9IQHCJQQ9IAPZXUGVIJZ","company":"BMW","dataTypes":[{"id":"odometer","name":"Odometer","unit":"km"}],"lat":"12","location":{"city":"Muenchen","country":"Germany"},"lon":"52","sensorId":"bmw-3","type":"Odometer","value":350},{"address":"R9ZSOBUZVNUMSBNIDRPLLQLGABQSR9TRIAJQ9BHPBMULEUUOQTBEJLRTINHMOIFFWTCFJYYTBEY9LCO99","company":"SAP","dataTypes":[{"id":"temp","name":"Temperature","unit":"C"},{"id":"pres","name":"Pressure","unit":"hPa"}],"lat":"52.434983","location":{"city":"Potsdam","country":"Germany"},"lon":"13.055286","sensorId":"mysensor","type":"BMT280-bosch","value":305},{"address":"MUCVUD9HANLWGQWXC9XEU9CLMDTQNLORYQSCKERZONXCFNFJ9JTC9BSFZJMRFTBFJZQWKRTYTFFVACQDJGUMONEKCX","company":"NOGtec","dataTypes":[{"id":"temp","name":"temperature","unit":"c"}],"location":{"city":"Berlin","country":"Germany"},"sensorId":"nog76-1","type":"Wetterstation","value":350},{"address":"R9ZSOBUZVNUMSBNIDRPLLQLGABQSR9TRIAJQ9BHPBMULEUUOQTBEJLRTINHMOIFFWTCFJYYTBEY9LCO99","company":"Bosch","dataTypes":[{"id":"pres","name":"Pressure","normalise":0.321,"unit":"hpa"},{"id":"temp","name":"Temperature","normalise":"1","unit":"c"},{"id":"poll","name":"Pollution","unit":"pm2.5"}],"lat":"46.222495","location":{"city":"Berlin","country":"Germany"},"lon":"6.138718","owner":"Jeff Bridges","sensorId":"test","totalPackets":33202,"type":"Potato Scales","value":350}]`
