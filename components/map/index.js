@@ -1,15 +1,21 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled, { css, injectGlobal } from 'styled-components'
 import MapGL, { Marker, Popup, NavigationControl } from 'react-map-gl'
 import { Link } from '../../routes'
 import { getBalance } from '../../lib/iota'
+import CSS from './css'
+const navStyle = {
+  position: 'absolute',
+  top: 0,
+  right: 0,
+  padding: '10px'
+}
+
 export default class extends React.Component {
   state = {
     viewport: {
       latitude: 52.23,
       longitude: 11.16,
-      // latitude: 37.785164,
-      // longitude: -100,
       zoom: 3.74,
       bearing: 0,
       pitch: 30,
@@ -60,7 +66,7 @@ export default class extends React.Component {
           anchor="bottom-left"
           offsetTop={-30}
           offsetLeft={10}
-          closeButton={false}
+          closeButton={true}
           longitude={Number(popupInfo.lon)}
           latitude={Number(popupInfo.lat)}
           closeOnClick={true}
@@ -69,12 +75,12 @@ export default class extends React.Component {
           <Link route={`/sensor/${popupInfo.sensorId}`} prefetch>
             <SensorCard href="">
               <CardHeader>
-                <CardIcon
+                {/* <CardIcon
                   src="/static/icons/icon-weather-small.svg"
                   alt="Weather sensor icon"
-                />
+                /> */}
                 <SensorType>
-                  Weather{' '}
+                  {popupInfo.type}{' '}
                   <LocationIcon
                     src="/static/icons/icon-small-location-dark.svg"
                     alt="Icon location pin"
@@ -126,9 +132,10 @@ export default class extends React.Component {
           onViewportChange={this._updateViewport}
           mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}
         >
-          <div style={{ position: 'absolute', right: 0 }}>
+          <div className="nav" style={navStyle}>
             <NavigationControl onViewportChange={this._updateViewport} />
           </div>
+
           {devices
             .filter(device => device.lon && device.lat)
             .map(this._renderCityMarker)}
@@ -222,12 +229,6 @@ const Nav = styled.div`
   padding: 10px;
   z-index: 100;
 `
-const navStyle = {
-  // zIndex: 99,
-  // position: 'absolute',
-  // top: 20,
-  // right: 30
-}
 
 const Heading = styled.h3`
   text-transform: capitalize;
@@ -388,4 +389,16 @@ const SensorId = styled.span`
   color: #fff;
   line-height: 42px;
   position: relative;
+`
+//override
+injectGlobal`
+ .mapboxgl-popup-close-button {
+   position: absolute;
+   top: 2px;
+   right: 10px;
+    color: rgba(255, 255, 255, .3);
+    z-index: 99;
+    font-size: 120%;
+    background: transparent;
+  }
 `
