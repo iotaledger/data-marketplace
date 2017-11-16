@@ -81,11 +81,11 @@ export default class extends React.Component {
 
 const Loading = () => {
   return (
-    <div style={{ margin: '7px 0 0 ' }}>
+    <div style={{ margin: '8px 0 0 ' }}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="30"
-        height="30"
+        width="26"
+        height="26"
         viewBox="0 0 38 38"
         stroke="#0d3497"
       >
