@@ -14,12 +14,16 @@ export default class extends React.Component {
   }
 
   sort = devices => {
-    var org = {}
-    devices.map(device => {
-      if (!org[device.company]) org[device.company] = []
-      org[device.company].push(device)
+    let slides = []
+    let count = -1
+    devices.map((device, i) => {
+      if (i % 6 === 0) {
+        count++
+        slides[count] = []
+      }
+      slides[count].push(device)
     })
-    return org
+    return slides
   }
 
   shift = direction => {
@@ -36,8 +40,9 @@ export default class extends React.Component {
       <Section>
         <Header>
           <Heading>Marketplace Sensors</Heading>
+          <Tagline>Lorem ipsum dolor sit amet enim etiam.</Tagline>
         </Header>
-        <Companies>
+        {/* <Companies>
           {Object.keys(devices).map((company, i) => (
             <Tab
               onClick={() => this.setState({ slideIndex: i })}
@@ -47,7 +52,7 @@ export default class extends React.Component {
               {company}
             </Tab>
           ))}
-        </Companies>
+        </Companies> */}
         <SlideWrapper index={slideIndex}>
           {Object.keys(devices).map((company, i) => (
             <Slide index={i} slide={slideIndex} key={`company-${i}`}>
@@ -66,14 +71,7 @@ export default class extends React.Component {
                       <SensorType>{item.type}</SensorType>
                       <SensorId>{item.sensorId || '--'}</SensorId>
                     </CardHeader>
-                    <RowHalf>
-                      <RowIcon
-                        src="/static/icons/icon-small-packet.svg"
-                        alt=""
-                      />
-                      <RowDesc>Data packets sent</RowDesc>
-                      <Data>21829</Data>
-                    </RowHalf>
+
                     <RowHalf>
                       <RowIcon
                         src="/static/icons/icon-small-location.svg"
@@ -82,15 +80,23 @@ export default class extends React.Component {
                       <RowDesc>Location</RowDesc>
                       <Data>{item.location.city || '--'}</Data>
                     </RowHalf>
+                    <RowHalf>
+                      <RowIcon
+                        src="/static/icons/icon-small-packet.svg"
+                        alt=""
+                      />
+                      <RowDesc>Sensor streams:</RowDesc>
+                      <Data>{item.dataTypes.length}</Data>
+                    </RowHalf>
                     <CardFooter>
                       <FootRow>
                         <InfoKey>Owner:</InfoKey>
                         <InfoValue>{item.company || '--'}</InfoValue>
                       </FootRow>
-                      <FootRow>
+                      {/* <FootRow>
                         <InfoKey>Sensor streams collected:</InfoKey>
                         <InfoValue>{item.dataTypes.length}</InfoValue>
-                      </FootRow>
+                      </FootRow> */}
                       <FootRow>
                         <InfoKey>Data price:</InfoKey>
                         <InfoValue>
@@ -210,6 +216,8 @@ const Section = styled.section`
   padding-bottom: 90px;
   margin-bottom: 120px;
   overflow-y: hidden;
+  overflow-x: hidden;
+
   @media (max-width: 760px) {
     padding-top: 40px;
   }
@@ -241,6 +249,7 @@ const SlideWrapper = styled.div`
   position: relative;
   height: auto;
   transition: all 0.4s ease;
+  overflow-x: hidden;
   /* min-height: 620px;
   @media (max-width: 1110px) {
     min-height: 920px;
@@ -413,3 +422,15 @@ const Arrow = styled.div`
 `
 
 // const data = `[{"address":"RKWYXENMHNBVAZJEBXNILEFGUYQLUYRGGGSJBMIKCCLWOQVEERIXVOIFFMOIEUTYEIOSELCACNQFWTGCEJJNT9QMGC","company":"DNVGL","dataTypes":[{"id":"temp","name":"temp","unit":"C"}],"lat":"63.36243","location":{"city":"Trondheim","country":"Norway"},"lon":"10.372489","sensorId":"DNVGLTEST","type":"RaspberryPI","value":350},{"address":"MUCVUD9HANLWGQWXC9XEU9CLMDTQNLORYQSCKERZONXCFNFJ9JTC9BSFZJMRFTBFJZQWKRTYTFFVACQDJGUMONEKCX","company":"DNV GL","dataTypes":[{"id":"temp","name":"temp","unit":"C"}],"lat":"63.36243","location":{"city":"Trondheim","country":"Norway"},"lon":"10.372489","sensorId":"DNVGLTRD","type":"temp sensor","value":350},{"address":"R9ZSOBUZVNUMSBNIDRPLLQLGABQSR9TRIAJQ9BHPBMULEUUOQTBEJLRTINHMOIFFWTCFJYYTBEY9LCO99","company":"SAP","dataTypes":[{"id":"temp","name":"Temperature","unit":"C"},{"id":"pres","name":"Pressure","unit":"pHa"}],"lat":"52.525870","location":{"city":"Berlin","country":"Germany"},"lon":"13.403037","sensorId":"SAP_sensor","type":"weather","value":340},{"company":"Bosch","dataTypes":[{"id":"temp","name":"Temperature","unit":"°C"},{"id":"poll","name":"Pollution","unit":"G"},{"id":"pres","name":"Pressure","unit":"W"}],"location":{"city":"Berlin","country":"Germany"},"sensorId":"XYZ","type":"Weather Station"},{"address":"R9ZSOBUZVNUMSBNIDRPLLQLGABQSR9TRIAJQ9BHPBMULEUUOQTBEJLRTINHMOIFFWTCFJYYTBEY9LCO99","company":"BMW","dataTypes":[{"id":"temp","name":"Temperature","unit":"c"}],"lat":"48.176927","location":{"city":"Garching","country":"München"},"lon":"11.559996","sensorId":"bmw-1","type":"Weather Station inside","value":305},{"address":"NMBBMJACNALUMSLXHPFRGLYRZW9KHUUFBOHREUONOKXVTZOMTYZ9BRWQWLCRDQEUJUNDGATMUEGTJXNEKGRGPEJSHX","company":"BMW","dataTypes":[{"id":"temp","name":"Temperature","unit":"c"}],"lat":"12","location":{"city":"Berlin","country":"Germany"},"lon":"52","sensorId":"bmw-2","type":"Temp Sensor","value":350},{"address":"CZFKMTQFQVYRXBJ9ZAZTRMKOSGXNROCERURIQNNWLEIHGHBWYPCEIC9KTFVMEGZS9HNOIM9IQHCJQQ9IAPZXUGVIJZ","company":"BMW","dataTypes":[{"id":"odometer","name":"Odometer","unit":"km"}],"lat":"12","location":{"city":"Muenchen","country":"Germany"},"lon":"52","sensorId":"bmw-3","type":"Odometer","value":350},{"address":"R9ZSOBUZVNUMSBNIDRPLLQLGABQSR9TRIAJQ9BHPBMULEUUOQTBEJLRTINHMOIFFWTCFJYYTBEY9LCO99","company":"SAP","dataTypes":[{"id":"temp","name":"Temperature","unit":"C"},{"id":"pres","name":"Pressure","unit":"hPa"}],"lat":"52.434983","location":{"city":"Potsdam","country":"Germany"},"lon":"13.055286","sensorId":"mysensor","type":"BMT280-bosch","value":305},{"address":"MUCVUD9HANLWGQWXC9XEU9CLMDTQNLORYQSCKERZONXCFNFJ9JTC9BSFZJMRFTBFJZQWKRTYTFFVACQDJGUMONEKCX","company":"NOGtec","dataTypes":[{"id":"temp","name":"temperature","unit":"c"}],"location":{"city":"Berlin","country":"Germany"},"sensorId":"nog76-1","type":"Wetterstation","value":350},{"address":"R9ZSOBUZVNUMSBNIDRPLLQLGABQSR9TRIAJQ9BHPBMULEUUOQTBEJLRTINHMOIFFWTCFJYYTBEY9LCO99","company":"Bosch","dataTypes":[{"id":"pres","name":"Pressure","normalise":0.321,"unit":"hpa"},{"id":"temp","name":"Temperature","normalise":"1","unit":"c"},{"id":"poll","name":"Pollution","unit":"pm2.5"}],"lat":"46.222495","location":{"city":"Berlin","country":"Germany"},"lon":"6.138718","owner":"Jeff Bridges","sensorId":"test","totalPackets":33202,"type":"Potato Scales","value":350}]`
+const Tagline = styled.h4`
+  @media (max-width: 760px) {
+    font-size: 18px;
+    line-height: 28px;
+  }
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 33px;
+  margin-bottom: 60px;
+  text-align: center;
+  color: #4e5a61;
+`
