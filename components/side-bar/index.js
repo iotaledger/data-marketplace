@@ -79,12 +79,17 @@ export default class extends React.Component {
         <Details>
           <Label>Sensor details:</Label>
           <div>
-            <DetailRow>
-              <DetailKey>Device Balance:</DetailKey>
-              <DetailValue>
-                {deviceInfo.balance ? reducer(deviceInfo.balance) : `--`}
-              </DetailValue>
-            </DetailRow>
+            <a
+              href={`https://testnet.thetangle.org/address/${deviceInfo.address}`}
+              target={`_blank`}
+            >
+              <DetailRow>
+                <DetailKey>Device Balance:</DetailKey>
+                <DetailValue>
+                  {deviceInfo.balance ? reducer(deviceInfo.balance) : `--`}
+                </DetailValue>
+              </DetailRow>
+            </a>
             <DetailRow>
               <DetailKey>Location:</DetailKey>
               <DetailValue>
@@ -158,6 +163,8 @@ export default class extends React.Component {
     )
   }
 }
+
+const A = styled.a`text-decoration: none;`
 
 const More = styled.div`
   color: white;
