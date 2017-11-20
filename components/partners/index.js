@@ -7,30 +7,72 @@ export default props => (
       <H>Our Corporate Partners</H>
       <Ul>
         <Li>
-          <img
-            src="/static/logotypes/placeholder.png"
-            srcSet="/static/logotypes/placeholder.png 2x"
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
             alt="Logo"
           />
         </Li>
         <Li>
-          <img
-            src="/static/logotypes/placeholder.png"
-            srcSet="/static/logotypes/placeholder.png 2x"
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
             alt="Logo"
           />
         </Li>
         <Li>
-          <img
-            src="/static/logotypes/placeholder.png"
-            srcSet="/static/logotypes/placeholder.png 2x"
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
             alt="Logo"
           />
         </Li>
         <Li>
-          <img
-            src="/static/logotypes/placeholder.png"
-            srcSet="/static/logotypes/placeholder.png 2x"
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/generic.png"
+            srcSet="/static/logotypes/generic.png 2x"
             alt="Logo"
           />
         </Li>
@@ -71,7 +113,9 @@ const Ul = styled.ul`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 40px 0;
+  flex-wrap: wrap;
+  margin: 40px auto;
+  width: 80%;
   list-style: none;
   @media (max-width: 1120px) {
     justify-content: space-around;
@@ -96,4 +140,8 @@ const Li = styled.li`
   @media (max-width: 760px) {
     margin-bottom: 40px;
   }
+`
+const I = styled.img`
+  max-width: 200px;
+  padding: 5px;
 `
