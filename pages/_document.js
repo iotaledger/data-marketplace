@@ -25,6 +25,7 @@ export default class MyDocument extends Document {
             }}
           />
           <title>IOTA Data Market</title>
+          <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css" />
           {styleTags}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <script src="/static/iota-bindings-emscripten.wasm" />
