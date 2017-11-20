@@ -40,7 +40,7 @@ export default class extends React.Component {
       <Section>
         <Header>
           <Heading>Marketplace Sensors</Heading>
-          <Tagline>Lorem ipsum dolor sit amet enim etiam.</Tagline>
+          <Tagline>Click below to view and purchase it's MAM stream</Tagline>
         </Header>
         {/* <Companies>
           {Object.keys(devices).map((company, i) => (
