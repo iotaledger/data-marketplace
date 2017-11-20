@@ -24,6 +24,7 @@ export default class extends React.Component {
     packets: [],
     purchase: false,
     button: true,
+    index: 0,
     loading: {
       heading: `Loading Device`,
       body: `Fetching device information and your purchase history. `
@@ -74,15 +75,21 @@ ID and try again`,
     })
   }
 
-  fetch = async (deviceRef, userRef, time) => {
-    try {
-      var data = await getData(deviceRef, userRef, this.props.id, time)
-      if (typeof data == 'string') return this.setState({ loading: false })
+  fetch = async (deviceRef, userRef) => {
+    var data = await getData(deviceRef, userRef, this.props.id)
+    if (typeof data == 'string') return this.setState({ loading: false })
+    if (data[0].time) data = data.sort((a, b) => b.time - a.time)
+    this.fetchMam(data)
+    this.setState({ mamData: data })
+  }
 
+  fetchMam = data => {
+    try {
+      if (!data[0]) throw 'Fail'
       var mamState = Mam.init(iota)
-      var packets = data.map(async (packet, i) => {
+      var packets = data.splice(this.state.index, 20).map(async (packet, i) => {
         var packet = await Mam.fetchSingle(packet.root, null)
-        if (packet) this.saveData(packet.payload)
+        if (packet) this.saveData(packet.payload, i)
       })
     } catch (e) {
       this.setState({ dataEnd: true })
@@ -90,15 +97,14 @@ ID and try again`,
   }
 
   // Append datax
-  saveData = data => {
+  saveData = (data, i) => {
     var packet = JSON.parse(iota.utils.fromTrytes(data))
-    console.log(packet)
     var packets = [...this.state.packets, packet]
     this.setState({
       packets,
       purchase: true,
       fetching: false,
-      lastTime: packet.time
+      index: i
     })
   }
 
@@ -119,7 +125,6 @@ ID and try again`,
   fund = async () => {
     this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
       var wallet = await initWallet()
-      console.log(wallet)
       await localStorage.setItem('wallet', JSON.stringify(wallet))
       this.setState({
         walletInit: true,
@@ -199,13 +204,8 @@ ID and try again`,
 
   loadMore = () => {
     if (this.state.packets[0] && !this.state.fetching) {
-      console.log('Fired')
       this.setState({ fetching: true }, () => {
-        this.fetch(
-          this.state.deviceRef,
-          this.state.userRef,
-          this.state.lastTime
-        )
+        this.fetchMam(this.state.mamData)
       })
     }
   }
