@@ -4,12 +4,13 @@ import MapGL, { Marker, Popup, NavigationControl } from 'react-map-gl'
 import { Link } from '../../routes'
 import { getBalance } from '../../lib/iota'
 import CSS from './css'
-const navStyle = {
-  position: 'absolute',
-  top: 0,
-  right: 0,
-  padding: '10px'
-}
+
+// const navStyle = {
+//   position: 'absolute',
+//   top: 0,
+//   right: 20,
+//   padding: '10px'
+// }
 
 export default class extends React.Component {
   state = {
@@ -17,17 +18,24 @@ export default class extends React.Component {
       latitude: 52.23,
       longitude: 11.16,
       zoom: 3.74,
+      maxZoom: 11.5,
       bearing: 0,
       pitch: 30,
-      width: 800
+      width: 800,
+      height: 900,
+      scrollZoom: false
     },
     popupInfo: null
   }
   componentDidMount() {
     window.addEventListener('resize', this._resize)
     this._resize()
+    this.mapObj()
   }
 
+  componentWillReceiveProps(props) {
+    console.log(props)
+  }
   componentWillUnmount() {
     window.removeEventListener('resize', this._resize)
   }
@@ -43,6 +51,10 @@ export default class extends React.Component {
   }
   _updateViewport = viewport => {
     this.setState({ viewport })
+  }
+
+  mapObj = () => {
+    // map.scrollZoom.disable()
   }
 
   _renderCityMarker = (device, index) => {
@@ -64,12 +76,12 @@ export default class extends React.Component {
         <Popup
           tipSize={10}
           anchor="bottom-left"
-          offsetTop={-30}
-          offsetLeft={10}
+          offsetTop={-5}
+          offsetLeft={5}
           closeButton={true}
           longitude={Number(popupInfo.lon)}
           latitude={Number(popupInfo.lat)}
-          closeOnClick={true}
+          closeOnClick={false}
           onClose={() => this.setState({ popupInfo: null })}
         >
           <Link route={`/sensor/${popupInfo.sensorId}`} prefetch>
@@ -99,8 +111,8 @@ export default class extends React.Component {
                   <InfoValue>{popupInfo.company}</InfoValue>
                 </FootRow>
                 <FootRow>
-                  <InfoKey>Device Balance:</InfoKey>
-                  <InfoValue>Lorem ipsum</InfoValue>
+                  <InfoKey>Sensor Streams:</InfoKey>
+                  <InfoValue>{popupInfo.dataTypes.length}</InfoValue>
                 </FootRow>
                 <FootRow>
                   <InfoKey>Data price:</InfoKey>
@@ -120,61 +132,26 @@ export default class extends React.Component {
     return (
       <Main id={'map'}>
         <Header>
-          <Heading>Sensor map</Heading>
-          <Subtitle>Click on a pin to view the sensor information.</Subtitle>
+          <div>
+            <Heading>Sensor map</Heading>
+            <Subtitle>Click on a pin to view the sensor information.</Subtitle>
+          </div>
         </Header>
         <MapGL
-          maxZoom={11.5}
-          scrollZoom={false}
           {...viewport}
-          height={900}
           mapStyle="mapbox://styles/iotafoundation/cj8y282t417092rlgv4j9wcxg"
           onViewportChange={this._updateViewport}
           mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}
         >
-          <div className="nav" style={navStyle}>
+          <div style={{ position: 'absolute', right: 0 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
           </div>
-
           {devices
             .filter(device => device.lon && device.lat)
             .map(this._renderCityMarker)}
 
           {this._renderPopup()}
         </MapGL>
-        {/* <Pin>
-          <SensorCard href="./sensor-data.html">
-            <CardHeader>
-              <CardIcon
-                src="/static/icons/icon-weather-small.svg"
-                alt="Weather sensor icon"
-              />
-              <SensorType>
-                Weather{" "}
-                <LocationIcon
-                  src="/static/icons/icon-small-location-dark.svg"
-                  alt="Icon location pin"
-                />{" "}
-                <span>Berlin</span>
-              </SensorType>
-              <SensorId>ID-27281</SensorId>
-            </CardHeader>
-            <CardFooter>
-              <FootRow>
-                <InfoKey>Owner:</InfoKey>
-                <InfoValue>Patrick Moore</InfoValue>
-              </FootRow>
-              <FootRow>
-                <InfoKey>Data entries:</InfoKey>
-                <InfoValue>Lorem ipsum</InfoValue>
-              </FootRow>
-              <FootRow>
-                <InfoKey>Data price:</InfoKey>
-                <InfoValue>$0.01</InfoValue>
-              </FootRow>
-            </CardFooter>
-          </SensorCard>
-        </Pin> */}
 
         <HeaderBg
           src="/static/shapes/shape-main-1.svg"
@@ -190,6 +167,16 @@ export default class extends React.Component {
     )
   }
 }
+
+const Clear = styled.div`
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  /* pointer-events: none; */
+`
 
 const Main = styled.main`
   position: relative;
@@ -212,7 +199,8 @@ const Header = styled.div`
   padding: 0 15px;
   margin-right: auto;
   margin-left: auto;
-  display: inline-block;
+  display: flex;
+  justify-contents: center;
   width: 300px;
   position: absolute;
   z-index: 1100;
@@ -394,8 +382,8 @@ const SensorId = styled.span`
 injectGlobal`
  .mapboxgl-popup-close-button {
    position: absolute;
-   top: 2px;
-   right: 10px;
+   top: 8px;
+   right: 15px;
     color: rgba(255, 255, 255, .3);
     z-index: 99;
     font-size: 120%;
