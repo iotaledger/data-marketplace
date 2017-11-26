@@ -85,7 +85,8 @@ export default class extends React.Component {
                 />
                 <Heading>Purchase device stream</Heading>
                 <Info>
-                  Mauris non tempor quam, et lacinia sapien. Mauris accumsan.
+                  You can purchase access to this device's data stream by
+                  clicking below.
                 </Info>
                 <Button
                   type="button"
