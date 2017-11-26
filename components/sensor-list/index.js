@@ -69,7 +69,11 @@ export default class extends React.Component {
                         alt="Weather sensor icon"
                       /> */}
                       <SensorType>{item.type}</SensorType>
-                      <SensorId>{item.sensorId || '--'}</SensorId>
+                      <SensorId>
+                        {item.sensorId && item.sensorId.length > 20
+                          ? item.sensorId.substr(0, 20) + '...'
+                          : item.sensorId}
+                      </SensorId>
                     </CardHeader>
 
                     <RowHalf>
@@ -135,7 +139,8 @@ export default class extends React.Component {
             type="button"
             onClick={() =>
               slideIndex < Object.keys(devices).length - 1 &&
-              this.shift('right')}
+              this.shift('right')
+            }
           >
             <Arrow
               style={{ transform: 'rotate(180deg)' }}
@@ -217,6 +222,7 @@ const Section = styled.section`
   margin-bottom: 120px;
   overflow-y: hidden;
   overflow-x: hidden;
+  min-height: 600px;
 
   @media (max-width: 760px) {
     padding-top: 40px;
@@ -344,7 +350,9 @@ const RowIcon = styled.img`
   position: relative;
   top: 1px;
 `
-const SensorIcon = styled.img`margin-right: 10px;`
+const SensorIcon = styled.img`
+  margin-right: 10px;
+`
 const CardFooter = styled.footer`
   padding: 20px 30px;
   background-color: rgba(206, 218, 226, 0.2);
@@ -369,7 +377,9 @@ const InfoValue = styled.span`
   line-height: 16px;
   font-weight: 800;
 `
-const CardIcon = styled.img`margin-right: 10px;`
+const CardIcon = styled.img`
+  margin-right: 10px;
+`
 const SensorType = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   position: absolute;
