@@ -36,15 +36,6 @@ app.prepare().then(() => {
     return res.json(JSON.stringify(resp))
   })
 
-  server.post('/new-data', async (req, res) => {
-    var packet = req.body
-    if (!packet.id || !packet.packet || !packet.sk)
-      return res.json(JSON.stringify({ error: 'Values missing' }))
-
-    var resp = await Firebase.newData(packet.id, packet.packet, packet.sk)
-    return res.json(JSON.stringify(resp))
-  })
-
   server.get('*', (req, res) => {
     return handler(req, res)
   })
