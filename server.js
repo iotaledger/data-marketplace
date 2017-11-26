@@ -29,6 +29,13 @@ app.prepare().then(() => {
     }
   })
 
+  server.post('/new-device', async (req, res) => {
+    var packet = req.body
+    console.log(packet)
+    var resp = await Firebase.newDevice(packet.id, packet.device, packet.sk)
+    return res.json(JSON.stringify(resp))
+  })
+
   server.get('*', (req, res) => {
     return handler(req, res)
   })

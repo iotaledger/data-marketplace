@@ -88,7 +88,11 @@ ID and try again`,
       if (!data[0]) throw 'Fail'
       var mamState = Mam.init(iota)
       var packets = data.splice(this.state.index, 20).map(async (packet, i) => {
-        var packet = await Mam.fetchSingle(packet.root, null)
+        var packet = await Mam.fetchSingle(
+          packet.root,
+          'restricted',
+          packet.sidekey
+        )
         if (packet) this.saveData(packet.payload, i)
       })
     } catch (e) {
