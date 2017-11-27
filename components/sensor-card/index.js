@@ -23,12 +23,12 @@ export default class extends React.Component {
           <Row key={`sensor-${i}`}>
             {row.map((item, i) => (
               <RowHalf key={`item-${i}`}>
-                <RowDesc>{item.name}:</RowDesc>
+                <RowDesc>{item && item.name}:</RowDesc>
                 <RowValue>
                   {(this.props.packet &&
                     this.props.packet.data[item.id.toLowerCase()]) ||
                     '--'}
-                  <RowUnit>{item.unit}</RowUnit>
+                  <RowUnit>{item && item.unit}</RowUnit>
                 </RowValue>
               </RowHalf>
             ))}
