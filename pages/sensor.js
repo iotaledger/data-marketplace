@@ -79,6 +79,7 @@ ID and try again`,
     var data = await getData(deviceRef, userRef, this.props.id)
     if (typeof data == 'string') return this.setState({ loading: false })
     if (data[0].time) data = data.sort((a, b) => b.time - a.time)
+    console.log(data)
     this.fetchMam(data)
     this.setState({ mamData: data })
   }
@@ -90,8 +91,8 @@ ID and try again`,
       var packets = data.splice(this.state.index, 20).map(async (packet, i) => {
         var packet = await Mam.fetchSingle(
           packet.root,
-          'restricted',
-          packet.sidekey
+          packet.sidekey !== '' ? 'restricted' : null,
+          packet.sidekey !== '' ? packet.sidekey : null
         )
         if (packet) this.saveData(packet.payload, i)
       })
@@ -103,6 +104,7 @@ ID and try again`,
   // Append datax
   saveData = (data, i) => {
     var packet = JSON.parse(iota.utils.fromTrytes(data))
+    console.log(packet)
     var packets = [...this.state.packets, packet]
     this.setState({
       packets,
