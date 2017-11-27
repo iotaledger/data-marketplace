@@ -13,7 +13,7 @@ export default props => (
       </W>
       <N>
         <Ul>
-          <Li>
+          {/* <Li>
             <A href="#">Terms of Service</A>
           </Li>
           <Li>
@@ -21,7 +21,7 @@ export default props => (
           </Li>
           <Li>
             <A href="#">Privacy Policy</A>
-          </Li>
+          </Li> */}
         </Ul>
         <Copy>© 2017 IOTA. All rights reserved.</Copy>
       </N>

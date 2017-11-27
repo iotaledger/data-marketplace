@@ -90,7 +90,7 @@ export default class extends React.Component {
       <Container>
         <div>
           <Header>How it works?</Header>
-          <Tagline>Lorem ipsum dolor sit amet enim etiam.</Tagline>
+          <Tagline>{''}</Tagline>
         </div>
         <InfoRow>
           <InfoCol>
