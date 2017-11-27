@@ -11,8 +11,7 @@ export default class MyDocument extends Document {
         <Head>
           <script
             async
-            src={`https://www.googletagmanager.com/gtag/js?id=${process.env
-              .GA_TRACKING_ID}`}
+            src={`https://www.googletagmanager.com/gtag/js?id=UA-106570081-3`}
           />
           <script
             dangerouslySetInnerHTML={{
@@ -20,14 +19,14 @@ export default class MyDocument extends Document {
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments)};
                 gtag('js', new Date());
-                gtag('config', '${process.env.GA_TRACKING_ID}');
+                gtag('config', 'UA-106570081-3');
               `
             }}
           />
           <title>IOTA Data Market</title>
-          <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css" />
           {styleTags}
           <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css" />
           <script src="/static/iota-bindings-emscripten.wasm" />
           <script src="/static/mam.web.js" />
           <script src="/static/curl.min.js" />
