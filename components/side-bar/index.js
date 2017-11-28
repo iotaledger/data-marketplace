@@ -80,7 +80,9 @@ export default class extends React.Component {
           <Label>Sensor details:</Label>
           <div>
             <a
-              href={`https://testnet.thetangle.org/address/${deviceInfo.address}`}
+              href={`https://testnet.thetangle.org/address/${
+                deviceInfo.address
+              }`}
               target={`_blank`}
             >
               <DetailRow>
@@ -95,8 +97,9 @@ export default class extends React.Component {
               <DetailValue>
                 {' '}
                 {deviceInfo.location
-                  ? `${deviceInfo.location.city}, ${deviceInfo.location
-                      .country} `
+                  ? `${deviceInfo.location.city}, ${
+                      deviceInfo.location.country
+                    } `
                   : `--`}
               </DetailValue>
             </DetailRow>
@@ -164,7 +167,9 @@ export default class extends React.Component {
   }
 }
 
-const A = styled.a`text-decoration: none;`
+const A = styled.a`
+  text-decoration: none;
+`
 
 const More = styled.div`
   color: white;
