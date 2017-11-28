@@ -4,6 +4,7 @@ import MapGL, { Marker, Popup, NavigationControl } from 'react-map-gl'
 import { Link } from '../../routes'
 import { getBalance } from '../../lib/iota'
 import CSS from './css'
+import Controls from './controls'
 
 // const navStyle = {
 //   position: 'absolute',
@@ -11,6 +12,7 @@ import CSS from './css'
 //   right: 20,
 //   padding: '10px'
 // }
+const mapControls = new Controls()
 
 export default class extends React.Component {
   state = {
@@ -127,17 +129,18 @@ export default class extends React.Component {
           </div>
         </Header>
         <MapGL
-          maxZoom={11.5}
           scrollZoom={false}
+          mapControls={mapControls}
+          maxZoom={11.5}
           {...viewport}
           height={900}
           mapStyle="mapbox://styles/iotafoundation/cj8y282t417092rlgv4j9wcxg"
           onViewportChange={this._updateViewport}
           mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}
         >
-          {/* <div style={{ position: 'absolute', right: 20, top: 10 }}>
+          <div style={{ position: 'absolute', right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
-          </div> */}
+          </div>
           {devices
             .filter(device => device.lon && device.lat)
             .map(this._renderCityMarker)}

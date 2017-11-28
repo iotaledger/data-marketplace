@@ -7,6 +7,7 @@ injectGlobal`
     position: relative;
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
+.mapboxgl-missing-css {display: none;}
 
 .mapboxgl-canvas-container.mapboxgl-interactive,
 .mapboxgl-ctrl-nav-compass {
