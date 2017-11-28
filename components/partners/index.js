@@ -148,6 +148,13 @@ export default props => (
         </Li>
         <Li>
           <I
+            src="/static/logotypes/tine.png"
+            srcSet="/static/logotypes/tine.png 2x"
+            alt="Logo"
+          />
+        </Li>
+        <Li>
+          <I
             src="/static/logotypes/trianel.png"
             srcSet="/static/logotypes/trianel.png 2x"
             alt="Logo"
@@ -171,6 +178,13 @@ export default props => (
           <I
             src="/static/logotypes/uio.png"
             srcSet="/static/logotypes/uio.png 2x"
+            alt="Logo"
+          />
+        </Li>
+        <Li>
+          <I
+            src="/static/logotypes/undc.png"
+            srcSet="/static/logotypes/undc.png 2x"
             alt="Logo"
           />
         </Li>
