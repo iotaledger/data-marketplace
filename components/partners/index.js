@@ -19,6 +19,13 @@ export default props => (
             srcSet="/static/logotypes/agder.png 2x"
             alt="Logo"
           />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/aliander.png"
+            srcSet="/static/logotypes/aliander.png 2x"
+            alt="Logo"
+          />
         </Li>
         <Li>
           <I
