@@ -18,24 +18,17 @@ export default class extends React.Component {
       latitude: 52.23,
       longitude: 11.16,
       zoom: 3.74,
-      maxZoom: 11.5,
       bearing: 0,
-      pitch: 30,
-      width: 800,
-      height: 900,
-      scrollZoom: false
+      pitch: 15,
+      width: 800
     },
     popupInfo: null
   }
   componentDidMount() {
     window.addEventListener('resize', this._resize)
     this._resize()
-    this.mapObj()
   }
 
-  componentWillReceiveProps(props) {
-    console.log(props)
-  }
   componentWillUnmount() {
     window.removeEventListener('resize', this._resize)
   }
@@ -51,10 +44,6 @@ export default class extends React.Component {
   }
   _updateViewport = viewport => {
     this.setState({ viewport })
-  }
-
-  mapObj = () => {
-    // map.scrollZoom.disable()
   }
 
   _renderCityMarker = (device, index) => {
@@ -78,10 +67,10 @@ export default class extends React.Component {
           anchor="bottom-left"
           offsetTop={-5}
           offsetLeft={5}
-          closeButton={true}
+          closeButton={false}
           longitude={Number(popupInfo.lon)}
           latitude={Number(popupInfo.lat)}
-          closeOnClick={false}
+          closeOnClick={true}
           onClose={() => this.setState({ popupInfo: null })}
         >
           <Link route={`/sensor/${popupInfo.sensorId}`} prefetch>
@@ -138,18 +127,20 @@ export default class extends React.Component {
           </div>
         </Header>
         <MapGL
+          maxZoom={11.5}
+          scrollZoom={false}
           {...viewport}
+          height={900}
           mapStyle="mapbox://styles/iotafoundation/cj8y282t417092rlgv4j9wcxg"
           onViewportChange={this._updateViewport}
           mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}
         >
-          <div style={{ position: 'absolute', right: 0 }}>
+          {/* <div style={{ position: 'absolute', right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
-          </div>
+          </div> */}
           {devices
             .filter(device => device.lon && device.lat)
             .map(this._renderCityMarker)}
-
           {this._renderPopup()}
         </MapGL>
 
@@ -178,7 +169,7 @@ const Clear = styled.div`
   /* pointer-events: none; */
 `
 
-const Main = styled.main`
+const Main = styled.div`
   position: relative;
   &::before {
     content: '';
@@ -251,7 +242,7 @@ const Subtitle = styled.h4`
 const HeaderBg = styled.img`
   position: absolute;
   top: -120px;
-  right: 70vw;
+  right: 75vw;
   z-index: 1000;
   @media (max-width: 1120px) {
     right: 67vw;
@@ -363,8 +354,12 @@ const InfoValue = styled.span`
   font-weight: 400;
   color: #fff;
 `
-const CardIcon = styled.img`margin-right: 10px;`
-const LocationIcon = styled.img`margin: 0 6px 0 13px;`
+const CardIcon = styled.img`
+  margin-right: 10px;
+`
+const LocationIcon = styled.img`
+  margin: 0 6px 0 13px;
+`
 const SensorType = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   position: absolute;
