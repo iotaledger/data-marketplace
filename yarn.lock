@@ -2536,9 +2536,21 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+gl-mat3@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/gl-mat3/-/gl-mat3-1.0.0.tgz#89633219ca429379a16b9185d95d41713453b912"
+
 gl-mat4@^1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/gl-mat4/-/gl-mat4-1.1.4.tgz#1e895b55892e56a896867abd837d38f37a178086"
+
+gl-quat@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/gl-quat/-/gl-quat-1.0.0.tgz#0945ec923386f45329be5dc357b1c8c2d47586c5"
+  dependencies:
+    gl-mat3 "^1.0.0"
+    gl-vec3 "^1.0.3"
+    gl-vec4 "^1.0.0"
 
 gl-vec2@^1.0.0:
   version "1.0.0"
@@ -2548,7 +2560,7 @@ gl-vec3@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/gl-vec3/-/gl-vec3-1.0.3.tgz#110fd897d0729f6398307381567d0944941bf22b"
 
-gl-vec4@^1.0.1:
+gl-vec4@^1.0.0, gl-vec4@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/gl-vec4/-/gl-vec4-1.0.1.tgz#97d96878281b14b532cbce101785dfd1cb340964"
 
@@ -3384,9 +3396,9 @@ mapbox-gl-supported@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/mapbox-gl-supported/-/mapbox-gl-supported-1.2.0.tgz#cbd34df894206cadda9a33c8d9a4609f26bb1989"
 
-mapbox-gl@0.40.1:
-  version "0.40.1"
-  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-0.40.1.tgz#14785b1ab3bc7a42fd24fcb37637ebcec817c5f1"
+mapbox-gl@0.41.0:
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-0.41.0.tgz#68839ac1d45c1e90a230d7a6c17434b5e2cfbb73"
   dependencies:
     "@mapbox/gl-matrix" "^0.0.1"
     "@mapbox/point-geometry" "^0.1.0"
@@ -3419,6 +3431,16 @@ mapbox-gl@0.40.1:
     unflowify "^1.0.0"
     vt-pbf "^3.0.1"
     webworkify "^1.4.0"
+
+"math.gl@>= 1.0.0-alpha.8", math.gl@^1.0.0-alpha.7:
+  version "1.0.0-alpha.8"
+  resolved "https://registry.yarnpkg.com/math.gl/-/math.gl-1.0.0-alpha.8.tgz#51dd8d03e5c50096851e8a268d888c1eda766cd1"
+  dependencies:
+    gl-mat4 "^1.1.4"
+    gl-quat "^1.0.0"
+    gl-vec2 "^1.0.0"
+    gl-vec3 "^1.0.3"
+    gl-vec4 "^1.0.1"
 
 maximatch@^0.1.0:
   version "0.1.0"
@@ -4250,17 +4272,18 @@ react-hot-loader@3.0.0-beta.7:
     redbox-react "^1.3.6"
     source-map "^0.4.4"
 
-react-map-gl@^3.0.0:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/react-map-gl/-/react-map-gl-3.1.3.tgz#94cf22a034720a16dea47aa23558a29c4c585d1f"
+react-map-gl@l3wi/react-map-gl:
+  version "3.1.1"
+  resolved "https://codeload.github.com/l3wi/react-map-gl/tar.gz/540dcb542d8a7f133ff6808f67e416f9a515261e"
   dependencies:
     babel-runtime "^6.23.0"
     bowser "^1.2.0"
     immutable "*"
-    mapbox-gl "0.40.1"
+    mapbox-gl "0.41.0"
+    math.gl ">= 1.0.0-alpha.8"
     mjolnir.js ">=0.4.1"
     prop-types "^15.5.7"
-    viewport-mercator-project "^4.0.1"
+    viewport-mercator-project "^5.0.0-alpha.1"
 
 react-proxy@^3.0.0-alpha.0:
   version "3.0.0-alpha.1"
@@ -5177,14 +5200,11 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-viewport-mercator-project@^4.0.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-4.1.1.tgz#92b0611fa0041041d2f3568da3529a8a846017d0"
+viewport-mercator-project@^5.0.0-alpha.1:
+  version "5.0.0-alpha.1"
+  resolved "https://registry.yarnpkg.com/viewport-mercator-project/-/viewport-mercator-project-5.0.0-alpha.1.tgz#637b849517f4fc3898028a89210d244b412011e0"
   dependencies:
-    gl-mat4 "^1.1.4"
-    gl-vec2 "^1.0.0"
-    gl-vec3 "^1.0.3"
-    gl-vec4 "^1.0.1"
+    math.gl "^1.0.0-alpha.7"
 
 vlq@^0.2.1:
   version "0.2.3"
