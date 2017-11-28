@@ -13,7 +13,6 @@ import Controls from './controls'
 //   padding: '10px'
 // }
 const mapControls = new Controls()
-
 export default class extends React.Component {
   state = {
     viewport: {
@@ -24,7 +23,8 @@ export default class extends React.Component {
       pitch: 15,
       width: 800
     },
-    popupInfo: null
+    popupInfo: null,
+    mapHeight: 900
   }
   componentDidMount() {
     window.addEventListener('resize', this._resize)
@@ -36,12 +36,18 @@ export default class extends React.Component {
   }
 
   _resize = () => {
+    let mapHeight
+    console.log(window.innerWidth > 760)
+    if (window.innerWidth < 760) mapHeight = 500
+    if (window.innerWidth > 760) mapHeight = 900
+
     this.setState({
       viewport: {
         ...this.state.viewport,
         width: this.props.width || window.innerWidth,
         height: this.props.height || window.innerHeight
-      }
+      },
+      mapHeight
     })
   }
   _updateViewport = viewport => {
@@ -118,7 +124,7 @@ export default class extends React.Component {
   }
 
   render() {
-    const { viewport } = this.state
+    const { viewport, mapHeight } = this.state
     const { devices } = this.props
     return (
       <Main id={'map'}>
@@ -133,7 +139,7 @@ export default class extends React.Component {
           mapControls={mapControls}
           maxZoom={11.5}
           {...viewport}
-          height={900}
+          height={mapHeight}
           mapStyle="mapbox://styles/iotafoundation/cj8y282t417092rlgv4j9wcxg"
           onViewportChange={this._updateViewport}
           mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}
