@@ -18,7 +18,7 @@
     "next-routes": "^1.1.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
-    "react-map-gl": "^3.0.0",
+    "react-map-gl": "l3wi/react-map-gl",
     "styled-components": "^2.2.1"
   },
   "devDependencies": {
