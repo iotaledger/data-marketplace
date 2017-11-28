@@ -69,7 +69,7 @@ export default class extends React.Component {
         <Block>
           <Desc>{desc}</Desc>
           {walletInit ? (
-            <Balance>{reducer(wallet.amount)}</Balance>
+            <Balance>{reducer(wallet.balance)}</Balance>
           ) : (
             <Button onClick={() => this.props.fund()}>Fund Wallet</Button>
           )}

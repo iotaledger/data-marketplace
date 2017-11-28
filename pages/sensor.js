@@ -199,7 +199,7 @@ ID and try again`,
         })
         var message = JSON.parse(await resp.json())
         if (message._writeTime) {
-          wallet.amount = wallet.amount - device.value
+          wallet.amount = wallet.balance - device.value
           this.fetch(this.state.deviceRef, this.state.userRef)
           this.setState({ loading: true, purchase: true, wallet })
           await localStorage.setItem('wallet', JSON.stringify(wallet))
