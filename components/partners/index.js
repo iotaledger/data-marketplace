@@ -4,7 +4,7 @@ import styled from 'styled-components'
 export default props => (
   <S>
     <C>
-      <H>Our Corporate Partners</H>
+      <H>Marketplace Participants</H>
       <Ul>
         <Li>
           <I
