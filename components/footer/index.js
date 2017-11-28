@@ -15,13 +15,13 @@ export default props => (
         <Ul>
           {/* <Li>
             <A href="#">Terms of Service</A>
-          </Li>
+          </Li> 
           <Li>
             <A href="#">Customer Support</A>
-          </Li>
-          <Li>
-            <A href="#">Privacy Policy</A>
           </Li> */}
+          <Li>
+            <A href="https://iota.org">https://iota.org</A>
+          </Li>
         </Ul>
         <Copy>© 2017 IOTA Foundation. All rights reserved.</Copy>
       </N>
