@@ -23,7 +23,7 @@ export default props => (
             <A href="#">Privacy Policy</A>
           </Li> */}
         </Ul>
-        <Copy>© 2017 IOTA. All rights reserved.</Copy>
+        <Copy>© 2017 IOTA Foundation. All rights reserved.</Copy>
       </N>
     </C>
   </F>
