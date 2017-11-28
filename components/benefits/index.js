@@ -6,7 +6,7 @@ export default props => (
     <C>
       <H>
         <H3>Only with IOTA</H3>
-        <H4>Lorem ipsum dolor sit amet sramet blablamet</H4>
+        <H4>The enabling technology of the Data Marketplace</H4>
       </H>
       <R>
         <Col>
@@ -16,8 +16,7 @@ export default props => (
           />
           <T>Feeless Micropayments</T>
           <P>
-            Mauris non tempor quam, et lacinia sapien. Mauris accumsan eros eget
-            libero posuere vulputate. Etiam elit elit, eleme.
+            IOTA is the first protocol that allows for feeless Micropayments, enabling new ways to monetize data. 
           </P>
         </Col>
         <Col>
@@ -27,8 +26,7 @@ export default props => (
           />
           <T>Secure Data Anchoring</T>
           <P>
-            Fusce vehicula dolor arcu, sit amet blandit dolor mollis nec. Donec
-            viverra eleifend lacus, vitae ullamcorper metus..
+            Once data is input into IOTA, it is distributed and made tamper-proof, establishing new trust in data.
           </P>
         </Col>
       </R>
