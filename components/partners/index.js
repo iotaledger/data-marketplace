@@ -141,6 +141,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/nordic.png"
+            srcSet="/static/logotypes/nordic.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/ntnu.png"
             srcSet="/static/logotypes/ntnu.png 2x"
             alt="Logo"
