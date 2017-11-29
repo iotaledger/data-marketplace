@@ -37,7 +37,6 @@ export default class extends React.Component {
 
   _resize = () => {
     let mapHeight
-    console.log(window.innerWidth > 760)
     if (window.innerWidth < 760) mapHeight = 500
     if (window.innerWidth > 760) mapHeight = 900
 
