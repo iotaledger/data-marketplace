@@ -27,6 +27,13 @@ export default props => (
             alt="Logo"
           />
         </Li>
+        {/* <Li>
+          <I
+            src="/static/logotypes/alpiq.png"
+            srcSet="/static/logotypes/alpiq.png 2x"
+            alt="Logo"
+          />
+        </Li> */}
         <Li>
           <I
             src="/static/logotypes/apgsga.png"
@@ -57,8 +64,22 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/dt.png"
+            srcSet="/static/logotypes/dt.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/elering.png"
             srcSet="/static/logotypes/elering.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/enexis.png"
+            srcSet="/static/logotypes/enexis.png 2x"
             alt="Logo"
           />
         </Li>{' '}
@@ -101,6 +122,13 @@ export default props => (
           <I
             src="/static/logotypes/ismb.png"
             srcSet="/static/logotypes/ismb.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/microsoft.png"
+            srcSet="/static/logotypes/microsoft.png 2x"
             alt="Logo"
           />
         </Li>{' '}
