@@ -26,12 +26,22 @@ export default props => (
         <Copy>© 2017 IOTA Foundation. All rights reserved.</Copy>
       </N>
     </C>
+    <W>
+      <P
+      >{`Disclaimer:  This experimental IOTA Data Marketplace runs on the IOTA testnet.  Participants can choose to make their data available for free to other marketplace participants or to offer it for fictional "sales" in IOTA testnet tokens. No real world payments or other real world financial consequences will result from this experiment.  All data being contributed to this proof of concept is either non-sensitive data of which the participants are the authorized owners and/or is publicly available data which the participants may freely choose to share.  Participation in the IOTA Data Marketplace takes place on a voluntary, non-contractual basis.  Participants may choose to discontinue their participation at any time."`}</P>
+    </W>
   </F>
 )
 
+const P = styled.p`
+  font-size: 70%;
+  padding: 0px 20px;
+  margin: 30px auto 0;
+  color: rgba(255, 255, 255, 0.6);
+`
 const F = styled.footer`
   background-image: linear-gradient(-329deg, #1857eb 31%, #0d3497 65%);
-  padding: 170px 0 30px;
+  padding: 170px 0 20px;
   @media (max-width: 760px) {
     padding: 90px 0 3px;
   }
