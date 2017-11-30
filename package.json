@@ -14,11 +14,13 @@
     "in-view": "^0.6.1",
     "iota.lib.js": "l3wi/iota.lib.js",
     "isomorphic-fetch": "^2.2.1",
+    "mailgun.js": "^2.0.1",
     "next": "3.2.2",
     "next-routes": "^1.1.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-map-gl": "l3wi/react-map-gl",
+    "react-recaptcha": "^2.3.5",
     "styled-components": "^2.2.1"
   },
   "devDependencies": {
