@@ -20,6 +20,22 @@ app.prepare().then(() => {
   const server = express()
   server.use(bodyParser.json())
 
+  server.post('/purchase', async (req, res) => {
+    var packet = req.body
+    console.log(packet)
+    if (!packet || !packet.id || !packet.device)
+      return res.json('Malformed Request')
+
+    if (packet.full) {
+      var resp = await Firebase.full(packet.id, packet.device)
+      console.log(resp)
+      return res.json(JSON.stringify(resp))
+    } else {
+      var resp = await Firebase.partial(packet.id, packet.device)
+      return res.json(JSON.stringify(resp))
+    }
+  })
+
   server.post('/email', async (req, res) => {
     var packet = req.body
     console.log(packet)
@@ -47,17 +63,24 @@ app.prepare().then(() => {
     mg.messages
       .create('mail.tangle.works', {
         from: 'Data Market <mailgun@mail.tangle.works>',
-        to: ['particpate@iota.org'],
+        to: ['participate@iota.org'],
         subject: 'Marketplace Form Inquiry',
-        html: `<h1>Marketplace</h1>
+        html: `<div>
+          <p><strong>Name:</strong></p><br /><p>${packet.name}</p>
+        </div>
         <div>
-          <p><strong>Name:</strong></p><p>${packet.name}</p>  
-          <p><strong>Company:</strong></p><p>${packet.company}</p>
-          <p><strong>Email:</strong></p><p>${packet.email}</p>
-          <p><strong>Message:</strong></p><p>${packet.body}</p>
+          <p><strong>Company:</strong></p><br /><p>${packet.company}</p>
+        </div> 
+        <div>
+          <p><strong>Email:</strong></p><br /><p>${packet.email}</p>
+        </div>          
+        <div>
+          <p><strong>Message:</strong></p><br /><p>${packet.body}</p>
         </div>`
       })
-      .then(msg => res.json({ success: true })) // logs response data
+      .then(msg => {
+        return res.json({ success: true })
+      }) // logs response data
       .catch(err => console.log(err)) // logs any error
   })
 
