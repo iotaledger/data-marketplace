@@ -118,7 +118,7 @@ const I = styled.input`
   margin: 30px 0 0;
   width: 100%;
   &::placeholder {
-    color: rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.3);
   }
 `
 const T = styled.textarea`
@@ -131,7 +131,7 @@ const T = styled.textarea`
   background: transparent;
   border-bottom: 1px solid rgba(0, 0, 0, 0.3);
   &::placeholder {
-    color: rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.3);
   }
 `
 
@@ -158,7 +158,7 @@ const H = styled.p`
   letter-spacing: 0.84px;
   text-align: center;
   text-transform: uppercase;
-  color: #cedbe2;
+  color: rgba(137, 156, 166, 1);
   @media (max-width: 760px) {
     margin-bottom: 40px;
   }
