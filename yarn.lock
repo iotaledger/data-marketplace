@@ -2957,8 +2957,8 @@ invert-kv@^1.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
 iota.lib.js@l3wi/iota.lib.js:
-  version "0.4.2"
-  resolved "https://codeload.github.com/l3wi/iota.lib.js/tar.gz/119f2abfed389d253eceaf25b78423993a6270ee"
+  version "0.4.4"
+  resolved "https://codeload.github.com/l3wi/iota.lib.js/tar.gz/374fdffb907682a0ed7962b8c2b901a8b054fe60"
   dependencies:
     async "^2.5.0"
     bignumber.js "^4.1.0"
@@ -4290,6 +4290,10 @@ react-proxy@^3.0.0-alpha.0:
   resolved "https://registry.yarnpkg.com/react-proxy/-/react-proxy-3.0.0-alpha.1.tgz#4400426bcfa80caa6724c7755695315209fa4b07"
   dependencies:
     lodash "^4.6.1"
+
+react-recaptcha@^2.3.5:
+  version "2.3.5"
+  resolved "https://registry.yarnpkg.com/react-recaptcha/-/react-recaptcha-2.3.5.tgz#a5db337125bb00fb13c2fa2e4ebfbe8b0cd06bb7"
 
 react@^15.5.4:
   version "15.6.2"

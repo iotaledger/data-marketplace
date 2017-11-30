@@ -25,6 +25,7 @@ export default class MyDocument extends Document {
           />
           <title>IOTA Data Market</title>
           {styleTags}
+          <script src="https://www.google.com/recaptcha/api.js" async defer/> 
           <meta
             property="og:image"
             content="https://cdn-images-1.medium.com/max/2000/1*XOSduao7nmUZUpRmjt4zeg.jpeg"
