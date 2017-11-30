@@ -7,6 +7,7 @@ import Map from '../components/map'
 import SensorList from '../components/sensor-list'
 import Partners from '../components/partners'
 import Benefits from '../components/benefits'
+import Form from '../components/form'
 import Footer from '../components/footer'
 
 import FB, { allDevices } from '../lib/db'
@@ -28,10 +29,13 @@ export default class extends React.Component {
         <SensorList {...this.state} />
         <Partners />
         <Benefits />
+        <Form />
         <Footer />
       </Main>
     )
   }
 }
 
-const Main = styled.div`overflow-x: hidden;`
+const Main = styled.div`
+  overflow-x: hidden;
+`
