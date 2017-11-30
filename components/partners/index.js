@@ -92,6 +92,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/epm.png"
+            srcSet="/static/logotypes/epm.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/ewe.png"
             srcSet="/static/logotypes/ewe.png 2x"
             alt="Logo"
@@ -108,6 +115,13 @@ export default props => (
           <I
             src="/static/logotypes/fujitsu.png"
             srcSet="/static/logotypes/fujitsu.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/grid.png"
+            srcSet="/static/logotypes/grid.png 2x"
             alt="Logo"
           />
         </Li>{' '}
