@@ -10,7 +10,8 @@ export default class extends React.Component {
     company: '',
     captcha: null,
     loading: false,
-    success: false
+    success: false,
+    error: null
   }
 
   verify = data => {
@@ -18,32 +19,40 @@ export default class extends React.Component {
   }
 
   submit = async e => {
+    e.preventDefault()
     let state = this.state
     if (state.loading) return
+
     if (!state.name || !state.email || !state.body)
-      this.setState({ loading: true }, async () => {
-        var response = await fetch('/email', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(state)
-        })
-        var data = await response.json()
-        this.setState({ success: true })
+      return this.setState({ error: 'Please fill out all fields' })
+
+    if (!state.captcha)
+      return this.setState({ error: 'Please complete the captcha' })
+
+    this.setState({ loading: true }, async () => {
+      var response = await fetch('/email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(state)
       })
-    e.preventDefault()
+      var data = await response.json()
+      console.log(data)
+      this.setState({ success: true })
+    })
   }
 
   render() {
-    var { name, email, body, company, success } = this.state
+    var { name, email, body, company, success, error } = this.state
     return (
       <S>
         <C>
           <H>Get Involved</H>
         </C>
         {!success ? (
-          <F onSubmit={() => this.submit}>
+          <F onSubmit={this.submit}>
+            {error && <Error>{error}</Error>}
             <I
               type={'text'}
               placeholder={'Your Full Name'}
@@ -77,7 +86,7 @@ export default class extends React.Component {
           </F>
         ) : (
           <C>
-            <H>Submitted</H>
+            <Error>Your message has been sent!</Error>
           </C>
         )}
 
@@ -141,7 +150,7 @@ const C = styled.div`
   padding: 0 15px;
   margin-right: auto;
   margin-left: auto;
-  margin-top: 30px;
+  margin-top: 60px;
 `
 const H = styled.p`
   font-size: 13px;
@@ -150,6 +159,18 @@ const H = styled.p`
   text-align: center;
   text-transform: uppercase;
   color: #cedbe2;
+  @media (max-width: 760px) {
+    margin-bottom: 40px;
+  }
+`
+const Error = styled.p`
+  padding: 15px 0 0px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.84px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #fba471ff;
   @media (max-width: 760px) {
     margin-bottom: 40px;
   }
