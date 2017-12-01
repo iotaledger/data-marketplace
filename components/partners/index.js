@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 export default props => (
-  <S>
+  <S id="participants">
     <C>
       <H>Marketplace Participants</H>
       <Ul>

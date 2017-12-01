@@ -28,6 +28,13 @@ export default class extends React.Component {
             <Link route={'/#map'} prefetch>
               <Button type="button">Try it yourself</Button>
             </Link>
+            <Link route={'/#participants'} prefetch>
+              <SubLink>{'Participants'.toUpperCase()}</SubLink>
+            </Link>
+
+            <Link route={'/#contact'} prefetch>
+              <SubLink>{'Contact Us'.toUpperCase()}</SubLink>
+            </Link>
           </Info>
           <Graphics>
             <Graphic1
@@ -64,6 +71,27 @@ export default class extends React.Component {
     )
   }
 }
+
+const SubLink = styled.p`
+  @media (max-width: 760px) {
+    font-size: 18px;
+    line-height: 28px;
+  }
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  line-height: 33px;
+  padding: 10px 15px 0;
+  color: rgba(78, 90, 97, 1);
+  opacity: 0.5;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+`
 
 const Header = styled.header`
   position: relative;
@@ -160,6 +188,7 @@ const Button = styled.button`
   text-transform: uppercase;
   color: #fff;
   font-weight: 700;
+  margin-bottom: 15px;
 `
 
 const Graphics = styled.div`
