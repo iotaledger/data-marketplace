@@ -25,8 +25,21 @@ export default class extends React.Component {
               Never has getting access to diverse, fine-granular data been this
               easy!
             </Tagline>
+            <a
+              href={'https://blog.iota.org/iota-data-marketplace-cb6be463ac7f'}
+              target={'_blank'}
+            >
+              <Button type="button">About the Marketplace</Button>
+            </a>
             <Link route={'/#map'} prefetch>
-              <Button type="button">Try it yourself</Button>
+              <SubLink>{'Try the Marketplace'.toUpperCase()}</SubLink>
+            </Link>
+            <Link route={'/#participants'} prefetch>
+              <SubLink>{'Participants'.toUpperCase()}</SubLink>
+            </Link>
+
+            <Link route={'/#contact'} prefetch>
+              <SubLink>{'Get involved'.toUpperCase()}</SubLink>
             </Link>
           </Info>
           <Graphics>
@@ -64,6 +77,27 @@ export default class extends React.Component {
     )
   }
 }
+
+const SubLink = styled.p`
+  @media (max-width: 760px) {
+    font-size: 18px;
+    line-height: 28px;
+  }
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  line-height: 33px;
+  padding: 7px 15px 0;
+  color: rgba(78, 90, 97, 1);
+  opacity: 0.5;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+`
 
 const Header = styled.header`
   position: relative;
@@ -160,6 +194,7 @@ const Button = styled.button`
   text-transform: uppercase;
   color: #fff;
   font-weight: 700;
+  margin-bottom: 15px;
 `
 
 const Graphics = styled.div`
