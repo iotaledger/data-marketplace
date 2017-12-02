@@ -285,7 +285,8 @@ const H = styled.p`
   letter-spacing: 0.84px;
   text-align: center;
   text-transform: uppercase;
-  color: #cedbe2;
+  color: rgba(137, 156, 166, 1);
+
   @media (max-width: 760px) {
     margin-bottom: 40px;
   }
