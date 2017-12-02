@@ -46,7 +46,7 @@ export default class extends React.Component {
   render() {
     var { name, email, body, company, success, error } = this.state
     return (
-      <S>
+      <S id="contact">
         <C>
           <H>Get Involved</H>
         </C>
