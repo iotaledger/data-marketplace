@@ -98,11 +98,11 @@ export default class extends React.Component {
               </Internal>
             ) : (
               <Internal>
-                <img
+                {/* <img
                   src="/static/icons/icon-padlock.png"
                   srcSet="/static/icons/icon-padlock@2x.png 2x"
                   alt="Icon padlock"
-                />
+                /> */}
                 <Heading>{this.props.error.heading}</Heading>
                 <Info>{this.props.error.body}</Info>
                 {this.props.button && (
