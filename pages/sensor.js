@@ -78,8 +78,14 @@ ID and try again`,
   fetch = async (deviceRef, userRef) => {
     var data = await getData(deviceRef, userRef, this.props.id)
     if (typeof data == 'string') return this.setState({ loading: false })
-    if (data[0].time) data = data.sort((a, b) => b.time - a.time)
-    console.log(data)
+    if (data && data[0].time) {
+      data = data.sort((a, b) => b.time - a.time)
+    } else {
+      return this.throw({
+        body: "Device data does not exist or is in an unrecognisable format.",
+        heading: `Stream Read Failure`
+      })
+    }
     this.fetchMam(data)
     this.setState({ mamData: data })
   }
