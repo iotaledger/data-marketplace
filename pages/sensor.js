@@ -86,6 +86,7 @@ ID and try again`,
         heading: `Stream Read Failure`
       })
     }
+
     this.fetchMam(data)
     this.setState({ mamData: data })
   }
@@ -94,11 +95,14 @@ ID and try again`,
     try {
       if (!data[0]) throw 'Fail'
       var mamState = Mam.init(iota)
+      mamState.channel.security = this.state.deviceInfo.security || 2;
+
       var packets = data.splice(this.state.index, 20).map(async (packet, i) => {
         var packet = await Mam.fetchSingle(
           packet.root,
           packet.sidekey !== '' ? 'restricted' : null,
-          packet.sidekey !== '' ? packet.sidekey : null
+          packet.sidekey !== '' ? packet.sidekey : null,
+          this.state.deviceInfo.hash === "curlp27" ? 27 : undefined
         )
         if (packet) this.saveData(packet.payload, i)
       })
@@ -109,15 +113,21 @@ ID and try again`,
 
   // Append datax
   saveData = (data, i) => {
-    var packet = JSON.parse(iota.utils.fromTrytes(data))
-    console.log(packet)
-    var packets = [...this.state.packets, packet]
-    this.setState({
-      packets,
-      purchase: true,
-      fetching: false,
-      index: i
-    })
+    let input = iota.utils.fromTrytes(data);
+    try {
+      var packet = JSON.parse(input);
+      console.log(packet)
+      var packets = [...this.state.packets, packet]
+      this.setState({
+        packets,
+        purchase: true,
+        fetching: false,
+        index: i
+      })
+    } catch(e) {
+      console.error(e);
+      console.log("Failing input: ", input);
+    }
   }
 
   fetchWallet = async () => {
