@@ -86,6 +86,7 @@ ID and try again`,
         heading: `Stream Read Failure`
       })
     }
+    console.log(data.length + " Packets found.")
     this.fetchMam(data)
     this.setState({ mamData: data })
   }
@@ -100,7 +101,11 @@ ID and try again`,
           packet.sidekey !== '' ? 'restricted' : null,
           packet.sidekey !== '' ? packet.sidekey : null
         )
-        if (packet) this.saveData(packet.payload, i)
+        
+        if (packet){ this.saveData(packet.payload, i) } else {
+          this.throw({      body: "Unable to read the packets of data from the device.",
+          heading: `Device Misconfigured`})
+        }
       })
     } catch (e) {
       this.setState({ dataEnd: true })
