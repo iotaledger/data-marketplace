@@ -25,13 +25,15 @@ export default class MyDocument extends Document {
           />
           <title>IOTA Data Market</title>
           {styleTags}
-          <script src="https://www.google.com/recaptcha/api.js" async defer/> 
+          <script src="https://www.google.com/recaptcha/api.js" async defer/>
+          <meta property="og:title" content="The IOTA Data Marketplace" /> 
+          <meta property="og:description" content="IOTA makes it possible to securely store, sell, and access data streams." />
           <meta
             property="og:image"
             content="https://cdn-images-1.medium.com/max/2000/1*XOSduao7nmUZUpRmjt4zeg.jpeg"
           />
-          <meta property="og:title" content="The IOTA Data Marketplace" />
           <meta name="title" content="IOTA Data Marketplace" />
+          <meta name="description" content="IOTA makes it possible to securely store, sell, and access data streams."/>
           <meta
             name="keywords"
             content="IoT, Internet of Things,Marketplace,Data,IOTA"
