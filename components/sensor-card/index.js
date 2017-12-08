@@ -26,7 +26,7 @@ export default class extends React.Component {
                 <RowDesc>{item && item.name}:</RowDesc>
                 <RowValue>
                   {(this.props.packet &&
-                    this.props.packet.data[item.id.toLowerCase()]) ||
+                    (this.props.packet.data[item.id] || this.props.packet.data[item.id.toLowerCase()])) ||
                     '--'}
                   <RowUnit>{item && item.unit}</RowUnit>
                 </RowValue>
