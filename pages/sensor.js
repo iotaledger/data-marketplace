@@ -105,7 +105,9 @@ ID and try again`,
           this.state.deviceInfo.hash === "curlp27" ? 27 : undefined
         )
         
-        if (packet){ this.saveData(packet.payload, i) } else {
+        if (packet) { 
+          this.saveData(packet.payload, i) 
+        } else {
           this.throw({      body: "Unable to read the packets of data from the device.",
           heading: `Device Misconfigured`})
         }
@@ -212,7 +214,7 @@ ID and try again`,
           device: this.props.id,
           full: true
         }
-        var resp = await fetch('/purchase', {
+        var resp = await fetch('https://us-central1-datamarket-617e1.cloudfunctions.net/purchaseStream', {
           method: 'post',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(packet)
