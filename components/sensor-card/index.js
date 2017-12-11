@@ -24,9 +24,12 @@ export default class extends React.Component {
             {row.map((item, i) => (
               <RowHalf key={`item-${i}`}>
                 <RowDesc>{item && item.name}:</RowDesc>
+                {console.log(this.props.packet.data[item.id])}
                 <RowValue>
                   {(this.props.packet &&
-                    (this.props.packet.data[item.id] || this.props.packet.data[item.id.toLowerCase()])) ||
+                    this.props.packet.data[item.id] !== typeof 'object' &&
+                    (this.props.packet.data[item.id] ||
+                      this.props.packet.data[item.id.toLowerCase()])) ||
                     '--'}
                   <RowUnit>{item && item.unit}</RowUnit>
                 </RowValue>
