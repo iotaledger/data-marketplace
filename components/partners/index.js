@@ -104,13 +104,13 @@ export default props => (
             alt="Logo"
           />
         </Li>
-        <Li>
+        {/**<Li>
           <I
             src="/static/logotypes/ey.png"
             srcSet="/static/logotypes/ey.png 2x"
             alt="Logo"
           />
-        </Li>
+        </Li>**/}
         <Li>
           <I
             src="/static/logotypes/farmforce.png"
