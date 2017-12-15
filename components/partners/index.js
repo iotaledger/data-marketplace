@@ -43,6 +43,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/bkk.png"
+            srcSet="/static/logotypes/bkk.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/blocklab.png"
             srcSet="/static/logotypes/blocklab.png 2x"
             alt="Logo"
@@ -104,13 +111,13 @@ export default props => (
             alt="Logo"
           />
         </Li>
-        {/**<Li>
+        <Li>
           <I
             src="/static/logotypes/ey.png"
             srcSet="/static/logotypes/ey.png 2x"
             alt="Logo"
           />
-        </Li>**/}
+        </Li>
         <Li>
           <I
             src="/static/logotypes/farmforce.png"
@@ -169,6 +176,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/nte.png"
+            srcSet="/static/logotypes/nte.png 2x"
+            alt="Logo"
+          />
+        </Li>
+        <Li>
+          <I
             src="/static/logotypes/ntnu.png"
             srcSet="/static/logotypes/ntnu.png 2x"
             alt="Logo"
@@ -209,13 +223,13 @@ export default props => (
             alt="Logo"
           />
         </Li>
-        <Li>
+        {/* <Li>
           <I
             src="/static/logotypes/schuco.png"
             srcSet="/static/logotypes/schuco.png 2x"
             alt="Logo"
           />
-        </Li>
+        </Li> */}
         <Li>
           <I
             src="/static/logotypes/tine.png"
