@@ -223,13 +223,13 @@ export default props => (
             alt="Logo"
           />
         </Li>
-        {/* <Li>
+        <Li>
           <I
             src="/static/logotypes/schuco.png"
             srcSet="/static/logotypes/schuco.png 2x"
             alt="Logo"
           />
-        </Li> */}
+        </Li>
         <Li>
           <I
             src="/static/logotypes/tine.png"
