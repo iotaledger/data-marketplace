@@ -9,10 +9,10 @@ import {
   getBalance
 } from '../lib/iota'
 
-import SensorNav from '../components/sensor-nav'
+import DeviceNav from '../components/device-nav'
 import Modal from '../components/modal'
 import Sidebar from '../components/user-sidebar'
-import DataStream from '../components/data-stream'
+import DeviceList from '../components/device-list'
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
@@ -96,9 +96,10 @@ export default class extends React.Component {
     var { deviceInfo, packets, purchase, loading, error, button } = this.state
     return (
       <Main>
-        <SensorNav {...this.state} fund={this.fund} />
+        <DeviceNav {...this.state} />
         <Data>
           <Sidebar {...this.state} />
+          <DeviceList />
         </Data>
         {/* <Modal
           button={button}
