@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import FB, { getData, deviceInfo } from '../lib/db'
+import FB, { getData, deviceInfo } from '../lib/firebase-user'
 import {
   iota,
   initWallet,
