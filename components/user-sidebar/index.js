@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { reducer, getBalance } from '../../lib/iota'
 
 const Sidebar = styled.aside`
-  background-image: linear-gradient(-189deg, #0d3497 1%, #1857eb 95%);
+  background: rgba(240, 240, 240, 1);
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-end;
@@ -47,7 +47,7 @@ const Label = styled.label`
   margin: 0 0 30px;
   cursor: pointer;
   text-transform: uppercase;
-  color: #009fff;
+  color: #595959ff;
 `
 const DetailRow = styled.div`
   @media (max-width: 760px) {
@@ -64,7 +64,7 @@ const DetailKey = styled.p`
 const DetailValue = styled.p`
   font-size: 16px;
   line-height: 32px;
-  color: #fff;
+  color: #595959ff;
 `
 
 export default class extends React.Component {
@@ -135,14 +135,6 @@ export default class extends React.Component {
             </div>
           </div>
         </Details> */}
-        <Fetcher>
-          {this.props.dataEnd && <More>{`End of data reached`}</More>}
-          {this.props.fetching &&
-          this.props.packets[0] &&
-          !this.props.dataEnd ? (
-            <Loading />
-          ) : null}
-        </Fetcher>
       </Sidebar>
     )
   }
