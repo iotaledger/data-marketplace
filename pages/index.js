@@ -9,8 +9,9 @@ import Partners from '../components/partners'
 import Benefits from '../components/benefits'
 import Form from '../components/form'
 import Footer from '../components/footer'
+import Cookies from '../components/cookie'
 
-import FB, { allDevices } from '../lib/db'
+import FB, { allDevices } from '../lib/firebase-user'
 
 export default class extends React.Component {
   state = { devices: [] }
@@ -31,6 +32,7 @@ export default class extends React.Component {
         <Benefits />
         <Form />
         <Footer />
+        <Cookies />
       </Main>
     )
   }
