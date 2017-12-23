@@ -82,11 +82,11 @@ ID and try again`,
       data = data.sort((a, b) => b.time - a.time)
     } else {
       return this.throw({
-        body: "Device data does not exist or is in an unrecognisable format.",
+        body: 'Device data does not exist or is in an unrecognisable format.',
         heading: `Stream Read Failure`
       })
     }
-    console.log(data.length + " Packets found.")
+    console.log(data.length + ' Packets found.')
     this.fetchMam(data)
     this.setState({ mamData: data })
   }
@@ -95,21 +95,23 @@ ID and try again`,
     try {
       if (!data[0]) throw 'Fail'
       var mamState = Mam.init(iota)
-      mamState.channel.security = this.state.deviceInfo.security || 2;
+      mamState.channel.security = this.state.deviceInfo.security || 2
 
       var packets = data.splice(this.state.index, 20).map(async (packet, i) => {
         var packet = await Mam.fetchSingle(
           packet.root,
           packet.sidekey !== '' ? 'restricted' : null,
           packet.sidekey !== '' ? packet.sidekey : null,
-          this.state.deviceInfo.hash === "curlp27" ? 27 : undefined
+          this.state.deviceInfo.hash === 'curlp27' ? 27 : undefined
         )
-        
-        if (packet) { 
-          this.saveData(packet.payload, i) 
+
+        if (packet) {
+          this.saveData(packet.payload, i)
         } else {
-          this.throw({      body: "Unable to read the packets of data from the device.",
-          heading: `Device Misconfigured`})
+          this.throw({
+            body: 'Unable to read the packets of data from the device.',
+            heading: `Device Misconfigured`
+          })
         }
       })
     } catch (e) {
@@ -119,9 +121,9 @@ ID and try again`,
 
   // Append datax
   saveData = (data, i) => {
-    let input = iota.utils.fromTrytes(data);
+    let input = iota.utils.fromTrytes(data)
     try {
-      var packet = JSON.parse(input);
+      var packet = JSON.parse(input)
       console.log(packet)
       var packets = [...this.state.packets, packet]
       this.setState({
@@ -130,9 +132,9 @@ ID and try again`,
         fetching: false,
         index: i
       })
-    } catch(e) {
-      console.error(e);
-      console.log("Failing input: ", input);
+    } catch (e) {
+      console.error(e)
+      console.log('Failing input: ', input)
     }
   }
 
@@ -214,11 +216,14 @@ ID and try again`,
           device: this.props.id,
           full: true
         }
-        var resp = await fetch('https://us-central1-datamarket-617e1.cloudfunctions.net/purchaseStream', {
-          method: 'post',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(packet)
-        })
+        var resp = await fetch(
+          'https://us-central1-datamarket-617e1.cloudfunctions.net/purchaseStream',
+          {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(packet)
+          }
+        )
         var message = JSON.parse(await resp.json())
         if (message._writeTime) {
           wallet.amount = wallet.balance - device.value
