@@ -1,6 +1,7 @@
 import React from 'react'
 import styled, { keyframes } from 'styled-components'
-import DeviceCard from '../device-card'
+import DeviceCard from '../card/device'
+import AddCard from '../add-sensor'
 import Inview from '../inview'
 
 const InfoCol = styled.main`
@@ -31,11 +32,13 @@ const CardWrapper = styled.div`
 export default props => (
   <InfoCol>
     <CardWrapper>
-      {Array(5)
+      {props.devices
         .fill()
         .map((packet, i) => (
           <DeviceCard index={i} key={i} layout={props.layout} packet={packet} />
         ))}
+
+      {props.devices.length <= 5 ? <AddCard /> : `No more devices can be added`}
     </CardWrapper>
   </InfoCol>
 )
