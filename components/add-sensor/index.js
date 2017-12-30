@@ -6,6 +6,7 @@ const Heading = state => <Header>New Device</Header>
 
 export default class extends React.Component {
   state = {
+    loading: false,
     active: false,
     submit: false,
     comapny: '',
@@ -24,6 +25,7 @@ export default class extends React.Component {
   }
   remove = i => {
     var data = this.state.dataTypes
+    if (data.length == 1) return alert('You must have at least one data field.')
     data.splice(i, 1)
     this.setState({ dataTypes: data })
   }
@@ -47,6 +49,8 @@ export default class extends React.Component {
       return alert('Enter city or country')
     if (!this.state.deviceLat || !this.state.deviceLon)
       return alert('Please enter a device coordinates')
+    if (!this.state.dataTypes || this.state.dataTypes.length < 1)
+      return alert('You must have a valid data field')
     var device = {
       type: this.state.deviceType,
       location: {
@@ -54,8 +58,7 @@ export default class extends React.Component {
         country: this.state.country
       },
       sensorId: this.state.deviceID,
-      type: this.state.deviceType || 'Weather Station',
-      company: this.state.company || 'Unknown',
+      type: this.state.deviceType,
       dataTypes: this.state.dataTypes,
       lat: this.state.deviceLat,
       lon: this.state.deviceLon,
@@ -63,32 +66,18 @@ export default class extends React.Component {
       address: seedGen(81)
     }
 
+    // Generate Key for the device
     let secretKey = seedGen(15)
-
-    let response = await fetch(
-      'https://us-central1-datamarket-617e1.cloudfunctions.net/newDevice',
-      {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ id: this.state.deviceID, device, sk: secretKey })
-      }
-    )
-
-    this.setState({ submit: true, secretKey })
+    //
+    this.setState({ loading: true }, () => this.props.create(device, secretKey))
   }
 
   render() {
     var { active } = this.state
     return (
-      <Card
-        header={Heading(this.state)}
-        // footer={Footer(this.state, this.activate)}
-      >
+      <Card header={Heading(this.state)}>
         {active && (
           <Form>
-            {/* <Header>Device Details</Header> */}
             <Column>
               <label>Device ID:</label>
               <Input
@@ -162,20 +151,12 @@ export default class extends React.Component {
             </Row>
             <Row style={{ justifyContent: 'space-between' }}>
               <Header>Data Fields:</Header>
-              <Add onClick={() => this.addRow()}>Add Field</Add>
+              <Add onClick={() => this.addRow()}>
+                <IconButton src="/static/icons/icon-add.svg" />
+              </Add>
             </Row>
             {this.state.dataTypes.map((fields, i) => (
               <Row key={i}>
-                <Small>
-                  <label>Field Name:</label>
-                  <Input
-                    placeholder={'eg. Temperature'}
-                    type={'text'}
-                    name={'name'}
-                    value={this.state.dataTypes[i].name}
-                    onChange={e => this.changeRow(e, i)}
-                  />
-                </Small>
                 <Small>
                   <label>Field ID:</label>
                   <Input
@@ -187,6 +168,17 @@ export default class extends React.Component {
                   />
                 </Small>
                 <Small>
+                  <label>Field Name:</label>
+                  <Input
+                    placeholder={'eg. Temperature'}
+                    type={'text'}
+                    name={'name'}
+                    value={this.state.dataTypes[i].name}
+                    onChange={e => this.changeRow(e, i)}
+                  />
+                </Small>
+
+                <Small>
                   <label>Field Unit:</label>
                   <Input
                     placeholder={'eg. c'}
@@ -196,9 +188,9 @@ export default class extends React.Component {
                     onChange={e => this.changeRow(e, i)}
                   />
                 </Small>
-                <button style={{ flex: 1 }} onClick={() => this.remove(i)}>
-                  Delete
-                </button>
+                <Add style={{ flex: 1 }} onClick={() => this.remove(i)}>
+                  <IconButton src="/static/icons/icon-delete.svg" />
+                </Add>
               </Row>
             ))}
           </Form>
@@ -286,6 +278,11 @@ const Row = styled.div`
   }
 `
 
+const IconButton = styled.img`
+  height: 20px;
+  width: 20px;
+`
+
 const FooterButton = styled.button`
   color: ${props =>
     props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`};
@@ -310,7 +307,13 @@ const Input = styled.input`
   &::placeholder {
   }
 `
-const Add = styled.button``
+const Add = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  paddin: 10px 0 0;
+`
 
 const seedGen = length => {
   var charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9'
