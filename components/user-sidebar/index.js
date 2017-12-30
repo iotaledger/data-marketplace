@@ -81,7 +81,7 @@ export default class extends React.Component {
           <div>
             <DetailRow>
               <DetailKey>Number of Devices:</DetailKey>
-              <DetailValue>2</DetailValue>
+              <DetailValue>{this.props.devices.length}</DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailKey>Total Packets:</DetailKey>
@@ -89,8 +89,13 @@ export default class extends React.Component {
             </DetailRow>
             <DetailRow>
               <DetailKey>Total Data Streams:</DetailKey>
-              <DetailValue>7</DetailValue>
-            </DetailRow>{' '}
+              <DetailValue>
+                7
+                {/* {this.props.devices
+                  .map(device => device.dataTypes.length)
+                  .reduce((a, b) => a + b)} */}
+              </DetailValue>
+            </DetailRow>
             <DetailRow>
               <DetailKey>Owner:</DetailKey>
               <DetailValue> Lewis Freiberg</DetailValue>
