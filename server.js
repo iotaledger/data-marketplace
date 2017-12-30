@@ -10,7 +10,6 @@ const handler = routes.getRequestHandler(app)
 const api = 'key-1104febc601341ced88b1fa1598a5e72'
 const domain = 'mail.tangle.works'
 
-const Firebase = require('./lib/serverDB')
 var mg = require('mailgun-js')({ apiKey: api, domain: domain })
 
 // var mg = mailgun.client({
