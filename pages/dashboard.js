@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import FB, { getData, deviceInfo } from '../lib/db'
+import FB from '../lib/firebase-admin'
+
 import {
   iota,
   initWallet,
@@ -10,9 +11,11 @@ import {
 } from '../lib/iota'
 
 import DeviceNav from '../components/device-nav'
-import Modal from '../components/modal'
+import LoginModal from '../components/login-modal'
 import Sidebar from '../components/user-sidebar'
 import DeviceList from '../components/device-list'
+
+var firebase = {}
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
@@ -20,14 +23,14 @@ export default class extends React.Component {
   }
 
   state = {
-    deviceInfo: {},
+    devices: ['a', 'b', 'c', 'd', 'e'],
     packets: [],
-    purchase: false,
+    user: false,
     button: true,
     index: 0,
     loading: {
-      heading: `Loading Device`,
-      body: `Fetching device information and your purchase history. `
+      heading: `Loading User`,
+      body: `Fetching your devices and account statistcs`
     },
     error: false,
     fetching: false
@@ -35,6 +38,34 @@ export default class extends React.Component {
 
   async componentDidMount() {
     // Init Wallet
+    firebase = await FB()
+    console.log(firebase)
+    this.setState({ loading: false })
+  }
+
+  auth = channel => {
+    let provider
+    switch (channel) {
+      case 'google':
+        provider = new firebase.auth.GoogleAuthProvider()
+        provider.addScope('email')
+        provider.addScope('profile')
+        break
+    }
+
+    firebase
+      .auth()
+      .signInAnonymously()
+      .then(data => {
+        console.log(data)
+        this.setState({ user: data })
+      })
+      .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code
+        var errorMessage = error.message
+        return errorMessage
+      })
   }
 
   throw = (error, button) => {
@@ -45,66 +76,28 @@ export default class extends React.Component {
     })
   }
 
-  fetchMam = data => {
-    try {
-      if (!data[0]) throw 'Fail'
-      var mamState = Mam.init(iota)
-      mamState.channel.security = this.state.deviceInfo.security || 2
-
-      var packets = data.splice(this.state.index, 20).map(async (packet, i) => {
-        var packet = await Mam.fetchSingle(
-          packet.root,
-          packet.sidekey !== '' ? 'restricted' : null,
-          packet.sidekey !== '' ? packet.sidekey : null,
-          this.state.deviceInfo.hash === 'curlp27' ? 27 : undefined
-        )
-
-        if (packet) {
-          this.saveData(packet.payload, i)
-        } else {
-          this.throw({
-            body: 'Unable to read the packets of data from the device.',
-            heading: `Device Misconfigured`
-          })
-        }
-      })
-    } catch (e) {
-      this.setState({ dataEnd: true })
-    }
-  }
-
-  // Append datax
-  saveData = (data, i) => {
-    let input = iota.utils.fromTrytes(data)
-    try {
-      var packet = JSON.parse(input)
-      console.log(packet)
-      var packets = [...this.state.packets, packet]
-      this.setState({
-        packets,
-        purchase: true,
-        fetching: false,
-        index: i
-      })
-    } catch (e) {
-      console.error(e)
-      console.log('Failing input: ', input)
-    }
+  createDevice = device => {
+    console.log('Saving new device')
+    console.log(device)
+    // Check device doesn't exist
+    // Add device to device list
+    // Add device to profile
+    // Add device key.
   }
 
   render() {
-    var { deviceInfo, packets, purchase, loading, error, button } = this.state
+    var { devices, packets, user, loading, error, button } = this.state
     return (
       <Main>
         <DeviceNav {...this.state} />
         <Data>
           <Sidebar {...this.state} />
-          <DeviceList />
+          <DeviceList devices={devices} create={this.createDevice} />
         </Data>
-        {/* <Modal
+        {/* <LoginModal
           button={button}
-          purchase={this.purchase}
-          show={!purchase}
+          auth={this.auth}
+          show={!user}
           loading={loading}
           error={error}
         /> */}
