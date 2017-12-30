@@ -23,7 +23,7 @@ export default class extends React.Component {
   }
 
   state = {
-    devices: ['a', 'b', 'c', 'd', 'e'],
+    devices: ['a', 'b', 'c'],
     packets: [],
     user: false,
     button: true,
@@ -83,6 +83,8 @@ export default class extends React.Component {
     // Add device to device list
     // Add device to profile
     // Add device key.
+
+    //Push device into the local state.
   }
 
   render() {
