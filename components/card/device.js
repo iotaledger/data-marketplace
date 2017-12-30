@@ -1,21 +1,38 @@
-import React from 'react'
 import styled, { css } from 'styled-components'
 
-export default item => (
-  <Card data-component="SensorCard">
-    <CardHeader>
-      {/* <CardIcon
-        src="/static/icons/icon-weather.svg"
-        alt="Weather sensor icon"
-      /> */}
-      <SensorType>{item.type}</SensorType>
-      <SensorId>
-        {item.sensorId && item.sensorId.length > 20
-          ? item.sensorId.substr(0, 20) + '...'
-          : item.sensorId}
-      </SensorId>
-    </CardHeader>
+import Card from './index.js'
 
+const Heading = props => (
+  <div>
+    <SensorType>{props.type} Turtle Spawn</SensorType>
+    <SensorId>
+      Te-SAAKSA
+      {props.sensorId && props.sensorId.length > 20
+        ? [props].sensorId.substr(0, 20) + '...'
+        : props.sensorId}
+    </SensorId>
+  </div>
+)
+
+const Footer = props => (
+  <div>
+    <FootRow>
+      <InfoKey>Owner:</InfoKey>
+      <InfoValue>{'Chuck Testa'}</InfoValue>
+    </FootRow>
+    {/* <FootRow>
+        <InfoKey>Sensor streams collected:</InfoKey>
+        <InfoValue>{item.dataTypes.length}</InfoValue>
+      </FootRow> */}
+    <FootRow>
+      <InfoKey>Data price:</InfoKey>
+      <InfoValue>{'2ki'}</InfoValue>
+    </FootRow>
+  </div>
+)
+
+export default props => (
+  <Card header={Heading(props)} footer={Footer(props)}>
     <RowHalf>
       <RowIcon src="/static/icons/icon-small-location.svg" alt="" />
       <RowDesc>Location</RowDesc>
@@ -26,49 +43,9 @@ export default item => (
       <RowDesc>Sensor streams:</RowDesc>
       <Data>{7}</Data>
     </RowHalf>
-    <CardFooter>
-      <FootRow>
-        <InfoKey>Owner:</InfoKey>
-        <InfoValue>{'Chuck Testa'}</InfoValue>
-      </FootRow>
-      {/* <FootRow>
-        <InfoKey>Sensor streams collected:</InfoKey>
-        <InfoValue>{item.dataTypes.length}</InfoValue>
-      </FootRow> */}
-      <FootRow>
-        <InfoKey>Data price:</InfoKey>
-        <InfoValue>{'2ki'}</InfoValue>
-      </FootRow>
-    </CardFooter>
   </Card>
 )
 
-const Card = styled.a`
-  color: inherit;
-  text-decoration: none;
-  position: relative;
-  padding-top: 20px;
-  border: 1px solid #eaecee;
-  border-radius: 6px;
-  margin-bottom: 40px;
-  background-color: #fff;
-  cursor: pointer;
-  transition: box-shadow 0.19s ease-out;
-  @media (max-width: 1120px) {
-    margin-bottom: 20px;
-  }
-  @media (max-width: 400px) {
-    width: 280px;
-  }
-  &:hover {
-    box-shadow: 0 23px 50px 0 rgba(25, 54, 80, 0.1);
-  }
-`
-const CardHeader = styled.header`
-  position: relative;
-  padding: 0 30px 8px 30px;
-  border-bottom: 1px solid #eaecee;
-`
 const RowHalf = styled.div`
   padding: 20px 30px 14px;
   display: inline-block;
