@@ -97,10 +97,7 @@ export default props => (
           Google sign-in
           {/* {props.deviceInfo.type ? props.deviceInfo.type : 'Loading Device'} */}
         </Desc>
-        <DeviceID>
-          Lewis Freiberg
-          {props.deviceInfo.sensorId && props.deviceInfo.sensorId}
-        </DeviceID>
+        <DeviceID>Lewis Freiberg</DeviceID>
       </Block>
     </Header>
     <RightHeader>Helo</RightHeader>

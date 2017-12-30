@@ -93,10 +93,7 @@ export default class extends React.Component {
             </DetailRow>{' '}
             <DetailRow>
               <DetailKey>Owner:</DetailKey>
-              <DetailValue>
-                {' '}
-                {deviceInfo.company ? deviceInfo.company : `--`}
-              </DetailValue>
+              <DetailValue> Lewis Freiberg</DetailValue>
             </DetailRow>
             {/* <DetailRow>
               <DetailKey>Data Types:</DetailKey>
