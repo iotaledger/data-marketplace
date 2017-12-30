@@ -1,4 +1,6 @@
 import styled, { css } from 'styled-components'
+import { reducer, getBalance } from '../../lib/iota'
+import { format } from 'date-fns'
 
 import Card from './index.js'
 
@@ -16,17 +18,19 @@ const Heading = props => (
 
 const Footer = props => (
   <div>
-    <FootRow>
-      <InfoKey>Owner:</InfoKey>
-      <InfoValue>{'Chuck Testa'}</InfoValue>
-    </FootRow>
     {/* <FootRow>
-        <InfoKey>Sensor streams collected:</InfoKey>
-        <InfoValue>{item.dataTypes.length}</InfoValue>
-      </FootRow> */}
+      <InfoKey>Device Address:</InfoKey>
+      <InfoValue>
+        {'AJDJ9HAKF99JSMAK9IRJSAIEJSME'.substr(0, 11) + '...'}
+      </InfoValue>
+    </FootRow> */}
+    <FootRow>
+      <InfoKey>Device Balance:</InfoKey>
+      <InfoValue>{reducer(9353985325)}</InfoValue>
+    </FootRow>
     <FootRow>
       <InfoKey>Data price:</InfoKey>
-      <InfoValue>{'2ki'}</InfoValue>
+      <InfoValue>{reducer(23424232)}</InfoValue>
     </FootRow>
   </div>
 )
@@ -42,6 +46,16 @@ export default props => (
       <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
       <RowDesc>Sensor streams:</RowDesc>
       <Data>{7}</Data>
+    </RowHalf>
+    <RowHalf>
+      <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
+      <RowDesc>Stream Purchases:</RowDesc>
+      <Data>{523}</Data>
+    </RowHalf>
+    <RowHalf>
+      <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
+      <RowDesc>Last Packet:</RowDesc>
+      <Data>{'31 minutes ago'}</Data>
     </RowHalf>
   </Card>
 )
