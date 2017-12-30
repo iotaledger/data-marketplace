@@ -31,3 +31,4 @@ node_modules
 .next/
 .DS_Store
 now.json
+.vscode
