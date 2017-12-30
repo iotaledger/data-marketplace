@@ -38,7 +38,17 @@ export default props => (
           <DeviceCard index={i} key={i} layout={props.layout} packet={packet} />
         ))}
 
-      {props.devices.length <= 5 ? <AddCard /> : `No more devices can be added`}
+      {props.devices.length < 4 ? (
+        <AddCard create={props.create} />
+      ) : (
+        <End>{`5 device max per users. Delete a device to add another.`}</End>
+      )}
     </CardWrapper>
   </InfoCol>
 )
+
+const End = styled.span`
+  padding: 15px 0 50px;
+  color: white;
+  opacity: 0.4;
+`
