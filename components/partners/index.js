@@ -8,6 +8,13 @@ export default props => (
       <Ul>
         <Li>
           <I
+            src="/static/logotypes/acando.png"
+            srcSet="/static/logotypes/acando.png 2x"
+            alt="Logo"
+          />
+        </Li>
+        <Li>
+          <I
             src="/static/logotypes/accenture.png"
             srcSet="/static/logotypes/accenture.png 2x"
             alt="Logo"
@@ -120,6 +127,13 @@ export default props => (
         </Li>
         <Li>
           <I
+            src="/static/logotypes/farmboek.png"
+            srcSet="/static/logotypes/farmboek.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/farmforce.png"
             srcSet="/static/logotypes/farmforce.png 2x"
             alt="Logo"
@@ -155,6 +169,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/kpmg.png"
+            srcSet="/static/logotypes/kpmg.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/microsoft.png"
             srcSet="/static/logotypes/microsoft.png 2x"
             alt="Logo"
@@ -164,6 +185,13 @@ export default props => (
           <I
             src="/static/logotypes/movimento.png"
             srcSet="/static/logotypes/movimento.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/multiconsult.png"
+            srcSet="/static/logotypes/multiconsult.png 2x"
             alt="Logo"
           />
         </Li>{' '}
@@ -230,6 +258,13 @@ export default props => (
             alt="Logo"
           />
         </Li>
+        <Li>
+          <I
+            src="/static/logotypes/tele2.png"
+            srcSet="/static/logotypes/tele2.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/tine.png"
