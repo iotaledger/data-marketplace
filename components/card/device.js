@@ -1,17 +1,16 @@
+import React from 'react'
 import styled, { css } from 'styled-components'
 import { reducer, getBalance } from '../../lib/iota'
+import { fbRef } from '../../lib/firebase-admin'
 import { format } from 'date-fns'
 
 import Card from './index.js'
 
 const Heading = props => (
   <div>
-    <SensorType>{props.type} Turtle Spawn</SensorType>
+    <SensorType>{props.type}</SensorType>
     <SensorId>
-      Te-SAAKSA
-      {props.sensorId && props.sensorId.length > 20
-        ? [props].sensorId.substr(0, 20) + '...'
-        : props.sensorId}
+      {props.sensorId ? props.sensorId.substr(0, 20) + '...' : '--'}
     </SensorId>
   </div>
 )
@@ -35,30 +34,52 @@ const Footer = props => (
   </div>
 )
 
-export default props => (
-  <Card header={Heading(props)} footer={Footer(props)}>
-    <RowHalf>
-      <RowIcon src="/static/icons/icon-small-location.svg" alt="" />
-      <RowDesc>Location</RowDesc>
-      <Data>{'Exmouth, WA'}</Data>
-    </RowHalf>
-    <RowHalf>
-      <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
-      <RowDesc>Sensor streams:</RowDesc>
-      <Data>{7}</Data>
-    </RowHalf>
-    <RowHalf>
-      <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
-      <RowDesc>Stream Purchases:</RowDesc>
-      <Data>{523}</Data>
-    </RowHalf>
-    <RowHalf>
-      <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
-      <RowDesc>Last Packet:</RowDesc>
-      <Data>{'31 minutes ago'}</Data>
-    </RowHalf>
-  </Card>
-)
+export default class extends React.Component {
+  state = { loading: true, device: { location: {} } }
+  componentDidMount() {
+    console.log(this.props)
+    fbRef
+      .firestore()
+      .collection('devices')
+      .doc(this.props.device)
+      .get()
+      .then(doc => {
+        console.log(doc.data())
+        this.setState({ device: doc.data() })
+      })
+  }
+  render() {
+    var { device, loading } = this.state
+    return (
+      <Card header={Heading(device)} footer={Footer(device)}>
+        <RowHalf>
+          <RowIcon src="/static/icons/icon-small-location.svg" alt="" />
+          <RowDesc>Location</RowDesc>
+          <Data>
+            {device.location.city
+              ? device.location.city + ', ' + device.location.country
+              : '--'}
+          </Data>
+        </RowHalf>
+        <RowHalf>
+          <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
+          <RowDesc>Sensor streams:</RowDesc>
+          <Data>{device.dataTypes && device.dataTypes.length}</Data>
+        </RowHalf>
+        <RowHalf>
+          <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
+          <RowDesc>Stream Purchases:</RowDesc>
+          <Data>{523}</Data>
+        </RowHalf>
+        <RowHalf>
+          <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
+          <RowDesc>Last Packet:</RowDesc>
+          <Data>{'31 minutes ago'}</Data>
+        </RowHalf>
+      </Card>
+    )
+  }
+}
 
 const RowHalf = styled.div`
   padding: 20px 30px 14px;
