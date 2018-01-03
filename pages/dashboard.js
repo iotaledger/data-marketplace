@@ -23,7 +23,7 @@ export default class extends React.Component {
   }
 
   state = {
-    devices: ['a', 'b', 'c'],
+    devices: [],
     packets: [],
     user: false,
     button: true,
@@ -57,7 +57,7 @@ export default class extends React.Component {
       .auth()
       .signInAnonymously()
       .then(data => {
-        console.log(data)
+        this.findDevices(data)
         this.setState({ user: data })
       })
       .catch(function(error) {
@@ -68,6 +68,36 @@ export default class extends React.Component {
       })
   }
 
+  findDevices = user => {
+    firebase
+      .firestore()
+      .collection('users')
+      .doc(user.uid)
+      .collection('devices')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          console.log(doc.id)
+          this.setState({ devices: [...this.state.devices, doc.id] }, () => {
+            return
+          })
+        })
+      })
+  }
+
+  getDevice = device => {
+    firebase
+      .firestore()
+      .collection('devices')
+      .doc(device)
+      .get()
+      .then(function(doc) {
+        console.log(doc.id, ' => ', doc.data())
+      })
+      .catch(function(error) {
+        console.error('Error adding document: ', error)
+      })
+  }
   throw = (error, button) => {
     this.setState({
       loading: false,
@@ -96,13 +126,13 @@ export default class extends React.Component {
           <Sidebar {...this.state} />
           <DeviceList devices={devices} create={this.createDevice} />
         </Data>
-        {/* <LoginModal
+        <LoginModal
           button={button}
           auth={this.auth}
           show={!user}
           loading={loading}
           error={error}
-        /> */}
+        />
       </Main>
     )
   }
