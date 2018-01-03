@@ -3,7 +3,6 @@ import styled, { css } from 'styled-components'
 
 export default props => (
   <Card data-component="SensorCard">
-    {console.log(props)}
     {props.header && <CardHeader>{props.header}</CardHeader>}
     {props.children}
     {props.footer && <CardFooter>{props.footer}</CardFooter>}
