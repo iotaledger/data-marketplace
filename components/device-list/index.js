@@ -32,11 +32,10 @@ const CardWrapper = styled.div`
 export default props => (
   <InfoCol>
     <CardWrapper>
-      {props.devices
-        .fill()
-        .map((packet, i) => (
-          <DeviceCard index={i} key={i} layout={props.layout} packet={packet} />
-        ))}
+      {console.log(props)}
+      {props.devices.map((device, i) => (
+        <DeviceCard index={i} key={i} layout={props.layout} device={device} />
+      ))}
 
       {props.devices.length < 4 ? (
         <AddCard create={props.create} />
