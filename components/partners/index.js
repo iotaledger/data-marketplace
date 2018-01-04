@@ -8,6 +8,13 @@ export default props => (
       <Ul>
         <Li>
           <I
+            src="/static/logotypes/3for2.png"
+            srcSet="/static/logotypes/3for2.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/acando.png"
             srcSet="/static/logotypes/acando.png 2x"
             alt="Logo"
@@ -262,6 +269,13 @@ export default props => (
           <I
             src="/static/logotypes/tele2.png"
             srcSet="/static/logotypes/tele2.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/telstra.png"
+            srcSet="/static/logotypes/telstra.png 2x"
             alt="Logo"
           />
         </Li>{' '}
