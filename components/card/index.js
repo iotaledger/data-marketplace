@@ -20,6 +20,7 @@ const Card = styled.a`
   background-color: #fff;
   cursor: pointer;
   transition: box-shadow 0.19s ease-out;
+  width: 500px;
   @media (max-width: 1120px) {
     margin-bottom: 20px;
   }
