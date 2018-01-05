@@ -58,7 +58,14 @@ export default class extends React.Component {
       .signInAnonymously()
       .then(data => {
         this.findDevices(data)
-        this.setState({ user: data })
+        firebase
+          .firestore()
+          .collection('users')
+          .doc(data.uid)
+          .get()
+          .then(doc => {
+            this.setState({ user: data, userData: doc.data() })
+          })
       })
       .catch(function(error) {
         // Handle Errors here.
@@ -108,14 +115,50 @@ export default class extends React.Component {
     })
   }
 
-  createDevice = device => {
+  createDevice = (device, sk) => {
     console.log('Saving new device')
     console.log(device)
-    // Check device doesn't exist
-    // Add device to device list
-    // Add device to profile
-    // Add device key.
+    console.log(this.state.userData)
 
+    // Assign to user
+    device.owner = this.state.user.uid
+
+    // Add Address
+    device.address =
+      'KC9MBBIBYE9MGJBEDRJJKRENVIVYXGMMSPTXVHVSCKXODLYEYJHSOSXTXPTXGQU9S9IRXAIFAWSQLHJTDWBE9KFNMC'
+
+    firebase
+      .firestore()
+      .collection('devices')
+      .doc(device.sensorId)
+      .get()
+      .then(async doc => {
+        // Check device doesn't exist
+        if (doc.exists) {
+          console.log('Device exists')
+          return { err: `Device Exists` }
+        } else {
+          // Add cloud function call
+          await fetch(
+            'https://us-central1-marketplacev2.cloudfunctions.net/newDevice',
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                apiKey: this.state.userData.apiKey,
+                id: device.sensorId,
+                sk,
+                device
+              })
+            }
+          )
+          this.setState({ devices: [...this.state.devices, device] })
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        return { err: 'An Error Occured' }
+      })
     //Push device into the local state.
   }
 
