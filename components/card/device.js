@@ -37,16 +37,7 @@ const Footer = props => (
 export default class extends React.Component {
   state = { loading: true, device: { location: {} } }
   componentDidMount() {
-    console.log(this.props)
-    fbRef
-      .firestore()
-      .collection('devices')
-      .doc(this.props.device)
-      .get()
-      .then(doc => {
-        console.log(doc.data())
-        this.setState({ device: doc.data() })
-      })
+    this.setState(this.props)
   }
   render() {
     var { device, loading } = this.state

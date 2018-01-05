@@ -71,16 +71,18 @@ export default class extends React.Component {
   findDevices = user => {
     firebase
       .firestore()
-      .collection('users')
-      .doc(user.uid)
       .collection('devices')
+      .where('owner', '==', user.uid)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           console.log(doc.id)
-          this.setState({ devices: [...this.state.devices, doc.id] }, () => {
-            return
-          })
+          this.setState(
+            { devices: [...this.state.devices, doc.data()] },
+            () => {
+              return
+            }
+          )
         })
       })
   }
