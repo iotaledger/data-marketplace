@@ -32,7 +32,6 @@ const CardWrapper = styled.div`
 export default props => (
   <InfoCol>
     <CardWrapper>
-      {console.log(props)}
       {props.devices.map((device, i) => (
         <DeviceCard index={i} key={i} layout={props.layout} device={device} />
       ))}
