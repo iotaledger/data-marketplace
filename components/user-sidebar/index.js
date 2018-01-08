@@ -83,22 +83,23 @@ export default class extends React.Component {
               <DetailKey>Number of Devices:</DetailKey>
               <DetailValue>{this.props.devices.length}</DetailValue>
             </DetailRow>
-            <DetailRow>
+            {/* <DetailRow>
               <DetailKey>Total Packets:</DetailKey>
               <DetailValue>20112</DetailValue>
-            </DetailRow>
+            </DetailRow> */}
             <DetailRow>
               <DetailKey>Total Data Streams:</DetailKey>
               <DetailValue>
-                7
-                {/* {this.props.devices
-                  .map(device => device.dataTypes.length)
-                  .reduce((a, b) => a + b)} */}
+                {this.props.devices[0]
+                  ? this.props.devices
+                      .map(device => device.dataTypes.length)
+                      .reduce((a, b) => a + b)
+                  : '--'}
               </DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailKey>Owner:</DetailKey>
-              <DetailValue> Lewis Freiberg</DetailValue>
+              <DetailValue>{this.props.user.displayName}</DetailValue>
             </DetailRow>
             {/* <DetailRow>
               <DetailKey>Data Types:</DetailKey>
