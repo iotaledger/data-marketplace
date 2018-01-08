@@ -9,7 +9,6 @@ export default class extends React.Component {
     loading: false,
     active: false,
     submit: false,
-    comapny: '',
     deviceID: '',
     deviceType: '',
     deviceLocation: '',
@@ -69,7 +68,18 @@ export default class extends React.Component {
     // Generate Key for the device
     let secretKey = seedGen(15)
     //
-    this.setState({ loading: true }, () => this.props.create(device, secretKey))
+    this.setState({ loading: true }, async () => {
+      await this.props.create(device, secretKey)
+      this.setState({
+        loading: false,
+        deviceID: '',
+        deviceType: '',
+        deviceLocation: '',
+        deviceLat: '',
+        deviceLon: '',
+        dataTypes: [{ id: '', name: '', unit: '' }]
+      })
+    })
   }
 
   render() {
@@ -85,16 +95,6 @@ export default class extends React.Component {
                 type={'text'}
                 name={'deviceID'}
                 value={this.state.deviceID}
-                onChange={e => this.change(e)}
-              />
-            </Column>
-            <Column>
-              <label>Company:</label>
-              <Input
-                placeholder={'eg. Bosch'}
-                type={'text'}
-                name={'company'}
-                value={this.state.company}
                 onChange={e => this.change(e)}
               />
             </Column>
@@ -131,7 +131,7 @@ export default class extends React.Component {
               <Column>
                 <label>Latitude:</label>
                 <Input
-                  placeholder={'Lat: -12.312'}
+                  placeholder={'Lat: 52.312'}
                   type={'number'}
                   name={'deviceLat'}
                   value={this.state.deviceLat}
@@ -141,7 +141,7 @@ export default class extends React.Component {
               <Column>
                 <label>Longitude:</label>
                 <Input
-                  placeholder={'Lon: 52.221'}
+                  placeholder={'Lon: -12.221'}
                   type={'number'}
                   name={'deviceLon'}
                   value={this.state.deviceLon}
