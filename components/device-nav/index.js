@@ -94,12 +94,16 @@ export default props => (
     <Header>
       <Block>
         <Desc>
-          Google sign-in
+          {/* Google sign-in */}
           {/* {props.deviceInfo.type ? props.deviceInfo.type : 'Loading Device'} */}
         </Desc>
-        <DeviceID>Lewis Freiberg</DeviceID>
+        <DeviceID>{props.user.displayName || '--'}</DeviceID>
       </Block>
     </Header>
-    <RightHeader>Helo</RightHeader>
+    <RightHeader>
+      {props.user && (
+        <button onClick={() => props.logout()}>{`Log Out`}</button>
+      )}
+    </RightHeader>
   </Main>
 )
