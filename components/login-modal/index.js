@@ -70,6 +70,11 @@ const Internal = styled.div`
   width: 100%;
 `
 
+const SignupButton = styled.img`
+  width: 80%;
+  margin: 10px 0 0;
+`
+
 export default class extends React.Component {
   render() {
     return (
@@ -78,23 +83,14 @@ export default class extends React.Component {
           <AccessBox>
             {!this.props.error ? (
               <Internal>
-                <img
-                  src="/static/icons/icon-padlock.png"
-                  srcSet="/static/icons/icon-padlock@2x.png 2x"
-                  alt="Icon padlock"
-                />
-                <Heading>Purchase device stream</Heading>
+                <Heading>Login with OAuth</Heading>
                 <Info>
-                  You can purchase access to this device's data stream by
-                  clicking below.
+                  Click one of the login buttons below to generate an account.
                 </Info>
-                <Button
-                  type="button"
-                  className="btn btn-accent txt-bold modal-trigger"
+                <SignupButton
                   onClick={() => this.props.auth('google')}
-                >
-                  Login with Google
-                </Button>
+                  src={`/static/icons/btn_google.png`}
+                />
               </Internal>
             ) : (
               <Internal>
