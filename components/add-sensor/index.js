@@ -67,11 +67,13 @@ export default class extends React.Component {
 
     // Generate Key for the device
     let secretKey = seedGen(15)
+    device.sk = secretKey
     //
     this.setState({ loading: true }, async () => {
       await this.props.create(device, secretKey)
       this.setState({
         loading: false,
+        active: false,
         deviceID: '',
         deviceType: '',
         deviceLocation: '',
@@ -83,15 +85,15 @@ export default class extends React.Component {
   }
 
   render() {
-    var { active } = this.state
+    var { active, loading } = this.state
     return (
       <Card header={Heading(this.state)}>
-        {active && (
+        {active && !loading ? (
           <Form>
             <Column>
               <label>Device ID:</label>
               <Input
-                placeholder={'eg. bosch-x910'}
+                placeholder={'eg. fitbit-x910'}
                 type={'text'}
                 name={'deviceID'}
                 value={this.state.deviceID}
@@ -194,6 +196,11 @@ export default class extends React.Component {
               </Row>
             ))}
           </Form>
+        ) : null}
+        {loading && (
+          <LoadingBox>
+            <Loading />
+          </LoadingBox>
         )}
         {active ? (
           <FootRow>
@@ -212,6 +219,46 @@ export default class extends React.Component {
       </Card>
     )
   }
+}
+
+const LoadingBox = styled.div`
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`
+
+const Loading = () => {
+  return (
+    <svg
+      style={{ padding: '20' }}
+      xmlns="http://www.w3.org/2000/svg"
+      width="130"
+      height="130"
+      viewBox="0 0 38 38"
+      stroke="#e2e2e2"
+    >
+      <g fill="none" fillRule="evenodd">
+        <g transform="translate(1 1)" strokeWidth="2">
+          <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
+          <path
+            d="M36 18c0-9.94-8.06-18-18-18"
+            transform="rotate(319.698 18 18)"
+          >
+            <animateTransform
+              attributeName="transform"
+              type="rotate"
+              from="0 18 18"
+              to="360 18 18"
+              dur="1s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </g>
+      </g>
+    </svg>
+  )
 }
 
 const Form = styled.form`
