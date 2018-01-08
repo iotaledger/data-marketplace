@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import FB, { getData, deviceInfo } from '../lib/firebase-user'
+import FB from '../lib/firebase'
+import { getData, deviceInfo, userAuth } from '../lib/auth-user'
 import {
   iota,
   initWallet,
@@ -38,9 +39,10 @@ export default class extends React.Component {
     this.fetchWallet()
     // Firebase
     const firebase = await FB()
-    const store = firebase.firestore
+    const store = firebase.firestore()
+    const user = await userAuth(firebase)
     // Get data
-    let userRef = store.collection('users').doc(firebase.user.uid)
+    let userRef = store.collection('users').doc(user.uid)
     let deviceRef = store.collection('devices').doc(this.props.id)
     let device = await deviceInfo(deviceRef, this.props.id)
     if (device.address) device.balance = await getBalance(device.address)
@@ -61,7 +63,7 @@ ID and try again`,
       deviceRef,
       deviceInfo: device,
       layout,
-      uid: firebase.user.uid
+      uid: user.uid
     })
     // MAM
     this.fetch(deviceRef, userRef)

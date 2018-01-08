@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import FB from '../lib/firebase-admin'
+import FB from '../lib/firebase'
 
 import {
   iota,

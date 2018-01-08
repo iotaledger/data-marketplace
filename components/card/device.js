@@ -1,7 +1,7 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
 import { reducer, getBalance } from '../../lib/iota'
-import { fbRef } from '../../lib/firebase-admin'
+import { fbRef } from '../../lib/firebase'
 import { format } from 'date-fns'
 
 import Card from './index.js'
@@ -57,7 +57,7 @@ export default class extends React.Component {
           <RowDesc>Sensor streams:</RowDesc>
           <Data>{device.dataTypes && device.dataTypes.length}</Data>
         </RowHalf>
-        <RowHalf>
+        {/* <RowHalf>
           <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
           <RowDesc>Stream Purchases:</RowDesc>
           <Data>{523}</Data>
@@ -66,7 +66,7 @@ export default class extends React.Component {
           <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
           <RowDesc>Last Packet:</RowDesc>
           <Data>{'31 minutes ago'}</Data>
-        </RowHalf>
+        </RowHalf> */}
       </Card>
     )
   }
