@@ -38,64 +38,90 @@ export default class extends React.Component {
 
   async componentDidMount() {
     // Init Wallet
-    firebase = await FB()
-    console.log(firebase)
-    this.setState({ loading: false })
+    this.firebase = await FB()
+    console.log(this.firebase)
+    this.checkLogin()
   }
-
+  checkLogin = () => {
+    this.firebase.auth().onAuthStateChanged(user => {
+      if (user && !user.isAnonymous) {
+        // User is signed in.
+        console.log(user)
+        this.getUser(user)
+      } else {
+        // No user is signed in.
+        this.setState({ loading: false })
+      }
+    })
+  }
   auth = channel => {
     let provider
     switch (channel) {
       case 'google':
-        provider = new firebase.auth.GoogleAuthProvider()
+        provider = new this.firebase.auth.GoogleAuthProvider()
         provider.addScope('email')
         provider.addScope('profile')
         break
     }
 
-    firebase
+    this.firebase
       .auth()
-      .signInAnonymously()
-      .then(data => {
-        this.findDevices(data)
-        firebase
-          .firestore()
-          .collection('users')
-          .doc(data.uid)
-          .get()
-          .then(doc => {
-            this.setState({ user: data, userData: doc.data() })
-          })
+      .signInWithPopup(provider)
+      .then(result => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken
+        // The signed-in user info.
+        var user = result.user
+        this.getUser(user)
       })
-      .catch(function(error) {
+      .catch(error => {
         // Handle Errors here.
         var errorCode = error.code
         var errorMessage = error.message
-        return errorMessage
+        // The email of the user's account used.
+        var email = error.email
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential
+        // ...
+      })
+  }
+
+  getUser = user => {
+    this.findDevices(user)
+    this.firebase
+      .firestore()
+      .collection('users')
+      .doc(user.uid)
+      .get()
+      .then(doc => {
+        this.setState({
+          user: user,
+          userData: doc.data(),
+          loading: false,
+          firebase
+        })
       })
   }
 
   findDevices = user => {
-    firebase
+    this.firebase
       .firestore()
       .collection('devices')
       .where('owner', '==', user.uid)
       .get()
       .then(querySnapshot => {
+        var devices = []
         querySnapshot.forEach(doc => {
           console.log(doc.id)
-          this.setState(
-            { devices: [...this.state.devices, doc.data()] },
-            () => {
-              return
-            }
-          )
+          devices.push(doc.data())
+          if (devices.length == querySnapshot.size)
+            return this.setState({ devices })
         })
       })
   }
 
   getDevice = device => {
-    firebase
+    this.firebase
       .firestore()
       .collection('devices')
       .doc(device)
@@ -127,7 +153,7 @@ export default class extends React.Component {
     device.address =
       'KC9MBBIBYE9MGJBEDRJJKRENVIVYXGMMSPTXVHVSCKXODLYEYJHSOSXTXPTXGQU9S9IRXAIFAWSQLHJTDWBE9KFNMC'
 
-    firebase
+    this.firebase
       .firestore()
       .collection('devices')
       .doc(device.sensorId)
@@ -153,6 +179,7 @@ export default class extends React.Component {
             }
           )
           this.setState({ devices: [...this.state.devices, device] })
+          return { success: true }
         }
       })
       .catch(err => {
@@ -162,11 +189,25 @@ export default class extends React.Component {
     //Push device into the local state.
   }
 
+  logout = () => {
+    this.firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        console.log('Logged Out')
+        this.setState({ user: false, devices: [] })
+      })
+      .catch(function(error) {
+        // An error happened.
+      })
+  }
+
   render() {
     var { devices, packets, user, loading, error, button } = this.state
     return (
       <Main>
-        <DeviceNav {...this.state} />
+        <DeviceNav {...this.state} logout={this.logout} />
         <Data>
           <Sidebar {...this.state} />
           <DeviceList devices={devices} create={this.createDevice} />
