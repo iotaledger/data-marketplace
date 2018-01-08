@@ -6,14 +6,38 @@ import { format } from 'date-fns'
 
 import Card from './index.js'
 
-const Heading = props => (
-  <div>
+const Heading = (props, func) => (
+  <Full>
     <SensorType>{props.type}</SensorType>
     <SensorId>
       {props.sensorId ? props.sensorId.substr(0, 20) + '...' : '--'}
     </SensorId>
-  </div>
+    <Delete onClick={() => func(props.sensorId)}>
+      <IconButton src="/static/icons/icon-delete.svg" />
+    </Delete>
+  </Full>
 )
+const Full = styled.div`
+  width: 100%;
+`
+const Delete = styled.span`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  top: 10px;
+  right: 30px;
+`
+const IconButton = styled.img`
+  height: 20px;
+  width: 20px;
+  cursor: pointer;
+  opacity: 1;
+  transition: all 0.3s ease;
+  &:hover {
+    opacity: 0.4;
+  }
+  /* margin-right: 5px; */
+`
 
 const Footer = props => (
   <div>
@@ -24,12 +48,12 @@ const Footer = props => (
       </InfoValue>
     </FootRow> */}
     <FootRow>
-      <InfoKey>Device Balance:</InfoKey>
-      <InfoValue>{reducer(9353985325)}</InfoValue>
+      <InfoKey>Data price:</InfoKey>
+      <InfoValue>{reducer(props.value)}</InfoValue>
     </FootRow>
     <FootRow>
-      <InfoKey>Data price:</InfoKey>
-      <InfoValue>{reducer(23424232)}</InfoValue>
+      <InfoKey>Device Key:</InfoKey>
+      <InfoValue>{props.sk}</InfoValue>
     </FootRow>
   </div>
 )
@@ -42,7 +66,7 @@ export default class extends React.Component {
   render() {
     var { device, loading } = this.state
     return (
-      <Card header={Heading(device)} footer={Footer(device)}>
+      <Card header={Heading(device, this.props.delete)} footer={Footer(device)}>
         <RowHalf>
           <RowIcon src="/static/icons/icon-small-location.svg" alt="" />
           <RowDesc>Location</RowDesc>
