@@ -150,43 +150,60 @@ export default class extends React.Component {
     device.owner = this.state.user.uid
 
     // Add Address
-    device.address =
-      'KC9MBBIBYE9MGJBEDRJJKRENVIVYXGMMSPTXVHVSCKXODLYEYJHSOSXTXPTXGQU9S9IRXAIFAWSQLHJTDWBE9KFNMC'
+    return new Promise((res, rej) => {
+      this.firebase
+        .firestore()
+        .collection('devices')
+        .doc(device.sensorId)
+        .get()
+        .then(async doc => {
+          // Check device doesn't exist
+          if (doc.exists) {
+            console.log('Device exists')
+            return { err: `Device Exists` }
+          } else {
+            // Add cloud function call
+            var resp = await fetch(
+              'https://us-central1-marketplacev2.cloudfunctions.net/newDevice',
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  apiKey: this.state.userData.apiKey,
+                  id: device.sensorId,
+                  sk,
+                  device
+                })
+              }
+            )
+            this.setState({ devices: [...this.state.devices, device] })
+            res({ success: true })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          res({ err: 'An Error Occured' })
+        })
+      //Push device into the local state.
+    })
+  }
 
-    this.firebase
-      .firestore()
-      .collection('devices')
-      .doc(device.sensorId)
-      .get()
-      .then(async doc => {
-        // Check device doesn't exist
-        if (doc.exists) {
-          console.log('Device exists')
-          return { err: `Device Exists` }
-        } else {
-          // Add cloud function call
-          await fetch(
-            'https://us-central1-marketplacev2.cloudfunctions.net/newDevice',
-            {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                apiKey: this.state.userData.apiKey,
-                id: device.sensorId,
-                sk,
-                device
-              })
-            }
-          )
-          this.setState({ devices: [...this.state.devices, device] })
-          return { success: true }
-        }
-      })
-      .catch(err => {
-        console.log(err)
-        return { err: 'An Error Occured' }
-      })
-    //Push device into the local state.
+  deleteDevice = async id => {
+    await fetch(
+      'https://us-central1-marketplacev2.cloudfunctions.net/removeDevice',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          apiKey: this.state.userData.apiKey,
+          id
+        })
+      }
+    )
+    this.setState({
+      devices: [...this.state.devices.filter(device => device.sensorId !== id)]
+    })
+    return { success: true }
   }
 
   logout = () => {
@@ -210,7 +227,11 @@ export default class extends React.Component {
         <DeviceNav {...this.state} logout={this.logout} />
         <Data>
           <Sidebar {...this.state} />
-          <DeviceList devices={devices} create={this.createDevice} />
+          <DeviceList
+            devices={devices}
+            create={this.createDevice}
+            delete={this.deleteDevice}
+          />
         </Data>
         <LoginModal
           button={button}
