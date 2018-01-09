@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "iota.lib.js": "^0.4.2",
+    "node-fetch": "^1.7.3"
+  }
+}

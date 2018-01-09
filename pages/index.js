@@ -11,14 +11,15 @@ import Form from '../components/form'
 import Footer from '../components/footer'
 import Cookies from '../components/cookie'
 
-import FB, { allDevices } from '../lib/firebase-user'
+import FB from '../lib/firebase'
+import { allDevices } from '../lib/auth-user'
 
 export default class extends React.Component {
   state = { devices: [] }
   componentDidMount = async () => {
     // Firebase
     const firebase = await FB()
-    var devices = await allDevices(firebase.firestore)
+    var devices = await allDevices(firebase)
     this.setState({ devices })
   }
   render() {
