@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import FB from '../lib/firebase-admin'
+import FB from '../lib/firebase'
+
 import {
   iota,
   initWallet,
@@ -10,9 +11,11 @@ import {
 } from '../lib/iota'
 
 import DeviceNav from '../components/device-nav'
-import Modal from '../components/modal'
+import LoginModal from '../components/login-modal'
 import Sidebar from '../components/user-sidebar'
 import DeviceList from '../components/device-list'
+
+var firebase = {}
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
@@ -20,14 +23,14 @@ export default class extends React.Component {
   }
 
   state = {
-    deviceInfo: {},
+    devices: [],
     packets: [],
-    purchase: false,
+    user: false,
     button: true,
     index: 0,
     loading: {
-      heading: `Loading Device`,
-      body: `Fetching device information and your purchase history. `
+      heading: `Loading User`,
+      body: `Fetching your devices and account statistcs`
     },
     error: false,
     fetching: false
@@ -35,9 +38,101 @@ export default class extends React.Component {
 
   async componentDidMount() {
     // Init Wallet
-    const firebase = await FB()
+    this.firebase = await FB()
+    console.log(this.firebase)
+    this.checkLogin()
+  }
+  checkLogin = () => {
+    this.firebase.auth().onAuthStateChanged(user => {
+      if (user && !user.isAnonymous) {
+        // User is signed in.
+        console.log(user)
+        this.getUser(user)
+      } else {
+        // No user is signed in.
+        this.setState({ loading: false })
+      }
+    })
+  }
+  auth = channel => {
+    let provider
+    switch (channel) {
+      case 'google':
+        provider = new this.firebase.auth.GoogleAuthProvider()
+        provider.addScope('email')
+        provider.addScope('profile')
+        break
+    }
+
+    this.firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(result => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken
+        // The signed-in user info.
+        var user = result.user
+        this.getUser(user)
+      })
+      .catch(error => {
+        // Handle Errors here.
+        var errorCode = error.code
+        var errorMessage = error.message
+        // The email of the user's account used.
+        var email = error.email
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential
+        // ...
+      })
   }
 
+  getUser = user => {
+    this.findDevices(user)
+    this.firebase
+      .firestore()
+      .collection('users')
+      .doc(user.uid)
+      .get()
+      .then(doc => {
+        this.setState({
+          user: user,
+          userData: doc.data(),
+          loading: false,
+          firebase
+        })
+      })
+  }
+
+  findDevices = user => {
+    this.firebase
+      .firestore()
+      .collection('devices')
+      .where('owner', '==', user.uid)
+      .get()
+      .then(querySnapshot => {
+        var devices = []
+        querySnapshot.forEach(doc => {
+          console.log(doc.id)
+          devices.push(doc.data())
+          if (devices.length == querySnapshot.size)
+            return this.setState({ devices })
+        })
+      })
+  }
+
+  getDevice = device => {
+    this.firebase
+      .firestore()
+      .collection('devices')
+      .doc(device)
+      .get()
+      .then(function(doc) {
+        console.log(doc.id, ' => ', doc.data())
+      })
+      .catch(function(error) {
+        console.error('Error adding document: ', error)
+      })
+  }
   throw = (error, button) => {
     this.setState({
       loading: false,
@@ -46,69 +141,109 @@ export default class extends React.Component {
     })
   }
 
-  fetchMam = data => {
-    try {
-      if (!data[0]) throw 'Fail'
-      var mamState = Mam.init(iota)
-      mamState.channel.security = this.state.deviceInfo.security || 2
+  createDevice = (device, sk) => {
+    console.log('Saving new device')
+    console.log(device)
+    console.log(this.state.userData)
 
-      var packets = data.splice(this.state.index, 20).map(async (packet, i) => {
-        var packet = await Mam.fetchSingle(
-          packet.root,
-          packet.sidekey !== '' ? 'restricted' : null,
-          packet.sidekey !== '' ? packet.sidekey : null,
-          this.state.deviceInfo.hash === 'curlp27' ? 27 : undefined
-        )
+    // Assign to user
+    device.owner = this.state.user.uid
 
-        if (packet) {
-          this.saveData(packet.payload, i)
-        } else {
-          this.throw({
-            body: 'Unable to read the packets of data from the device.',
-            heading: `Device Misconfigured`
-          })
-        }
-      })
-    } catch (e) {
-      this.setState({ dataEnd: true })
-    }
+    // Add Address
+    return new Promise((res, rej) => {
+      this.firebase
+        .firestore()
+        .collection('devices')
+        .doc(device.sensorId)
+        .get()
+        .then(async doc => {
+          // Check device doesn't exist
+          if (doc.exists) {
+            console.log('Device exists')
+            return { err: `Device Exists` }
+          } else {
+            // Add cloud function call
+            var resp = await fetch(
+              `https://us-central1-${
+                process.env.FIREBASEID
+              }.cloudfunctions.net/newDevice`,
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  apiKey: this.state.userData.apiKey,
+                  id: device.sensorId,
+                  sk,
+                  device
+                })
+              }
+            )
+            this.setState({ devices: [...this.state.devices, device] })
+            res({ success: true })
+          }
+        })
+        .catch(err => {
+          console.log(err)
+          res({ err: 'An Error Occured' })
+        })
+      //Push device into the local state.
+    })
   }
 
-  // Append datax
-  saveData = (data, i) => {
-    let input = iota.utils.fromTrytes(data)
-    try {
-      var packet = JSON.parse(input)
-      console.log(packet)
-      var packets = [...this.state.packets, packet]
-      this.setState({
-        packets,
-        purchase: true,
-        fetching: false,
-        index: i
+  deleteDevice = async id => {
+    await fetch(
+      `https://us-central1-${
+        process.env.FIREBASEID
+      }.cloudfunctions.net/removeDevice`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          apiKey: this.state.userData.apiKey,
+          id
+        })
+      }
+    )
+    this.setState({
+      devices: [...this.state.devices.filter(device => device.sensorId !== id)]
+    })
+    return { success: true }
+  }
+
+  logout = () => {
+    this.firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        console.log('Logged Out')
+        this.setState({ user: false, devices: [] })
       })
-    } catch (e) {
-      console.error(e)
-      console.log('Failing input: ', input)
-    }
+      .catch(function(error) {
+        // An error happened.
+      })
   }
 
   render() {
-    var { deviceInfo, packets, purchase, loading, error, button } = this.state
+    var { devices, packets, user, loading, error, button } = this.state
     return (
       <Main>
-        <DeviceNav {...this.state} />
+        <DeviceNav {...this.state} logout={this.logout} />
         <Data>
           <Sidebar {...this.state} />
-          <DeviceList />
+          <DeviceList
+            devices={devices}
+            create={this.createDevice}
+            delete={this.deleteDevice}
+          />
         </Data>
-        {/* <Modal
+        <LoginModal
           button={button}
-          purchase={this.purchase}
-          show={!purchase}
+          auth={this.auth}
+          show={!user}
           loading={loading}
           error={error}
-        /> */}
+        />
       </Main>
     )
   }
