@@ -3,15 +3,20 @@ import styled, { css } from 'styled-components'
 import { reducer, getBalance } from '../../lib/iota'
 import { fbRef } from '../../lib/firebase'
 import { format } from 'date-fns'
+import { getZip } from '../../lib/zip'
 
 import Card from './index.js'
 
 const Heading = (props, func) => (
   <Full>
     <SensorType>{props.type}</SensorType>
-    <SensorId>
-      {props.sensorId ? props.sensorId.substr(0, 20) + '...' : '--'}
-    </SensorId>
+    {props.sensorId && (
+      <SensorId>
+        {props.sensorId.length > 20
+          ? props.sensorId.substr(0, 20) + '...'
+          : props.sensorId}
+      </SensorId>
+    )}
     <Delete onClick={() => func(props.sensorId)}>
       <IconButton src="/static/icons/icon-delete.svg" />
     </Delete>
@@ -40,23 +45,28 @@ const IconButton = styled.img`
 `
 
 const Footer = props => (
-  <div>
+  <div onClick={() => getZip(props)}>
+    <FootRow>
+      <FooterButton>Download Publish Script</FooterButton>
+    </FootRow>
     {/* <FootRow>
-      <InfoKey>Device Address:</InfoKey>
-      <InfoValue>
-        {'AJDJ9HAKF99JSMAK9IRJSAIEJSME'.substr(0, 11) + '...'}
-      </InfoValue>
-    </FootRow> */}
-    <FootRow>
-      <InfoKey>Data price:</InfoKey>
-      <InfoValue>{reducer(props.value)}</InfoValue>
-    </FootRow>
-    <FootRow>
-      <InfoKey>Device Key:</InfoKey>
+      <InfoKey>Device Publish Key:</InfoKey>
       <InfoValue>{props.sk}</InfoValue>
-    </FootRow>
+    </FootRow> */}
   </div>
 )
+const FooterButton = styled.button`
+  color: ${props =>
+    props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`};
+  padding: 5px 15px;
+  margin-right: -15px;
+  font-size: 90%;
+  background: transparent;
+  &:first-of-type {
+    margin-left: -15px;
+    margin-right: 0;
+  }
+`
 
 export default class extends React.Component {
   state = { loading: true, device: { location: {} } }

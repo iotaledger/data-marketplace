@@ -23,17 +23,24 @@ export default class MyDocument extends Document {
               `
             }}
           />
+
           <title>IOTA Data Market</title>
           {styleTags}
-          <script src="https://www.google.com/recaptcha/api.js" async defer/>
-          <meta property="og:title" content="The IOTA Data Marketplace" /> 
-          <meta property="og:description" content="IOTA makes it possible to securely store, sell, and access data streams." />
+          <script src="https://www.google.com/recaptcha/api.js" async defer />
+          <meta property="og:title" content="The IOTA Data Marketplace" />
+          <meta
+            property="og:description"
+            content="IOTA makes it possible to securely store, sell, and access data streams."
+          />
           <meta
             property="og:image"
             content="https://cdn-images-1.medium.com/max/2000/1*XOSduao7nmUZUpRmjt4zeg.jpeg"
           />
           <meta name="title" content="IOTA Data Marketplace" />
-          <meta name="description" content="IOTA makes it possible to securely store, sell, and access data streams."/>
+          <meta
+            name="description"
+            content="IOTA makes it possible to securely store, sell, and access data streams."
+          />
           <meta
             name="keywords"
             content="IoT, Internet of Things,Marketplace,Data,IOTA"
@@ -44,6 +51,7 @@ export default class MyDocument extends Document {
           <script src="/static/iota-bindings-emscripten.wasm" />
           <script src="/static/mam.web.js" />
           <script src="/static/curl.min.js" />
+          <script type="text/javascript" src="/static/jszip-utils.min.js" />
         </Head>
         <body>
           <div className="root">{main}</div>
