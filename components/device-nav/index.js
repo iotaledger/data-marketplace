@@ -94,6 +94,7 @@ export default props => (
     <Header>
       <Block>
         <Desc>
+          Owner:
           {/* Google sign-in */}
           {/* {props.deviceInfo.type ? props.deviceInfo.type : 'Loading Device'} */}
         </Desc>
@@ -102,8 +103,20 @@ export default props => (
     </Header>
     <RightHeader>
       {props.user && (
-        <button onClick={() => props.logout()}>{`Log Out`}</button>
+        <FooterButton onClick={() => props.logout()}>{`Log Out`}</FooterButton>
       )}
     </RightHeader>
   </Main>
 )
+const FooterButton = styled.button`
+  color: ${props =>
+    props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`};
+  padding: 5px 15px;
+  margin-right: -15px;
+  font-size: 90%;
+  background: transparent;
+  &:first-of-type {
+    margin-left: -15px;
+    margin-right: 0;
+  }
+`

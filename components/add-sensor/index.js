@@ -333,9 +333,9 @@ const IconButton = styled.img`
 const FooterButton = styled.button`
   color: ${props =>
     props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`};
-  padding: 10px 15px 10px 15px;
+  padding: 5px 15px;
   margin-right: -15px;
-  font-size: 105%;
+  font-size: 90%;
   background: transparent;
   &:first-of-type {
     margin-left: -15px;
