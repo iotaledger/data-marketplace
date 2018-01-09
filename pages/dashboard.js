@@ -164,7 +164,9 @@ export default class extends React.Component {
           } else {
             // Add cloud function call
             var resp = await fetch(
-              'https://us-central1-marketplacev2.cloudfunctions.net/newDevice',
+              `https://us-central1-${
+                process.env.FIREBASEID
+              }.cloudfunctions.net/newDevice`,
               {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -190,7 +192,9 @@ export default class extends React.Component {
 
   deleteDevice = async id => {
     await fetch(
-      'https://us-central1-marketplacev2.cloudfunctions.net/removeDevice',
+      `https://us-central1-${
+        process.env.FIREBASEID
+      }.cloudfunctions.net/removeDevice`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
