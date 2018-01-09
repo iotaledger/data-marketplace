@@ -32,7 +32,7 @@ export default class extends React.Component {
         <Benefits />
         <Form />
         <Footer />
-        <Cookies />
+        {/* <Cookies /> */}
       </Main>
     )
   }
