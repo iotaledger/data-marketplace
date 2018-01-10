@@ -62,73 +62,22 @@ const Button = styled.button`
   font-weight: 700;
   background-color: #009fff;
 `
-const Internal = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-`
 
-export default class extends React.Component {
-  render() {
-    return (
-      <Modal className="access-modal-wrapper" show={this.props.show}>
-        {!this.props.loading ? (
-          <AccessBox>
-            {!this.props.error ? (
-              <Internal>
-                <img
-                  src="/static/icons/icon-padlock.png"
-                  srcSet="/static/icons/icon-padlock@2x.png 2x"
-                  alt="Icon padlock"
-                />
-                <Heading>Purchase device stream</Heading>
-                <Info>
-                  You can purchase access to this device's data stream by
-                  clicking below.
-                </Info>
-                <Button
-                  type="button"
-                  className="btn btn-accent txt-bold modal-trigger"
-                  onClick={() => this.props.purchase()}
-                >
-                  Purchase Access for $0.20
-                </Button>
-              </Internal>
-            ) : (
-              <Internal>
-                {/* <img
-                  src="/static/icons/icon-padlock.png"
-                  srcSet="/static/icons/icon-padlock@2x.png 2x"
-                  alt="Icon padlock"
-                /> */}
-                <Heading>{this.props.error.heading}</Heading>
-                <Info>{this.props.error.body}</Info>
-                {this.props.button && (
-                  <Link route={'/'}>
-                    <Button
-                      type="button"
-                      className="btn btn-accent txt-bold modal-trigger"
-                    >
-                      Go back
-                    </Button>
-                  </Link>
-                )}
-              </Internal>
-            )}
-          </AccessBox>
-        ) : (
-          <AccessBox className="access-modal">
-            <Heading>{this.props.loading.heading || '--'} </Heading>
-            <Info>{this.props.loading.body || '--'}</Info>
-            <Loading />
-          </AccessBox>
-        )}
-      </Modal>
-    )
-  }
-}
+export default props => (
+  <Modal className="access-modal-wrapper" show={props.show}>
+    {!props.loading ? (
+      <AccessBox>
+        {!props.error ? props.cardContent : props.errorContent}
+      </AccessBox>
+    ) : (
+      <AccessBox className="access-modal">
+        <Heading>{props.loading.heading || '--'} </Heading>
+        <Info>{props.loading.body || '--'}</Info>
+        <Loading />
+      </AccessBox>
+    )}
+  </Modal>
+)
 
 const Loading = () => {
   return (
