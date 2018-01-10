@@ -19,7 +19,7 @@ var firebase = {}
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
-    return { id: query.id }
+    return { grandfather: query.grandfather !== undefined }
   }
 
   state = {
@@ -27,6 +27,7 @@ export default class extends React.Component {
     packets: [],
     user: false,
     button: true,
+    grandModal: false,
     index: 0,
     loading: {
       heading: `Loading User`,
@@ -37,6 +38,7 @@ export default class extends React.Component {
   }
 
   async componentDidMount() {
+    if (this.props.grandfather) this.setState({ grandfather: true })
     // Init Wallet
     this.firebase = await FB()
     console.log(this.firebase)
@@ -223,14 +225,43 @@ export default class extends React.Component {
         // An error happened.
       })
   }
-
+  // Show grandfather modal
+  toggleGrand = () => {
+    this.setState({ grandModal: true })
+  }
+  grandfather = async () => {
+    await fetch(
+      `https://us-central1-${
+        process.env.FIREBASEID
+      }.cloudfunctions.net/grandfather`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sk: this.state.userData.apiKey,
+          id
+        })
+      }
+    )
+    this.setState({
+      devices: [...this.state.devices.filter(device => device.sensorId !== id)]
+    })
+  }
   render() {
-    var { devices, packets, user, loading, error, button } = this.state
+    var {
+      devices,
+      packets,
+      user,
+      loading,
+      error,
+      button,
+      grandModal
+    } = this.state
     return (
       <Main>
         <DeviceNav {...this.state} logout={this.logout} />
         <Data>
-          <Sidebar {...this.state} />
+          <Sidebar {...this.state} toggleGrand={this.toggleGrand} />
           <DeviceList
             devices={devices}
             create={this.createDevice}
@@ -241,6 +272,13 @@ export default class extends React.Component {
           button={button}
           auth={this.auth}
           show={!user}
+          loading={loading}
+          error={error}
+        />
+        <LoginModal
+          button={button}
+          grandfather={this.grandfather}
+          show={grandModal && user}
           loading={loading}
           error={error}
         />
