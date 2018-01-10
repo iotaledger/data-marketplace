@@ -180,7 +180,7 @@ ID and try again`,
         },
         false
       )
-    if (wallet.amount < device.value)
+    if (wallet.balance < device.value)
       return this.throw({
         body: `You have run out of IOTA. Click below to refill you wallet with IOTA.`,
         heading: `Not enough Balance`
@@ -228,7 +228,7 @@ ID and try again`,
         )
         var message = JSON.parse(await resp.json())
         if (message._writeTime) {
-          wallet.amount = wallet.balance - device.value
+          wallet.balance = wallet.balance - device.value
           this.fetch(this.state.deviceRef, this.state.userRef)
           this.setState({ loading: true, purchase: true, wallet })
           await localStorage.setItem('wallet', JSON.stringify(wallet))
