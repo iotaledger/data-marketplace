@@ -230,11 +230,11 @@ export default class extends React.Component {
   toggleGrand = () => {
     this.setState({ grandModal: true })
   }
-  grandfather = (sk, id) => {
+  grandfather = (id, sk) => {
     this.setState(
       {
         loading: {
-          header: 'Posting Request',
+          heading: 'Sending Request',
           body: 'Adding device to you account.'
         }
       },
