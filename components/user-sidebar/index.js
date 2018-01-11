@@ -106,7 +106,7 @@ export default class extends React.Component {
         {this.props.grandfather && (
           <Details>
             <Grandfather onClick={() => this.props.toggleGrand()}>
-              Load 'pre-admin' device
+              Grandfather Old Device
             </Grandfather>
           </Details>
         )}

@@ -12,6 +12,7 @@ import {
 
 import DeviceNav from '../components/device-nav'
 import LoginModal from '../components/login-modal'
+import GrandModal from '../components/modal/grandfather'
 import Sidebar from '../components/user-sidebar'
 import DeviceList from '../components/device-list'
 
@@ -229,23 +230,39 @@ export default class extends React.Component {
   toggleGrand = () => {
     this.setState({ grandModal: true })
   }
-  grandfather = async () => {
-    await fetch(
-      `https://us-central1-${
-        process.env.FIREBASEID
-      }.cloudfunctions.net/grandfather`,
+  grandfather = (sk, id) => {
+    this.setState(
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sk: this.state.userData.apiKey,
-          id
-        })
+        loading: {
+          header: 'Posting Request',
+          body: 'Adding device to you account.'
+        }
+      },
+      async () => {
+        var resp = await fetch(
+          `https://us-central1-${
+            process.env.FIREBASEID
+          }.cloudfunctions.net/grandfather`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              owner: this.state.user.uid,
+              sk,
+              id
+            })
+          }
+        )
+        var data = await resp.json()
+        console.log(data)
+        if (data.error) {
+          /// Add error
+          this.throw({ heading: 'Error', body: data.error }, true)
+        } else {
+          location.reload()
+        }
       }
     )
-    this.setState({
-      devices: [...this.state.devices.filter(device => device.sensorId !== id)]
-    })
   }
   render() {
     var {
@@ -275,7 +292,7 @@ export default class extends React.Component {
           loading={loading}
           error={error}
         />
-        <LoginModal
+        <GrandModal
           button={button}
           grandfather={this.grandfather}
           show={grandModal && user}

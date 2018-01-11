@@ -11,7 +11,7 @@ import {
 } from '../lib/iota'
 
 import SensorNav from '../components/sensor-nav'
-import Modal from '../components/modal'
+import Modal from '../components/modal/purchase'
 import Sidebar from '../components/side-bar'
 import DataStream from '../components/data-stream'
 
