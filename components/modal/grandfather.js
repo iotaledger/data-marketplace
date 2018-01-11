@@ -55,18 +55,30 @@ const Input = styled.input`
   }
 `
 
-const content = props => (
+const content = (state, change, submit) => (
   <Internal>
     <Heading>Grandfather Old Device</Heading>
     <Info>
       Enter you device's ID and Secret Key (Used in the publish script).
     </Info>
-    <Input type="text" placeholder={'Enter Device ID'} />
-    <Input type="text" placeholder={'Enter Secret Key'} />
+    <Input
+      type="text"
+      placeholder={'Enter Device ID'}
+      value={state.id}
+      name={'id'}
+      onChange={e => change(e)}
+    />
+    <Input
+      type="text"
+      placeholder={'Enter Secret Key'}
+      value={state.sk}
+      name={'sk'}
+      onChange={e => change(e)}
+    />
     <Button
       type="button"
       className="btn btn-accent txt-bold modal-trigger"
-      onClick={() => props.grandfather()}
+      onClick={() => submit()}
     >
       Load Device
     </Button>
@@ -88,11 +100,19 @@ const error = props => (
 )
 
 export default class extends React.Component {
+  state = { id: '', sk: '' }
+  change = e => {
+    this.setState({ [e.target.name]: e.target.value })
+  }
+
+  submit = () => {
+    this.props.grandfather(this.state.id, this.state.sk)
+  }
   render() {
     return (
       <Card
         {...this.props}
-        cardContent={content(this.props)}
+        cardContent={content(this.state, this.change, this.submit)}
         errorContent={error(this.props)}
       />
     )
