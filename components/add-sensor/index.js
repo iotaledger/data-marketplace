@@ -74,6 +74,7 @@ export default class extends React.Component {
       this.setState({
         loading: false,
         active: false,
+        companuy: '',
         deviceID: '',
         deviceType: '',
         deviceLocation: '',
@@ -107,6 +108,16 @@ export default class extends React.Component {
                 type={'text'}
                 name={'deviceType'}
                 value={this.state.deviceType}
+                onChange={e => this.change(e)}
+              />
+            </Column>
+            <Column>
+              <label>Company:</label>
+              <Input
+                placeholder={'eg. Datacentrix.Biz or Private'}
+                type={'text'}
+                name={'company'}
+                value={this.state.company}
                 onChange={e => this.change(e)}
               />
             </Column>
