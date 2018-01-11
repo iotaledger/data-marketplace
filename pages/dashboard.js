@@ -12,6 +12,7 @@ import {
 
 import DeviceNav from '../components/device-nav'
 import LoginModal from '../components/login-modal'
+import GrandModal from '../components/modal/grandfather'
 import Sidebar from '../components/user-sidebar'
 import DeviceList from '../components/device-list'
 
@@ -19,7 +20,7 @@ var firebase = {}
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
-    return { id: query.id }
+    return { grandfather: query.grandfather !== undefined }
   }
 
   state = {
@@ -27,6 +28,7 @@ export default class extends React.Component {
     packets: [],
     user: false,
     button: true,
+    grandModal: false,
     index: 0,
     loading: {
       heading: `Loading User`,
@@ -37,6 +39,7 @@ export default class extends React.Component {
   }
 
   async componentDidMount() {
+    if (this.props.grandfather) this.setState({ grandfather: true })
     // Init Wallet
     this.firebase = await FB()
     console.log(this.firebase)
@@ -223,14 +226,59 @@ export default class extends React.Component {
         // An error happened.
       })
   }
-
+  // Show grandfather modal
+  toggleGrand = () => {
+    this.setState({ grandModal: true })
+  }
+  grandfather = (sk, id) => {
+    this.setState(
+      {
+        loading: {
+          header: 'Posting Request',
+          body: 'Adding device to you account.'
+        }
+      },
+      async () => {
+        var resp = await fetch(
+          `https://us-central1-${
+            process.env.FIREBASEID
+          }.cloudfunctions.net/grandfather`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              owner: this.state.user.uid,
+              sk,
+              id
+            })
+          }
+        )
+        var data = await resp.json()
+        console.log(data)
+        if (data.error) {
+          /// Add error
+          this.throw({ heading: 'Error', body: data.error }, true)
+        } else {
+          location.reload()
+        }
+      }
+    )
+  }
   render() {
-    var { devices, packets, user, loading, error, button } = this.state
+    var {
+      devices,
+      packets,
+      user,
+      loading,
+      error,
+      button,
+      grandModal
+    } = this.state
     return (
       <Main>
         <DeviceNav {...this.state} logout={this.logout} />
         <Data>
-          <Sidebar {...this.state} />
+          <Sidebar {...this.state} toggleGrand={this.toggleGrand} />
           <DeviceList
             devices={devices}
             create={this.createDevice}
@@ -241,6 +289,13 @@ export default class extends React.Component {
           button={button}
           auth={this.auth}
           show={!user}
+          loading={loading}
+          error={error}
+        />
+        <GrandModal
+          button={button}
+          grandfather={this.grandfather}
+          show={grandModal && user}
           loading={loading}
           error={error}
         />

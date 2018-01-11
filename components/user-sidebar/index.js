@@ -101,48 +101,32 @@ export default class extends React.Component {
               <DetailKey>Owner:</DetailKey>
               <DetailValue>{this.props.user.displayName}</DetailValue>
             </DetailRow>
-            {/* <DetailRow>
-              <DetailKey>Data Types:</DetailKey>
-              {deviceInfo.dataTypes &&
-                deviceInfo.dataTypes.map((type, i) => (
-                  <DetailValue key={i}>{` - ${type.name}`}</DetailValue>
-                ))}
-            </DetailRow> */}
           </div>
         </Details>
-        {/* <Details className="sensor-data-wrapper">
-          <Label>Sensor data:</Label>
-          <div className="sensor-data">
-            <div className="chart-wrapper">
-              <header className="chart-header">
-                <span className="chart-desc">AVG Temperature</span>
-                <span className="chart-value">
-                  68 <span>°F</span>
-                </span>
-              </header>
-              <canvas id="temperatureChart" width={400} height={205} />
-            </div>
-            <div className="chart-wrapper">
-              <header className="chart-header">
-                <span className="chart-desc">AVG Humidity</span>
-                <span className="chart-value">15%</span>
-              </header>
-              <canvas id="humidityChart" width={400} height={205} />
-            </div>
-            <div className="chart-wrapper">
-              <header className="chart-header">
-                <span className="chart-desc">AVG Presure</span>
-                <span className="chart-value">990 hPa</span>
-              </header>
-              <canvas id="pressureChart" width={400} height={205} />
-            </div>
-          </div>
-        </Details> */}
+        {this.props.grandfather && (
+          <Details>
+            <Grandfather onClick={() => this.props.toggleGrand()}>
+              Grandfather Old Device
+            </Grandfather>
+          </Details>
+        )}
       </Sidebar>
     )
   }
 }
 
+const Grandfather = styled.button`
+  color: ${props =>
+    props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`};
+  padding: 5px 15px;
+  margin-right: -15px;
+  font-size: 90%;
+  background: transparent;
+  &:first-of-type {
+    margin-left: -15px;
+    margin-right: 0;
+  }
+`
 const A = styled.a`
   text-decoration: none;
 `
