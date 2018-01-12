@@ -36,6 +36,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/akita.png"
+            srcSet="/static/logotypes/akita.png 2x"
+            alt="Logo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/aliander.png"
             srcSet="/static/logotypes/aliander.png 2x"
             alt="Logo"
