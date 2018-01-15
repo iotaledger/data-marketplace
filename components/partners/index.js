@@ -10,182 +10,182 @@ export default props => (
           <I
             src="/static/logotypes/3for2.png"
             srcSet="/static/logotypes/3for2.png 2x"
-            alt="Logo"
+            alt="3for2"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/acando.png"
             srcSet="/static/logotypes/acando.png 2x"
-            alt="Logo"
+            alt="acando"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/accenture.png"
             srcSet="/static/logotypes/accenture.png 2x"
-            alt="Logo"
+            alt="accenture"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/agder.png"
             srcSet="/static/logotypes/agder.png 2x"
-            alt="Logo"
+            alt="agder"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/akita.png"
             srcSet="/static/logotypes/akita.png 2x"
-            alt="Logo"
+            alt="akita"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/aliander.png"
             srcSet="/static/logotypes/aliander.png 2x"
-            alt="Logo"
+            alt="aliander"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/aparito.png"
             srcSet="/static/logotypes/aparito.png 2x"
-            alt="Logo"
+            alt="aparito"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/apgsga.png"
             srcSet="/static/logotypes/apgsga.png 2x"
-            alt="Logo"
+            alt="apgsga"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/bkk.png"
             srcSet="/static/logotypes/bkk.png 2x"
-            alt="Logo"
+            alt="bkk"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/blocklab.png"
             srcSet="/static/logotypes/blocklab.png 2x"
-            alt="Logo"
+            alt="blocklab"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/bosch.png"
             srcSet="/static/logotypes/bosch.png 2x"
-            alt="Logo"
+            alt="bosch"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/dnvgl.png"
             srcSet="/static/logotypes/dnvgl.png 2x"
-            alt="Logo"
+            alt="dnvgl"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/dt.png"
             srcSet="/static/logotypes/dt.png 2x"
-            alt="Logo"
+            alt="dt"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/elering.png"
             srcSet="/static/logotypes/elering.png 2x"
-            alt="Logo"
+            alt="elering"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/enexis.png"
             srcSet="/static/logotypes/enexis.png 2x"
-            alt="Logo"
+            alt="enexis"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/engie.png"
             srcSet="/static/logotypes/engie.png 2x"
-            alt="Logo"
+            alt="engie"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/epm.png"
             srcSet="/static/logotypes/epm.png 2x"
-            alt="Logo"
+            alt="epm"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/ewe.png"
             srcSet="/static/logotypes/ewe.png 2x"
-            alt="Logo"
+            alt="ewe"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/ey.png"
             srcSet="/static/logotypes/ey.png 2x"
-            alt="Logo"
+            alt="ey"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/farmboek.png"
             srcSet="/static/logotypes/farmboek.png 2x"
-            alt="Logo"
+            alt="farmboek"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/farmforce.png"
             srcSet="/static/logotypes/farmforce.png 2x"
-            alt="Logo"
+            alt="farmforce"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/fujitsu.png"
             srcSet="/static/logotypes/fujitsu.png 2x"
-            alt="Logo"
+            alt="fujitsu"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/grid.png"
             srcSet="/static/logotypes/grid.png 2x"
-            alt="Logo"
+            alt="grid"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/ice.png"
             srcSet="/static/logotypes/ice.png 2x"
-            alt="Logo"
+            alt="ice"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/ismb.png"
             srcSet="/static/logotypes/ismb.png 2x"
-            alt="Logo"
+            alt="ismb"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/kpmg.png"
             srcSet="/static/logotypes/kpmg.png 2x"
-            alt="Logo"
+            alt="kpmg"
           />
         </Li>{' '}
         {/* <Li>
@@ -199,63 +199,70 @@ export default props => (
           <I
             src="/static/logotypes/movimento.png"
             srcSet="/static/logotypes/movimento.png 2x"
-            alt="Logo"
+            alt="movimento"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/multiconsult.png"
             srcSet="/static/logotypes/multiconsult.png 2x"
-            alt="Logo"
+            alt="multiconsult"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/nordic.png"
             srcSet="/static/logotypes/nordic.png 2x"
-            alt="Logo"
+            alt="nordic"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/nte.png"
             srcSet="/static/logotypes/nte.png 2x"
-            alt="Logo"
+            alt="nte"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/ntnu.png"
             srcSet="/static/logotypes/ntnu.png 2x"
-            alt="Logo"
+            alt="ntnu"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/orange.png"
             srcSet="/static/logotypes/orange.png 2x"
-            alt="Logo"
+            alt="orange"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/oslo.png"
             srcSet="/static/logotypes/oslo.png 2x"
-            alt="Logo"
+            alt="oslo"
+          />
+        </Li>
+        <Li>
+          <I
+            src="/static/logotypes/philips.png"
+            srcSet="/static/logotypes/philips.png 2x"
+            alt="philips"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/poyry.png"
             srcSet="/static/logotypes/poyry.png 2x"
-            alt="Logo"
+            alt="poyry"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/samsung.png"
             srcSet="/static/logotypes/samsung.png 2x"
-            alt="Logo"
+            alt="samsung"
           />
         </Li>
         {/* <Li>
@@ -269,63 +276,63 @@ export default props => (
           <I
             src="/static/logotypes/schuco.png"
             srcSet="/static/logotypes/schuco.png 2x"
-            alt="Logo"
+            alt="schuco"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/tele2.png"
             srcSet="/static/logotypes/tele2.png 2x"
-            alt="Logo"
+            alt="tele2"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/telstra.png"
             srcSet="/static/logotypes/telstra.png 2x"
-            alt="Logo"
+            alt="telstra"
           />
         </Li>{' '}
         <Li>
           <I
             src="/static/logotypes/tine.png"
             srcSet="/static/logotypes/tine.png 2x"
-            alt="Logo"
+            alt="tine"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/trianel.png"
             srcSet="/static/logotypes/trianel.png 2x"
-            alt="Logo"
+            alt="trianel"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/trondheim.png"
             srcSet="/static/logotypes/trondheim.png 2x"
-            alt="Logo"
+            alt="trondheim"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/tum.png"
             srcSet="/static/logotypes/tum.png 2x"
-            alt="Logo"
+            alt="tum"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/uio.png"
             srcSet="/static/logotypes/uio.png 2x"
-            alt="Logo"
+            alt="uio"
           />
         </Li>
         <Li>
           <I
             src="/static/logotypes/undc.png"
             srcSet="/static/logotypes/undc.png 2x"
-            alt="Logo"
+            alt="undc"
           />
         </Li>
       </Ul>
