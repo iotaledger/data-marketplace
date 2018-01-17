@@ -31,7 +31,7 @@ export default class extends React.Component {
         <SensorList {...this.state} />
         <Partners />
         <Benefits />
-        <Form />
+        <Form {...this.state} />
         <Footer />
         {/* <Cookies /> */}
       </Main>
