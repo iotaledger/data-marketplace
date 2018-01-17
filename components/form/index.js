@@ -77,10 +77,12 @@ export default class extends React.Component {
               placeholder={'Your message here...'}
               onChange={e => this.setState({ body: e.target.value })}
             />
-            <Recaptcha
-              sitekey="6LeIFTsUAAAAAHRqa-Y9JtoN8Bopd3gQBDM2ItCm"
-              verifyCallback={this.verify}
-            />
+            {this.props.devices.length !== 0 && (
+              <Recaptcha
+                sitekey="6LeIFTsUAAAAAHRqa-Y9JtoN8Bopd3gQBDM2ItCm"
+                verifyCallback={this.verify}
+              />
+            )}
             {!this.state.loading && <Button type={'submit'}>Submit</Button>}
             {this.state.loading && <Button>Sending</Button>}
           </F>
