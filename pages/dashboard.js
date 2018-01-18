@@ -167,9 +167,7 @@ export default class extends React.Component {
           } else {
             // Add cloud function call
             var resp = await fetch(
-              `https://us-central1-${
-                process.env.FIREBASEID
-              }.cloudfunctions.net/newDevice`,
+              `https://${process.env.API}.marketplace.tangle.works/newDevice`,
               {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -195,9 +193,7 @@ export default class extends React.Component {
 
   deleteDevice = async id => {
     await fetch(
-      `https://us-central1-${
-        process.env.FIREBASEID
-      }.cloudfunctions.net/removeDevice`,
+      `https://${process.env.API}.marketplace.tangle.works/removeDevice`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -220,7 +216,7 @@ export default class extends React.Component {
       .then(() => {
         // Sign-out successful.
         console.log('Logged Out')
-        this.setState({ user: false, devices: [] })
+        this.setState({ user: false, devices: [], userData: false })
       })
       .catch(function(error) {
         // An error happened.
@@ -240,9 +236,7 @@ export default class extends React.Component {
       },
       async () => {
         var resp = await fetch(
-          `https://us-central1-${
-            process.env.FIREBASEID
-          }.cloudfunctions.net/grandfather`,
+          `https://${process.env.API}.marketplace.tangle.works/grandfather`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
