@@ -69,13 +69,17 @@ const DetailValue = styled.p`
 `
 
 export default class extends React.Component {
+  state = { alert: false, alertMessage: '' }
   componentWillReceiveProps = props => {
     this.setState(props)
   }
 
   alert = text => {
-    this.setState({ alert: text }, () =>
-      setTimeout(() => this.setState({ alert: false }), 500)
+    this.setState({ alert: text, alertMessage: text }, () =>
+      setTimeout(
+        () => this.setState({ alert: false, alertMessage: text }),
+        1500
+      )
     )
   }
 
@@ -152,7 +156,7 @@ export default class extends React.Component {
                 </CopyBox>
               </Clipboard>
             </DetailRow>
-            <DetailRow />
+            <Alert {...this.state}>{this.state.alertMessage}</Alert>
           </Details>
         )}
         {this.props.grandfather && (
@@ -166,6 +170,14 @@ export default class extends React.Component {
     )
   }
 }
+
+const Alert = styled.span`
+  font-size: 16px;
+  line-height: 32px;
+  color: #595959ff;
+  opacity: ${props => (props.alert ? 1 : 0)};
+  transition: all 0.5s ease;
+`
 
 const CopyBox = DetailValue.extend`
   cursor: pointer;
