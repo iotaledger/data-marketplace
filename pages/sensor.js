@@ -195,44 +195,61 @@ ID and try again`,
       },
       async () => {
         // Try purchase
+        let purchaseResp
         try {
-          let response = await purchaseData(
+          purchaseResp = await purchaseData(
             wallet.seed,
             device.address,
             device.value
           )
-          this.setState({
-            loading: {
-              heading: `Success!`,
-              body: `Your purchase was successful. Fetching MAM stream and decoding data.`
-            }
-          })
         } catch (e) {
           return this.throw({
             body: e.error,
             heading: `Purchase Failed`
           })
         }
-        var packet = {
-          id: this.state.uid,
-          device: this.props.id,
-          full: true
-        }
-        var resp = await fetch(
-          'https://us-central1-datamarket-617e1.cloudfunctions.net/purchaseStream',
+        this.setState(
           {
-            method: 'post',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(packet)
+            loading: {
+              heading: `Success!`,
+              body: `Your purchase was successfully. Fetching MAM stream and decoding data.`
+            }
+          },
+          async () => {
+            var packet = {
+              id: this.state.uid,
+              device: this.props.id,
+              full: true,
+              hashes: purchaseResp.map(bundle => bundle.hash)
+            }
+            var resp = await fetch(
+              `https://${
+                process.env.API
+              }.marketplace.tangle.works/purchaseStream`,
+              {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(packet)
+              }
+            )
+            var message = JSON.parse(await resp.json())
+            // Check Success
+            if (message.success) {
+              // Modify wallet balance
+              wallet.balance = wallet.balance - device.value
+              // Start Fetching data
+              this.fetch(this.state.deviceRef, this.state.userRef)
+              // Update wallet.
+              await localStorage.setItem('wallet', JSON.stringify(wallet))
+              return this.setState({ loading: true, purchase: true, wallet })
+            } else {
+              return this.throw({
+                body: message.error,
+                heading: `Purchase Failed`
+              })
+            }
           }
         )
-        var message = JSON.parse(await resp.json())
-        if (message._writeTime) {
-          wallet.balance = wallet.balance - device.value
-          this.fetch(this.state.deviceRef, this.state.userRef)
-          this.setState({ loading: true, purchase: true, wallet })
-          await localStorage.setItem('wallet', JSON.stringify(wallet))
-        }
       }
     )
   }
