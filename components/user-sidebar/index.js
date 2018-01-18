@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { reducer, getBalance } from '../../lib/iota'
+import Clipboard from 'react-clipboard.js'
 
 const Sidebar = styled.aside`
   background: rgba(240, 240, 240, 1);
@@ -72,6 +73,12 @@ export default class extends React.Component {
     this.setState(props)
   }
 
+  alert = text => {
+    this.setState({ alert: text }, () =>
+      setTimeout(() => this.setState({ alert: false }), 500)
+    )
+  }
+
   render() {
     var { deviceInfo } = this.props
     return (
@@ -103,6 +110,51 @@ export default class extends React.Component {
             </DetailRow>
           </div>
         </Details>
+        {this.props.userData && (
+          <Details>
+            <DetailRow>
+              <DetailKey>Your API Key:</DetailKey>
+              <Clipboard
+                style={{ background: 'none', display: 'block' }}
+                data-clipboard-text={this.props.userData.apiKey}
+                onSuccess={() => this.alert('Successfully Copied')}
+              >
+                <CopyBox>
+                  {this.props.userData.apiKey
+                    ? this.props.userData.apiKey.substr(0, 20) + '...'
+                    : '--'}
+                </CopyBox>
+              </Clipboard>
+            </DetailRow>
+            <DetailRow>
+              <DetailKey>Your User ID:</DetailKey>
+              <Clipboard
+                style={{ background: 'none', display: 'block' }}
+                data-clipboard-text={this.props.user.uid}
+                onSuccess={() => this.alert('Successfully Copied')}
+              >
+                <CopyBox>
+                  {this.props.user.uid &&
+                    this.props.user.uid.substr(0, 18) + '...'}
+                </CopyBox>
+              </Clipboard>
+            </DetailRow>
+            <DetailRow>
+              <DetailKey>Your Seed:</DetailKey>
+              <Clipboard
+                style={{ background: 'none', display: 'block' }}
+                data-clipboard-text={this.props.userData.seed}
+                onSuccess={() => this.alert('Successfully Copied')}
+              >
+                <CopyBox>
+                  {this.props.userData.seed &&
+                    this.props.userData.seed.substr(0, 16) + '...'}
+                </CopyBox>
+              </Clipboard>
+            </DetailRow>
+            <DetailRow />
+          </Details>
+        )}
         {this.props.grandfather && (
           <Details>
             <Grandfather onClick={() => this.props.toggleGrand()}>
@@ -115,6 +167,13 @@ export default class extends React.Component {
   }
 }
 
+const CopyBox = DetailValue.extend`
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    opacity: 0.6;
+  }
+`
 const Grandfather = styled.button`
   color: ${props =>
     props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`};

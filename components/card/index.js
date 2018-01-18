@@ -24,6 +24,9 @@ const Card = styled.a`
   @media (max-width: 1120px) {
     margin-bottom: 20px;
   }
+  @media (max-width: 890px) {
+    width: 100%;
+  }
   @media (max-width: 400px) {
     width: 280px;
   }
