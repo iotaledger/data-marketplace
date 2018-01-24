@@ -165,7 +165,9 @@ export default class extends React.Component {
             console.log('Device exists')
             return { err: `Device Exists` }
           } else {
-            // Add cloud function call
+            // Deactivate the Device
+            device.inactive = true
+            // Call server
             var resp = await fetch(
               `https://${process.env.API}.marketplace.tangle.works/newDevice`,
               {
