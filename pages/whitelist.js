@@ -69,51 +69,80 @@ export default class extends React.Component {
         var { devices, search, filtered } = this.state
         return (
             <Main>
-                <input
-                    type={'search'}
-                    value={search}
-                    onChange={e => this.change(e)}
-                />
-                {filtered.map((device, i) => (
-                    <Card
-                        inactive={device.inactive}
-                        key={`device-${device.sensorId}`}
-                    >
-                        <Row>
-                            <Field>{device.sensorId}</Field>
-                            <Field small>{device.type}</Field>
-                        </Row>
-                        <Row>
-                            <Field>
-                                {device.location &&
-                                    `Location: ${device.location.city}, ${
-                                        device.location.country
-                                    }`}
-                            </Field>
-                        </Row>
-                        <Link to={`/sensor/${device.sensorId}`}>
-                            <a target="_blank"> View Device</a>
-                        </Link>
-                        <Button onClick={() => this.toggle(device, i)}>
-                            {device.inactive ? 'Activate' : 'Deactivate'}
-                        </Button>
-                    </Card>
-                ))}
+                <Heading>
+                    <h2>Marketplace Whitelist</h2>
+                    <span>Grey == Inactive, Green == Active</span>
+                    <div>
+                        <input
+                            type={'search'}
+                            value={search}
+                            onChange={e => this.change(e)}
+                            placeholder="Enter search here..."
+                        />
+                    </div>
+                </Heading>
+                <CardsList>
+                    {filtered
+                        .filter(dev => !dev.inactive)
+                        .map((device, i) => CardModule(device, i, this.toggle))}
+                    {filtered
+                        .filter(dev => dev.inactive)
+                        .map((device, i) => CardModule(device, i, this.toggle))}
+                </CardsList>
             </Main>
         )
     }
 }
 
-const Button = styled.button``
+const CardModule = (device, i, toggle) => (
+    <Card inactive={device.inactive} key={`device-${device.sensorId}`}>
+        <Row>
+            <Field>{device.sensorId}</Field>
+            <Field small>{device.type}</Field>
+        </Row>
+        <Row>
+            <Field>
+                {device.location &&
+                    `Location: ${device.location.city}, ${
+                        device.location.country
+                    }`}
+            </Field>
+        </Row>
+        <Link to={`/sensor/${device.sensorId}`}>
+            <Links target="_blank"> View Device</Links>
+        </Link>
+        <Links onClick={() => toggle(device, i)}>
+            {device.inactive ? 'Activate' : 'Deactivate'}
+        </Links>
+    </Card>
+)
+
+const Links = styled.div`
+    width: 100%;
+    padding: 5px 8px;
+    background: rgba(230, 138, 138, 1);
+    color: white;
+    text-align: center;
+    margin: 5px 2px;
+    cursor: pointer;
+    &:hover {
+        background: palevioletred;
+    }
+`
 
 const Main = styled.div`
     overflow-x: hidden;
+    padding-top: 50px;
+    background: #fafafaff;
+    min-height: 100vh;
+    align-items: center;
 `
 const Card = styled.div`
+    flex: 0 0 200px;
     background: ${props =>
         props.inactive ? '#e2e2e2' : 'rgba(167, 234, 187, 1)'};
     padding: 10px;
-    margin: 5px;
+    margin: 10px 10px;
 `
 const Row = styled.div`
     display: flex;
@@ -123,4 +152,19 @@ const Row = styled.div`
 const Field = styled.p`
     padding: 0 5px;
     font-size: ${props => (props.small ? `80%` : `100%`)};
+`
+
+const Heading = Row.extend`
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    background: rgba(138, 174, 230, 1);
+    padding: 10px;
+    justify-content: space-between;
+`
+const CardsList = styled.section`
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin: auto;
 `
