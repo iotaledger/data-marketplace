@@ -183,6 +183,13 @@ export default props => (
                 </Li>{' '}
                 <Li>
                     <I
+                        src="/static/logotypes/grandcentrix.png"
+                        srcSet="/static/logotypes/grandcentrix.png 2x"
+                        alt="grandcentrix"
+                    />
+                </Li>{' '}
+                <Li>
+                    <I
                         src="/static/logotypes/grid.png"
                         srcSet="/static/logotypes/grid.png 2x"
                         alt="grid"
