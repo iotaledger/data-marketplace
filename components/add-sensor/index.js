@@ -67,7 +67,7 @@ export default class extends React.Component {
             lon: this.state.deviceLon,
             company: this.state.company,
             value: (Math.random() * 1000 + 1000).toFixed(0),
-            address: seedGen(81)
+            address: seedGen(80) + '9'
         }
 
         // Generate Key for the device
