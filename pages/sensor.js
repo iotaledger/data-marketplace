@@ -101,7 +101,7 @@ ID and try again`,
             mamState.channel.security = this.state.deviceInfo.security || 2
 
             var packets = data
-                .splice(this.state.index, 20)
+                .splice(this.state.index, 10)
                 .map(async (packet, i) => {
                     var packet = await Mam.fetchSingle(
                         packet.root,

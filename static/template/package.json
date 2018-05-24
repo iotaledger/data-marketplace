@@ -1,6 +1,7 @@
 {
   "dependencies": {
-    "iota.lib.js": "^0.4.2",
-    "node-fetch": "^1.7.3"
+    "@iota/curl-remote": "^0.0.3",
+    "iota.lib.js": "^0.4.7",
+    "node-fetch": "^2.0.0"
   }
 }
