@@ -8,6 +8,13 @@ export default props => (
       <Ul>
         <Li>
           <I
+            src="/static/logotypes/42.png"
+            srcSet="/static/logotypes/42.png 2x"
+            alt="42"
+          />
+        </Li>
+        <Li>
+          <I
             src="/static/logotypes/3for2.png"
             srcSet="/static/logotypes/3for2.png 2x"
             alt="3for2"
@@ -50,6 +57,13 @@ export default props => (
         </Li>
         <Li>
           <I
+            src="/static/logotypes/allego.png"
+            srcSet="/static/logotypes/allego.png 2x"
+            alt="allego"
+          />
+        </Li>
+        <Li>
+          <I
             src="/static/logotypes/amrita.png"
             srcSet="/static/logotypes/amrita.png 2x"
             alt="amrita"
@@ -74,6 +88,13 @@ export default props => (
             src="/static/logotypes/arundo.png"
             srcSet="/static/logotypes/arundo.png 2x"
             alt="arundo"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/biilabs.png"
+            srcSet="/static/logotypes/biilabs.png 2x"
+            alt="Biilabs"
           />
         </Li>{' '}
         <Li>
@@ -120,6 +141,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/dnb.png"
+            srcSet="/static/logotypes/dnb.png 2x"
+            alt="DNB"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/elering.png"
             srcSet="/static/logotypes/elering.png 2x"
             alt="elering"
@@ -137,6 +165,13 @@ export default props => (
             src="/static/logotypes/engie.png"
             srcSet="/static/logotypes/engie.png 2x"
             alt="engie"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/entra.png"
+            srcSet="/static/logotypes/entra.png 2x"
+            alt="entra"
           />
         </Li>{' '}
         <Li>
@@ -197,6 +232,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/gasunie.png"
+            srcSet="/static/logotypes/gasunie.png 2x"
+            alt="gasunie"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/grandcentrix.png"
             srcSet="/static/logotypes/grandcentrix.png 2x"
             alt="grandcentrix"
@@ -211,9 +253,23 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/handelshoyskolen.png"
+            srcSet="/static/logotypes/handelshoyskolen.png 2x"
+            alt="handelshoyskolen"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/ice.png"
             srcSet="/static/logotypes/ice.png 2x"
             alt="ice"
+          />
+        </Li>{' '}
+        <Li>
+          <I
+            src="/static/logotypes/Illaris_LAB.JPG"
+            srcSet="/static/logotypes/Illaris_LAB.JPG 2x"
+            alt="Illaris LAB"
           />
         </Li>{' '}
         <Li>
@@ -274,6 +330,13 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
+            src="/static/logotypes/nordic_semiconductor.png"
+            srcSet="/static/logotypes/nordic_semiconductor.png 2x"
+            alt="nordic semiconductor"
+          />
+        </Li>{' '}
+        <Li>
+          <I
             src="/static/logotypes/nte.png"
             srcSet="/static/logotypes/nte.png 2x"
             alt="nte"
@@ -323,6 +386,13 @@ export default props => (
         </Li>
         <Li>
           <I
+            src="/static/logotypes/RWTH.png"
+            srcSet="/static/logotypes/RWTH.png 2x"
+            alt="RWTH Aachen"
+          />
+        </Li>
+        <Li>
+          <I
             src="/static/logotypes/samsung.png"
             srcSet="/static/logotypes/samsung.png 2x"
             alt="samsung"
@@ -340,6 +410,20 @@ export default props => (
             src="/static/logotypes/schuco.png"
             srcSet="/static/logotypes/schuco.png 2x"
             alt="schuco"
+          />
+        </Li>
+        <Li>
+          <I
+            src="/static/logotypes/south-east-water.png"
+            srcSet="/static/logotypes/south-east-water.png 2x"
+            alt="South East Water"
+          />
+        </Li>
+        <Li>
+          <I
+            src="/static/logotypes/sweco.png"
+            srcSet="/static/logotypes/sweco.png 2x"
+            alt="Sweco"
           />
         </Li>
         <Li>
@@ -379,6 +463,13 @@ export default props => (
         </Li>
         <Li>
           <I
+            src="/static/logotypes/tukio.png"
+            srcSet="/static/logotypes/tukio.png 2x"
+            alt="tukio"
+          />
+        </Li>
+        <Li>
+          <I
             src="/static/logotypes/tum.png"
             srcSet="/static/logotypes/tum.png 2x"
             alt="tum"
@@ -396,6 +487,13 @@ export default props => (
             src="/static/logotypes/undc.png"
             srcSet="/static/logotypes/undc.png 2x"
             alt="undc"
+          />
+        </Li>
+        <Li>
+          <I
+            src="/static/logotypes/USC_viterbi.png"
+            srcSet="/static/logotypes/USC_viterbi.png 2x"
+            alt="USC Viterbi"
           />
         </Li>
         <Li>
