@@ -267,8 +267,8 @@ export default props => (
         </Li>{' '}
         <Li>
           <I
-            src="/static/logotypes/Illaris_LAB.JPG"
-            srcSet="/static/logotypes/Illaris_LAB.JPG 2x"
+            src="/static/logotypes/illaris.png"
+            srcSet="/static/logotypes/illaris.png 2x"
             alt="Illaris LAB"
           />
         </Li>{' '}
