@@ -265,13 +265,13 @@ export default props => (
             alt="ice"
           />
         </Li>{' '}
-        <Li>
+        {/* <Li>
           <I
             src="/static/logotypes/illaris.png"
             srcSet="/static/logotypes/illaris.png 2x"
             alt="Illaris LAB"
           />
-        </Li>{' '}
+        </Li>{' '} */}
         <Li>
           <I
             src="/static/logotypes/innoenergy.png"
