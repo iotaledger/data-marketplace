@@ -1,6 +1,6 @@
 import React from 'react'
 import styled, { css } from 'styled-components'
-import { reducer, getBalance } from '../../lib/iota'
+import { reducer, getBalance } from '../../lib/utils'
 import { fbRef } from '../../lib/firebase'
 import { format } from 'date-fns'
 import { getZip } from '../../lib/zip'
