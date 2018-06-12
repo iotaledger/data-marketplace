@@ -8,8 +8,7 @@ import {
     purchaseData,
     reducer,
     getBalance
-} from '../lib/iota'
-
+} from '../lib/utils'
 import SensorNav from '../components/sensor-nav'
 import Modal from '../components/modal/purchase'
 import Sidebar from '../components/side-bar'
@@ -40,30 +39,39 @@ export default class extends React.Component {
         // Firebase
         const firebase = await FB()
         const store = firebase.firestore()
-        const user = await userAuth(firebase)
+        const { uid } = await userAuth(firebase)
         // Get data
-        let userRef = store.collection('users').doc(user.uid)
-        let deviceRef = store.collection('devices').doc(this.props.id)
-        let device = await deviceInfo(deviceRef, this.props.id)
-        if (device.address) device.balance = await getBalance(device.address)
-        if (typeof device == 'string')
+        const userRef = store.collection('users').doc(uid)
+        const deviceRef = store.collection('devices').doc(this.props.id)
+        const device = await deviceInfo(deviceRef, this.props.id)
+
+        if (device.address) {
+            device.balance = await getBalance(device.address)
+        }
+
+        if (typeof device == 'string') {
             return this.throw({
                 body: ` The device you are looking for doesn't exist, check the device
 ID and try again`,
                 heading: `Device doesn't exist`
             })
+        }
+
         // Organise data for layout
-        var layout = []
+        const layout = []
         device.dataTypes.map((item, i) => {
-            if (!layout[Math.floor(i / 2)]) layout[Math.floor(i / 2)] = []
+            if (!layout[Math.floor(i / 2)]) {
+                layout[Math.floor(i / 2)] = []
+            }
             layout[Math.floor(i / 2)].push(item)
         })
+
         this.setState({
             userRef,
             deviceRef,
             deviceInfo: device,
             layout,
-            uid: user.uid
+            uid
         })
         // MAM
         this.fetch(deviceRef, userRef)
@@ -78,8 +86,11 @@ ID and try again`,
     }
 
     fetch = async (deviceRef, userRef) => {
-        var data = await getData(deviceRef, userRef, this.props.id)
-        if (typeof data == 'string') return this.setState({ loading: false })
+        let data = await getData(deviceRef, userRef, this.props.id)
+        if (typeof data == 'string') {
+            return this.setState({ loading: false })
+        }
+
         if (data && data[0].time) {
             data = data.sort((a, b) => b.time - a.time)
         } else {

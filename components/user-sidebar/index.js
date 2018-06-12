@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { reducer, getBalance } from '../../lib/iota'
+import { reducer, getBalance } from '../../lib/utils'
 import Clipboard from 'react-clipboard.js'
 import { Link } from '../../routes'
 const Sidebar = styled.aside`

@@ -1,14 +1,13 @@
-import React from "react"
-import styled, { css, injectGlobal } from "styled-components"
-import MapGL, { Popup, NavigationControl } from "react-map-gl"
-import { Link } from "../../routes"
-import { getBalance } from "../../lib/iota"
-import CSS from "./css"
-import Controls from "./controls"
-
-import Overlay from "./overlay"
-import Markers from "./markers"
-import iconMapping from "./icon-atlas.json"
+import React from 'react'
+import styled, { css, injectGlobal } from 'styled-components'
+import MapGL, { Popup, NavigationControl } from 'react-map-gl'
+import { Link } from '../../routes'
+import CSS from './css'
+import Controls from './controls'
+import { getBalance } from '../../lib/utils'
+import Overlay from './overlay'
+import Markers from './markers'
+import iconMapping from './icon-atlas.json'
 
 const mapControls = new Controls()
 
@@ -27,12 +26,12 @@ export default class extends React.Component {
     mapHeight: 900
   }
   componentDidMount() {
-    window.addEventListener("resize", this._resize)
+    window.addEventListener('resize', this._resize)
     this._resize()
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this._resize)
+    window.removeEventListener('resize', this._resize)
   }
 
   _resize = () => {
@@ -78,11 +77,11 @@ export default class extends React.Component {
                   alt="Weather sensor icon"
                 /> */}
                 <SensorType>
-                  {popupInfo.type}{" "}
+                  {popupInfo.type}{' '}
                   <LocationIcon
                     src="/static/icons/icon-small-location-dark.svg"
                     alt="Icon location pin"
-                  />{" "}
+                  />{' '}
                   <span>{popupInfo.location.city}</span>
                 </SensorType>
                 <SensorId>
@@ -118,7 +117,7 @@ export default class extends React.Component {
   render() {
     const { viewport, mapHeight } = this.state
     return (
-      <Main id={"map"}>
+      <Main id={'map'}>
         <Header>
           <div>
             <Heading>Sensor map</Heading>
@@ -135,7 +134,7 @@ export default class extends React.Component {
           onViewportChange={this._updateViewport}
           mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}
         >
-          <div style={{ position: "absolute", right: 20, top: 10 }}>
+          <div style={{ position: 'absolute', right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
           </div>
           <Markers devices={this.props.devices} openPopup={this._openPopup} />
@@ -170,7 +169,7 @@ const Clear = styled.div`
 const Main = styled.div`
   position: relative;
   &::before {
-    content: "";
+    content: '';
     position: absolute;
     top: 74px;
     left: 0;
@@ -330,7 +329,7 @@ const FootRow = styled.div`
 const InfoKey = styled.span`
   color: #738fd4;
   text-transform: capitalize;
-  font: 12px/16px "Nunito Sans", sans-serif;
+  font: 12px/16px 'Nunito Sans', sans-serif;
 `
 
 const InfoValue = styled.span`
@@ -346,7 +345,7 @@ const LocationIcon = styled.img`
   margin: 0 6px 0 13px;
 `
 const SensorType = styled.span`
-  font: 12px/16px "Nunito Sans", sans-serif;
+  font: 12px/16px 'Nunito Sans', sans-serif;
   position: absolute;
   top: -8px;
   color: #738fd4;

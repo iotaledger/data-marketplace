@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { initWallet, purchase, reducer } from '../../lib/iota'
+import { initWallet, purchase, reducer } from '../../lib/utils'
 
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;

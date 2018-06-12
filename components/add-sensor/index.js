@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components'
 import React from 'react'
+import { generateSeed, generateDeviceAddress } from '../../lib/utils'
 import Card from '../card'
 
 const Heading = state => <Header>New Device</Header>
@@ -9,6 +10,8 @@ export default class extends React.Component {
         loading: false,
         active: false,
         submit: false,
+        city: '',
+        country: '',
         company: '',
         deviceID: '',
         deviceType: '',
@@ -19,16 +22,16 @@ export default class extends React.Component {
     }
 
     addRow = () => {
-        var dataTypes = this.state.dataTypes
+        const dataTypes = this.state.dataTypes
         dataTypes.push({ id: '', name: '', unit: '' })
         this.setState({ dataTypes })
     }
     remove = i => {
-        var data = this.state.dataTypes
-        if (data.length == 1)
+        const dataTypes = this.state.dataTypes
+        if (dataTypes.length == 1)
             return alert('You must have at least one data field.')
-        data.splice(i, 1)
-        this.setState({ dataTypes: data })
+        dataTypes.splice(i, 1)
+        this.setState({ dataTypes })
     }
 
     change = e => {
@@ -36,9 +39,52 @@ export default class extends React.Component {
     }
 
     changeRow = (e, i) => {
-        var data = this.state.dataTypes
-        data[i][e.target.name] = e.target.value
-        this.setState({ dataTypes: data })
+        const dataTypes = this.state.dataTypes
+        dataTypes[i][e.target.name] = e.target.value
+        this.setState({ dataTypes })
+    }
+
+    generateDeviceAddressCallback = async deviceAddress => {
+        // Generate Key for the device
+        const secretKey = generateSeed(15)
+
+        const device = {
+            type: this.state.deviceType,
+            location: {
+                city: this.state.city,
+                country: this.state.country
+            },
+            sensorId: this.state.deviceID,
+            type: this.state.deviceType,
+            dataTypes: this.state.dataTypes,
+            lat: this.state.deviceLat,
+            lon: this.state.deviceLon,
+            company: this.state.company,
+            value: (Math.random() * 1000 + 1000).toFixed(0),
+            address: deviceAddress,
+            sk: secretKey
+        }
+
+        const createDevive = await this.props.create(device, secretKey)
+
+        if (createDevive.error) {
+            this.setState({ loading: false })
+            return alert(createDevive.error)
+        }
+
+        this.setState({
+            loading: false,
+            active: false,
+            city: '',
+            country: '',
+            company: '',
+            deviceID: '',
+            deviceType: '',
+            deviceLocation: '',
+            deviceLat: '',
+            deviceLon: '',
+            dataTypes: [{ id: '', name: '', unit: '' }]
+        })
     }
 
     submit = async () => {
@@ -54,50 +100,16 @@ export default class extends React.Component {
             return alert('Please enter a device coordinates')
         if (!this.state.dataTypes || this.state.dataTypes.length < 1)
             return alert('You must have a valid data field')
-        var device = {
-            type: this.state.deviceType,
-            location: {
-                city: this.state.city,
-                country: this.state.country
-            },
-            sensorId: this.state.deviceID,
-            type: this.state.deviceType,
-            dataTypes: this.state.dataTypes,
-            lat: this.state.deviceLat,
-            lon: this.state.deviceLon,
-            company: this.state.company,
-            value: (Math.random() * 1000 + 1000).toFixed(0),
-            address: seedGen(80) + '9'
-        }
 
-        // Generate Key for the device
-        let secretKey = seedGen(15)
-        device.sk = secretKey
-
-        this.setState({ loading: true }, async () => {
-            const response = await this.props.create(device, secretKey)
-
-            if (response.error) {
-                this.setState({ loading: false })
-                return alert(response.error)
-            }
-
-            this.setState({
-                loading: false,
-                active: false,
-                company: '',
-                deviceID: '',
-                deviceType: '',
-                deviceLocation: '',
-                deviceLat: '',
-                deviceLon: '',
-                dataTypes: [{ id: '', name: '', unit: '' }]
-            })
-        })
+        this.setState({ loading: true })
+        generateDeviceAddress(
+            generateSeed(81),
+            this.generateDeviceAddressCallback
+        )
     }
 
     render() {
-        var { active, loading } = this.state
+        const { active, loading } = this.state
         return (
             <Card header={Heading(this.state)}>
                 {active && !loading ? (
@@ -109,7 +121,7 @@ export default class extends React.Component {
                                 type={'text'}
                                 name={'deviceID'}
                                 value={this.state.deviceID}
-                                onChange={e => this.change(e)}
+                                onChange={this.change}
                             />
                         </Column>
                         <Column>
@@ -119,7 +131,7 @@ export default class extends React.Component {
                                 type={'text'}
                                 name={'deviceType'}
                                 value={this.state.deviceType}
-                                onChange={e => this.change(e)}
+                                onChange={this.change}
                             />
                         </Column>
                         <Column>
@@ -129,7 +141,7 @@ export default class extends React.Component {
                                 type={'text'}
                                 name={'company'}
                                 value={this.state.company}
-                                onChange={e => this.change(e)}
+                                onChange={this.change}
                             />
                         </Column>
                         <Column>
@@ -140,14 +152,14 @@ export default class extends React.Component {
                                     type={'text'}
                                     name={'city'}
                                     value={this.state.city}
-                                    onChange={e => this.change(e)}
+                                    onChange={this.change}
                                 />
                                 <Input
                                     placeholder={'eg. Germany'}
                                     type={'text'}
                                     name={'country'}
                                     value={this.state.country}
-                                    onChange={e => this.change(e)}
+                                    onChange={this.change}
                                 />
                             </Row>
                         </Column>
@@ -159,7 +171,7 @@ export default class extends React.Component {
                                     type={'number'}
                                     name={'deviceLat'}
                                     value={this.state.deviceLat}
-                                    onChange={e => this.change(e)}
+                                    onChange={this.change}
                                 />
                             </Column>
                             <Column>
@@ -169,7 +181,7 @@ export default class extends React.Component {
                                     type={'number'}
                                     name={'deviceLon'}
                                     value={this.state.deviceLon}
-                                    onChange={e => this.change(e)}
+                                    onChange={this.change}
                                 />
                             </Column>
                         </Row>
@@ -393,20 +405,3 @@ const Add = styled.div`
     justify-content: flex-end;
     paddin: 10px 0 0;
 `
-
-const seedGen = length => {
-    var charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9'
-    var i
-    var result = ''
-    if (window.crypto && window.crypto.getRandomValues) {
-        var values = new Uint32Array(length)
-        window.crypto.getRandomValues(values)
-        for (i = 0; i < length; i++) {
-            result += charset[values[i] % charset.length]
-        }
-        return result
-    } else
-        throw new Error(
-            "Your browser is outdated and can't generate secure random numbers"
-        )
-}

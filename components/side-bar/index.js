@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { reducer, getBalance } from '../../lib/iota'
+import { reducer, getBalance } from '../../lib/utils'
 
 const Sidebar = styled.aside`
   background-image: linear-gradient(-189deg, #0d3497 1%, #1857eb 95%);

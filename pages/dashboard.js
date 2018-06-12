@@ -8,7 +8,7 @@ import {
     purchaseData,
     reducer,
     getBalance
-} from '../lib/iota'
+} from '../lib/utils'
 
 import DeviceNav from '../components/device-nav'
 import LoginModal from '../components/login-modal'
@@ -98,8 +98,8 @@ export default class extends React.Component {
             .get()
             .then(doc => {
                 this.setState({
-                    user: user,
-                    userData: doc.data(),
+                    user,
+                    userData: doc.exists ? doc.data() : null,
                     loading: false,
                     firebase
                 })
