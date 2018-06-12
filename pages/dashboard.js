@@ -2,13 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import FB from '../lib/firebase'
 
-import {
-    iota,
-    initWallet,
-    purchaseData,
-    reducer,
-    getBalance
-} from '../lib/utils'
+import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils'
 
 import DeviceNav from '../components/device-nav'
 import LoginModal from '../components/login-modal'
@@ -19,300 +13,267 @@ import DeviceList from '../components/device-list'
 var firebase = {}
 
 export default class extends React.Component {
-    static async getInitialProps({ query }) {
-        return { grandfather: query.grandfather !== undefined }
+  static async getInitialProps({ query }) {
+    return { grandfather: query.grandfather !== undefined }
+  }
+
+  state = {
+    devices: [],
+    packets: [],
+    user: false,
+    button: true,
+    grandModal: false,
+    index: 0,
+    loading: {
+      heading: `Loading User`,
+      body: `Fetching your devices and account statistcs`,
+    },
+    error: false,
+    fetching: false,
+  }
+
+  async componentDidMount() {
+    if (this.props.grandfather) this.setState({ grandfather: true })
+    // Init Wallet
+    this.firebase = await FB()
+    this.checkLogin()
+  }
+  checkLogin = () => {
+    this.firebase.auth().onAuthStateChanged(user => {
+      if (user && !user.isAnonymous) {
+        // User is signed in.
+        this.getUser(user)
+      } else {
+        // No user is signed in.
+        this.setState({ loading: false })
+      }
+    })
+  }
+  auth = channel => {
+    let provider
+    switch (channel) {
+      case 'google':
+        provider = new this.firebase.auth.GoogleAuthProvider()
+        provider.addScope('email')
+        provider.addScope('profile')
+        break
     }
 
-    state = {
-        devices: [],
-        packets: [],
-        user: false,
-        button: true,
-        grandModal: false,
-        index: 0,
-        loading: {
-            heading: `Loading User`,
-            body: `Fetching your devices and account statistcs`
-        },
-        error: false,
-        fetching: false
-    }
+    this.firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(result => {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        var token = result.credential.accessToken
+        // The signed-in user info.
+        var user = result.user
+        this.getUser(user)
+      })
+      .catch(error => {
+        // Handle Errors here.
+        var errorCode = error.code
+        var errorMessage = error.message
+        // The email of the user's account used.
+        var email = error.email
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential
+        // ...
+      })
+  }
 
-    async componentDidMount() {
-        if (this.props.grandfather) this.setState({ grandfather: true })
-        // Init Wallet
-        this.firebase = await FB()
-        console.log(this.firebase)
-        this.checkLogin()
-    }
-    checkLogin = () => {
-        this.firebase.auth().onAuthStateChanged(user => {
-            if (user && !user.isAnonymous) {
-                // User is signed in.
-                console.log(user)
-                this.getUser(user)
-            } else {
-                // No user is signed in.
-                this.setState({ loading: false })
-            }
-        })
-    }
-    auth = channel => {
-        let provider
-        switch (channel) {
-            case 'google':
-                provider = new this.firebase.auth.GoogleAuthProvider()
-                provider.addScope('email')
-                provider.addScope('profile')
-                break
-        }
-
-        this.firebase
-            .auth()
-            .signInWithPopup(provider)
-            .then(result => {
-                // This gives you a Google Access Token. You can use it to access the Google API.
-                var token = result.credential.accessToken
-                // The signed-in user info.
-                var user = result.user
-                this.getUser(user)
-            })
-            .catch(error => {
-                // Handle Errors here.
-                var errorCode = error.code
-                var errorMessage = error.message
-                // The email of the user's account used.
-                var email = error.email
-                // The firebase.auth.AuthCredential type that was used.
-                var credential = error.credential
-                // ...
-            })
-    }
-
-    getUser = user => {
-        this.findDevices(user)
-        this.firebase
-            .firestore()
-            .collection('users')
-            .doc(user.uid)
-            .get()
-            .then(doc => {
-                this.setState({
-                    user,
-                    userData: doc.exists ? doc.data() : null,
-                    loading: false,
-                    firebase
-                })
-            })
-    }
-
-    findDevices = user => {
-        this.firebase
-            .firestore()
-            .collection('devices')
-            .where('owner', '==', user.uid)
-            .get()
-            .then(querySnapshot => {
-                var devices = []
-                querySnapshot.forEach(doc => {
-                    console.log(doc.id)
-                    devices.push(doc.data())
-                    if (devices.length == querySnapshot.size)
-                        return this.setState({ devices })
-                })
-            })
-    }
-
-    getDevice = device => {
-        this.firebase
-            .firestore()
-            .collection('devices')
-            .doc(device)
-            .get()
-            .then(function(doc) {
-                console.log(doc.id, ' => ', doc.data())
-            })
-            .catch(function(error) {
-                console.error('Error adding document: ', error)
-            })
-    }
-    throw = (error, button) => {
+  getUser = user => {
+    this.findDevices(user)
+    this.firebase
+      .firestore()
+      .collection('users')
+      .doc(user.uid)
+      .get()
+      .then(doc => {
         this.setState({
-            loading: false,
-            error,
-            button
+          user,
+          userData: doc.exists ? doc.data() : null,
+          loading: false,
+          firebase,
         })
-    }
+      })
+  }
 
-    createDevice = (device, sk) => {
-        console.log('Saving new device')
-        console.log(this.state.userData)
-
-        // Assign to user
-        device.owner = this.state.user.uid
-        // Deactivate the Device
-        device.inactive = true
-
-        return new Promise(async (res, rej) => {
-            const packet = JSON.stringify({
-                apiKey: this.state.userData.apiKey,
-                id: device.sensorId,
-                sk,
-                device
-            })
-            console.log(packet)
-
-            // Call server
-            var resp = await fetch(
-                `https://${process.env.API}.marketplace.tangle.works/newDevice`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: packet
-                }
-            )
-            const data = await resp.json()
-            // Check success
-            if (data.success)
-                this.setState({
-                    devices: [...this.state.devices, device]
-                })
-            res(data)
+  findDevices = user => {
+    this.firebase
+      .firestore()
+      .collection('devices')
+      .where('owner', '==', user.uid)
+      .get()
+      .then(querySnapshot => {
+        var devices = []
+        querySnapshot.forEach(doc => {
+          console.log(doc.id)
+          devices.push(doc.data())
+          if (devices.length == querySnapshot.size) return this.setState({ devices })
         })
-    }
+      })
+  }
 
-    deleteDevice = async id => {
-        this.setState({ loading: true })
-        const response = await fetch(
-            `https://${process.env.API}.marketplace.tangle.works/removeDevice`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    apiKey: this.state.userData.apiKey,
-                    id
-                })
-            }
-        )
-        const data = await response.json()
-        if (data.success) {
-            return this.setState({
-                loading: false,
-                devices: [
-                    ...this.state.devices.filter(
-                        device => device.sensorId !== id
-                    )
-                ]
-            })
+  getDevice = device => {
+    this.firebase
+      .firestore()
+      .collection('devices')
+      .doc(device)
+      .get()
+      .then(function(doc) {
+        console.log(doc.id, ' => ', doc.data())
+      })
+      .catch(function(error) {
+        console.error('Error adding document: ', error)
+      })
+  }
+  throw = (error, button) => {
+    this.setState({
+      loading: false,
+      error,
+      button,
+    })
+  }
+
+  createDevice = (device, sk) => {
+    console.log('Saving new device')
+    console.log(this.state.userData)
+
+    // Assign to user
+    device.owner = this.state.user.uid
+    // Deactivate the Device
+    device.inactive = true
+
+    return new Promise(async (res, rej) => {
+      const packet = JSON.stringify({
+        apiKey: this.state.userData.apiKey,
+        id: device.sensorId,
+        sk,
+        device,
+      })
+      console.log(packet)
+
+      // Call server
+      var resp = await fetch(`https://${process.env.API}.marketplace.tangle.works/newDevice`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: packet,
+      })
+      const data = await resp.json()
+      // Check success
+      if (data.success)
+        this.setState({
+          devices: [...this.state.devices, device],
+        })
+      res(data)
+    })
+  }
+
+  deleteDevice = async id => {
+    this.setState({ loading: true })
+    const response = await fetch(
+      `https://${process.env.API}.marketplace.tangle.works/removeDevice`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          apiKey: this.state.userData.apiKey,
+          id,
+        }),
+      }
+    )
+    const data = await response.json()
+    if (data.success) {
+      return this.setState({
+        loading: false,
+        devices: [...this.state.devices.filter(device => device.sensorId !== id)],
+      })
+    } else {
+      alert(`Couldn't Delete Device`)
+      return this.setState({
+        loading: false,
+      })
+    }
+  }
+
+  logout = () => {
+    this.firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        // Sign-out successful.
+        console.log('Logged Out')
+        this.setState({ user: false, devices: [], userData: false })
+      })
+      .catch(function(error) {
+        // An error happened.
+      })
+  }
+  // Show grandfather modal
+  toggleGrand = () => {
+    this.setState({ grandModal: true })
+  }
+  grandfather = (id, sk) => {
+    this.setState(
+      {
+        loading: {
+          heading: 'Sending Request',
+          body: 'Adding device to you account.',
+        },
+      },
+      async () => {
+        var resp = await fetch(`https://${process.env.API}.marketplace.tangle.works/grandfather`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            owner: this.state.user.uid,
+            sk,
+            id,
+          }),
+        })
+        var data = await resp.json()
+        console.log(data)
+        if (data.error) {
+          /// Add error
+          this.throw({ heading: 'Error', body: data.error }, true)
         } else {
-            alert(`Couldn't Delete Device`)
-            return this.setState({
-                loading: false
-            })
+          location.reload()
         }
-    }
-
-    logout = () => {
-        this.firebase
-            .auth()
-            .signOut()
-            .then(() => {
-                // Sign-out successful.
-                console.log('Logged Out')
-                this.setState({ user: false, devices: [], userData: false })
-            })
-            .catch(function(error) {
-                // An error happened.
-            })
-    }
-    // Show grandfather modal
-    toggleGrand = () => {
-        this.setState({ grandModal: true })
-    }
-    grandfather = (id, sk) => {
-        this.setState(
-            {
-                loading: {
-                    heading: 'Sending Request',
-                    body: 'Adding device to you account.'
-                }
-            },
-            async () => {
-                var resp = await fetch(
-                    `https://${
-                        process.env.API
-                    }.marketplace.tangle.works/grandfather`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            owner: this.state.user.uid,
-                            sk,
-                            id
-                        })
-                    }
-                )
-                var data = await resp.json()
-                console.log(data)
-                if (data.error) {
-                    /// Add error
-                    this.throw({ heading: 'Error', body: data.error }, true)
-                } else {
-                    location.reload()
-                }
-            }
-        )
-    }
-    render() {
-        var {
-            devices,
-            packets,
-            user,
-            loading,
-            error,
-            button,
-            grandModal
-        } = this.state
-        return (
-            <Main>
-                <DeviceNav {...this.state} logout={this.logout} />
-                <Data>
-                    <Sidebar {...this.state} toggleGrand={this.toggleGrand} />
-                    <DeviceList
-                        devices={devices}
-                        create={this.createDevice}
-                        delete={this.deleteDevice}
-                    />
-                </Data>
-                <LoginModal
-                    button={button}
-                    auth={this.auth}
-                    show={!user}
-                    loading={loading}
-                    error={error}
-                />
-                <GrandModal
-                    button={button}
-                    grandfather={this.grandfather}
-                    show={grandModal && user}
-                    loading={loading}
-                    error={error}
-                />
-            </Main>
-        )
-    }
+      }
+    )
+  }
+  render() {
+    var { devices, packets, user, loading, error, button, grandModal } = this.state
+    return (
+      <Main>
+        <DeviceNav {...this.state} logout={this.logout} />
+        <Data>
+          <Sidebar {...this.state} toggleGrand={this.toggleGrand} />
+          <DeviceList devices={devices} create={this.createDevice} delete={this.deleteDevice} />
+        </Data>
+        <LoginModal button={button} auth={this.auth} show={!user} loading={loading} error={error} />
+        <GrandModal
+          button={button}
+          grandfather={this.grandfather}
+          show={grandModal && user}
+          loading={loading}
+          error={error}
+        />
+      </Main>
+    )
+  }
 }
 const Main = styled.main`
-    width: 100vw;
-    height: 100vh;
+  width: 100vw;
+  height: 100vh;
 `
 
 const Data = styled.section`
-    background-image: linear-gradient(-189deg, #06236c 1%, #1449c6 95%);
-    min-height: 90vh;
-    position: relative;
-    display: flex;
-    @media (max-width: 760px) {
-        flex-direction: column;
-    }
+  background-image: linear-gradient(-189deg, #06236c 1%, #1449c6 95%);
+  min-height: 90vh;
+  position: relative;
+  display: flex;
+  @media (max-width: 760px) {
+    flex-direction: column;
+  }
 `
