@@ -1,20 +1,20 @@
-import React from "react";
-import styled, { css, injectGlobal } from "styled-components";
-import MapGL, { Marker, Popup, NavigationControl } from "react-map-gl";
-import { Link } from "../../routes";
-import { getBalance } from "../../lib/iota";
-import CSS from "./css";
-import Controls from "./controls";
+import React from "react"
+import styled, { css, injectGlobal } from "styled-components"
+import MapGL, { Marker, Popup, NavigationControl } from "react-map-gl"
+import { Link } from "../../routes"
+import { getBalance } from "../../lib/iota"
+import CSS from "./css"
+import Controls from "./controls"
 
-import Overlay from "./overlay";
-import iconMapping from "./icon-atlas.json";
+import Overlay from "./overlay"
+import iconMapping from "./icon-atlas.json"
 // const navStyle = {
 //   position: 'absolute',
 //   top: 0,
 //   right: 20,
 //   padding: '10px'
 // }
-const mapControls = new Controls();
+const mapControls = new Controls()
 
 export default class extends React.Component {
   state = {
@@ -29,20 +29,20 @@ export default class extends React.Component {
     },
     popupInfo: null,
     mapHeight: 900
-  };
+  }
   componentDidMount() {
-    window.addEventListener("resize", this._resize);
-    this._resize();
+    window.addEventListener("resize", this._resize)
+    this._resize()
   }
 
   componentWillUnmount() {
-    window.removeEventListener("resize", this._resize);
+    window.removeEventListener("resize", this._resize)
   }
 
   _resize = () => {
-    let mapHeight;
-    if (window.innerWidth < 760) mapHeight = 500;
-    if (window.innerWidth > 760) mapHeight = 900;
+    let mapHeight
+    if (window.innerWidth < 760) mapHeight = 500
+    if (window.innerWidth > 760) mapHeight = 900
 
     this.setState({
       viewport: {
@@ -51,16 +51,16 @@ export default class extends React.Component {
         height: this.props.height || window.innerHeight
       },
       mapHeight
-    });
-  };
+    })
+  }
   _updateViewport = viewport => {
     this.setState({
       viewport: { ...this.state.viewport, ...viewport }
-    });
-  };
+    })
+  }
 
   _renderPopup = () => {
-    const { popupInfo } = this.state;
+    const { popupInfo } = this.state
     return (
       popupInfo && (
         <Popup
@@ -113,32 +113,35 @@ export default class extends React.Component {
           </Link>
         </Popup>
       )
-    );
-  };
+    )
+  }
   _openPopup = device => {
-    this.setState({ popupInfo: device });
-  };
+    this.setState({ popupInfo: device })
+  }
 
   sanatiseDevice = device => {
-    if (!device.lon && !device.lat && device.inactive) return false;
-    if (device.lat >= 90 || device.lat <= -90) return false;
-    if (device.lon >= 180 || device.lon <= -180) return false;
-    return true;
-  };
+    if (!device.lon || !device.lat || device.inactive) return false
+    if (device.lat >= 90 || device.lat <= -90) return false
+    if (device.lon >= 180 || device.lon <= -180) return false
+    return true
+  }
 
   render() {
-    const { viewport, mapHeight } = this.state;
+    const { viewport, mapHeight } = this.state
     let devices =
       this.props.devices.length > 0
         ? [
             ...this.props.devices
-              .filter(device => this.sanatiseDevice)
+              .filter(device => this.sanatiseDevice(device))
               .map(device => {
-                device.coordinates = [device.lat, device.lon];
-                return device;
+                device.coordinates = [
+                  Number(device.lat).toFixed(4),
+                  Number(device.lon).toFixed(4)
+                ]
+                return device
               })
           ]
-        : false;
+        : false
     return (
       <Main id={"map"}>
         <Header>
@@ -160,27 +163,17 @@ export default class extends React.Component {
           <div style={{ position: "absolute", right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
           </div>
-          {/* {devices && (
-                        <Overlay
-                            viewport={viewport}
-                            data={devices}
-                            iconMapping={iconMapping}
-                            iconAtlas="static/icons/map-atlas.png"
-                            showCluster={true}
-                        />
-                    )} */}
           {devices &&
-            devices.filter(device => this.sanatiseDevice).map(device => {
-              device.lat = Number(device.lat);
-              device.lon = Number(device.lon);
+            devices.map((device, i) => {
               return (
                 <Marker
-                  latitude={Number(device.lat)}
-                  longitude={Number(device.lon)}
+                  latitude={device.lat}
+                  longitude={device.lon}
+                  key={`marker-${i}`}
                 >
                   <Pin onClick={() => this._openPopup(device)} />
                 </Marker>
-              );
+              )
             })}
           {this._renderPopup()}
         </MapGL>
@@ -196,7 +189,7 @@ export default class extends React.Component {
           alt="Shape accent"
         />
       </Main>
-    );
+    )
   }
 }
 
@@ -208,7 +201,7 @@ const Clear = styled.div`
   right: 0;
   z-index: 999;
   /* pointer-events: none; */
-`;
+`
 
 const Main = styled.div`
   position: relative;
@@ -224,7 +217,7 @@ const Main = styled.div`
       top: 0;
     }
   }
-`;
+`
 
 const Header = styled.div`
   max-width: 1170px;
@@ -240,7 +233,7 @@ const Header = styled.div`
   @media (max-width: 760px) {
     padding-top: 50px;
   }
-`;
+`
 
 const Nav = styled.div`
   position: absolute;
@@ -248,7 +241,7 @@ const Nav = styled.div`
   left: 0px;
   padding: 10px;
   z-index: 100;
-`;
+`
 
 const Heading = styled.h3`
   text-transform: capitalize;
@@ -263,7 +256,7 @@ const Heading = styled.h3`
     margin-bottom: 0;
     margin-bottom: 10px;
   }
-`;
+`
 const Subtitle = styled.h4`
   font-size: 19px;
   font-weight: 400;
@@ -279,7 +272,7 @@ const Subtitle = styled.h4`
     font-size: 18px;
     line-height: 28px;
   }
-`;
+`
 const HeaderBg = styled.img`
   position: absolute;
   top: -120px;
@@ -296,7 +289,7 @@ const HeaderBg = styled.img`
   @media (max-width: 520px) {
     right: 35vw;
   }
-`;
+`
 
 const HeaderBgMobile = styled.img`
   position: absolute;
@@ -318,7 +311,7 @@ const HeaderBgMobile = styled.img`
   @media (max-width: 370px) {
     right: 25vw;
   }
-`;
+`
 
 const SensorCardWrapper = styled.div`
   position: absolute;
@@ -328,7 +321,7 @@ const SensorCardWrapper = styled.div`
   @media (max-width: 760px) {
     display: block;
   }
-`;
+`
 
 const SensorCard = styled.a`
   display: block;
@@ -348,7 +341,7 @@ const SensorCard = styled.a`
   @media (max-width: 760px) {
     margin-bottom: 10px;
   }
-`;
+`
 
 const Pin = styled.div`
   background-image: linear-gradient(-140deg, #184490 0%, #0a2056 100%);
@@ -361,59 +354,59 @@ const Pin = styled.div`
   border-radius: 50% 50% 50% 0;
   cursor: pointer !important;
   box-shadow: -10px 9px 12px 0 rgba(10, 32, 87, 0.12);
-`;
+`
 
 const CardHeader = styled.header`
   position: relative;
   padding: 0 30px 8px 30px;
   border-bottom: 1px solid rgba(115, 143, 212, 0.2);
-`;
+`
 
 const CardFooter = styled.footer`
   padding: 20px 30px;
   padding: 8px 30px;
   border-top: none;
   background-color: transparent;
-`;
+`
 const FootRow = styled.div`
   display: flex;
   justify-content: space-between;
   &:not(:last-of-type) {
     margin-bottom: 5px;
   }
-`;
+`
 
 const InfoKey = styled.span`
   color: #738fd4;
   text-transform: capitalize;
   font: 12px/16px "Nunito Sans", sans-serif;
-`;
+`
 
 const InfoValue = styled.span`
   font-size: 12px;
   line-height: 16px;
   font-weight: 400;
   color: #fff;
-`;
+`
 const CardIcon = styled.img`
   margin-right: 10px;
-`;
+`
 const LocationIcon = styled.img`
   margin: 0 6px 0 13px;
-`;
+`
 const SensorType = styled.span`
   font: 12px/16px "Nunito Sans", sans-serif;
   position: absolute;
   top: -8px;
   color: #738fd4;
-`;
+`
 const SensorId = styled.span`
   font-size: 20px;
   top: 4px;
   color: #fff;
   line-height: 42px;
   position: relative;
-`;
+`
 //override
 injectGlobal`
  .mapboxgl-popup-close-button {
@@ -425,4 +418,4 @@ injectGlobal`
     font-size: 120%;
     background: transparent;
   }
-`;
+`
