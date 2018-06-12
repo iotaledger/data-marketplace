@@ -1,19 +1,15 @@
 import React from "react"
 import styled, { css, injectGlobal } from "styled-components"
-import MapGL, { Marker, Popup, NavigationControl } from "react-map-gl"
+import MapGL, { Popup, NavigationControl } from "react-map-gl"
 import { Link } from "../../routes"
 import { getBalance } from "../../lib/iota"
 import CSS from "./css"
 import Controls from "./controls"
 
 import Overlay from "./overlay"
+import Markers from "./markers"
 import iconMapping from "./icon-atlas.json"
-// const navStyle = {
-//   position: 'absolute',
-//   top: 0,
-//   right: 20,
-//   padding: '10px'
-// }
+
 const mapControls = new Controls()
 
 export default class extends React.Component {
@@ -119,29 +115,8 @@ export default class extends React.Component {
     this.setState({ popupInfo: device })
   }
 
-  sanatiseDevice = device => {
-    if (!device.lon || !device.lat || device.inactive) return false
-    if (device.lat >= 90 || device.lat <= -90) return false
-    if (device.lon >= 180 || device.lon <= -180) return false
-    return true
-  }
-
   render() {
     const { viewport, mapHeight } = this.state
-    let devices =
-      this.props.devices.length > 0
-        ? [
-            ...this.props.devices
-              .filter(device => this.sanatiseDevice(device))
-              .map(device => {
-                device.coordinates = [
-                  Number(device.lat).toFixed(4),
-                  Number(device.lon).toFixed(4)
-                ]
-                return device
-              })
-          ]
-        : false
     return (
       <Main id={"map"}>
         <Header>
@@ -163,18 +138,7 @@ export default class extends React.Component {
           <div style={{ position: "absolute", right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
           </div>
-          {devices &&
-            devices.map((device, i) => {
-              return (
-                <Marker
-                  latitude={device.lat}
-                  longitude={device.lon}
-                  key={`marker-${i}`}
-                >
-                  <Pin onClick={() => this._openPopup(device)} />
-                </Marker>
-              )
-            })}
+          <Markers devices={this.props.devices} openPopup={this._openPopup} />
           {this._renderPopup()}
         </MapGL>
 
@@ -341,19 +305,6 @@ const SensorCard = styled.a`
   @media (max-width: 760px) {
     margin-bottom: 10px;
   }
-`
-
-const Pin = styled.div`
-  background-image: linear-gradient(-140deg, #184490 0%, #0a2056 100%);
-  position: absolute;
-  height: 20px;
-  width: 20px;
-  top: -20px;
-  right: -10px;
-  transform: rotate(-45deg);
-  border-radius: 50% 50% 50% 0;
-  cursor: pointer !important;
-  box-shadow: -10px 9px 12px 0 rgba(10, 32, 87, 0.12);
 `
 
 const CardHeader = styled.header`
