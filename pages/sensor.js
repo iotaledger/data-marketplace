@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
 import FB from '../lib/firebase'
-import Mam from 'mam.client.js'
 import { getData, deviceInfo, userAuth } from '../lib/auth-user'
 import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils'
 import SensorNav from '../components/sensor-nav'
