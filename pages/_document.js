@@ -2,77 +2,55 @@ import Document, { Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet, injectGlobal } from 'styled-components'
 
 export default class MyDocument extends Document {
-    render() {
-        const sheet = new ServerStyleSheet()
-        const main = sheet.collectStyles(<Main />)
-        const styleTags = sheet.getStyleElement()
-        return (
-            <html>
-                <Head>
-                    <script
-                        async
-                        src={`https://www.googletagmanager.com/gtag/js?id=UA-106570081-3`}
-                    />
-                    <script
-                        dangerouslySetInnerHTML={{
-                            __html: `
+  render() {
+    const sheet = new ServerStyleSheet()
+    const main = sheet.collectStyles(<Main />)
+    const styleTags = sheet.getStyleElement()
+    return (
+      <html>
+        <Head>
+          <script async src={`https://www.googletagmanager.com/gtag/js?id=UA-106570081-3`} />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments)};
                 gtag('js', new Date());
                 gtag('config', 'UA-106570081-3');
-              `
-                        }}
-                    />
+              `,
+            }}
+          />
 
-                    <title>IOTA Data Market</title>
-                    {styleTags}
-                    <script
-                        src="https://www.google.com/recaptcha/api.js"
-                        async
-                        defer
-                    />
-                    <meta
-                        property="og:title"
-                        content="The IOTA Data Marketplace"
-                    />
-                    <meta
-                        property="og:description"
-                        content="IOTA makes it possible to securely store, sell, and access data streams."
-                    />
-                    <meta
-                        property="og:image"
-                        content="https://cdn-images-1.medium.com/max/2000/1*XOSduao7nmUZUpRmjt4zeg.jpeg"
-                    />
-                    <meta name="title" content="IOTA Data Marketplace" />
-                    <meta
-                        name="description"
-                        content="IOTA makes it possible to securely store, sell, and access data streams."
-                    />
-                    <meta
-                        name="keywords"
-                        content="IoT, Internet of Things,Marketplace,Data,IOTA"
-                    />
-                    <meta name="author" content="IOTA Foundation" />
-                    <meta
-                        name="viewport"
-                        content="width=device-width, initial-scale=1"
-                    />
-                    <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css" />
-                    <script src="/static/iota-bindings-emscripten.wasm" />
-                    <script src="/static/mam.web.js" />
-                    <script src="/static/curl.min.js" />
-                    <script
-                        type="text/javascript"
-                        src="/static/jszip-utils.min.js"
-                    />
-                </Head>
-                <body>
-                    <div className="root">{main}</div>
-                    <NextScript />
-                </body>
-            </html>
-        )
-    }
+          <title>IOTA Data Market</title>
+          {styleTags}
+          <script src="https://www.google.com/recaptcha/api.js" async defer />
+          <meta property="og:title" content="The IOTA Data Marketplace" />
+          <meta
+            property="og:description"
+            content="IOTA makes it possible to securely store, sell, and access data streams."
+          />
+          <meta
+            property="og:image"
+            content="https://cdn-images-1.medium.com/max/2000/1*XOSduao7nmUZUpRmjt4zeg.jpeg"
+          />
+          <meta name="title" content="IOTA Data Marketplace" />
+          <meta
+            name="description"
+            content="IOTA makes it possible to securely store, sell, and access data streams."
+          />
+          <meta name="keywords" content="IoT, Internet of Things,Marketplace,Data,IOTA" />
+          <meta name="author" content="IOTA Foundation" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css" />
+          <script type="text/javascript" src="/static/jszip-utils.min.js" />
+        </Head>
+        <body>
+          <div className="root">{main}</div>
+          <NextScript />
+        </body>
+      </html>
+    )
+  }
 }
 
 injectGlobal`
@@ -116,37 +94,37 @@ injectGlobal`
   .tablet-hidden-later {
     display: inline;
     @media screen and (max-width: 970px){
-      display: none;      
+      display: none;
     }
   }
-  
+
 
   .tablet-hidden {
     display: inline;
     @media screen and (max-width: 1120px){
-      display: none;      
+      display: none;
     }
   }
   .mobile-hidden {
-    display: inline;  
+    display: inline;
     @media screen and (max-width: 760px){
-      display: none;      
+      display: none;
     }
   }
   .desktop-hidden {
     display: inline;
     @media screen and (max-width: 970px){
-      display: none;      
+      display: none;
     }
   }
   .desktop-hidden-later {
-    display: inline;    
+    display: inline;
     @media (min-width: 970px){
       display: none;
-      
+
     }
   }
- 
+
   .mapboxgl-popup-tip {
     color: transparent !important;
     border-bottom-color:transparent !important;
@@ -164,21 +142,21 @@ injectGlobal`
   @font-face {
     font-family: 'Nunito Sans';
     src: url('/static/fonts/NunitoSans-ExtraLight.ttf');
-    font-weight: 200;    
+    font-weight: 200;
   }
   @font-face {
     font-family: 'Nunito Sans';
     src: url('/static/fonts/NunitoSans-Regular.ttf');
-    font-weight: 400;    
+    font-weight: 400;
   }
   @font-face {
     font-family: 'Nunito Sans';
     src: url('/static/fonts/NunitoSans-Bold.ttf');
-    font-weight: 600;    
-  }  
+    font-weight: 600;
+  }
   @font-face {
     font-family: 'Nunito Sans';
     src: url('/static/fonts/NunitoSans-ExtraBold.ttf');
-    font-weight: 800;    
+    font-weight: 800;
   }
 `
