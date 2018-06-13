@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@iota/curl-remote": "^0.0.3",
     "iota.lib.js": "^0.4.7",
     "mam.client.js": "iotaledger/mam.client.js",
     "node-fetch": "^2.0.0"

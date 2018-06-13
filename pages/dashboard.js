@@ -28,6 +28,7 @@ export default class extends React.Component {
       heading: `Loading User`,
       body: `Fetching your devices and account statistcs`,
     },
+    userData: {},
     error: false,
     fetching: false,
   }
@@ -91,7 +92,7 @@ export default class extends React.Component {
       .then(doc => {
         this.setState({
           user,
-          userData: doc.exists ? doc.data() : null,
+          userData: doc.exists ? doc.data() : {},
           loading: false,
           firebase,
         })
@@ -151,7 +152,7 @@ export default class extends React.Component {
         sk,
         device,
       })
-      console.log(packet)
+      console.log('createDevice', packet)
 
       // Call server
       var resp = await fetch(`https://${process.env.API}.marketplace.tangle.works/newDevice`, {
@@ -203,7 +204,7 @@ export default class extends React.Component {
       .then(() => {
         // Sign-out successful.
         console.log('Logged Out')
-        this.setState({ user: false, devices: [], userData: false })
+        this.setState({ user: false, devices: [], userData: {} })
       })
       .catch(function(error) {
         // An error happened.
