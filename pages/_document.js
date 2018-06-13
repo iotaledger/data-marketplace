@@ -42,7 +42,6 @@ export default class MyDocument extends Document {
           <meta name="author" content="IOTA Foundation" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <link href="https://api.tiles.mapbox.com/mapbox-gl-js/v0.37.0/mapbox-gl.css" />
-          <script type="text/javascript" src="/static/jszip-utils.min.js" />
         </Head>
         <body>
           <div className="root">{main}</div>

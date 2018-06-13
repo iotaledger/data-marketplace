@@ -16,6 +16,7 @@
     "iota.lib.js": "0.4.7",
     "isomorphic-fetch": "2.2.1",
     "jszip": "3.1.5",
+    "jszip-utils": "^0.0.2",
     "luma.gl": "5.3.0",
     "mailgun-js": "0.13.1",
     "mam.client.js": "iotaledger/mam.client.js",
