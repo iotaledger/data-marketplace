@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import FB from '../lib/firebase'
+import Mam from 'mam.client.js'
 import { getData, deviceInfo, userAuth } from '../lib/auth-user'
 import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils'
 import SensorNav from '../components/sensor-nav'
@@ -104,7 +105,7 @@ ID and try again`,
       const mamState = Mam.init(iota)
       mamState.channel.security = this.state.deviceInfo.security || 2
 
-      var packets = data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
+      const packets = data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
         const result = await Mam.fetchSingle(
           root,
           sidekey !== '' ? 'restricted' : null,

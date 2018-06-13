@@ -1,8 +1,8 @@
 var fetch = require('node-fetch')
 var crypto = require('crypto')
-var Mam = require('./mam.node.js')
+var Mam = require('mam.client.js')
 var IOTA = require('iota.lib.js')
-var iota = new IOTA({ provider: `http://p103.iotaledger.net:14700/` })
+var iota = new IOTA({ provider: 'https://testnet140.tangle.works/' })
 
 // Set Varibles
 var debug = false // Set to 'false' to publish data live
@@ -10,7 +10,7 @@ let uuid = 'test' // Enter your device ID here NOT YOUR ROOT
 let secretKey = 'GIX9FPONKQSZAWG' // Enter secret key here
 
 // API end point
-let endpoint = `https://us-central1-datamarket-617e1.cloudfunctions.net/newData`
+let endpoint = 'https://us-central1-datamarket-617e1.cloudfunctions.net/newData'
 
 // Random Key Generator
 const keyGen = length => {
@@ -55,15 +55,15 @@ const pushKeys = async (root, sidekey) => {
   const packet = {
     sidekey: sidekey,
     root: root,
-    time: Date.now()
+    time: Date.now(),
   }
   // Initiate Fetch Call
   var resp = await fetch(endpoint, {
     method: 'post',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ id: uuid, packet, sk: secretKey })
+    body: JSON.stringify({ id: uuid, packet, sk: secretKey }),
   })
   return resp.json()
 }
@@ -76,7 +76,7 @@ Array(4)
       time: Date.now(),
       data: {
         // Change the below varibles to match your device!
-        temp: (Math.random() * 50).toFixed(2)
-      }
+        temp: (Math.random() * 50).toFixed(2),
+      },
     })
   )
