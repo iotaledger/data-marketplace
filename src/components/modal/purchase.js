@@ -45,16 +45,16 @@ const Internal = styled.div`
   align-items: center;
   width: 100%;
 `;
-const Input = styled.input`
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid white;
-  padding: 4px 10px;
-  color: white;
-  &:placeholder {
-    color: rgba(0, 0, 0, 0.3);
-  }
-`;
+// const Input = styled.input`
+//   background: transparent;
+//   border: none;
+//   border-bottom: 1px solid white;
+//   padding: 4px 10px;
+//   color: white;
+//   &:placeholder {
+//     color: rgba(0, 0, 0, 0.3);
+//   }
+// `;
 
 const content = props => (
   <Internal>

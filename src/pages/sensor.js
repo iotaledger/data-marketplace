@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FB from '../lib/firebase';
 import Mam from 'mam.client.js';
 import { getData, deviceInfo, userAuth } from '../lib/auth-user';
-import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils';
+import { iota, initWallet, purchaseData } from '../lib/utils';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -45,7 +45,7 @@ export default class extends React.Component {
       device.balance = await getBalance(device.address);
     }
 
-    if (typeof device == 'string') {
+    if (typeof device === 'string') {
       return this.throw({
         body: ` The device you are looking for doesn't exist, check the device
 ID and try again`,
@@ -55,7 +55,7 @@ ID and try again`,
 
     // Organise data for layout
     const layout = [];
-    device.dataTypes.map((item, i) => {
+    device.dataTypes.forEach((item, i) => {
       if (!layout[Math.floor(i / 2)]) {
         layout[Math.floor(i / 2)] = [];
       }
@@ -83,7 +83,7 @@ ID and try again`,
 
   fetch = async (deviceRef, userRef) => {
     let data = await getData(deviceRef, userRef, this.props.id);
-    if (typeof data == 'string') {
+    if (typeof data === 'string') {
       return this.setState({ loading: false });
     }
 
@@ -102,7 +102,13 @@ ID and try again`,
 
   fetchMam = data => {
     try {
-      if (!data[0]) throw 'Fail';
+      if (!data[0]) {
+        this.throw({
+          body: 'Fail',
+          heading: 'Fail',
+        });
+      }
+
       const mamState = Mam.init(iota);
       mamState.channel.security = this.state.deviceInfo.security || 2;
 
@@ -123,6 +129,7 @@ ID and try again`,
           });
         }
       });
+      return packets;
     } catch (e) {
       this.setState({ dataEnd: true });
     }
@@ -268,7 +275,7 @@ ID and try again`,
   };
 
   render() {
-    const { deviceInfo, packets, purchase, loading, error, button } = this.state;
+    const { purchase, loading, error, button } = this.state;
     return (
       <Main>
         <SensorNav {...this.state} fund={this.fund} />

@@ -9,7 +9,6 @@ import Partners from '../components/partners';
 import Benefits from '../components/benefits';
 import Form from '../components/form';
 import Footer from '../components/footer';
-import Cookies from '../components/cookie';
 import Map from '../components/map';
 
 import FB from '../lib/firebase';
@@ -46,7 +45,6 @@ export default class extends React.Component {
         <Benefits />
         <Form {...this.state} />
         <Footer />
-        {/* <Cookies /> */}
       </Main>
     );
   }

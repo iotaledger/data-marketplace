@@ -67,21 +67,21 @@ const Block = styled.div`
   flex-direction: column;
   align-items: flex-start;
 `;
-const NavGraphics = styled.img`
-  height: 100%;
-  width: auto;
-  @media (max-width: 760px) {
-    width: 66px;
-    object-fit: cover;
-  }
-`;
+// const NavGraphics = styled.img`
+//   height: 100%;
+//   width: auto;
+//   @media (max-width: 760px) {
+//     width: 66px;
+//     object-fit: cover;
+//   }
+// `;
 
-const SensorIcon = styled.img`
-  margin-right: 10px;
-  @media (max-width: 760px) {
-    display: none;
-  }
-`;
+// const SensorIcon = styled.img`
+//   margin-right: 10px;
+//   @media (max-width: 760px) {
+//     display: none;
+//   }
+// `;
 
 export default props => (
   <Main>

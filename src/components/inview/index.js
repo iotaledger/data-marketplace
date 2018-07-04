@@ -1,13 +1,13 @@
-import React from 'react'
-import InView from 'in-view'
+import React from 'react';
+import InView from 'in-view';
 
 export default class extends React.Component {
-  state = {}
+  state = {};
   componentDidMount = () => {
-    var enter = InView('.inview').on('enter', el => this.props.func())
-  }
+    InView('.inview').on('enter', el => this.props.func());
+  };
 
   render() {
-    return <div className={'inview'}>{this.props.children}</div>
+    return <div className={'inview'}>{this.props.children}</div>;
   }
 }

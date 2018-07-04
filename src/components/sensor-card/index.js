@@ -1,21 +1,19 @@
-import React from 'react'
-import styled from 'styled-components'
-import { format } from 'date-fns'
+import React from 'react';
+import styled from 'styled-components';
+import { format } from 'date-fns';
 
 export default class extends React.Component {
-  state = {}
+  state = {};
   componentDidMount = () => {
-    setTimeout(() => this.setState({ visible: true }), 300)
-  }
+    setTimeout(() => this.setState({ visible: true }), 300);
+  };
 
   render() {
     return (
       <SensorCard visible={this.state.visible}>
         <CardHeader>
           <HeaderRow>
-            <HeaderAccent>
-              {format(this.props.packet.time, 'dddd')}
-            </HeaderAccent>{' '}
+            <HeaderAccent>{format(this.props.packet.time, 'dddd')}</HeaderAccent>{' '}
             {format(this.props.packet.time, 'DD MMMM, YYYY H:mm a ')}
           </HeaderRow>
         </CardHeader>
@@ -57,7 +55,7 @@ export default class extends React.Component {
           </RowHalf>
         </Row> */}
       </SensorCard>
-    )
+    );
   }
 }
 const SensorCard = styled.div`
@@ -138,17 +136,17 @@ const SensorCard = styled.div`
     padding-top: 10px;
     margin-bottom: 10px;
   }
-`
+`;
 
 const CardHeader = styled.header`
   position: relative;
   padding: 0 30px 8px 30px;
   border-bottom: 1px solid #eaecee;
-`
+`;
 const HeaderRow = styled.p`
   font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
-`
+`;
 const HeaderAccent = styled.span`
   font-size: 18px;
   line-height: 33px;
@@ -157,7 +155,7 @@ const HeaderAccent = styled.span`
   @media (max-width: 470px) {
     display: block;
   }
-`
+`;
 
 const Row = styled.div`
   &:not(:last-of-type) {
@@ -174,7 +172,7 @@ const Row = styled.div`
   &:last-of-type {
     padding-bottom: 10px;
   }
-`
+`;
 const RowHalf = styled.div`
   padding: 20px 30px 8px;
   display: inline-block;
@@ -200,12 +198,12 @@ const RowHalf = styled.div`
       border: none;
     }
   }
-`
+`;
 const RowDesc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
   margin: 0;
-`
+`;
 const RowValue = styled.p`
   font-size: 26px;
   font-weight: 800;
@@ -215,7 +213,7 @@ const RowValue = styled.p`
     font-size: 20px;
     line-height: 0;
   }
-`
+`;
 const RowUnit = styled.span`
   font-size: 14px;
   font-weight: 400;
@@ -227,10 +225,10 @@ const RowUnit = styled.span`
     line-height: 30px;
     top: -4px;
   }
-`
+`;
 
-const WindIcon = styled.img`
-  transform: rotate(-57deg);
-  position: relative;
-  top: -2px;
-`
+// const WindIcon = styled.img`
+//   transform: rotate(-57deg);
+//   position: relative;
+//   top: -2px;
+// `

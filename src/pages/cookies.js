@@ -1,18 +1,15 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from 'react';
 
 export default class extends React.Component {
-  state = { visible: false }
+  state = { visible: false };
 
   componentDidMount = async () => {
-    let visible = await localStorage.getItem('cookie')
-    this.setState({ visible })
-    console.log(visible)
-  }
+    const visible = await localStorage.getItem('cookie');
+    this.setState({ visible });
+  };
+
   render() {
-    var { visible } = this.state
-    return <Main visible>Hellooo</Main>
+    const { visible } = this.state;
+    return <div visible={visible}>Hellooo</div>;
   }
 }
-
-const Main = styled.div``

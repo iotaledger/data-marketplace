@@ -18,7 +18,7 @@ export const purchaseData = async (seed, address, value) => {
     console.log('Falling Back');
   }
   try {
-    var transfers = [{ address: iota.utils.addChecksum(address), value: parseInt(value) }];
+    var transfers = [{ address: iota.utils.addChecksum(address), value: parseInt(value, 10) }];
   } catch (e) {
     throw Error('Device address is invalid');
   }
@@ -60,24 +60,24 @@ export const getBalance = async address => {
 
 export const reducer = amount => {
   if (amount < Math.pow(10, 3)) {
-    var num = amount;
-    if (num % 1 != 0) return num.toFixed(2) + 'i';
+    const num = amount;
+    if (num % 1 !== 0) return num.toFixed(2) + 'i';
     return num + 'i';
   } else if (amount < Math.pow(10, 6)) {
-    var num = amount / Math.pow(10, 3);
-    if (num % 1 != 0) return num.toFixed(2) + 'Ki';
+    const num = amount / Math.pow(10, 3);
+    if (num % 1 !== 0) return num.toFixed(2) + 'Ki';
     return num + 'Ki';
   } else if (amount < Math.pow(10, 9)) {
-    var num = amount / Math.pow(10, 6);
-    if (num % 1 != 0) return num.toFixed(2) + 'Mi';
+    const num = amount / Math.pow(10, 6);
+    if (num % 1 !== 0) return num.toFixed(2) + 'Mi';
     return num + 'Mi';
   } else if (amount < Math.pow(10, 12)) {
-    var num = amount / Math.pow(10, 9);
-    if (num % 1 != 0) return num.toFixed(2) + 'Gi';
+    const num = amount / Math.pow(10, 9);
+    if (num % 1 !== 0) return num.toFixed(2) + 'Gi';
     return num + 'Gi';
   } else if (amount < Math.pow(10, 15)) {
-    var num = amount / Math.pow(10, 12);
-    if (num % 1 != 0) return num.toFixed(2) + 'Ti';
+    const num = amount / Math.pow(10, 12);
+    if (num % 1 !== 0) return num.toFixed(2) + 'Ti';
     return num + 'Ti';
   }
 };

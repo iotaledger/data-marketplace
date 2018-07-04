@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 // import { Link } from '../../routes'
 import { Link } from 'react-router-dom';
 export default class extends React.Component {
@@ -17,7 +17,7 @@ export default class extends React.Component {
   sort = devices => {
     let slides = [];
     let count = -1;
-    devices.filter(device => !device.inactive).map((device, i) => {
+    devices.filter(device => !device.inactive).forEach((device, i) => {
       if (i % 6 === 0) {
         count++;
         slides[count] = [];
@@ -156,34 +156,34 @@ const Shape = styled.img`
   }
 `;
 
-const Companies = styled.nav`
-  display: flex;
-  justify-content: center;
-  margin: 0 0 3rem;
-  flex-wrap: wrap;
-`;
+// const Companies = styled.nav`
+//   display: flex;
+//   justify-content: center;
+//   margin: 0 0 3rem;
+//   flex-wrap: wrap;
+// `;
 
-const Tab = styled.span`
-  border-radius: 100px;
-  font-size: 80%;
-  margin: 10px 5px;
-  border: none;
-  padding: 0.5rem 0.6rem 0.3rem;
-  outline: none;
-  cursor: pointer;
-  ${props =>
-    props.active
-      ? css`
-          color: #fff;
-          background-color: #009fff;
-          box-shadow: 0 16px 25px 0 rgba(0, 159, 255, 0.27);
-        `
-      : css`
-          border: 1px solid #eaecee;
-          color: #808b92;
-          background-color: #fff;
-        `};
-`;
+// const Tab = styled.span`
+//   border-radius: 100px;
+//   font-size: 80%;
+//   margin: 10px 5px;
+//   border: none;
+//   padding: 0.5rem 0.6rem 0.3rem;
+//   outline: none;
+//   cursor: pointer;
+//   ${props =>
+//     props.active
+//       ? css`
+//           color: #fff;
+//           background-color: #009fff;
+//           box-shadow: 0 16px 25px 0 rgba(0, 159, 255, 0.27);
+//         `
+//       : css`
+//           border: 1px solid #eaecee;
+//           color: #808b92;
+//           background-color: #fff;
+//         `};
+// `;
 
 const Section = styled.section`
   position: relative;
@@ -321,9 +321,6 @@ const RowIcon = styled.img`
   position: relative;
   top: 1px;
 `;
-const SensorIcon = styled.img`
-  margin-right: 10px;
-`;
 const CardFooter = styled.footer`
   padding: 20px 30px;
   background-color: rgba(206, 218, 226, 0.2);
@@ -348,9 +345,9 @@ const InfoValue = styled.span`
   line-height: 16px;
   font-weight: 800;
 `;
-const CardIcon = styled.img`
-  margin-right: 10px;
-`;
+// const CardIcon = styled.img`
+//   margin-right: 10px;
+// `;
 const SensorType = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   position: absolute;

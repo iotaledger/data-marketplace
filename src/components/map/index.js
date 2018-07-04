@@ -1,14 +1,10 @@
 import React from 'react';
-import styled, { css, injectGlobal } from 'styled-components';
+import styled, { injectGlobal } from 'styled-components';
 import MapGL, { Popup, NavigationControl } from 'react-map-gl';
-// import { Link } from '../../routes'
 import { Link } from 'react-router-dom';
-import CSS from './css';
+import './css';
 import Controls from './controls';
-import { getBalance } from '../../lib/utils';
-import Overlay from './overlay';
 import Markers from './markers';
-import iconMapping from './icon-atlas.json';
 
 const mapControls = new Controls();
 
@@ -164,15 +160,15 @@ export default class extends React.Component {
   }
 }
 
-const Clear = styled.div`
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 999;
-  /* pointer-events: none; */
-`;
+// const Clear = styled.div`
+//   position: absolute;
+//   top: 0;
+//   bottom: 0;
+//   left: 0;
+//   right: 0;
+//   z-index: 999;
+//   /* pointer-events: none; */
+// `;
 
 const Main = styled.div`
   position: relative;
@@ -206,13 +202,13 @@ const Header = styled.div`
   }
 `;
 
-const Nav = styled.div`
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  padding: 10px;
-  z-index: 100;
-`;
+// const Nav = styled.div`
+//   position: absolute;
+//   top: 0px;
+//   left: 0px;
+//   padding: 10px;
+//   z-index: 100;
+// `;
 
 const Heading = styled.h3`
   text-transform: capitalize;
@@ -284,15 +280,15 @@ const HeaderBgMobile = styled.img`
   }
 `;
 
-const SensorCardWrapper = styled.div`
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  @media (max-width: 760px) {
-    display: block;
-  }
-`;
+// const SensorCardWrapper = styled.div`
+//   position: absolute;
+//   bottom: 20px;
+//   left: 50%;
+//   transform: translateX(-50%);
+//   @media (max-width: 760px) {
+//     display: block;
+//   }
+// `;
 
 const SensorCard = styled.a`
   display: block;
@@ -346,9 +342,9 @@ const InfoValue = styled.span`
   font-weight: 400;
   color: #fff;
 `;
-const CardIcon = styled.img`
-  margin-right: 10px;
-`;
+// const CardIcon = styled.img`
+//   margin-right: 10px;
+// `;
 const LocationIcon = styled.img`
   margin: 0 6px 0 13px;
 `;
