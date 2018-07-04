@@ -25,7 +25,7 @@ const Header = styled.header`
   display: flex;
 `;
 
-const Back = styled.a`
+const Back = styled(Link)`
   display: flex;
   justify-content: center;
   height: 100%;
@@ -88,11 +88,9 @@ const Block = styled.div`
 
 export default props => (
   <Main>
-    <Link to={`/#map`}>
-      <Back>
-        <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
-      </Back>
-    </Link>
+    <Back to={`/#map`}>
+      <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
+    </Back>
 
     <Header>
       <Block>
