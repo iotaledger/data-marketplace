@@ -1,0 +1,28 @@
+{
+  "hosting": {
+    "public": "build",
+    "headers": [
+      {
+        "source": "**/*",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "package.json",
+      "README.md",
+      "**/.*",
+      "**/node_modules/**",
+      "node_modules/**",
+      "public/**",
+      "src/**",
+      "firebase_functions/**",
+      ".git/**"
+    ]
+  }
+}
