@@ -1,8 +1,9 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from '../../routes'
+import React from 'react';
+import styled from 'styled-components';
+// import { Link } from '../../routes'
+import { Link } from 'react-router-dom';
 
-import Card from './index'
+import Card from './index';
 
 const Heading = styled.p`
   font-size: 28px;
@@ -11,14 +12,14 @@ const Heading = styled.p`
   margin-bottom: 12px;
   text-align: center;
   color: #009fff;
-`
+`;
 const Info = styled.p`
   font-size: 17px;
   line-height: 28px;
   color: #fff;
   text-align: center;
   margin-bottom: auto;
-`
+`;
 const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -36,14 +37,14 @@ const Button = styled.button`
   box-shadow: 0 10px 20px 0 #0a2056;
   font-weight: 700;
   background-color: #009fff;
-`
+`;
 const Internal = styled.div`
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
   align-items: center;
   width: 100%;
-`
+`;
 const Input = styled.input`
   background: transparent;
   border: none;
@@ -53,14 +54,12 @@ const Input = styled.input`
   &:placeholder {
     color: rgba(0, 0, 0, 0.3);
   }
-`
+`;
 
 const content = (state, change, submit) => (
   <Internal>
     <Heading>Grandfather Old Device</Heading>
-    <Info>
-      Enter you device's ID and Secret Key (Used in the publish script).
-    </Info>
+    <Info>Enter you device's ID and Secret Key (Used in the publish script).</Info>
     <Input
       type="text"
       placeholder={'Enter Device ID'}
@@ -83,31 +82,31 @@ const content = (state, change, submit) => (
       Load Device
     </Button>
   </Internal>
-)
+);
 
 const error = props => (
   <Internal>
     <Heading>{props.error.heading}</Heading>
     <Info>{props.error.body}</Info>
     {props.button && (
-      <Link route={'/'}>
+      <Link to={'/'}>
         <Button type="button" className="btn btn-accent txt-bold modal-trigger">
           Go back
         </Button>
       </Link>
     )}
   </Internal>
-)
+);
 
 export default class extends React.Component {
-  state = { id: '', sk: '' }
+  state = { id: '', sk: '' };
   change = e => {
-    this.setState({ [e.target.name]: e.target.value })
-  }
+    this.setState({ [e.target.name]: e.target.value });
+  };
 
   submit = () => {
-    this.props.grandfather(this.state.id, this.state.sk)
-  }
+    this.props.grandfather(this.state.id, this.state.sk);
+  };
   render() {
     return (
       <Card
@@ -115,6 +114,6 @@ export default class extends React.Component {
         cardContent={content(this.state, this.change, this.submit)}
         errorContent={error(this.props)}
       />
-    )
+    );
   }
 }
