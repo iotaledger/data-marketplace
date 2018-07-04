@@ -1,4 +1,4 @@
-import styled, { css, injectGlobal } from 'styled-components'
+import { injectGlobal } from 'styled-components';
 
 injectGlobal`
 .mapboxgl-map {
@@ -327,4 +327,4 @@ a.mapboxgl-ctrl-logo {
         display:none;
     }
 }
-`
+`;
