@@ -1,7 +1,7 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
-import SensorCard from '../sensor-card'
-import Inview from '../inview'
+import React from 'react';
+import styled from 'styled-components';
+import SensorCard from '../sensor-card';
+import Inview from '../inview';
 
 const InfoCol = styled.main`
   position: relative;
@@ -26,47 +26,47 @@ const InfoCol = styled.main`
       visibility: hidden;
     }
   }
-`
-const Pulse = keyframes`
-0% {
-   opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`
-const Loader = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 300px;
-  width: 100%;
-  opacity: 0;
-  animation: ${props =>
-    !props.show ? `${Pulse} 1s alternate infinite` : `none`};
-  z-index: 0;
-  background-image: radial-gradient(
-    ellipse at top,
-    rgba(116, 209, 234, 0.3),
-    rgba(116, 209, 234, 0) 50%
-  );
-  @media (max-width: 1200px) {
-    width: calc(100% + 30px);
-    background-image: radial-gradient(
-      ellipse at top left,
-      rgba(116, 209, 234, 0.3),
-      rgba(116, 209, 234, 0) 50%
-    );
-  }
-  @media (max-width: 760px) {
-    width: 100%;
-    background-image: radial-gradient(
-      ellipse at top,
-      rgba(116, 209, 234, 0.3),
-      rgba(116, 209, 234, 0) 50%
-    );
-  }
-`
+`;
+// const Pulse = keyframes`
+// 0% {
+//    opacity: 1;
+//   }
+//   100% {
+//     opacity: 0;
+//   }
+// `;
+// const Loader = styled.div`
+//   position: absolute;
+//   top: 0;
+//   left: 0;
+//   height: 300px;
+//   width: 100%;
+//   opacity: 0;
+//   animation: ${props =>
+//     !props.show ? `${Pulse} 1s alternate infinite` : `none`};
+//   z-index: 0;
+//   background-image: radial-gradient(
+//     ellipse at top,
+//     rgba(116, 209, 234, 0.3),
+//     rgba(116, 209, 234, 0) 50%
+//   );
+//   @media (max-width: 1200px) {
+//     width: calc(100% + 30px);
+//     background-image: radial-gradient(
+//       ellipse at top left,
+//       rgba(116, 209, 234, 0.3),
+//       rgba(116, 209, 234, 0) 50%
+//     );
+//   }
+//   @media (max-width: 760px) {
+//     width: 100%;
+//     background-image: radial-gradient(
+//       ellipse at top,
+//       rgba(116, 209, 234, 0.3),
+//       rgba(116, 209, 234, 0) 50%
+//     );
+//   }
+// `
 const CardWrapper = styled.div`
   display: flex;
   flex-flow: row wrap;
@@ -82,7 +82,7 @@ const CardWrapper = styled.div`
     margin-left: 0;
     align-items: center;
   }
-`
+`;
 
 export default props => (
   <InfoCol>
@@ -91,12 +91,7 @@ export default props => (
         props.packets
           .sort((a, b) => b.time - a.time)
           .map((packet, i) => (
-            <SensorCard
-              index={i}
-              key={i}
-              layout={props.layout}
-              packet={packet}
-            />
+            <SensorCard index={i} key={i} layout={props.layout} packet={packet} />
           ))}
       <Fetcher>
         {props.dataEnd ? (
@@ -116,13 +111,13 @@ export default props => (
       </Fetcher>
     </CardWrapper>
   </InfoCol>
-)
+);
 const Block = styled.div`
   width: 10px;
   height: 10px;
   position: absolute;
   bottom: 0;
-`
+`;
 const Fetcher = styled.div`
   position: absolute;
   bottom: 10px;
@@ -132,15 +127,15 @@ const Fetcher = styled.div`
   @media (max-width: 760px) {
     position: relative;
   }
-`
+`;
 
 const Hide = styled.div`
   opacity: 0;
   @media (max-width: 760px) {
     opacity: 1;
   }
-`
-const More = styled.div``
+`;
+const More = styled.div``;
 const Loading = () => {
   return (
     <svg
@@ -153,10 +148,7 @@ const Loading = () => {
       <g fill="none" fillRule="evenodd">
         <g transform="translate(1 1)" strokeWidth="2">
           <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
-          <path
-            d="M36 18c0-9.94-8.06-18-18-18"
-            transform="rotate(319.698 18 18)"
-          >
+          <path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(319.698 18 18)">
             <animateTransform
               attributeName="transform"
               type="rotate"
@@ -169,5 +161,5 @@ const Loading = () => {
         </g>
       </g>
     </svg>
-  )
-}
+  );
+};

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import FB from '../lib/firebase';
 
-import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils';
+// import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils';
 
 import DeviceNav from '../components/device-nav';
 import LoginModal from '../components/login-modal';
@@ -58,6 +58,8 @@ export default class extends React.Component {
         provider.addScope('email');
         provider.addScope('profile');
         break;
+      default:
+        break;
     }
 
     this.firebase
@@ -65,19 +67,19 @@ export default class extends React.Component {
       .signInWithPopup(provider)
       .then(result => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
+        // var token = result.credential.accessToken;
         // The signed-in user info.
         var user = result.user;
         this.getUser(user);
       })
       .catch(error => {
         // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
+        // var errorCode = error.code;
+        // var errorMessage = error.message;
         // The email of the user's account used.
-        var email = error.email;
+        // var email = error.email;
         // The firebase.auth.AuthCredential type that was used.
-        var credential = error.credential;
+        // var credential = error.credential;
         // ...
       });
   };
@@ -110,7 +112,7 @@ export default class extends React.Component {
         querySnapshot.forEach(doc => {
           console.log(doc.id);
           devices.push(doc.data());
-          if (devices.length == querySnapshot.size) return this.setState({ devices });
+          if (devices.length === querySnapshot.size) return this.setState({ devices });
         });
       });
   };
@@ -245,7 +247,7 @@ export default class extends React.Component {
     );
   };
   render() {
-    var { devices, packets, user, loading, error, button, grandModal } = this.state;
+    var { devices, user, loading, error, button, grandModal } = this.state;
     return (
       <Main>
         <DeviceNav {...this.state} logout={this.logout} />

@@ -184,38 +184,38 @@ const Error = styled.p`
   }
 `;
 
-const Ul = styled.ul`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  margin: 40px auto;
-  width: 80%;
-  list-style: none;
-  @media (max-width: 1120px) {
-    justify-content: space-around;
-  }
-  @media (max-width: 760px) {
-    flex-flow: row wrap;
-    max-width: 370px;
-    margin: 0 auto;
-  }
-`;
-const Li = styled.li`
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  vertical-align: baseline;
-  @media (max-width: 1120px) {
-    &:not(:last-of-type) {
-      margin-right: 0;
-    }
-  }
-  @media (max-width: 760px) {
-    margin-bottom: 40px;
-  }
-`;
+// const Ul = styled.ul`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   flex-wrap: wrap;
+//   margin: 40px auto;
+//   width: 80%;
+//   list-style: none;
+//   @media (max-width: 1120px) {
+//     justify-content: space-around;
+//   }
+//   @media (max-width: 760px) {
+//     flex-flow: row wrap;
+//     max-width: 370px;
+//     margin: 0 auto;
+//   }
+// `;
+// const Li = styled.li`
+//   margin: 0;
+//   padding: 0;
+//   border: 0;
+//   font-size: 100%;
+//   vertical-align: baseline;
+//   @media (max-width: 1120px) {
+//     &:not(:last-of-type) {
+//       margin-right: 0;
+//     }
+//   }
+//   @media (max-width: 760px) {
+//     margin-bottom: 40px;
+//   }
+// `;
 const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;

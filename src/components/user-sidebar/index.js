@@ -1,9 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { reducer, getBalance } from '../../lib/utils';
 import Clipboard from 'react-clipboard.js';
-// import { Link } from '../../routes'
-import { Link } from 'react-router-dom';
 const Sidebar = styled.aside`
   background: rgba(240, 240, 240, 1);
   display: flex;
@@ -82,7 +79,6 @@ export default class extends React.Component {
   };
 
   render() {
-    var { deviceInfo } = this.props;
     return (
       <Sidebar>
         <Details>
@@ -143,11 +139,9 @@ export default class extends React.Component {
             <Alert {...this.state}>{this.state.alertMessage}</Alert>
 
             <DetailRow>
-              <Link to="https://marketplace.tangle.works">
-                <a href="https://marketplace.tangle.works" target="_blank">
-                  <DetailKey>View the API documentation</DetailKey>
-                </a>
-              </Link>
+              <a href="https://marketplace.tangle.works" target="_blank" rel="noopener noreferrer">
+                <DetailKey>View the API documentation</DetailKey>
+              </a>
             </DetailRow>
           </Details>
         )}
@@ -189,51 +183,51 @@ const Grandfather = styled.button`
     margin-right: 0;
   }
 `;
-const A = styled.a`
-  text-decoration: none;
-`;
+// const A = styled.a`
+//   text-decoration: none;
+// `;
 
-const More = styled.div`
-  color: white;
-  padding: 20px 20px 10px;
-  margin: 10px 0 20px;
-`;
+// const More = styled.div`
+//   color: white;
+//   padding: 20px 20px 10px;
+//   margin: 10px 0 20px;
+// `;
 
-const Fetcher = styled.div`
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  display: flex;
-  justify-content: center;
-  @media (max-width: 760px) {
-    display: none;
-  }
-`;
+// const Fetcher = styled.div`
+//   position: absolute;
+//   bottom: 20px;
+//   left: 20px;
+//   display: flex;
+//   justify-content: center;
+//   @media (max-width: 760px) {
+//     display: none;
+//   }
+// `;
 
-const Loading = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="80"
-      height="80"
-      viewBox="0 0 38 38"
-      stroke="#fff"
-    >
-      <g fill="none" fillRule="evenodd">
-        <g transform="translate(1 1)" strokeWidth="2">
-          <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
-          <path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(319.698 18 18)">
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="0 18 18"
-              to="360 18 18"
-              dur="1s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </g>
-      </g>
-    </svg>
-  );
-};
+// const Loading = () => {
+//   return (
+//     <svg
+//       xmlns="http://www.w3.org/2000/svg"
+//       width="80"
+//       height="80"
+//       viewBox="0 0 38 38"
+//       stroke="#fff"
+//     >
+//       <g fill="none" fillRule="evenodd">
+//         <g transform="translate(1 1)" strokeWidth="2">
+//           <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
+//           <path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(319.698 18 18)">
+//             <animateTransform
+//               attributeName="transform"
+//               type="rotate"
+//               from="0 18 18"
+//               to="360 18 18"
+//               dur="1s"
+//               repeatCount="indefinite"
+//             />
+//           </path>
+//         </g>
+//       </g>
+//     </svg>
+//   );
+// };

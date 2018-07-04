@@ -43,24 +43,24 @@ const Info = styled.p`
   text-align: center;
   margin-bottom: auto;
 `;
-const Button = styled.button`
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  font: 15px 'Nunito Sans', sans-serif;
-  letter-spacing: 0.47px;
-  padding: 20px 38px;
-  border-radius: 100px;
-  text-transform: uppercase;
-  color: #fff;
-  font-size: 12px;
-  letter-spacing: 0.38px;
-  padding: 12px 21px;
-  margin: 30px 0 0;
-  box-shadow: 0 10px 20px 0 #0a2056;
-  font-weight: 700;
-  background-color: #009fff;
-`;
+// const Button = styled.button`
+//   -webkit-appearance: none;
+//   -moz-appearance: none;
+//   appearance: none;
+//   font: 15px 'Nunito Sans', sans-serif;
+//   letter-spacing: 0.47px;
+//   padding: 20px 38px;
+//   border-radius: 100px;
+//   text-transform: uppercase;
+//   color: #fff;
+//   font-size: 12px;
+//   letter-spacing: 0.38px;
+//   padding: 12px 21px;
+//   margin: 30px 0 0;
+//   box-shadow: 0 10px 20px 0 #0a2056;
+//   font-weight: 700;
+//   background-color: #009fff;
+// `;
 
 export default props => (
   <Modal className="access-modal-wrapper" show={props.show}>
