@@ -1,11 +1,13 @@
-import React from 'react'
-import styled, { keyframes } from 'styled-components'
-import { Link } from '../../routes'
+import React from 'react';
+import styled, { keyframes } from 'styled-components';
+// import { Link } from '../../routes'
+import { Link } from 'react-router-dom';
 
 export default class extends React.Component {
-  state = {}
+  state = {};
 
   render() {
+    const { onAnchorClick } = this.props;
     return (
       <Header>
         <Container>
@@ -14,31 +16,24 @@ export default class extends React.Component {
               <img src="/static/logotypes/logo-header.svg" alt="Logo IOTA" />
             </a>
             <Heading>
-              IOTA makes it<br className="desktop-hidden-later mobile-hidden-later" />{' '}
-              possible<br className="tablet-hidden-later mobile-hidden-later" />{' '}
-              to securely<br className="desktop-hidden-later mobile-hidden-later" />{' '}
-              store, sell,<br className="tablet-hidden-later mobile-hidden-later" />{' '}
-              and access<br className="desktop-hidden-later mobile-hidden" />{' '}
-              data streams.
+              IOTA makes it<br className="desktop-hidden-later mobile-hidden-later" /> possible<br className="tablet-hidden-later mobile-hidden-later" />{' '}
+              to securely<br className="desktop-hidden-later mobile-hidden-later" /> store, sell,<br className="tablet-hidden-later mobile-hidden-later" />{' '}
+              and access<br className="desktop-hidden-later mobile-hidden" /> data streams.
             </Heading>
             <Tagline>
-              Never has getting access to diverse, fine-granular data been this
-              easy!
+              Never has getting access to diverse, fine-granular data been this easy!
             </Tagline>
-            <a
-              href={'https://blog.iota.org/iota-data-marketplace-cb6be463ac7f'}
-              target={'_blank'}
-            >
+            <a href={'https://blog.iota.org/iota-data-marketplace-cb6be463ac7f'} target={'_blank'}>
               <Button type="button">About the Marketplace</Button>
             </a>
-            <Link route={'/#map'} prefetch>
+            <Link to={'/#map'} onClick={() => onAnchorClick('map')}>
               <SubLink>{'Try the Marketplace'.toUpperCase()}</SubLink>
             </Link>
-            <Link route={'/#participants'} prefetch>
+            <Link to={'/#participants'} onClick={() => onAnchorClick('participants')}>
               <SubLink>{'Participants'.toUpperCase()}</SubLink>
             </Link>
 
-            <Link route={'/#contact'} prefetch>
+            <Link to={'/#contact'} onClick={() => onAnchorClick('contact')}>
               <SubLink>{'Get involved'.toUpperCase()}</SubLink>
             </Link>
           </Info>
@@ -61,20 +56,11 @@ export default class extends React.Component {
             <GraphicBlock />
           </Graphics>
         </Container>
-        <Shape1
-          src="/static/shapes/shape-header-bg-1.svg"
-          alt="Background shape"
-        />
-        <Shape2
-          src="/static/shapes/shape-header-bg-2.svg"
-          alt="Background shape"
-        />
-        <Shape3
-          src="/static/shapes/shape-header-hero.svg"
-          alt="Background shape"
-        />
+        <Shape1 src="/static/shapes/shape-header-bg-1.svg" alt="Background shape" />
+        <Shape2 src="/static/shapes/shape-header-bg-2.svg" alt="Background shape" />
+        <Shape3 src="/static/shapes/shape-header-hero.svg" alt="Background shape" />
       </Header>
-    )
+    );
   }
 }
 
@@ -97,14 +83,14 @@ const SubLink = styled.p`
   &:hover {
     opacity: 1;
   }
-`
+`;
 
 const Header = styled.header`
   position: relative;
   top: -45px;
   transform: skewY(-4deg);
   background-image: linear-gradient(190deg, #f3f8fa 1%, #eaf0f4 95%);
-`
+`;
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -112,7 +98,7 @@ const Container = styled.div`
   padding: 0 15px;
   margin-right: auto;
   margin-left: auto;
-`
+`;
 const Info = styled.div`
   position: relative;
   top: 30px;
@@ -136,7 +122,7 @@ const Info = styled.div`
   @media (max-width: 600px) {
     margin-left: 5px;
   }
-`
+`;
 const Heading = styled.h1`
   font-size: 42px;
   line-height: 62px;
@@ -159,7 +145,7 @@ const Heading = styled.h1`
     margin-top: 40px;
     margin-bottom: 20px;
   }
-`
+`;
 const Tagline = styled.h2`
   font-size: 22px;
   line-height: 36px;
@@ -179,7 +165,7 @@ const Tagline = styled.h2`
   @media (max-width: 470px) {
     max-width: 230px;
   }
-`
+`;
 
 const Button = styled.button`
   background-color: #009fff;
@@ -195,7 +181,7 @@ const Button = styled.button`
   color: #fff;
   font-weight: 700;
   margin-bottom: 15px;
-`
+`;
 
 const Graphics = styled.div`
   position: relative;
@@ -278,7 +264,7 @@ const Graphics = styled.div`
       left: 200px;
     }
   }
-`
+`;
 const GraphicBlock = styled.div`
   position: relative;
   bottom: 50px;
@@ -298,20 +284,20 @@ const GraphicBlock = styled.div`
   @media (max-width: 700px) {
     display: none;
   }
-`
+`;
 
 const float = num => {
   return keyframes`
       0% {transform: translateY(0px) translateX(0px);}
-      50% {transform: translateY(${Math.random() * -5 +
-        'px'}) translateX(${Math.random() * -3 + 'px'});}
-      100% {transform: translateY(0px) translateX(0px);}`
-}
+      50% {transform: translateY(${Math.random() * -5 + 'px'}) translateX(${Math.random() * -3 +
+    'px'});}
+      100% {transform: translateY(0px) translateX(0px);}`;
+};
 
 const Graphic = styled.img`
   position: relative;
   z-index: 50;
-`
+`;
 const Graphic1 = Graphic.extend`
   top: 30px;
   left: 75%;
@@ -323,7 +309,7 @@ const Graphic1 = Graphic.extend`
   @media (max-width: 700px) {
     display: none;
   }
-`
+`;
 const Graphic2 = Graphic.extend`
   animation: 5s ${float(2)} ease infinite 0s;
 
@@ -348,7 +334,7 @@ const Graphic2 = Graphic.extend`
   @media (max-width: 400px) {
     left: 150px;
   }
-`
+`;
 const Graphic3 = Graphic.extend`
   top: 20px;
   left: 115px;
@@ -368,23 +354,23 @@ const Graphic3 = Graphic.extend`
   @media (max-width: 470px) {
     display: none;
   }
-`
+`;
 
 const Shape = styled.img`
   position: absolute;
   z-index: -10;
   transform: skewY(4deg);
-`
+`;
 
 const Shape1 = Shape.extend`
   bottom: -70px;
   right: 86vw;
-`
+`;
 
 const Shape2 = Shape.extend`
   top: 50px;
   left: 36vw;
-`
+`;
 const Shape3 = Shape.extend`
   top: -165px;
   left: 56vw;
@@ -401,4 +387,4 @@ const Shape3 = Shape.extend`
     top: -220px;
     left: 80vw;
   }
-`
+`;

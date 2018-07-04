@@ -1,6 +1,6 @@
-import React from 'react'
-import styled from 'styled-components'
-import Recaptcha from 'react-recaptcha'
+import React from 'react';
+import styled from 'styled-components';
+import Recaptcha from 'react-recaptcha';
 
 export default class extends React.Component {
   state = {
@@ -11,40 +11,46 @@ export default class extends React.Component {
     captcha: null,
     loading: false,
     success: false,
-    error: null
+    error: null,
+  };
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.anchor && nextProps.anchor === 'contact') {
+      const target = document.querySelector('#contact');
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   verify = data => {
-    this.setState({ captcha: data })
-  }
+    this.setState({ captcha: data });
+  };
 
   submit = async e => {
-    e.preventDefault()
-    let state = this.state
-    if (state.loading) return
+    e.preventDefault();
+    let state = this.state;
+    if (state.loading) return;
 
     if (!state.name || !state.email || !state.body)
-      return this.setState({ error: 'Please fill out all fields' })
+      return this.setState({ error: 'Please fill out all fields' });
 
-    if (!state.captcha)
-      return this.setState({ error: 'Please complete the captcha' })
+    if (!state.captcha) return this.setState({ error: 'Please complete the captcha' });
 
     this.setState({ loading: true }, async () => {
       var response = await fetch('/email', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(state)
-      })
-      var data = await response.json()
-      console.log(data)
-      this.setState({ success: true })
-    })
-  }
+        body: JSON.stringify(state),
+      });
+      var data = await response.json();
+      console.log(data);
+      this.setState({ success: true });
+    });
+  };
 
   render() {
-    var { name, email, body, company, success, error } = this.state
+    var { name, email, body, company, success, error } = this.state;
     return (
       <S id="contact">
         <C>
@@ -94,14 +100,14 @@ export default class extends React.Component {
 
         <Bottom />
       </S>
-    )
+    );
   }
 }
 
 const Bottom = styled.div`
   position: absolute;
   height: 50px;
-`
+`;
 const F = styled.form`
   display: flex;
   margin: 0 auto;
@@ -109,7 +115,7 @@ const F = styled.form`
   flex-direction: column;
   align-items: center;
   max-width: 400px;
-`
+`;
 
 const I = styled.input`
   background: transparent;
@@ -122,7 +128,7 @@ const I = styled.input`
   &::placeholder {
     color: rgba(0, 0, 0, 0.3);
   }
-`
+`;
 const T = styled.textarea`
   height: 100px;
   width: 100%;
@@ -135,7 +141,7 @@ const T = styled.textarea`
   &::placeholder {
     color: rgba(0, 0, 0, 0.3);
   }
-`
+`;
 
 const S = styled.section`
   background-image: linear-gradient(-189deg, #eaf0f4 1%, #f3f8fa 95%);
@@ -144,7 +150,7 @@ const S = styled.section`
   @media (max-width: 760px) {
     padding-bottom: 45px;
   }
-`
+`;
 const C = styled.div`
   /* transform: skewY(2deg); */
   width: 100%;
@@ -153,7 +159,7 @@ const C = styled.div`
   margin-right: auto;
   margin-left: auto;
   margin-top: 60px;
-`
+`;
 const H = styled.p`
   font-size: 13px;
   font-weight: 800;
@@ -164,7 +170,7 @@ const H = styled.p`
   @media (max-width: 760px) {
     margin-bottom: 40px;
   }
-`
+`;
 const Error = styled.p`
   padding: 15px 0 0px;
   font-size: 13px;
@@ -176,7 +182,7 @@ const Error = styled.p`
   @media (max-width: 760px) {
     margin-bottom: 40px;
   }
-`
+`;
 
 const Ul = styled.ul`
   display: flex;
@@ -194,7 +200,7 @@ const Ul = styled.ul`
     max-width: 370px;
     margin: 0 auto;
   }
-`
+`;
 const Li = styled.li`
   margin: 0;
   padding: 0;
@@ -209,7 +215,7 @@ const Li = styled.li`
   @media (max-width: 760px) {
     margin-bottom: 40px;
   }
-`
+`;
 const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -227,4 +233,4 @@ const Button = styled.button`
   box-shadow: 0 10px 20px 0 rgba(10, 32, 86, 0.4);
   font-weight: 700;
   background-color: #009fff;
-`
+`;

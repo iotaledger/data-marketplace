@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import dynamic from 'next/dynamic';
+// import dynamic from 'next/dynamic';
 
 import Header from '../components/header';
 import Features from '../components/feature-section';
@@ -10,32 +10,41 @@ import Benefits from '../components/benefits';
 import Form from '../components/form';
 import Footer from '../components/footer';
 import Cookies from '../components/cookie';
+import Map from '../components/map';
 
 import FB from '../lib/firebase';
 import { allDevices } from '../lib/auth-user';
 
-const Map = dynamic(import('../components/map'), {
-  ssr: false,
-});
+// const Map = dynamic(import('../components/map'), {
+//   ssr: false,
+// });
 
 export default class extends React.Component {
-  state = { devices: [], loading: true };
+  state = {
+    devices: [],
+    loading: true,
+    anchor: null,
+  };
+
   componentDidMount = async () => {
     // Firebase
     const firebase = await FB();
     var devices = await allDevices(firebase);
     this.setState({ devices, loading: false });
   };
+
+  onAnchorClick = anchor => this.setState({ anchor });
+
   render() {
     return (
       <Main>
-        <Header />
+        <Header onAnchorClick={this.onAnchorClick} />
         <Features />
         <Map {...this.state} />
         <SensorList {...this.state} />
-        <Partners />
+        <Partners {...this.state} />
         <Benefits />
-        {/* <Form {...this.state} /> */}
+        <Form {...this.state} />
         <Footer />
         {/* <Cookies /> */}
       </Main>

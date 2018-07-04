@@ -1,8 +1,9 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from '../../routes'
+import React from 'react';
+import styled from 'styled-components';
+// import { Link } from '../../routes'
+import { Link } from 'react-router-dom';
 
-import Wallet from '../wallet'
+import Wallet from '../wallet';
 
 const Main = styled.nav`
   display: flex;
@@ -18,11 +19,11 @@ const Main = styled.nav`
   @media (max-width: 760px) {
     height: 66px;
   }
-`
+`;
 const Header = styled.header`
   margin: 10px auto 0 30px;
   display: flex;
-`
+`;
 
 const Back = styled.a`
   display: flex;
@@ -35,12 +36,12 @@ const Back = styled.a`
     width: 46px;
     border: none;
   }
-`
+`;
 
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
-`
+`;
 
 const DeviceID = styled.span`
   font-size: 24px;
@@ -52,7 +53,7 @@ const DeviceID = styled.span`
     font-size: 15px;
     top: -4px;
   }
-`
+`;
 
 const RightHeader = styled.div`
   margin: 5px 30px 0 30px;
@@ -63,12 +64,12 @@ const RightHeader = styled.div`
     margin: 10px 20px 0 30px;
     width: 120px;
   }
-`
+`;
 const Block = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-`
+`;
 const NavGraphics = styled.img`
   height: 100%;
   width: auto;
@@ -76,18 +77,18 @@ const NavGraphics = styled.img`
     width: 66px;
     object-fit: cover;
   }
-`
+`;
 
 const SensorIcon = styled.img`
   margin-right: 10px;
   @media (max-width: 760px) {
     display: none;
   }
-`
+`;
 
 export default props => (
   <Main>
-    <Link route={`/#map`} prefetch>
+    <Link to={`/#map`}>
       <Back>
         <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
       </Back>
@@ -95,16 +96,12 @@ export default props => (
 
     <Header>
       <Block>
-        <Desc>
-          {props.deviceInfo.type ? props.deviceInfo.type : 'Loading Device'}
-        </Desc>
-        <DeviceID>
-          {props.deviceInfo.sensorId && props.deviceInfo.sensorId}
-        </DeviceID>
+        <Desc>{props.deviceInfo.type ? props.deviceInfo.type : 'Loading Device'}</Desc>
+        <DeviceID>{props.deviceInfo.sensorId && props.deviceInfo.sensorId}</DeviceID>
       </Block>
     </Header>
     <RightHeader>
       <Wallet {...props} />
     </RightHeader>
   </Main>
-)
+);
