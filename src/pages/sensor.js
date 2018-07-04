@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import FB from '../lib/firebase';
 import Mam from 'mam.client.js';
 import { getData, deviceInfo, userAuth } from '../lib/auth-user';
-import { iota, initWallet, purchaseData } from '../lib/utils';
+import { iota, initWallet, purchaseData, getBalance } from '../lib/utils';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -35,13 +35,18 @@ export default class extends React.Component {
     const firebase = await FB();
     const store = firebase.firestore();
     const { uid } = await userAuth(firebase);
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+
     // Get data
     const userRef = store.collection('users').doc(uid);
-    const deviceRef = store.collection('devices').doc(this.props.id);
+    const deviceRef = store.collection('devices').doc(id);
     const device = await deviceInfo(deviceRef, this.props.id);
 
     if (device.address) {
-      // console.log('sensor mount', device.address, device);
       device.balance = await getBalance(device.address);
     }
 
@@ -82,7 +87,13 @@ ID and try again`,
   };
 
   fetch = async (deviceRef, userRef) => {
-    let data = await getData(deviceRef, userRef, this.props.id);
+    const {
+      match: {
+        params: { id },
+      },
+    } = this.props;
+
+    let data = await getData(deviceRef, userRef, id);
     if (typeof data === 'string') {
       return this.setState({ loading: false });
     }

@@ -42,7 +42,7 @@ export const getBalance = async address => {
   )}"], "threshold": 100}`;
   var response;
   try {
-    response = await fetch(node, {
+    response = await fetch(`https://${process.env.API}.marketplace.tangle.works/`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
