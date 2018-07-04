@@ -1,6 +1,6 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from '../../routes'
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const Main = styled.nav`
   display: flex;
@@ -16,11 +16,11 @@ const Main = styled.nav`
   @media (max-width: 760px) {
     height: 66px;
   }
-`
+`;
 const Header = styled.header`
   margin: 10px auto 0 30px;
   display: flex;
-`
+`;
 
 const Back = styled.a`
   display: flex;
@@ -33,12 +33,12 @@ const Back = styled.a`
     width: 46px;
     border: none;
   }
-`
+`;
 
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
-`
+`;
 
 const DeviceID = styled.span`
   font-size: 24px;
@@ -50,7 +50,7 @@ const DeviceID = styled.span`
     font-size: 15px;
     top: -4px;
   }
-`
+`;
 
 const RightHeader = styled.div`
   margin: 5px 30px 0 30px;
@@ -61,12 +61,12 @@ const RightHeader = styled.div`
     margin: 10px 20px 0 30px;
     width: 120px;
   }
-`
+`;
 const Block = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-`
+`;
 const NavGraphics = styled.img`
   height: 100%;
   width: auto;
@@ -74,18 +74,18 @@ const NavGraphics = styled.img`
     width: 66px;
     object-fit: cover;
   }
-`
+`;
 
 const SensorIcon = styled.img`
   margin-right: 10px;
   @media (max-width: 760px) {
     display: none;
   }
-`
+`;
 
 export default props => (
   <Main>
-    <Link route={`/#map`} prefetch>
+    <Link to={`/#map`}>
       <Back>
         <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
       </Back>
@@ -102,15 +102,12 @@ export default props => (
       </Block>
     </Header>
     <RightHeader>
-      {props.user && (
-        <FooterButton onClick={() => props.logout()}>{`Log Out`}</FooterButton>
-      )}
+      {props.user && <FooterButton onClick={() => props.logout()}>{`Log Out`}</FooterButton>}
     </RightHeader>
   </Main>
-)
+);
 const FooterButton = styled.button`
-  color: ${props =>
-    props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`};
+  color: ${props => (props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`)};
   padding: 5px 15px;
   margin-right: -15px;
   font-size: 90%;
@@ -119,4 +116,4 @@ const FooterButton = styled.button`
     margin-left: -15px;
     margin-right: 0;
   }
-`
+`;

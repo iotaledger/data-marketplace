@@ -1,6 +1,5 @@
-import React from 'react'
-import styled from 'styled-components'
-import { Link } from '../../routes'
+import React from 'react';
+import styled from 'styled-components';
 
 const Modal = styled.div`
   position: fixed;
@@ -12,7 +11,7 @@ const Modal = styled.div`
   opacity: ${props => (props.show ? 1 : 0)};
   transition: all 0.5s ease;
   background-color: rgba(14, 56, 160, 0.6);
-`
+`;
 const AccessBox = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -28,7 +27,7 @@ const AccessBox = styled.div`
   border-radius: 6px;
   background-color: rgba(10, 32, 86, 0.9);
   box-shadow: 0 23px 50px 0 rgba(25, 54, 80, 0.1);
-`
+`;
 const Heading = styled.p`
   font-size: 28px;
   font-weight: 100;
@@ -36,14 +35,14 @@ const Heading = styled.p`
   margin-bottom: 12px;
   text-align: center;
   color: #009fff;
-`
+`;
 const Info = styled.p`
   font-size: 17px;
   line-height: 28px;
   color: #fff;
   text-align: center;
   margin-bottom: auto;
-`
+`;
 const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -61,14 +60,12 @@ const Button = styled.button`
   box-shadow: 0 10px 20px 0 #0a2056;
   font-weight: 700;
   background-color: #009fff;
-`
+`;
 
 export default props => (
   <Modal className="access-modal-wrapper" show={props.show}>
     {!props.loading ? (
-      <AccessBox>
-        {!props.error ? props.cardContent : props.errorContent}
-      </AccessBox>
+      <AccessBox>{!props.error ? props.cardContent : props.errorContent}</AccessBox>
     ) : (
       <AccessBox className="access-modal">
         <Heading>{props.loading.heading || '--'} </Heading>
@@ -77,7 +74,7 @@ export default props => (
       </AccessBox>
     )}
   </Modal>
-)
+);
 
 const Loading = () => {
   return (
@@ -91,10 +88,7 @@ const Loading = () => {
       <g fill="none" fillRule="evenodd">
         <g transform="translate(1 1)" strokeWidth="2">
           <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
-          <path
-            d="M36 18c0-9.94-8.06-18-18-18"
-            transform="rotate(319.698 18 18)"
-          >
+          <path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(319.698 18 18)">
             <animateTransform
               attributeName="transform"
               type="rotate"
@@ -107,5 +101,5 @@ const Loading = () => {
         </g>
       </g>
     </svg>
-  )
-}
+  );
+};
