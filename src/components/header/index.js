@@ -39,18 +39,18 @@ export default class extends React.Component {
           </Info>
           <Graphics>
             <Graphic1
-              src="/static/ilustrations/header-image-3.png"
-              srcSet="/static/ilustrations/header-image-3@2x.png 2x"
+              src="/static/illustrations/header-image-3.png"
+              srcSet="/static/illustrations/header-image-3@2x.png 2x"
               alt="IOTA sensor data image"
             />
             <Graphic2
-              src="/static/ilustrations/header-image-1.png"
-              srcSet="/static/ilustrations/header-image-1@2x.png 2x"
+              src="/static/illustrations/header-image-1.png"
+              srcSet="/static/illustrations/header-image-1@2x.png 2x"
               alt="IOTA sensor data image"
             />
             <Graphic3
-              src="/static/ilustrations/header-image-2.png"
-              srcSet="/static/ilustrations/header-image-2@2x.png 2x"
+              src="/static/illustrations/header-image-2.png"
+              srcSet="/static/illustrations/header-image-2@2x.png 2x"
               alt="IOTA sensor data image"
             />
             <GraphicBlock />

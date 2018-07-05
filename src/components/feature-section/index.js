@@ -94,7 +94,7 @@ export default class extends React.Component {
         </div>
         <InfoRow>
           <InfoCol>
-            <Image src="/static/ilustrations/choose.svg" alt="IOTA process lustration" />
+            <Image src="/static/illustrations/choose.svg" alt="IOTA process illustration" />
             <InfoHeading>Choose</InfoHeading>
             <Text>
               Pick a sensor from which you want to access the data from. Take a look at the map<br className="tablet-hidden" />{' '}
@@ -102,7 +102,7 @@ export default class extends React.Component {
             </Text>
           </InfoCol>
           <InfoCol>
-            <Image src="/static/ilustrations/pay.svg" alt="IOTA process lustration" />
+            <Image src="/static/illustrations/pay.svg" alt="IOTA process illustration" />
             <InfoHeading>Pay</InfoHeading>
             <Text>
               For each sensor you can purchase direct access to the data stream. Thanks<br className="tablet-hidden" />{' '}
@@ -110,7 +110,7 @@ export default class extends React.Component {
             </Text>
           </InfoCol>
           <InfoCol>
-            <Image src="/static/ilustrations/access.svg" alt="IOTA process lustration" />
+            <Image src="/static/illustrations/access.svg" alt="IOTA process illustration" />
             <InfoHeading>Access</InfoHeading>
             <Text>
               Continuously access the data from the sensor and use that data to fuel your reports,
