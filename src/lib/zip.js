@@ -27,6 +27,7 @@ export const getZip = async device => {
   zip.file('README.md', await getFileContent('/static/template/README.md'));
   zip.file('keyStorage.js', await getFileContent('/static/template/keyStorage.js'));
   zip.file('iota.js', await getFileContent('/static/template/iota.js'));
+  zip.file('data.json', await getFileContent('/static/template/data.json'));
 
   // when everything has been downloaded, we can trigger the dl
   zip
