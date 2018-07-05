@@ -227,13 +227,13 @@ ID and try again`,
           console.log(e);
           return this.throw({
             body: e.message,
-            heading: `Purchase Failed`,
+            heading: 'Purchase Failed',
           });
         }
         this.setState(
           {
             loading: {
-              heading: `Success!`,
+              heading: 'Success!',
               body: `Your purchase was successfully. Fetching MAM stream and decoding data.`,
             },
           },
