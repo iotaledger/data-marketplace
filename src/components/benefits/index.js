@@ -11,7 +11,7 @@ export default props => (
       <R>
         <Col>
           <I
-            src="/static/ilustrations/fm.svg"
+            src="/static/illustrations/fm.svg"
             alt="IOTA benefits ilustration"
           />
           <T>Feeless Micropayments</T>
@@ -21,7 +21,7 @@ export default props => (
         </Col>
         <Col>
           <I
-            src="/static/ilustrations/sda.svg"
+            src="/static/illustrations/sda.svg"
             alt="IOTA benefits ilustration"
           />
           <T>Secure Data Anchoring</T>
