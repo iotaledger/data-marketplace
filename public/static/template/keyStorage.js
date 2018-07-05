@@ -1,5 +1,5 @@
-const fetch = require('node-fetch')
-const { endpoint } = require('./config.json')
+const fetch = require('node-fetch');
+const { endpoint } = require('./config.json');
 
 // Push keys to market place.
 const storeKey = async (root, sidekey, sensorId, secretKey) => {
@@ -7,7 +7,7 @@ const storeKey = async (root, sidekey, sensorId, secretKey) => {
     sidekey,
     root,
     time: Date.now(),
-  }
+  };
   try {
     // Initiate Fetch Call
     const resp = await fetch(endpoint, {
@@ -16,14 +16,14 @@ const storeKey = async (root, sidekey, sensorId, secretKey) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id: sensorId, packet, sk: secretKey }),
-    })
-    return resp.json()
+    });
+    return resp.json();
   } catch (error) {
-    console.log('storeKey error', error)
-    return error
+    console.log('storeKey error', error);
+    return error;
   }
-}
+};
 
 module.exports = {
   storeKey,
-}
+};
