@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FB from '../lib/firebase';
+import config from '../config.json';
 
 // import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils';
 
@@ -157,7 +158,7 @@ export default class extends React.Component {
       console.log('createDevice', packet);
 
       // Call server
-      var resp = await fetch(`https://${process.env.API}.marketplace.tangle.works/newDevice`, {
+      var resp = await fetch(`https://${config.api}.marketplace.tangle.works/newDevice`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: packet,
@@ -174,17 +175,14 @@ export default class extends React.Component {
 
   deleteDevice = async id => {
     this.setState({ loading: true });
-    const response = await fetch(
-      `https://${process.env.API}.marketplace.tangle.works/removeDevice`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          apiKey: this.state.userData.apiKey,
-          id,
-        }),
-      }
-    );
+    const response = await fetch(`https://${config.api}.marketplace.tangle.works/removeDevice`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        apiKey: this.state.userData.apiKey,
+        id,
+      }),
+    });
     const data = await response.json();
     if (data.success) {
       return this.setState({
@@ -225,7 +223,7 @@ export default class extends React.Component {
         },
       },
       async () => {
-        var resp = await fetch(`https://${process.env.API}.marketplace.tangle.works/grandfather`, {
+        var resp = await fetch(`https://${config.api}.marketplace.tangle.works/grandfather`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

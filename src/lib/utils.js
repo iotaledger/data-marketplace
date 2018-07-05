@@ -1,11 +1,12 @@
 import IOTA from 'iota.lib.js';
 import curl from 'curl.lib.js';
+import config from '../config.json';
 require('isomorphic-fetch');
 
-export const iota = new IOTA({ provider: process.env.PROVIDER });
+export const iota = new IOTA({ provider: config.provider });
 
 export const initWallet = async () => {
-  var response = await fetch('https://marketseeds.tangle.works/');
+  var response = await fetch(config.provider);
   return await response.json();
 };
 
@@ -42,7 +43,7 @@ export const getBalance = async address => {
   )}"], "threshold": 100}`;
   var response;
   try {
-    response = await fetch(`https://${process.env.API}.marketplace.tangle.works/`, {
+    response = await fetch(`https://${config.api}.marketplace.tangle.works/`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
