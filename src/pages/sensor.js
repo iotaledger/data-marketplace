@@ -8,6 +8,7 @@ import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
+import config from '../config.json';
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
@@ -244,7 +245,7 @@ ID and try again`,
               hashes: purchaseResp.map(bundle => bundle.hash),
             };
             const resp = await fetch(
-              `https://${process.env.API}.marketplace.tangle.works/purchaseStream`,
+              `https://${config.api}.marketplace.tangle.works/purchaseStream`,
               {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
