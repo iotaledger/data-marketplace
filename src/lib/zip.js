@@ -1,5 +1,6 @@
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
+import config from '../config.json';
 
 const getFileContent = path => {
   return new Promise((resolve, reject) => {
@@ -45,8 +46,8 @@ export const getZip = async device => {
 };
 
 const getConfigFileContent = () => `{
-  "provider": "${process.env.PROVIDER}",
-  "endpoint": "https://${process.env.API}.marketplace.tangle.works/newData"
+  "provider": "${config.provider}",
+  "endpoint": "https://${config.api}.marketplace.tangle.works/newData",
 }
 `;
 
