@@ -45,7 +45,7 @@ export default class extends React.Component {
     // Get data
     const userRef = store.collection('users').doc(uid);
     const deviceRef = store.collection('devices').doc(id);
-    const device = await deviceInfo(deviceRef, this.props.id);
+    const device = await deviceInfo(deviceRef, id);
 
     if (device.address) {
       device.balance = await getBalance(device.address);
@@ -238,9 +238,14 @@ ID and try again`,
             },
           },
           async () => {
+            const {
+              match: {
+                params: { id },
+              },
+            } = this.props;
             const packet = {
               id: this.state.uid,
-              device: this.props.id,
+              device: id,
               full: true,
               hashes: purchaseResp.map(bundle => bundle.hash),
             };
