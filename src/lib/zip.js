@@ -48,38 +48,68 @@ export const getZip = async device => {
 const getConfigFileContent = () => `{
   "provider": "${config.provider}",
   "endpoint": "https://${config.api}.marketplace.tangle.works/newData",
+  "serverUrl": "https://swapi.co/api/vehicles/"
 }
 `;
 
 const getIndexFileContent = device => {
-  return `const { publish } = require('./iota')
-const { storeKey } = require('./keyStorage')
+  return `const fetch = require('node-fetch');
+const pick = require('lodash/pick');
+const { publish } = require('./iota');
+const { storeKey } = require('./keyStorage');
+const { serverUrl } = require('./config.json');
+const data = require('./data.json');
 
 // Set Varibles
-const debug = true // Set to 'false' to publish data live
-const sensorId = '${device.sensorId}' // Your device ID is here.
-const secretKey = '${device.sk}' // Your device's secret key here
+const debug = true; // Set to 'false' to publish data live
+const sensorId = '${device.sensorId}'; // Your device ID is here.
+const secretKey = '${device.sk}'; // Your device's secret key here
 
 // Push key to data marketplace.
 const pushKey = async (root, sidekey) => {
-  if (debug) {
-    return 'Debug mode'
-  }
-  const response = await storeKey(root, sidekey, sensorId, secretKey)
-  return response
+  if (debug) return 'Debug mode';
+  const response = await storeKey(root, sidekey, sensorId, secretKey);
+  return response;
 }
 
-// Emulate data being ingested
-Array(4)
-  .fill()
-  .map((_, i) =>
-    publish({
-      time: Date.now(),
-      // Change below to read actual values!
-      data: {
-    ${device.dataTypes.map(type => `    ${type.id}: 'PUT "${type.name}" READING IN HERE', \n`)}
-      }
-    }, pushKey)
-  )
+// EXAMPLE 1: read static data from file/database
+data.map(payload => {
+  if (debug) {
+    console.log({ time: Date.now(), data: { ...payload } });
+  } else {
+    // Publish sensor data to marketplace
+    publish(
+      {
+        time: Date.now(),
+        data: { ...payload }, // your sensor data goes here. Payload is any content in JSON format
+      },
+      pushKey
+    );
+  }
+});
+
+// EXAMPLE 2: request data from server or sensor
+const getRandomInt = max => Math.floor(Math.random() * Math.floor(max));
+Array.from(Array(10), async () => {
+  // Access public server. URL is configurable in config.json
+  // In this example a Star Wars API is used for demo purposes
+  const resp = await fetch(serverUrl + getRandomInt(73)); // construct URL to request a random star wars vehicle
+  const json = await resp.json();
+  if (!(json.detail && json.detail === 'Not found')) {
+    const payload = pick(json, ['name', 'model', 'manufacturer', 'vehicle_class']);
+    if (debug) {
+      console.log({ time: Date.now(), data: { ...payload } });
+    } else {
+      // Publish sensor data to marketplace
+      publish(
+        {
+          time: Date.now(),
+          data: { ...payload }, // your sensor data goes here. Payload is any content in JSON format
+        },
+        pushKey
+      );
+    }
+  }
+});
 `;
 };
