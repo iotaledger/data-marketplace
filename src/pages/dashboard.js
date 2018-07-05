@@ -111,7 +111,6 @@ export default class extends React.Component {
       .then(querySnapshot => {
         var devices = [];
         querySnapshot.forEach(doc => {
-          console.log(doc.id);
           devices.push(doc.data());
           if (devices.length === querySnapshot.size) return this.setState({ devices });
         });

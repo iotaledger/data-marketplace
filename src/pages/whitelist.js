@@ -19,7 +19,6 @@ export default class extends React.Component {
         // User is signed in.
         const devices = await allDevices(this.firebase);
         this.setState({ devices, filtered: devices });
-        console.log(user);
       } else {
         // User is signed out.
         console.log('Logged Out');
