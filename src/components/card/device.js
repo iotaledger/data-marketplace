@@ -62,41 +62,35 @@ const FooterButton = styled.button`
   }
 `;
 
-export default class extends React.Component {
-  state = { device: { location: {} } };
-  componentDidMount() {
-    this.setState(this.props);
-  }
-  render() {
-    var { device } = this.state;
-    return (
-      <Card header={Heading(device, this.props.delete)} footer={Footer(device)}>
-        <RowHalf>
-          <RowIcon src="/static/icons/icon-small-location.svg" alt="" />
-          <RowDesc>Location</RowDesc>
-          <Data>
-            {device.location.city ? device.location.city + ', ' + device.location.country : '--'}
-          </Data>
-        </RowHalf>
-        <RowHalf>
-          <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
-          <RowDesc>Sensor streams:</RowDesc>
-          <Data>{device.dataTypes && device.dataTypes.length}</Data>
-        </RowHalf>
-        {/* <RowHalf>
-          <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
-          <RowDesc>Stream Purchases:</RowDesc>
-          <Data>{523}</Data>
-        </RowHalf>
-        <RowHalf>
-          <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
-          <RowDesc>Last Packet:</RowDesc>
-          <Data>{'31 minutes ago'}</Data>
-        </RowHalf> */}
-      </Card>
-    );
-  }
-}
+export default props => {
+  const { device } = props;
+  return (
+    <Card header={Heading(device, props.delete)} footer={Footer(device)}>
+      <RowHalf>
+        <RowIcon src="/static/icons/icon-small-location.svg" alt="" />
+        <RowDesc>Location</RowDesc>
+        <Data>
+          {device.location.city ? device.location.city + ', ' + device.location.country : '--'}
+        </Data>
+      </RowHalf>
+      <RowHalf>
+        <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
+        <RowDesc>Sensor streams:</RowDesc>
+        <Data>{device.dataTypes && device.dataTypes.length}</Data>
+      </RowHalf>
+      {/* <RowHalf>
+      <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
+      <RowDesc>Stream Purchases:</RowDesc>
+      <Data>{523}</Data>
+    </RowHalf>
+    <RowHalf>
+      <RowIcon src="/static/icons/icon-small-packet.svg" alt="" />
+      <RowDesc>Last Packet:</RowDesc>
+      <Data>{'31 minutes ago'}</Data>
+    </RowHalf> */}
+    </Card>
+  );
+};
 
 const RowHalf = styled.div`
   padding: 20px 30px 14px;
