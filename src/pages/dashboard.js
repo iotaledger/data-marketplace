@@ -102,19 +102,18 @@ export default class extends React.Component {
       });
   };
 
-  findDevices = user => {
-    this.firebase
-      .firestore()
-      .collection('devices')
-      .where('owner', '==', user.uid)
-      .get()
-      .then(querySnapshot => {
-        var devices = [];
-        querySnapshot.forEach(doc => {
-          devices.push(doc.data());
-          if (devices.length === querySnapshot.size) return this.setState({ devices });
-        });
-      });
+  findDevices = async ({ uid }) => {
+    this.setState({ loading: true });
+    const response = await fetch(
+      `https://${config.api}.marketplace.tangle.works/getDevicesByUser`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid }),
+      }
+    );
+    const devices = await response.json();
+    return this.setState({ devices, loading: false });
   };
 
   getDevice = device => {
