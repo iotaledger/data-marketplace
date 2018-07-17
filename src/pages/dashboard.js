@@ -138,7 +138,7 @@ export default class extends React.Component {
     });
   };
 
-  createDevice = (device, sk) => {
+  createDevice = device => {
     console.log('Saving new device');
     console.log(this.state.userData);
 
@@ -151,7 +151,6 @@ export default class extends React.Component {
       const packet = JSON.stringify({
         apiKey: this.state.userData.apiKey,
         id: device.sensorId,
-        sk,
         device,
       });
       console.log('createDevice', packet);
