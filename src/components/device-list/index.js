@@ -33,7 +33,7 @@ export default props => (
   <InfoCol>
     <CardWrapper>
       {props.devices.map((device, i) => (
-        <DeviceCard index={i} key={i} layout={props.layout} device={device} delete={props.delete} />
+        <DeviceCard index={i} key={i} device={device} delete={props.delete} />
       ))}
 
       {props.devices.length < 3 ? (

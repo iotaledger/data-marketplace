@@ -122,10 +122,10 @@ export default class extends React.Component {
       .collection('devices')
       .doc(device)
       .get()
-      .then(function(doc) {
+      .then(doc => {
         console.log(doc.id, ' => ', doc.data());
       })
-      .catch(function(error) {
+      .catch(error => {
         console.error('Error adding document: ', error);
       });
   };
@@ -162,10 +162,9 @@ export default class extends React.Component {
       });
       const data = await resp.json();
       // Check success
-      if (data.success)
-        this.setState({
-          devices: [...this.state.devices, device],
-        });
+      if (data.success) {
+        this.findDevices(this.state.user);
+      }
       res(data);
     });
   };
@@ -242,7 +241,7 @@ export default class extends React.Component {
     );
   };
   render() {
-    var { devices, user, loading, error, button, grandModal } = this.state;
+    const { devices, user, loading, error, button, grandModal } = this.state;
     return (
       <Main>
         <DeviceNav {...this.state} logout={this.logout} />
