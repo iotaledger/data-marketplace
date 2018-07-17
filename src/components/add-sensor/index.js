@@ -44,9 +44,6 @@ export default class extends React.Component {
   };
 
   generateDeviceAddressCallback = async deviceAddress => {
-    // Generate Key for the device
-    const secretKey = generateSeed(15);
-
     const device = {
       location: {
         city: this.state.city,
@@ -60,10 +57,9 @@ export default class extends React.Component {
       company: this.state.company,
       value: (Math.random() * 1000 + 1000).toFixed(0),
       address: deviceAddress,
-      sk: secretKey,
     };
 
-    const createDevive = await this.props.create(device, secretKey);
+    const createDevive = await this.props.create(device);
 
     if (createDevive.error) {
       this.setState({ loading: false });
