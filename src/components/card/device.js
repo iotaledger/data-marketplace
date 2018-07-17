@@ -44,10 +44,6 @@ const Footer = props => (
     <FootRow>
       <FooterButton>Download Publish Script</FooterButton>
     </FootRow>
-    {/* <FootRow>
-      <InfoKey>Device Publish Key:</InfoKey>
-      <InfoValue>{props.sk}</InfoValue>
-    </FootRow> */}
   </div>
 );
 const FooterButton = styled.button`

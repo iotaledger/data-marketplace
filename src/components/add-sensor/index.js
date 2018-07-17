@@ -256,8 +256,7 @@ const Loading = () => {
       width="130"
       height="130"
       viewBox="0 0 38 38"
-      stroke="#e2e2e2"
-    >
+      stroke="#e2e2e2">
       <g fill="none" fillRule="evenodd">
         <g transform="translate(1 1)" strokeWidth="2">
           <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
