@@ -1,0 +1,21 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /deviceList {
+   		allow read, write: if false;
+  	}
+  	match /keys {
+   		allow read, write: if false;
+  	}
+  	match /devices/{documents=**} {
+      // Allow reading of devices
+      allow read;
+      allow write: if request.auth.token.email.matches('.*@iota[.]org');
+   	}
+    match /users/{userId} {
+    	allow read, write: if request.auth.uid == userId;
+  	}
+  	match /users/{userId}/{documents=**} {
+    	allow read: if request.auth.uid == userId;
+  	}
+  }
+}
