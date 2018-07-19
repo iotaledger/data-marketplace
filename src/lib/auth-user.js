@@ -1,3 +1,5 @@
+import config from '../config.json';
+
 export const userAuth = async firebase => {
   return new Promise((resolve, reject) => {
     firebase.auth().onAuthStateChanged(async user => {
@@ -21,98 +23,75 @@ export const userAuth = async firebase => {
   });
 };
 
-/// FUNCS
-export const deviceInfo = async (deviceRef, id) => {
+export const getData = async (userId, deviceId) => {
   try {
-    return await getDevice(deviceRef, id);
+    const result = await getPackets(userId, deviceId);
+    if (result.purchase && !result.purchase.full) {
+      const packets = await getPacketsPartial(result.purchase);
+      return packets;
+    } else {
+      return result.data;
+    }
   } catch (e) {
     return e;
   }
 };
-
-export const getData = async (deviceRef, userRef, id) => {
-  try {
-    var data = await getPackets(userRef, id);
-    var packets = await crossRef(data, deviceRef);
-    return packets;
-  } catch (e) {
-    return e;
-  }
-};
-export const allDevices = firebase => {
-  return new Promise((resolve, reject) => {
-    firebase
-      .firestore()
-      .collection('devices')
-      .get()
-      .then(querySnapshot => {
-        const devices = [];
-        querySnapshot.forEach(doc => {
-          devices.push(doc.data());
-        });
-        resolve(devices);
-      });
-  });
-};
-
-const getDevice = (deviceRef, id) => {
-  return new Promise((resolve, reject) => {
-    deviceRef.get().then(doc => {
-      if (doc.exists) {
-        resolve(doc.data());
-      } else {
-        reject('No Device!');
-      }
+export const allDevices = () => {
+  return new Promise(async (resolve, reject) => {
+    const response = await fetch(`https://${config.api}.marketplace.tangle.works/getDevices`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
     });
+    const devices = await response.json();
+    resolve(devices);
   });
 };
 
-const getPackets = (userRef, id) => {
+export const getDevice = deviceId => {
+  return new Promise(async (resolve, reject) => {
+    const response = await fetch(`https://${config.api}.marketplace.tangle.works/getDevice`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ deviceId }),
+    });
+    const device = await response.json();
+    if (device) {
+      resolve(device);
+    } else {
+      reject('No Device!');
+    }
+  });
+};
+
+const getPackets = (userId, deviceId) => {
+  return new Promise(async (resolve, reject) => {
+    const response = await fetch(`https://${config.api}.marketplace.tangle.works/queryStream`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, deviceId }),
+    });
+    const packets = await response.json();
+    if (packets) {
+      resolve(packets);
+    } else {
+      reject('No packets purchased');
+    }
+  });
+};
+
+export const getPacketsPartial = data => {
   return new Promise((resolve, reject) => {
-    userRef
-      .collection('purchases')
-      .doc(id)
-      .get()
-      .then(doc => {
-        if (doc.exists) {
-          resolve(doc.data());
+    const packets = [];
+    data.packets.map(ref =>
+      ref.get().then(item => {
+        if (item.exists) {
+          packets.push(item.data());
+          if (packets.length === data.packets.length) resolve(packets);
         } else {
-          reject('No packets purchased');
+          packets.push([]);
+          if (packets.length === data.packets.length) resolve(packets);
         }
-      });
+      })
+    );
   });
-};
-
-export const crossRef = (data, deviceRef) => {
-  if (data.full) {
-    return new Promise((resolve, reject) => {
-      deviceRef
-        .collection('data')
-        .get()
-        .then(querySnapshot => {
-          const data = [];
-          // Resolve if empty
-          if (querySnapshot.empty) reject();
-          querySnapshot.forEach(doc => {
-            data.push(doc.data());
-          });
-          resolve(data);
-        });
-    });
-  } else {
-    return new Promise((resolve, reject) => {
-      const packets = [];
-      data.packets.map(ref =>
-        ref.get().then(item => {
-          if (item.exists) {
-            packets.push(item.data());
-            if (packets.length === data.packets.length) resolve(packets);
-          } else {
-            packets.push([]);
-            if (packets.length === data.packets.length) resolve(packets);
-          }
-        })
-      );
-    });
-  }
 };

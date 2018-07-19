@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import FB from '../lib/firebase';
 import { allDevices } from '../lib/auth-user';
+import config from '../config.json';
 
 export default class extends React.Component {
   state = { devices: [], filtered: [] };
@@ -45,14 +46,17 @@ export default class extends React.Component {
     return this.setState({ filtered });
   };
 
-  toggle = async (device, i) => {
-    device.inactive = !device.inactive;
+  toggle = async device => {
     try {
-      await this.firebase
-        .firestore()
-        .collection('devices')
-        .doc(device.sensorId)
-        .set({ inactive: device.inactive }, { merge: true });
+      device.inactive = !device.inactive;
+      await fetch(`https://${config.api}.marketplace.tangle.works/toggleWhitelist`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sensorId: device.sensorId,
+          isInactive: device.inactive.toString(),
+        }),
+      });
 
       this.setState({
         devices: this.state.devices.map(dev => (dev.sensorId === device.sensorId ? device : dev)),

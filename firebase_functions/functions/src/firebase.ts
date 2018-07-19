@@ -40,6 +40,7 @@ exports.getPurchase = async (uid: string, device: string) => {
   if (doc.exists) return doc.data();
   console.log('getPurchase failed.', uid, device, doc);
   throw Error('Please purchase the stream');
+  return null;
 };
 
 exports.getData = async (device: string) => {
@@ -220,4 +221,31 @@ exports.deleteDevice = async (device: any) => {
     .doc(device)
     .delete();
   return true;
+};
+
+exports.toggleWhitelistDevice = async (sensorId: string, inactive: string) => {
+  // Whitelist device
+  await admin
+    .firestore()
+    .collection('devices')
+    .doc(sensorId)
+    .set({ inactive: inactive === 'true' }, { merge: true });
+  return true;
+};
+
+exports.getUser = async (userId: string) => {
+  // Get user
+  const doc = await admin
+    .firestore()
+    .collection('users')
+    .doc(userId)
+    .get();
+
+  // Check and return user
+  if (doc.exists) {
+    return doc.data();
+  }
+
+  console.log('getDevice failed.', userId, doc);
+  throw Error(`User doesn't exist`);
 };
