@@ -1,12 +1,11 @@
 import IOTA from 'iota.lib.js';
 import curl from 'curl.lib.js';
 import config from '../config.json';
-require('isomorphic-fetch');
 
 export const iota = new IOTA({ provider: config.provider });
 
 export const initWallet = async () => {
-  var response = await fetch(config.provider);
+  const response = await fetch(config.provider);
   return await response.json();
 };
 
