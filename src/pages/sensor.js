@@ -8,7 +8,7 @@ import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
-import config from '../config.json';
+import api from '../utils/api';
 
 export default class extends React.Component {
   static async getInitialProps({ query }) {
@@ -244,15 +244,7 @@ ID and try again`,
               full: true,
               hashes: purchaseResp.map(bundle => bundle.hash),
             };
-            const resp = await fetch(
-              `https://${config.api}.marketplace.tangle.works/purchaseStream`,
-              {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(packet),
-              }
-            );
-            const message = await resp.json();
+            const message = await api('purchaseStream', packet);
             // Check Success
             if (message.success) {
               // Modify wallet balance
