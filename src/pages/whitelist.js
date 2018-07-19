@@ -83,19 +83,15 @@ export default class extends React.Component {
           </div>
         </Heading>
         <CardsList>
-          {filtered
-            .filter(dev => !dev.inactive)
-            .map((device, i) => CardModule(device, i, this.toggle))}
-          {filtered
-            .filter(dev => dev.inactive)
-            .map((device, i) => CardModule(device, i, this.toggle))}
+          {filtered.filter(dev => !dev.inactive).map(device => CardModule(device, this.toggle))}
+          {filtered.filter(dev => dev.inactive).map(device => CardModule(device, this.toggle))}
         </CardsList>
       </Main>
     );
   }
 }
 
-const CardModule = (device, i, toggle) => (
+const CardModule = (device, toggle) => (
   <Card inactive={device.inactive} key={`device-${device.sensorId}`}>
     <Row>
       <Field>{device.sensorId}</Field>
@@ -109,7 +105,7 @@ const CardModule = (device, i, toggle) => (
     <Link to={`/sensor/${device.sensorId}`}>
       <Links target="_blank"> View Device</Links>
     </Link>
-    <Links onClick={() => toggle(device, i)}>{device.inactive ? 'Activate' : 'Deactivate'}</Links>
+    <Links onClick={() => toggle(device)}>{device.inactive ? 'Activate' : 'Deactivate'}</Links>
   </Card>
 );
 
