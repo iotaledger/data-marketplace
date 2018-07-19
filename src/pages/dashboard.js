@@ -11,8 +11,6 @@ import GrandModal from '../components/modal/grandfather';
 import Sidebar from '../components/user-sidebar';
 import DeviceList from '../components/device-list';
 
-var firebase = {};
-
 export default class extends React.Component {
   static async getInitialProps({ query }) {
     return { grandfather: query.grandfather !== undefined };
