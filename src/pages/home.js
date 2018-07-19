@@ -28,7 +28,7 @@ export default class extends React.Component {
   componentDidMount = async () => {
     // Firebase
     const firebase = await FB();
-    var devices = await allDevices(firebase);
+    const devices = await allDevices(firebase);
     this.setState({ devices, loading: false });
   };
 

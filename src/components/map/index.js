@@ -136,8 +136,7 @@ export default class extends React.Component {
           height={mapHeight}
           mapStyle="mapbox://styles/iotafoundation/cj8y282t417092rlgv4j9wcxg"
           onViewportChange={this._updateViewport}
-          mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}
-        >
+          mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}>
           <div style={{ position: 'absolute', right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
           </div>

@@ -41,9 +41,8 @@ export const getBalance = async address => {
     0,
     81
   )}"], "threshold": 100}`;
-  var response;
   try {
-    response = await fetch(`https://${config.api}.marketplace.tangle.works/`, {
+    const response = await fetch(`https://${config.api}.marketplace.tangle.works/`, {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
@@ -51,12 +50,12 @@ export const getBalance = async address => {
       },
       body: packet,
     });
+
+    const result = await response.json();
+    return result.balances[0];
   } catch (e) {
     return 0;
   }
-
-  let resp = await response.json();
-  return resp.balances[0];
 };
 
 export const reducer = amount => {
