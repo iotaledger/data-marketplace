@@ -85,21 +85,21 @@ export default class extends React.Component {
       });
   };
 
-  getUser = user => {
+  getUser = async user => {
     this.findDevices(user);
-    this.firebase
-      .firestore()
-      .collection('users')
-      .doc(user.uid)
-      .get()
-      .then(doc => {
-        this.setState({
-          user,
-          userData: doc.exists ? doc.data() : {},
-          loading: false,
-          firebase,
-        });
+    const response = await fetch(`https://${config.api}.marketplace.tangle.works/getUser`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId: user.uid }),
+    });
+    const userData = await response.json();
+    if (userData) {
+      this.setState({
+        user,
+        userData,
+        loading: false,
       });
+    }
   };
 
   findDevices = async ({ uid }) => {
@@ -116,19 +116,6 @@ export default class extends React.Component {
     return this.setState({ devices, loading: false });
   };
 
-  getDevice = device => {
-    this.firebase
-      .firestore()
-      .collection('devices')
-      .doc(device)
-      .get()
-      .then(doc => {
-        console.log(doc.id, ' => ', doc.data());
-      })
-      .catch(error => {
-        console.error('Error adding document: ', error);
-      });
-  };
   throw = (error, button) => {
     this.setState({
       loading: false,

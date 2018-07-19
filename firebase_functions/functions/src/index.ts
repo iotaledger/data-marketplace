@@ -14,6 +14,7 @@ const {
   getDevice,
   getDevices,
   getUserDevices,
+  getUser,
   setUser,
   setDevice,
   setPacket,
@@ -21,6 +22,7 @@ const {
   setOwner,
   setApiKey,
   deleteDevice,
+  toggleWhitelistDevice,
 } = require('./firebase');
 const { generateUUID, seedGen, sanatiseObject, findTx } = require('./helpers');
 
@@ -150,21 +152,32 @@ exports.grandfather = functions.https.onRequest((req, res) => {
   });
 });
 
-// // Query Devices
+// Query Devices
 exports.getDevices = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
+    try {
+      return res.json(await getDevices());
+    } catch (e) {
+      console.log('getDevices failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+// Query Device
+exports.getDevice = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
     const packet = req.body;
-    // Check Fields
-    if (!packet || !packet.apiKey) {
-      console.log('getDevices failed. Packet: ', packet);
+    // Add device key into the list
+    if (!packet || !packet.deviceId) {
+      console.log('getDevice failed. Packet: ', packet);
       return res.status(400).json({ error: 'Ensure all fields are included' });
     }
 
     try {
-      await getKey(<String>packet.apiKey);
-      return res.json({ data: await getDevices() });
+      return res.json(await getDevice(packet.deviceId));
     } catch (e) {
-      console.log('getDevices failed. Error: ', e.message);
+      console.log('getDevice failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
@@ -174,20 +187,19 @@ exports.getDevices = functions.https.onRequest((req, res) => {
 exports.queryStream = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     const packet = req.body;
-    // Add device key into the list
-    if (!packet || !packet.device || !packet.apiKey) {
+    if (!packet || !packet.deviceId || !packet.userId) {
       console.log('queryStream failed. Packet: ', packet);
       return res.status(400).json({ error: 'Ensure all fields are included' });
     }
 
     try {
-      // Get Key
-      const key = await getKey(<String>packet.apiKey);
       // Make sure purchase exists
-      // TODO: Get and read to ensure rights
-      await getPurchase(<String>key.uid, <String>packet.device);
-      // Return data
-      return res.json({ data: await getData(<String>packet.device) });
+      const purchase = await getPurchase(<String>packet.userId, <String>packet.deviceId);
+      if (purchase) {
+        // Return data
+        return res.json({ data: await getData(<String>packet.deviceId), purchase });
+      }
+      return res.status(403).json({ error: 'No packets purchased' });
     } catch (e) {
       console.log('queryStream failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -286,6 +298,46 @@ exports.getDevicesByUser = functions.https.onRequest((req, res) => {
       return res.json(devices);
     } catch (e) {
       console.log('getDevicesByUser failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+// Toggle whitelist entry
+exports.toggleWhitelist = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.sensorId || !packet.isInactive) {
+      console.log('toggleWhitelist failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Ensure all fields are included' });
+    }
+
+    try {
+      // Toggle whitelist
+      await toggleWhitelistDevice(packet.sensorId, packet.isInactive);
+      return res.json({ success: true });
+    } catch (e) {
+      console.log('toggleWhitelist failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.getUser = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.userId) {
+      console.log('getUser failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Ensure all fields are included' });
+    }
+
+    try {
+      // Retrieve user
+      return res.json({ user: await getUser(packet.userId) });
+    } catch (e) {
+      console.log('getUser failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
