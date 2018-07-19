@@ -112,7 +112,7 @@ export default class extends React.Component {
   };
 
   render() {
-    const { viewport, mapHeight } = this.state;
+    const { viewport, mapHeight, popupInfo } = this.state;
     return (
       <Main id="map">
         <Header>
@@ -129,6 +129,7 @@ export default class extends React.Component {
           height={mapHeight}
           mapStyle="mapbox://styles/iotafoundation/cj8y282t417092rlgv4j9wcxg"
           onViewportChange={this._updateViewport}
+          onClick={() => (popupInfo ? this.setState({ popupInfo: null }) : null)}
           mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}>
           <div style={{ position: 'absolute', right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
