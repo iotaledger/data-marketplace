@@ -1,11 +1,12 @@
 import IOTA from 'iota.lib.js';
 import curl from 'curl.lib.js';
-import config from '../config.json';
+import { provider } from '../config.json';
+import api from '../utils/api';
 
-export const iota = new IOTA({ provider: config.provider });
+export const iota = new IOTA({ provider });
 
 export const initWallet = async () => {
-  const response = await fetch(config.provider);
+  const response = await fetch(provider);
   return await response.json();
 };
 
@@ -35,21 +36,14 @@ export const purchaseData = async (seed, address, value) => {
 };
 
 export const getBalance = async address => {
-  const packet = `{"command": "getBalances", "addresses": ["${address.substring(
-    0,
-    81
-  )}"], "threshold": 100}`;
   try {
-    const response = await fetch(`https://${config.api}.marketplace.tangle.works/`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-IOTA-API-Version': 1,
-      },
-      body: packet,
-    });
+    const packet = {
+      command: 'getBalances',
+      addresses: [`${address.substring(0, 81)}`],
+      threshold: 100,
+    };
 
-    const result = await response.json();
+    const result = await api('', packet);
     return result.balances[0];
   } catch (e) {
     return 0;

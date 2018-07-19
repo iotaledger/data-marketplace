@@ -1,4 +1,4 @@
-import config from '../config.json';
+import api from '../utils/api';
 
 export const userAuth = async firebase => {
   return new Promise((resolve, reject) => {
@@ -36,25 +36,17 @@ export const getData = async (userId, deviceId) => {
     return e;
   }
 };
+
 export const allDevices = () => {
   return new Promise(async (resolve, reject) => {
-    const response = await fetch(`https://${config.api}.marketplace.tangle.works/getDevices`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const devices = await response.json();
+    const devices = await api('getDevices');
     resolve(devices);
   });
 };
 
 export const getDevice = deviceId => {
   return new Promise(async (resolve, reject) => {
-    const response = await fetch(`https://${config.api}.marketplace.tangle.works/getDevice`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ deviceId }),
-    });
-    const device = await response.json();
+    const device = await api('getDevice', { deviceId });
     if (device) {
       resolve(device);
     } else {
@@ -65,12 +57,7 @@ export const getDevice = deviceId => {
 
 const getPackets = (userId, deviceId) => {
   return new Promise(async (resolve, reject) => {
-    const response = await fetch(`https://${config.api}.marketplace.tangle.works/queryStream`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, deviceId }),
-    });
-    const packets = await response.json();
+    const packets = await api('queryStream', { userId, deviceId });
     if (packets) {
       resolve(packets);
     } else {
@@ -79,7 +66,7 @@ const getPackets = (userId, deviceId) => {
   });
 };
 
-export const getPacketsPartial = data => {
+const getPacketsPartial = data => {
   return new Promise((resolve, reject) => {
     const packets = [];
     data.packets.map(ref =>

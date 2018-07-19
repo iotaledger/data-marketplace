@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import FB from '../lib/firebase';
 import config from '../config.json';
+import api from '../utils/api';
 
 // import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils';
 
@@ -85,12 +86,7 @@ export default class extends React.Component {
 
   getUser = async user => {
     this.findDevices(user);
-    const response = await fetch(`https://${config.api}.marketplace.tangle.works/getUser`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId: user.uid }),
-    });
-    const userData = await response.json();
+    const userData = await api('getUser', { userId: user.uid });
     if (userData) {
       this.setState({
         user,
@@ -102,15 +98,7 @@ export default class extends React.Component {
 
   findDevices = async ({ uid }) => {
     this.setState({ loading: true });
-    const response = await fetch(
-      `https://${config.api}.marketplace.tangle.works/getDevicesByUser`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ uid }),
-      }
-    );
-    const devices = await response.json();
+    const devices = await api('getDevicesByUser', { uid });
     return this.setState({ devices, loading: false });
   };
 
@@ -132,20 +120,15 @@ export default class extends React.Component {
     device.inactive = true;
 
     return new Promise(async (res, rej) => {
-      const packet = JSON.stringify({
+      const packet = {
         apiKey: this.state.userData.apiKey,
         id: device.sensorId,
         device,
-      });
+      };
       console.log('createDevice', packet);
 
       // Call server
-      var resp = await fetch(`https://${config.api}.marketplace.tangle.works/newDevice`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: packet,
-      });
-      const data = await resp.json();
+      const data = await api('newDevice', packet);
       // Check success
       if (data.success) {
         this.findDevices(this.state.user);
@@ -154,21 +137,14 @@ export default class extends React.Component {
     });
   };
 
-  deleteDevice = async id => {
+  deleteDevice = async deviceId => {
     this.setState({ loading: true });
-    const response = await fetch(`https://${config.api}.marketplace.tangle.works/removeDevice`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        apiKey: this.state.userData.apiKey,
-        id,
-      }),
-    });
-    const data = await response.json();
+    const { apiKey } = this.state.userData;
+    const data = await api('removeDevice', { apiKey, id: deviceId });
     if (data.success) {
       return this.setState({
         loading: false,
-        devices: [...this.state.devices.filter(device => device.sensorId !== id)],
+        devices: [...this.state.devices.filter(device => device.sensorId !== deviceId)],
       });
     } else {
       alert(`Couldn't Delete Device`);
@@ -204,17 +180,15 @@ export default class extends React.Component {
         },
       },
       async () => {
-        var resp = await fetch(`https://${config.api}.marketplace.tangle.works/grandfather`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            owner: this.state.user.uid,
-            sk,
-            id,
-          }),
-        });
-        var data = await resp.json();
-        console.log(data);
+        const packet = {
+          owner: this.state.user.uid,
+          sk,
+          id,
+        };
+
+        // Call server
+        const data = await api('grandfather', packet);
+
         if (data.error) {
           /// Add error
           this.throw({ heading: 'Error', body: data.error }, true);
