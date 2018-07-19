@@ -11,11 +11,11 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "axios": "^0.18.0",
     "cors": "^2.8.4",
     "firebase-admin": "~5.8.0",
     "firebase-functions": "^0.8.0",
     "iota.lib.js": "^0.4.7",
-    "request": "2.83.0"
   },
   "devDependencies": {
     "tslint": "^5.8.0",
