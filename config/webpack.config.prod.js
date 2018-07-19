@@ -138,7 +138,7 @@ module.exports = {
           // Process JS with Babel.
           {
             test: /\.js$/,
-            include: paths.appSrc,
+            include: [paths.appSrc, paths.curlSrc],
             loader: require.resolve('babel-loader'),
             options: {
               compact: true,
