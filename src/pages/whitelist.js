@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import FB from '../lib/firebase';
 import { allDevices } from '../lib/auth-user';
-import config from '../config.json';
+import api from '../utils/api';
 
 export default class extends React.Component {
   state = { devices: [], filtered: [] };
@@ -49,13 +49,9 @@ export default class extends React.Component {
   toggle = async device => {
     try {
       device.inactive = !device.inactive;
-      await fetch(`https://${config.api}.marketplace.tangle.works/toggleWhitelist`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          sensorId: device.sensorId,
-          isInactive: device.inactive.toString(),
-        }),
+      await api('toggleWhitelist', {
+        sensorId: device.sensorId,
+        isInactive: device.inactive.toString(),
       });
 
       this.setState({
