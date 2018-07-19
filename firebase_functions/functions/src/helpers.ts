@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-const request = require('request'); // node module to send HTTP requests
+const axios = require('axios');
 
 exports.generateUUID = () => {
   let d = new Date().getTime();
@@ -36,30 +36,27 @@ exports.sanatiseObject = (device: any) => {
 
 exports.findTx = (packet, IOTA) => {
   return new Promise((resolve, reject) => {
-    request(
-      {
-        url: 'https://testnet140.tangle.works',
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-IOTA-API-Version': 'POTATO',
-        },
-        body: JSON.stringify({
-          command: 'getTrytes',
-          hashes: packet.hashes,
-        }),
+    axios({
+      method: 'POST',
+      url: 'https://testnet140.tangle.works',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-IOTA-API-Version': 1,
       },
-      (error, resp, body) => {
-        if (body) {
-          const response = JSON.parse(body);
-          const txBundle = response.trytes.map(trytes => IOTA.utils.transactionObject(trytes));
-          resolve(txBundle);
-        } else {
-          console.log(`findTx failed. Couldn't find your transaction`);
-          throw Error(`Couldn't find your transaction!`);
-          reject();
-        }
-      }
-    );
+      data: {
+        command: 'getTrytes',
+        hashes: packet.hashes,
+      },
+    })
+      .then(response => {
+        const txBundle = response.data.trytes.map(trytes => IOTA.utils.transactionObject(trytes));
+        console.log('txBundle', txBundle);
+        resolve(txBundle);
+      })
+      .catch(error => {
+        console.log(`findTx failed. Couldn't find your transaction`);
+        throw Error(`Couldn't find your transaction!`);
+        reject();
+      });
   });
 };
