@@ -71,45 +71,38 @@ export default class extends React.Component {
           longitude={Number(popupInfo.lon)}
           latitude={Number(popupInfo.lat)}
           closeOnClick={true}
-          onClose={() => this.setState({ popupInfo: null })}
-        >
-          <Link to={`/sensor/${popupInfo.sensorId}`}>
-            <SensorCard href="">
-              <CardHeader>
-                {/* <CardIcon
-                  src="/static/icons/icon-weather-small.svg"
-                  alt="Weather sensor icon"
-                /> */}
-                <SensorType>
-                  {popupInfo.type}{' '}
-                  <LocationIcon
-                    src="/static/icons/icon-small-location-dark.svg"
-                    alt="Icon location pin"
-                  />{' '}
-                  <span>{popupInfo.location.city}</span>
-                </SensorType>
-                <SensorId>
-                  {popupInfo.sensorId.length > 12
-                    ? `${popupInfo.sensorId.substring(0, 13)}...`
-                    : popupInfo.sensorId}
-                </SensorId>
-              </CardHeader>
-              <CardFooter>
-                <FootRow>
-                  <InfoKey>Owner:</InfoKey>
-                  <InfoValue>{popupInfo.company}</InfoValue>
-                </FootRow>
-                <FootRow>
-                  <InfoKey>Sensor Streams:</InfoKey>
-                  <InfoValue>{popupInfo.dataTypes.length}</InfoValue>
-                </FootRow>
-                <FootRow>
-                  <InfoKey>Data price:</InfoKey>
-                  <InfoValue>{popupInfo.value}i</InfoValue>
-                </FootRow>
-              </CardFooter>
-            </SensorCard>
-          </Link>
+          onClose={() => this.setState({ popupInfo: null })}>
+          <SensorCard to={`/sensor/${popupInfo.sensorId}`}>
+            <CardHeader>
+              <SensorType>
+                {popupInfo.type}{' '}
+                <LocationIcon
+                  src="/static/icons/icon-small-location-dark.svg"
+                  alt="Icon location pin"
+                />{' '}
+                <span>{popupInfo.location.city}</span>
+              </SensorType>
+              <SensorId>
+                {popupInfo.sensorId.length > 12
+                  ? `${popupInfo.sensorId.substring(0, 13)}...`
+                  : popupInfo.sensorId}
+              </SensorId>
+            </CardHeader>
+            <CardFooter>
+              <FootRow>
+                <InfoKey>Owner:</InfoKey>
+                <InfoValue>{popupInfo.company}</InfoValue>
+              </FootRow>
+              <FootRow>
+                <InfoKey>Sensor Streams:</InfoKey>
+                <InfoValue>{popupInfo.dataTypes.length}</InfoValue>
+              </FootRow>
+              <FootRow>
+                <InfoKey>Data price:</InfoKey>
+                <InfoValue>{popupInfo.value}i</InfoValue>
+              </FootRow>
+            </CardFooter>
+          </SensorCard>
         </Popup>
       )
     );
@@ -289,7 +282,7 @@ const HeaderBgMobile = styled.img`
 //   }
 // `;
 
-const SensorCard = styled.a`
+const SensorCard = styled(Link)`
   display: block;
   border-radius: 6px;
   transition: box-shadow 0.19s ease-out;
