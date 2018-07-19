@@ -24,6 +24,7 @@ const {
   deleteDevice,
   toggleWhitelistDevice,
 } = require('./firebase');
+const { sendEmail } = require('./email');
 const { generateUUID, seedGen, sanatiseObject, findTx } = require('./helpers');
 
 // Take in data from device
@@ -338,6 +339,34 @@ exports.getUser = functions.https.onRequest((req, res) => {
       return res.json({ user: await getUser(packet.userId) });
     } catch (e) {
       console.log('getUser failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.sendEmail = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+
+    if (
+      !packet ||
+      !packet.name ||
+      !packet.company ||
+      !packet.email ||
+      !packet.body ||
+      !packet.captcha
+    ) {
+      console.log('sendEmail failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      // Send email
+      await sendEmail(packet);
+      return res.json({ success: true });
+    } catch (e) {
+      console.log('sendEmail failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
