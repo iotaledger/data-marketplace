@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import FB from '../lib/firebase';
 import Mam from 'mam.client.js';
-import { getData, deviceInfo, userAuth } from '../lib/auth-user';
+import { getData, getDevice, userAuth } from '../lib/auth-user';
 import { iota, initWallet, purchaseData, getBalance } from '../lib/utils';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
@@ -34,7 +34,6 @@ export default class extends React.Component {
     this.fetchWallet();
     // Firebase
     const firebase = await FB();
-    const store = firebase.firestore();
     const { uid } = await userAuth(firebase);
     const {
       match: {
@@ -43,9 +42,7 @@ export default class extends React.Component {
     } = this.props;
 
     // Get data
-    const userRef = store.collection('users').doc(uid);
-    const deviceRef = store.collection('devices').doc(id);
-    const device = await deviceInfo(deviceRef, id);
+    const device = await getDevice(id);
 
     if (device.address) {
       device.balance = await getBalance(device.address);
@@ -69,14 +66,12 @@ ID and try again`,
     });
 
     this.setState({
-      userRef,
-      deviceRef,
       deviceInfo: device,
       layout,
       uid,
     });
     // MAM
-    this.fetch(deviceRef, userRef);
+    this.fetch(uid);
   }
 
   throw = (error, button) => {
@@ -87,14 +82,14 @@ ID and try again`,
     });
   };
 
-  fetch = async (deviceRef, userRef) => {
+  fetch = async userId => {
     const {
       match: {
         params: { id },
       },
     } = this.props;
 
-    let data = await getData(deviceRef, userRef, id);
+    let data = await getData(userId, id);
     if (typeof data === 'string') {
       return this.setState({ loading: false });
     }
@@ -263,7 +258,7 @@ ID and try again`,
               // Modify wallet balance
               wallet.balance = wallet.balance - device.value;
               // Start Fetching data
-              this.fetch(this.state.deviceRef, this.state.userRef);
+              this.fetch(this.state.uid);
               // Update wallet.
               await localStorage.setItem('wallet', JSON.stringify(wallet));
               return this.setState({
