@@ -1,0 +1,7 @@
+{
+  "apiKey": "key-XXXXXXXXXXXXXXX",
+  "googleSecretKey": "XXXXXXX_XXXXXXX",
+  "domain": "mail.tangle.works",
+  "emailRecepient": "datamarketplace@iota.org",
+  "emailReplyTo": "datamarketplace@iota.org"
+}

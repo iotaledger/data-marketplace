@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Recaptcha from 'react-recaptcha';
+import api from '../../utils/api';
 
 export default class extends React.Component {
   state = {
@@ -22,7 +23,7 @@ export default class extends React.Component {
   }
 
   verify = data => {
-    this.setState({ captcha: data });
+    this.setState({ captcha: data, loading: false });
   };
 
   submit = async e => {
@@ -36,21 +37,13 @@ export default class extends React.Component {
     if (!state.captcha) return this.setState({ error: 'Please complete the captcha' });
 
     this.setState({ loading: true }, async () => {
-      var response = await fetch('/email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(state),
-      });
-      var data = await response.json();
-      console.log(data);
+      await api('sendEmail', state);
       this.setState({ success: true });
     });
   };
 
   render() {
-    var { name, email, body, company, success, error } = this.state;
+    const { name, email, body, company, success, error, captcha, loading } = this.state;
     return (
       <S id="contact">
         <C>
@@ -89,8 +82,8 @@ export default class extends React.Component {
                 verifyCallback={this.verify}
               />
             )}
-            {!this.state.loading && <Button type={'submit'}>Submit</Button>}
-            {this.state.loading && <Button>Sending</Button>}
+            {captcha && !loading && <Button type={'submit'}>Submit</Button>}
+            {loading && <Button>Sending</Button>}
           </F>
         ) : (
           <C>
