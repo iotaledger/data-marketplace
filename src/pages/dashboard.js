@@ -1,11 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import FB from '../lib/firebase';
-import config from '../config.json';
 import api from '../utils/api';
-
-// import { iota, initWallet, purchaseData, reducer, getBalance } from '../lib/utils';
-
 import DeviceNav from '../components/device-nav';
 import LoginModal from '../components/login-modal';
 import GrandModal from '../components/modal/grandfather';
