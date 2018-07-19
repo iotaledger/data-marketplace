@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
-import { generateSeed, generateDeviceAddress } from '../../lib/utils';
+import { generateDeviceAddress } from '../../lib/utils';
 import Card from '../card';
 
 const Heading = state => <Header>New Device</Header>;
@@ -92,7 +92,7 @@ export default class extends React.Component {
       return alert('You must have a valid data field');
 
     this.setState({ loading: true });
-    generateDeviceAddress(generateSeed(81), this.generateDeviceAddressCallback);
+    generateDeviceAddress(this.generateDeviceAddressCallback);
   };
 
   render() {

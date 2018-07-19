@@ -19,25 +19,24 @@ export const purchaseData = async (seed, address, value) => {
     console.log('Falling Back');
   }
   try {
-    var transfers = [{ address: iota.utils.addChecksum(address), value: parseInt(value, 10) }];
+    const transfers = [{ address: iota.utils.addChecksum(address), value: parseInt(value, 10) }];
+    return new Promise(function(resolve, reject) {
+      iota.api.sendTransfer(seed, 5, 9, transfers, (e, r) => {
+        if (e !== null) {
+          console.log(e);
+          reject(e);
+        } else {
+          resolve(r);
+        }
+      });
+    });
   } catch (e) {
     throw Error('Device address is invalid');
   }
-
-  return new Promise(function(resolve, reject) {
-    iota.api.sendTransfer(seed, 5, 9, transfers, (e, r) => {
-      if (e !== null) {
-        console.log(e);
-        reject(e);
-      } else {
-        resolve(r);
-      }
-    });
-  });
 };
 
 export const getBalance = async address => {
-  var packet = `{"command": "getBalances", "addresses": ["${address.substring(
+  const packet = `{"command": "getBalances", "addresses": ["${address.substring(
     0,
     81
   )}"], "threshold": 100}`;
@@ -82,7 +81,7 @@ export const reducer = amount => {
   }
 };
 
-export const generateSeed = length => {
+const generateSeed = length => {
   if (window.crypto && window.crypto.getRandomValues) {
     const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
     let result = '';
@@ -93,8 +92,8 @@ export const generateSeed = length => {
   } else throw new Error("Your browser is outdated and can't generate secure random numbers");
 };
 
-export const generateDeviceAddress = (seed, callback) => {
-  iota.api.getNewAddress(seed, {}, (error, address) => {
+export const generateDeviceAddress = callback => {
+  iota.api.getNewAddress(generateSeed(81), {}, (error, address) => {
     if (error) throw error;
     callback(address);
   });
