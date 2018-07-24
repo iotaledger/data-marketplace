@@ -340,7 +340,11 @@ exports.getUser = functions.https.onRequest((req, res) => {
 
     try {
       // Retrieve user
-      return res.json({ user: await getUser(packet.userId) });
+      const user = await getUser(packet.userId);
+      if (!user.numberOfDevices) {
+        user.numberOfDevices = await getNumberOfDevices();
+      }
+      return res.json({ ...user });
     } catch (e) {
       console.log('getUser failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
