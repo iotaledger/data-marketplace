@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Clipboard from 'react-clipboard.js';
 const Sidebar = styled.aside`
@@ -66,7 +67,7 @@ const DetailValue = styled.p`
   color: #595959ff;
 `;
 
-export default class extends React.Component {
+class UserSidebar extends Component {
   state = { alert: false, alertMessage: '' };
   componentWillReceiveProps = props => {
     this.setState(props);
@@ -79,6 +80,7 @@ export default class extends React.Component {
   };
 
   render() {
+    const { settings, devices, user, userData, grandfather, toggleGrand } = this.props;
     return (
       <Sidebar>
         <Details>
@@ -86,7 +88,7 @@ export default class extends React.Component {
           <div>
             <DetailRow>
               <DetailKey>Number of Devices:</DetailKey>
-              <DetailValue>{this.props.devices.length}</DetailValue>
+              <DetailValue>{devices.length}</DetailValue>
             </DetailRow>
             {/* <DetailRow>
               <DetailKey>Total Packets:</DetailKey>
@@ -95,61 +97,54 @@ export default class extends React.Component {
             <DetailRow>
               <DetailKey>Total Data Streams:</DetailKey>
               <DetailValue>
-                {this.props.devices[0]
-                  ? this.props.devices
-                      .map(device => device.dataTypes.length)
-                      .reduce((a, b) => a + b)
+                {devices[0]
+                  ? devices.map(device => device.dataTypes.length).reduce((a, b) => a + b)
                   : '--'}
               </DetailValue>
             </DetailRow>
             <DetailRow>
               <DetailKey>Owner:</DetailKey>
-              <DetailValue>{this.props.user.displayName}</DetailValue>
+              <DetailValue>{user.displayName}</DetailValue>
             </DetailRow>
           </div>
         </Details>
-        {this.props.userData && (
+        {userData && (
           <Details>
             <DetailRow>
               <DetailKey>Your API Key:</DetailKey>
               <Clipboard
                 style={{ background: 'none', display: 'block' }}
-                data-clipboard-text={this.props.userData.apiKey}
-                onSuccess={() => this.alert('Successfully Copied')}
-              >
-                <CopyBox>
-                  {this.props.userData.apiKey
-                    ? this.props.userData.apiKey.substr(0, 20) + '...'
-                    : '--'}
-                </CopyBox>
+                data-clipboard-text={userData.apiKey}
+                onSuccess={() => this.alert('Successfully Copied')}>
+                <CopyBox>{userData.apiKey ? userData.apiKey.substr(0, 20) + '...' : '--'}</CopyBox>
               </Clipboard>
             </DetailRow>
             <DetailRow>
               <DetailKey>Your User ID:</DetailKey>
               <Clipboard
                 style={{ background: 'none', display: 'block' }}
-                data-clipboard-text={this.props.user.uid}
-                onSuccess={() => this.alert('Successfully Copied')}
-              >
-                <CopyBox>
-                  {this.props.user.uid && this.props.user.uid.substr(0, 18) + '...'}
-                </CopyBox>
+                data-clipboard-text={user.uid}
+                onSuccess={() => this.alert('Successfully Copied')}>
+                <CopyBox>{user.uid && user.uid.substr(0, 18) + '...'}</CopyBox>
               </Clipboard>
             </DetailRow>
             <Alert {...this.state}>{this.state.alertMessage}</Alert>
 
             <DetailRow>
-              <a href="https://marketplace.tangle.works" target="_blank" rel="noopener noreferrer">
-                <DetailKey>View the API documentation</DetailKey>
-              </a>
+              {settings ? (
+                <a
+                  href={`https://${settings.domainName}`}
+                  target="_blank"
+                  rel="noopener noreferrer">
+                  <DetailKey>View the API documentation</DetailKey>
+                </a>
+              ) : null}
             </DetailRow>
           </Details>
         )}
-        {this.props.grandfather && (
+        {grandfather && (
           <Details>
-            <Grandfather onClick={() => this.props.toggleGrand()}>
-              Grandfather Old Device
-            </Grandfather>
+            <Grandfather onClick={() => toggleGrand()}>Grandfather Old Device</Grandfather>
           </Details>
         )}
       </Sidebar>
@@ -231,3 +226,9 @@ const Grandfather = styled.button`
 //     </svg>
 //   );
 // };
+
+const mapStateToProps = state => ({
+  settings: state.settings,
+});
+
+export default connect(mapStateToProps)(UserSidebar);

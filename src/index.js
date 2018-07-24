@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import WebFontLoader from 'webfontloader';
-import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import './assets/scss/index.scss';
 import Router from './Router';
+import configureStore from './store/configure';
 import { initializeFirebaseApp } from './utils/firebase';
 
 WebFontLoader.load({
@@ -13,11 +14,12 @@ WebFontLoader.load({
 });
 
 initializeFirebaseApp();
+const store = configureStore();
 
 const renderApp = () => (
-  <BrowserRouter basename={process.env.PUBLIC_URL}>
+  <Provider store={store}>
     <Router />
-  </BrowserRouter>
+  </Provider>
 );
 
 ReactDOM.render(renderApp(), document.getElementById('root'));
