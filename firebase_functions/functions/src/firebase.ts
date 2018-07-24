@@ -246,6 +246,35 @@ exports.getUser = async (userId: string) => {
     return doc.data();
   }
 
-  console.log('getDevice failed.', userId, doc);
+  console.log('getUser failed.', userId, doc);
   throw Error(`User doesn't exist`);
+};
+
+exports.getNumberOfDevices = async () => {
+  // Get API key
+  const doc = await admin
+    .firestore()
+    .collection('settings')
+    .doc('settings')
+    .get();
+  if (doc.exists) {
+    const data = doc.data();
+    if (data.numberOfDevices) {
+      return data.numberOfDevices;
+    }
+  }
+  console.log('getNumberOfDevices failed. Setting does not exist', doc);
+  throw Error(`The getNumberOfDevices setting doesn't exist.`);
+};
+
+exports.getSettings = async () => {
+  // Get data
+  const doc = await admin
+    .firestore()
+    .collection('settings')
+    .doc('settings')
+    .get();
+  if (doc.exists) return doc.data();
+  console.log('getSettings failed. Setting does not exist', doc);
+  throw Error(`The getSettings setting doesn't exist.`);
 };

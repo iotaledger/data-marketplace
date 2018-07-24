@@ -14,7 +14,9 @@ const {
   getDevice,
   getDevices,
   getUserDevices,
+  getNumberOfDevices,
   getUser,
+  getSettings,
   setUser,
   setDevice,
   setPacket,
@@ -250,10 +252,12 @@ exports.setupUser = functions.auth.user().onCreate(event => {
       try {
         const apiKey = generateUUID();
         const seed = seedGen();
+        const numberOfDevices = (await getNumberOfDevices()) || 3;
 
         await setUser(user.uid, {
           apiKey,
           seed,
+          numberOfDevices,
         });
 
         await setApiKey(apiKey, user.uid);
@@ -367,6 +371,18 @@ exports.sendEmail = functions.https.onRequest((req, res) => {
       return res.json({ success: true });
     } catch (e) {
       console.log('sendEmail failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.settings = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      // Retrieve settings
+      return res.json(await getSettings());
+    } catch (e) {
+      console.log('settings failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
