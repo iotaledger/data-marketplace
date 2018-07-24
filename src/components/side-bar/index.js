@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
 import { reducer } from '../../lib/utils';
 
 const Sidebar = styled.aside`
@@ -67,27 +69,33 @@ const DetailValue = styled.p`
   color: #fff;
 `;
 
-export default class extends React.Component {
+class SideBar extends Component {
   componentWillReceiveProps = props => {
     this.setState(props);
   };
 
   render() {
-    var { deviceInfo } = this.props;
+    const { deviceInfo, settings } = this.props;
     return (
       <Sidebar>
         <Details>
           <Label>Sensor details:</Label>
           <div>
-            <a
-              href={`https://testnet.thetangle.org/address/${deviceInfo.address}`}
-              target={`_blank`}
-            >
+            {!isEmpty(settings) ? (
+              <a href={`${settings.tangleExplorer}${deviceInfo.address}`} target={`_blank`}>
+                <DetailRow>
+                  <DetailKey>Device Balance:</DetailKey>
+                  <DetailValue>
+                    {deviceInfo.balance ? reducer(deviceInfo.balance) : `--`}
+                  </DetailValue>
+                </DetailRow>
+              </a>
+            ) : (
               <DetailRow>
                 <DetailKey>Device Balance:</DetailKey>
                 <DetailValue>{deviceInfo.balance ? reducer(deviceInfo.balance) : `--`}</DetailValue>
               </DetailRow>
-            </a>
+            )}
             <DetailRow>
               <DetailKey>Location:</DetailKey>
               <DetailValue>
@@ -182,8 +190,7 @@ const Loading = () => {
       width="80"
       height="80"
       viewBox="0 0 38 38"
-      stroke="#fff"
-    >
+      stroke="#fff">
       <g fill="none" fillRule="evenodd">
         <g transform="translate(1 1)" strokeWidth="2">
           <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
@@ -202,3 +209,9 @@ const Loading = () => {
     </svg>
   );
 };
+
+const mapStateToProps = state => ({
+  settings: state.settings,
+});
+
+export default connect(mapStateToProps)(SideBar);
