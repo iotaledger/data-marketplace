@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { isEmpty } from 'lodash';
 import styled from 'styled-components';
+import { loadUser, logout } from '../store/user/actions';
 import FB from '../lib/firebase';
 import api from '../utils/api';
 import DeviceNav from '../components/device-nav';
@@ -8,7 +11,7 @@ import GrandModal from '../components/modal/grandfather';
 import Sidebar from '../components/user-sidebar';
 import DeviceList from '../components/device-list';
 
-export default class extends React.Component {
+class Dashboard extends Component {
   static async getInitialProps({ query }) {
     return { grandfather: query.grandfather !== undefined };
   }
@@ -16,7 +19,7 @@ export default class extends React.Component {
   state = {
     devices: [],
     packets: [],
-    user: false,
+    user: {},
     button: true,
     grandModal: false,
     index: 0,
@@ -24,7 +27,6 @@ export default class extends React.Component {
       heading: `Loading User`,
       body: `Fetching your devices and account statistcs`,
     },
-    userData: {},
     error: false,
     fetching: false,
   };
@@ -39,7 +41,8 @@ export default class extends React.Component {
     this.firebase.auth().onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {
         // User is signed in.
-        this.getUser(user);
+        this.setState({ user });
+        this.getUser();
       } else {
         // No user is signed in.
         this.setState({ loading: false });
@@ -65,36 +68,24 @@ export default class extends React.Component {
         // This gives you a Google Access Token. You can use it to access the Google API.
         // var token = result.credential.accessToken;
         // The signed-in user info.
-        var user = result.user;
-        this.getUser(user);
+        const user = result.user;
+        this.setState({ user });
+        this.getUser();
       })
       .catch(error => {
         // Handle Errors here.
-        // var errorCode = error.code;
-        // var errorMessage = error.message;
-        // The email of the user's account used.
-        // var email = error.email;
-        // The firebase.auth.AuthCredential type that was used.
-        // var credential = error.credential;
-        // ...
       });
   };
 
-  getUser = async user => {
-    this.findDevices(user);
-    const userData = await api('getUser', { userId: user.uid });
-    if (userData) {
-      this.setState({
-        user,
-        userData,
-        loading: false,
-      });
-    }
+  getUser = async () => {
+    this.findDevices();
+    await this.props.loadUser(this.state.user.uid);
+    this.setState({ loading: false });
   };
 
-  findDevices = async ({ uid }) => {
+  findDevices = async () => {
     this.setState({ loading: true });
-    const devices = await api('getDevicesByUser', { uid });
+    const devices = await api('getDevicesByUser', { uid: this.state.user.uid });
     return this.setState({ devices, loading: false });
   };
 
@@ -107,9 +98,7 @@ export default class extends React.Component {
   };
 
   createDevice = device => {
-    console.log('Saving new device');
-    console.log(this.state.userData);
-
+    const { userData } = this.props;
     // Assign to user
     device.owner = this.state.user.uid;
     // Deactivate the Device
@@ -117,17 +106,16 @@ export default class extends React.Component {
 
     return new Promise(async (res, rej) => {
       const packet = {
-        apiKey: this.state.userData.apiKey,
+        apiKey: userData.apiKey,
         id: device.sensorId,
         device,
       };
-      console.log('createDevice', packet);
 
       // Call server
       const data = await api('newDevice', packet);
       // Check success
       if (data.success) {
-        this.findDevices(this.state.user);
+        this.findDevices();
       }
       res(data);
     });
@@ -135,8 +123,8 @@ export default class extends React.Component {
 
   deleteDevice = async deviceId => {
     this.setState({ loading: true });
-    const { apiKey } = this.state.userData;
-    const data = await api('removeDevice', { apiKey, id: deviceId });
+    const { userData } = this.props;
+    const data = await api('removeDevice', { apiKey: userData.apiKey, id: deviceId });
     if (data.success) {
       return this.setState({
         loading: false,
@@ -151,22 +139,25 @@ export default class extends React.Component {
   };
 
   logout = () => {
+    this.props.logout();
     this.firebase
       .auth()
       .signOut()
       .then(() => {
         // Sign-out successful.
         console.log('Logged Out');
-        this.setState({ user: false, devices: [], userData: {} });
+        this.setState({ user: {}, devices: [] });
       })
-      .catch(function(error) {
+      .catch(error => {
         // An error happened.
       });
   };
+
   // Show grandfather modal
   toggleGrand = () => {
     this.setState({ grandModal: true });
   };
+
   grandfather = (id, sk) => {
     this.setState(
       {
@@ -189,26 +180,39 @@ export default class extends React.Component {
           /// Add error
           this.throw({ heading: 'Error', body: data.error }, true);
         } else {
-          // console.log('Dashboard grandfather', data);
-          location.reload();
+          console.log('Dashboard grandfather', data);
+          // location.reload();
         }
       }
     );
   };
+
   render() {
     const { devices, user, loading, error, button, grandModal } = this.state;
+    const { userData } = this.props;
     return (
       <Main>
         <DeviceNav {...this.state} logout={this.logout} />
         <Data>
           <Sidebar {...this.state} toggleGrand={this.toggleGrand} />
-          <DeviceList devices={devices} create={this.createDevice} delete={this.deleteDevice} />
+          <DeviceList
+            devices={devices}
+            maxDevices={userData.numberOfDevices}
+            create={this.createDevice}
+            delete={this.deleteDevice}
+          />
         </Data>
-        <LoginModal button={button} auth={this.auth} show={!user} loading={loading} error={error} />
+        <LoginModal
+          button={button}
+          auth={this.auth}
+          show={isEmpty(user)}
+          loading={loading}
+          error={error}
+        />
         <GrandModal
           button={button}
           grandfather={this.grandfather}
-          show={grandModal && user}
+          show={grandModal && !isEmpty(user)}
           loading={loading}
           error={error}
         />
@@ -230,3 +234,17 @@ const Data = styled.section`
     flex-direction: column;
   }
 `;
+
+const mapStateToProps = state => ({
+  userData: state.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadUser: userId => dispatch(loadUser(userId)),
+  logout: () => dispatch(logout()),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Dashboard);

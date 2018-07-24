@@ -36,10 +36,11 @@ export default props => (
         <DeviceCard index={i} key={i} device={device} delete={props.delete} />
       ))}
 
-      {props.devices.length < 3 ? (
+      {props.devices.length < props.maxDevices ? (
         <AddCard create={props.create} />
       ) : (
-        <End>{`3 device max per users. Delete a device to add another.`}</End>
+        <End>{`You can create up to ${props.maxDevices ||
+          3} devices. Delete a device to add another.`}</End>
       )}
     </CardWrapper>
   </InfoCol>
