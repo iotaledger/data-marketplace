@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 const axios = require('axios');
+const { provider, iotaApiVersion } = require('../config.json');
 
 exports.generateUUID = () => {
   let d = new Date().getTime();
@@ -38,10 +39,10 @@ exports.findTx = (packet, IOTA) => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'POST',
-      url: 'https://testnet140.tangle.works',
+      url: provider,
       headers: {
         'Content-Type': 'application/json',
-        'X-IOTA-API-Version': 1,
+        'X-IOTA-API-Version': iotaApiVersion,
       },
       data: {
         command: 'getTrytes',

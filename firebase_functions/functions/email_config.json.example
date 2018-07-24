@@ -3,5 +3,7 @@
   "googleSecretKey": "XXXXXXX_XXXXXXX",
   "domain": "mail.tangle.works",
   "emailRecepient": "datamarketplace@iota.org",
-  "emailReplyTo": "datamarketplace@iota.org"
+  "emailReplyTo": "datamarketplace@iota.org",
+  "emailSender": "mailgun@mail.tangle.works",
+  "emailList": "data-market@mail.tangle.works",
 }
