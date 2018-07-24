@@ -5,6 +5,8 @@ const {
   domain,
   emailRecepient,
   emailReplyTo,
+  emailSender,
+  emailList,
 } = require('../email_config.json');
 const mg = require('mailgun-js')({ apiKey, domain });
 
@@ -19,7 +21,7 @@ const checkRecaptcha = async captcha => {
 const mailgunSendEmail = packet => {
   mg.messages().send(
     {
-      from: 'Data Market <mailgun@mail.tangle.works>',
+      from: `Data Market <${emailSender}>`,
       to: emailRecepient,
       'h:Reply-To': packet.email,
       subject: 'Marketplace Form Inquiry',
@@ -43,7 +45,7 @@ const mailgunSendEmail = packet => {
     }
   );
 
-  const list = mg.lists('data-market@mail.tangle.works');
+  const list = mg.lists(emailList);
   const user = {
     subscribed: true,
     address: packet.email,
@@ -61,8 +63,8 @@ const mailgunSendEmail = packet => {
 
   mg.messages().send(
     {
-      from: 'Data Market <mailgun@mail.tangle.works>',
-      to: [packet.email],
+      from: `Data Market <${emailSender}>`,
+      to: packet.email,
       'h:Reply-To': emailReplyTo,
       subject: 'Submission Recieved - Data Marketplace',
       html: `Hi

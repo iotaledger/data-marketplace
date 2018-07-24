@@ -1,10 +1,9 @@
 import * as functions from 'firebase-functions';
 const cors = require('cors')({ origin: true });
 const iota = require('iota.lib.js');
+const { provider } = require('../config.json');
 
-const IOTA = new iota({
-  provider: 'https://testnet140.tangle.works:443',
-});
+const IOTA = new iota({ provider: `${provider}:443` });
 
 const {
   getKey,

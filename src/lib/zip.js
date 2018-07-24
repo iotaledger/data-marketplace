@@ -48,7 +48,7 @@ export const getZip = async device => {
 
 const getConfigFileContent = () => `{
   "provider": "${config.provider}",
-  "endpoint": "https://${config.api}.marketplace.tangle.works/newData",
+  "endpoint": "https://${config.api}.${config.domainName}/newData",
   "serverUrl": "https://swapi.co/api/vehicles/"
 }
 `;
