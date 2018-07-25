@@ -31,18 +31,19 @@ const CardWrapper = styled.div`
 
 export default props => (
   <InfoCol>
-    <CardWrapper>
-      {props.devices.map((device, i) => (
-        <DeviceCard index={i} key={i} device={device} delete={props.delete} />
-      ))}
-
-      {props.devices.length < props.maxDevices ? (
-        <AddCard create={props.create} />
-      ) : (
-        <End>{`You can create up to ${props.maxDevices ||
-          3} devices. Delete a device to add another.`}</End>
-      )}
-    </CardWrapper>
+    {props.devices.length && (
+      <CardWrapper>
+        {props.devices.map((device, i) => (
+          <DeviceCard index={i} key={i} device={device} delete={props.delete} />
+        ))}
+        {props.devices.length < props.maxDevices ? (
+          <AddCard create={props.create} />
+        ) : (
+          <End>{`You can create up to ${props.maxDevices ||
+            3} devices. Delete a device to add another.`}</End>
+        )}
+      </CardWrapper>
+    )}
   </InfoCol>
 );
 

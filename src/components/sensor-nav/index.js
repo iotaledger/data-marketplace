@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { Link } from '../../routes'
 import { Link } from 'react-router-dom';
 
 import Wallet from '../wallet';
@@ -58,7 +57,7 @@ const DeviceID = styled.span`
 const RightHeader = styled.div`
   margin: 5px 30px 0 30px;
   display: block;
-  width: 150px;
+  width: 250px;
   text-align: right;
   @media (max-width: 760px) {
     margin: 10px 20px 0 30px;
