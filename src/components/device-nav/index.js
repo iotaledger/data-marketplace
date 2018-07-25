@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { isEmpty } from 'lodash';
 import { Link } from 'react-router-dom';
 
 const Main = styled.nav`
@@ -100,7 +101,9 @@ export default props => (
       </Block>
     </Header>
     <RightHeader>
-      {props.user && <FooterButton onClick={() => props.logout()}>{`Log Out`}</FooterButton>}
+      {!isEmpty(props.user) && (
+        <FooterButton onClick={() => props.logout()}>{`Log Out`}</FooterButton>
+      )}
     </RightHeader>
   </Main>
 );
