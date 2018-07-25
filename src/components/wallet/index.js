@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { /* initWallet, purchase, */ reducer } from '../../lib/utils';
 
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
@@ -56,7 +55,7 @@ export default class extends React.Component {
   };
 
   render() {
-    var { desc, walletInit, walletLoading, wallet } = this.state;
+    const { desc, walletInit, walletLoading, wallet } = this.state;
     if (walletLoading) {
       return (
         <Block>
@@ -69,9 +68,9 @@ export default class extends React.Component {
         <Block>
           <Desc>{desc}</Desc>
           {walletInit ? (
-            <Balance>{reducer(wallet.balance)}</Balance>
+            <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
           ) : (
-            <Button onClick={() => this.props.fund()}>Fund Wallet</Button>
+            <Button onClick={this.props.fund}>Fund Wallet</Button>
           )}
         </Block>
       );
@@ -87,8 +86,7 @@ const Loading = () => {
         width="26"
         height="26"
         viewBox="0 0 38 38"
-        stroke="#0d3497"
-      >
+        stroke="#0d3497">
         <g fill="none" fillRule="evenodd">
           <g transform="translate(1 1)" strokeWidth="2">
             <circle strokeOpacity=".5" cx="18" cy="18" r="18" />

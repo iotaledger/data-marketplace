@@ -8,5 +8,6 @@
   "messagingSenderId": "0000000",
   "rootURL": "https://us-central1-XXXXXXXXXXXXX.cloudfunctions.net",
   "api": "staging",
-  "domainName": "marketplace.tangle.works"
+  "domainName": "marketplace.tangle.works",
+  "walletSeed": "https://marketseeds.tangle.works"
 }
