@@ -15,6 +15,7 @@ const {
   getUserDevices,
   getNumberOfDevices,
   getUser,
+  getWallet,
   getSettings,
   setUser,
   setDevice,
@@ -22,8 +23,10 @@ const {
   setPurchase,
   setOwner,
   setApiKey,
+  setWallet,
   deleteDevice,
   toggleWhitelistDevice,
+  updateBalance,
 } = require('./firebase');
 const { sendEmail } = require('./email');
 const { generateUUID, seedGen, sanatiseObject, findTx } = require('./helpers');
@@ -386,6 +389,66 @@ exports.settings = functions.https.onRequest((req, res) => {
       return res.json(await getSettings());
     } catch (e) {
       console.log('settings failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.setWallet = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (
+      !packet ||
+      !packet.userId ||
+      !packet.wallet.address ||
+      !packet.wallet.seed ||
+      !packet.wallet.balance
+    ) {
+      console.log('setWallet failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      return res.json({ success: await setWallet(packet.userId, packet.wallet) });
+    } catch (e) {
+      console.log('setWallet failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.updateBalance = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.userId || !packet.balance) {
+      console.log('updateBalance failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      return res.json({ success: await updateBalance(packet.userId, packet.balance) });
+    } catch (e) {
+      console.log('updateBalance failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.getWallet = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.userId) {
+      console.log('getWallet failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      return res.json(await getWallet(packet.userId));
+    } catch (e) {
+      console.log('getWallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });

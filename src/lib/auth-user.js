@@ -29,6 +29,8 @@ export const getData = async (userId, deviceId) => {
     if (result.purchase && !result.purchase.full) {
       const packets = await getPacketsPartial(result.purchase);
       return packets;
+    } else if (result.error) {
+      return result.error;
     } else {
       return result.data;
     }

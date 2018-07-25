@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import FB from '../lib/firebase';
 import Mam from 'mam.client.js';
+import { isEmpty } from 'lodash';
 import { getData, getDevice, userAuth } from '../lib/auth-user';
 import { iota, initWallet, purchaseData, getBalance } from '../lib/utils';
 import SensorNav from '../components/sensor-nav';
@@ -30,8 +31,6 @@ export default class extends React.Component {
   };
 
   async componentDidMount() {
-    // Init Wallet
-    this.fetchWallet();
     // Firebase
     const firebase = await FB();
     const { uid } = await userAuth(firebase);
@@ -40,6 +39,9 @@ export default class extends React.Component {
         params: { id },
       },
     } = this.props;
+
+    // Init Wallet
+    this.fetchWallet(uid);
 
     // Get data
     const device = await getDevice(id);
@@ -160,9 +162,9 @@ ID and try again`,
     }
   };
 
-  fetchWallet = async () => {
-    const wallet = JSON.parse(await localStorage.getItem('wallet'));
-    if (!wallet) {
+  fetchWallet = async userId => {
+    const wallet = await api('getWallet', { userId });
+    if (isEmpty(wallet) || !wallet.balance) {
       this.setState({ desc: 'Wallet not funded', walletLoading: false });
     } else {
       this.setState({
@@ -177,7 +179,7 @@ ID and try again`,
   fund = async () => {
     this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
       const wallet = await initWallet();
-      await localStorage.setItem('wallet', JSON.stringify(wallet));
+      await api('setWallet', { userId: this.state.uid, wallet });
       this.setState({
         walletInit: true,
         desc: 'IOTA wallet balance:',
@@ -191,8 +193,8 @@ ID and try again`,
   purchase = async () => {
     const device = this.state.deviceInfo;
     // Make sure we have wallet
-    let wallet = JSON.parse(await localStorage.getItem('wallet'));
-    if (!wallet)
+    const wallet = await api('getWallet', { userId: this.state.uid });
+    if (isEmpty(wallet) || wallet.error)
       return this.throw(
         {
           body: ` Setup wallet by clicking the top right, to get a prefunded IOTA wallet.`,
@@ -200,7 +202,7 @@ ID and try again`,
         },
         false
       );
-    if (wallet.balance < device.value)
+    if (Number(wallet.balance) < device.value)
       return this.throw({
         body: `You have run out of IOTA. Click below to refill you wallet with IOTA.`,
         heading: `Not enough Balance`,
@@ -248,11 +250,12 @@ ID and try again`,
             // Check Success
             if (message.success) {
               // Modify wallet balance
-              wallet.balance = wallet.balance - device.value;
+              wallet.balance = Number(wallet.balance) - device.value;
               // Start Fetching data
               this.fetch(this.state.uid);
               // Update wallet.
-              await localStorage.setItem('wallet', JSON.stringify(wallet));
+              await api('updateBalance', { userId: this.state.uid, balance: wallet.balance });
+
               return this.setState({
                 loading: true,
                 purchase: true,
