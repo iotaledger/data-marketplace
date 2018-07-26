@@ -35,7 +35,7 @@ exports.sanatiseObject = (device: any) => {
   return false;
 };
 
-exports.findTx = (packet, IOTA) => {
+exports.findTx = (hashes, IOTA) => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'POST',
@@ -46,7 +46,7 @@ exports.findTx = (packet, IOTA) => {
       },
       data: {
         command: 'getTrytes',
-        hashes: packet.hashes,
+        hashes,
       },
     })
       .then(response => {

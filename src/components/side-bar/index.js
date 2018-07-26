@@ -75,51 +75,47 @@ class SideBar extends Component {
   };
 
   render() {
-    const { deviceInfo, settings } = this.props;
+    const { device, settings } = this.props;
     return (
       <Sidebar>
         <Details>
           <Label>Sensor details:</Label>
           <div>
             {!isEmpty(settings) ? (
-              <a href={`${settings.tangleExplorer}${deviceInfo.address}`} target={`_blank`}>
+              <a href={`${settings.tangleExplorer}${device.address}`} target={`_blank`}>
                 <DetailRow>
                   <DetailKey>Device Balance:</DetailKey>
-                  <DetailValue>
-                    {deviceInfo.balance ? reducer(deviceInfo.balance) : `--`}
-                  </DetailValue>
+                  <DetailValue>{device.balance ? reducer(device.balance) : `--`}</DetailValue>
                 </DetailRow>
               </a>
             ) : (
               <DetailRow>
                 <DetailKey>Device Balance:</DetailKey>
-                <DetailValue>{deviceInfo.balance ? reducer(deviceInfo.balance) : `--`}</DetailValue>
+                <DetailValue>{device.balance ? reducer(device.balance) : `--`}</DetailValue>
               </DetailRow>
             )}
             <DetailRow>
               <DetailKey>Location:</DetailKey>
               <DetailValue>
                 {' '}
-                {deviceInfo.location
-                  ? `${deviceInfo.location.city}, ${deviceInfo.location.country} `
-                  : `--`}
+                {device.location ? `${device.location.city}, ${device.location.country} ` : `--`}
               </DetailValue>
             </DetailRow>
             {/* <DetailRow>
               <DetailKey>Owner:</DetailKey>
               <DetailValue>
                 {" "}
-                {deviceInfo.owner ? deviceInfo.owner : `--`}
+                {device.owner ? device.owner : `--`}
               </DetailValue>
             </DetailRow>{" "} */}
             <DetailRow>
               <DetailKey>Owner:</DetailKey>
-              <DetailValue> {deviceInfo.company ? deviceInfo.company : `--`}</DetailValue>
+              <DetailValue> {device.company ? device.company : `--`}</DetailValue>
             </DetailRow>
             {/* <DetailRow>
               <DetailKey>Data Types:</DetailKey>
-              {deviceInfo.dataTypes &&
-                deviceInfo.dataTypes.map((type, i) => (
+              {device.dataTypes &&
+                device.dataTypes.map((type, i) => (
                   <DetailValue key={i}>{` - ${type.name}`}</DetailValue>
                 ))}
             </DetailRow> */}
