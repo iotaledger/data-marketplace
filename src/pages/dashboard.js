@@ -194,7 +194,7 @@ class Dashboard extends Component {
       <Main>
         <DeviceNav {...this.state} logout={this.logout} />
         <Data>
-          <Sidebar {...this.state} toggleGrand={this.toggleGrand} />
+          <Sidebar {...this.state} userData={userData} toggleGrand={this.toggleGrand} />
           <DeviceList
             devices={devices}
             maxDevices={userData.numberOfDevices}
