@@ -1,7 +1,7 @@
 import IOTA from 'iota.lib.js';
 import curl from 'curl.lib.js';
 import { provider } from '../config.json';
-import api from '../utils/api';
+import { fetchData } from '../utils/api';
 
 export const iota = new IOTA({ provider });
 
@@ -34,11 +34,11 @@ export const getBalance = async address => {
   try {
     const packet = {
       command: 'getBalances',
-      addresses: [`${address.substring(0, 81)}`],
+      addresses: [address.substring(0, 81).toUpperCase()],
       threshold: 100,
     };
 
-    const result = await api('', packet);
+    const result = await fetchData(provider, packet);
     return result.balances[0];
   } catch (e) {
     return 0;

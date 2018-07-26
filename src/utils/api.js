@@ -8,13 +8,17 @@ const headers = {
   'X-IOTA-API-Version': apiVersion,
 };
 
-export default async (endpoint, data = {}) => {
+export const fetchData = async (endpoint, data = {}) => {
   if (!endpoint) return null;
-  const response = await fetch(`https://${api}.${domainName}/${endpoint}`, {
+  const response = await fetch(endpoint, {
     headers,
     method: 'POST',
     body: JSON.stringify(data),
   });
   const result = await response.json();
   return result;
+};
+
+export default async (endpoint, data = {}) => {
+  return await fetchData(`https://${api}.${domainName}/${endpoint}`, data);
 };
