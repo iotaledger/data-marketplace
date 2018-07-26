@@ -29,7 +29,7 @@ const {
   updateBalance,
 } = require('./firebase');
 const { sendEmail } = require('./email');
-const { generateUUID, seedGen, sanatiseObject, findTx } = require('./helpers');
+const { generateUUID, seedGen, sanatiseObject, findTx, initWallet } = require('./helpers');
 
 // Take in data from device
 exports.newData = functions.https.onRequest((req, res) => {
@@ -398,19 +398,14 @@ exports.setWallet = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     // Check Fields
     const packet = req.body;
-    if (
-      !packet ||
-      !packet.userId ||
-      !packet.wallet.address ||
-      !packet.wallet.seed ||
-      !packet.wallet.balance
-    ) {
+    if (!packet || !packet.userId) {
       console.log('setWallet failed. Packet: ', packet);
       return res.status(400).json({ error: 'Malformed Request' });
     }
 
     try {
-      return res.json({ success: await setWallet(packet.userId, packet.wallet) });
+      const wallet = await initWallet();
+      return res.json({ success: await setWallet(packet.userId, wallet) });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
