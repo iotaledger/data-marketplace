@@ -18,6 +18,7 @@ export default class extends React.Component {
     deviceLocation: '',
     deviceLat: '',
     deviceLon: '',
+    devicePrice: '',
     dataTypes: [{ id: '', name: '', unit: '' }],
   };
 
@@ -55,7 +56,7 @@ export default class extends React.Component {
       lat: this.state.deviceLat,
       lon: this.state.deviceLon,
       company: this.state.company,
-      value: (Math.random() * 1000 + 1000).toFixed(0),
+      price: this.state.devicePrice,
       address: deviceAddress,
     };
 
@@ -77,6 +78,7 @@ export default class extends React.Component {
       deviceLocation: '',
       deviceLat: '',
       deviceLon: '',
+      devicePrice: '',
       dataTypes: [{ id: '', name: '', unit: '' }],
     });
   };
@@ -216,6 +218,16 @@ export default class extends React.Component {
                 </Add>
               </Row>
             ))}
+            <Column>
+              <label>Price of the data stream:</label>
+              <Input
+                placeholder={50000}
+                type={'number'}
+                name={'devicePrice'}
+                value={this.state.devicePrice}
+                onChange={this.change}
+              />
+            </Column>
           </Form>
         ) : null}
         {loading && (

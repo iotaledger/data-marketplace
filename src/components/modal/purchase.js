@@ -68,9 +68,8 @@ const content = props => (
     <Button
       type="button"
       className="btn btn-accent txt-bold modal-trigger"
-      onClick={() => props.purchase()}
-    >
-      Purchase Access for $0.20
+      onClick={() => props.purchase()}>
+      Purchase Access for {props.device && props.device.price} IOTA
     </Button>
   </Internal>
 );
@@ -89,10 +88,6 @@ const error = props => (
   </Internal>
 );
 
-export default class extends React.Component {
-  render() {
-    return (
-      <Card {...this.props} cardContent={content(this.props)} errorContent={error(this.props)} />
-    );
-  }
-}
+export default props => (
+  <Card {...props} cardContent={content(props)} errorContent={error(props)} />
+);

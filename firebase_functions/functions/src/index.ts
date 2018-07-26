@@ -417,15 +417,28 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     // Check Fields
     const packet = req.body;
-    if (!packet || !packet.userId || !packet.balance) {
+    if (!packet || !packet.userId || !packet.deviceId) {
       console.log('updateBalance failed. Packet: ', packet);
       return res.status(400).json({ error: 'Malformed Request' });
     }
 
     try {
-      return res.json({ success: await updateBalance(packet.userId, packet.balance) });
+      const wallet = await getWallet(packet.userId);
+      const device = await getDevice(packet.deviceId);
+      const settings = await getSettings();
+      if (wallet && wallet.balance && device) {
+        const price = (device && device.price) || settings.defaultPrice;
+        const newBalance = Number(wallet.balance) - Number(price);
+        if (newBalance >= 0) {
+          return res.json({ success: await updateBalance(packet.userId, newBalance) });
+        }
+        console.log('updateBalance failed. Not enough funds', packet);
+        return res.json({ error: 'Not enough funds' });
+      }
+      console.log('updateBalance failed. Wallet not set', packet);
+      return res.json({ error: 'Wallet not set' });
     } catch (e) {
-      console.log('updateBalance failed. Error: ', e.message);
+      console.log('updateBalance failed. Error: ', e.message, packet);
       return res.status(403).json({ error: e.message });
     }
   });
