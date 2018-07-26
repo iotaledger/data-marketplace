@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 const axios = require('axios');
-const { provider, iotaApiVersion } = require('../config.json');
+const { provider, iotaApiVersion, walletSeed } = require('../config.json');
 
 exports.generateUUID = () => {
   let d = new Date().getTime();
@@ -60,4 +60,9 @@ exports.findTx = (packet, IOTA) => {
         reject();
       });
   });
+};
+
+exports.initWallet = async () => {
+  const response = await axios(walletSeed);
+  return response.data;
 };

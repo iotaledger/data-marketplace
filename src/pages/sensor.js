@@ -4,7 +4,7 @@ import FB from '../lib/firebase';
 import Mam from 'mam.client.js';
 import { isEmpty } from 'lodash';
 import { getData, getDevice, userAuth } from '../lib/auth-user';
-import { iota, initWallet, purchaseData, getBalance } from '../lib/utils';
+import { iota, purchaseData, getBalance } from '../lib/utils';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -177,16 +177,10 @@ ID and try again`,
   };
 
   fund = async () => {
+    const userId = this.state.uid;
     this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
-      const wallet = await initWallet();
-      await api('setWallet', { userId: this.state.uid, wallet });
-      this.setState({
-        walletInit: true,
-        desc: 'IOTA wallet balance:',
-        walletLoading: false,
-        wallet,
-        error: false,
-      });
+      await api('setWallet', { userId });
+      this.fetchWallet(userId);
     });
   };
 
