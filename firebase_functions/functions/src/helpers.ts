@@ -31,7 +31,7 @@ exports.sanatiseObject = (device: any) => {
   if (!device.dataTypes || device.dataTypes.length < 1) return 'You must have a valid data fields';
   if (!device.owner) return 'You must specify an owner';
   if (!device.address) return 'You must specify an address';
-  if (!device.value) return 'You must specify a price';
+  if (!device.price) return 'You must specify a price';
   return false;
 };
 

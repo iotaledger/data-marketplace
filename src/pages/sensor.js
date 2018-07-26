@@ -96,6 +96,9 @@ ID and try again`,
 
     let data = await getData(userId, deviceId);
     if (typeof data === 'string') {
+      if (data === 'No data to return') {
+        return this.setState({ loading: false, purchase: true });
+      }
       return this.setState({ loading: false });
     }
 
@@ -175,6 +178,7 @@ ID and try again`,
       this.setState({
         desc: 'IOTA wallet balance:',
         walletLoading: false,
+        error: false,
       });
     }
   };
@@ -190,12 +194,14 @@ ID and try again`,
   purchase = async () => {
     const { userId } = this.state;
     const device = this.props.sensor;
-    // Make sure we have wallet
-    if (!this.props.user || !this.props.user.wallet) {
+
+    if (!this.props.user) {
       await this.props.loadUser(userId);
     }
+
+    // Make sure we have wallet
     const wallet = this.props.user.wallet;
-    if (isEmpty(wallet) || wallet.error)
+    if (!wallet || isEmpty(wallet) || wallet.error) {
       return this.throw(
         {
           body: ` Setup wallet by clicking the top right, to get a prefunded IOTA wallet.`,
@@ -203,7 +209,8 @@ ID and try again`,
         },
         false
       );
-    if (Number(wallet.balance) < device.value)
+    }
+    if (Number(wallet.balance) < Number(device.price))
       return this.throw({
         body: `You have run out of IOTA. Click below to refill you wallet with IOTA.`,
         heading: `Not enough Balance`,
@@ -220,7 +227,7 @@ ID and try again`,
         // Try purchase
         let purchaseResp;
         try {
-          purchaseResp = await purchaseData(wallet.seed, device.address, device.value);
+          purchaseResp = await purchaseData(wallet.seed, device.address, Number(device.price));
         } catch (e) {
           console.log(e);
           return this.throw({
@@ -247,25 +254,31 @@ ID and try again`,
               full: true,
               hashes: purchaseResp.map(bundle => bundle.hash),
             };
-            const message = await api('purchaseStream', packet);
-            // Check Success
-            if (message.success) {
-              // Modify wallet balance
-              wallet.balance = Number(wallet.balance) - device.value;
-              // Start Fetching data
-              this.fetch(userId);
-              // Update wallet.
-              await api('updateBalance', { userId, deviceId });
-              await this.props.loadUser(userId);
 
-              return this.setState({
-                loading: true,
-                purchase: true,
-              });
+            const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
+            await this.props.loadUser(userId);
+
+            if (balanceUpdateResponse.success) {
+              const message = await api('purchaseStream', packet);
+              // Check Success
+              if (message.success) {
+                // Start Fetching data
+                this.fetch(userId);
+                // Update wallet balance
+                return this.setState({
+                  loading: true,
+                  purchase: true,
+                });
+              } else {
+                return this.throw({
+                  body: message.error,
+                  heading: 'Purchase Failed',
+                });
+              }
             } else {
               return this.throw({
-                body: message.error,
-                heading: `Purchase Failed`,
+                body: balanceUpdateResponse.error,
+                heading: 'Purchase Failed',
               });
             }
           }
@@ -284,19 +297,16 @@ ID and try again`,
 
   render() {
     const { purchase, loading, error, button } = this.state;
+    const { sensor, user } = this.props;
     return (
       <Main>
-        <SensorNav
-          {...this.state}
-          device={this.props.sensor}
-          wallet={this.props.user.wallet || {}}
-          fund={this.fund}
-        />
+        <SensorNav {...this.state} device={sensor} wallet={user.wallet || {}} fund={this.fund} />
         <Data>
-          <Sidebar {...this.state} device={this.props.sensor} />
+          <Sidebar {...this.state} device={sensor} />
           <DataStream {...this.state} func={this.loadMore} />
         </Data>
         <Modal
+          device={sensor}
           button={button}
           purchase={this.purchase}
           show={!purchase}
