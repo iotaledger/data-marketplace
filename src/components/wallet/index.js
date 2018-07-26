@@ -43,38 +43,27 @@ const Button = styled.button`
   }
 `;
 export default class extends React.Component {
-  state = {
-    desc: `Loading wallet`,
-    wallet: { amount: 0 },
+  static defaultProps = {
+    desc: 'Loading wallet',
+    wallet: { balance: 0 },
     walletInit: false,
     walletLoading: true,
   };
 
-  componentWillReceiveProps = props => {
-    this.setState({ ...props });
-  };
-
   render() {
-    const { desc, walletInit, walletLoading, wallet } = this.state;
-    if (walletLoading) {
-      return (
-        <Block>
-          <Desc>{desc}</Desc>
+    const { desc, fund, walletInit, walletLoading, wallet } = this.props;
+    return (
+      <Block>
+        <Desc>{desc}</Desc>
+        {walletLoading ? (
           <Loading />
-        </Block>
-      );
-    } else {
-      return (
-        <Block>
-          <Desc>{desc}</Desc>
-          {walletInit ? (
-            <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
-          ) : (
-            <Button onClick={this.props.fund}>Fund Wallet</Button>
-          )}
-        </Block>
-      );
-    }
+        ) : walletInit ? (
+          <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
+        ) : (
+          <Button onClick={fund}>Fund Wallet</Button>
+        )}
+      </Block>
+    );
   }
 }
 
