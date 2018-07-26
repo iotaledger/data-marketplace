@@ -19,7 +19,7 @@ class Router extends Component {
         <Switch>
           <Route path="/" component={HomePage} exact />
           <Route path="/dashboard" component={DashboardPage} />
-          <Route path="/sensor/:id" component={SensorPage} />
+          <Route path="/sensor/:deviceId" component={SensorPage} />
           <Route path="/cookies" component={CookiesPage} />
           <Route path="/whitelist" component={WhitelistPage} />
           <Route component={HomePage} />

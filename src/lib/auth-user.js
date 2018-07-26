@@ -46,17 +46,6 @@ export const allDevices = () => {
   });
 };
 
-export const getDevice = deviceId => {
-  return new Promise(async (resolve, reject) => {
-    const device = await api('getDevice', { deviceId });
-    if (device) {
-      resolve(device);
-    } else {
-      reject('No Device!');
-    }
-  });
-};
-
 const getPackets = (userId, deviceId) => {
   return new Promise(async (resolve, reject) => {
     const packets = await api('queryStream', { userId, deviceId });

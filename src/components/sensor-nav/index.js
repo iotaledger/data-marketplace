@@ -93,8 +93,8 @@ export default props => (
 
     <Header>
       <Block>
-        <Desc>{props.deviceInfo.type ? props.deviceInfo.type : 'Loading Device'}</Desc>
-        <DeviceID>{props.deviceInfo.sensorId && props.deviceInfo.sensorId}</DeviceID>
+        <Desc>{props.device.type ? props.device.type : 'Loading Device'}</Desc>
+        <DeviceID>{props.device.sensorId && props.device.sensorId}</DeviceID>
       </Block>
     </Header>
     <RightHeader>

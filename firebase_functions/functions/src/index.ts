@@ -218,14 +218,14 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     const packet = req.body;
     // Add device key into the list
-    if (!packet || !packet.id || !packet.device || !packet.hashes) {
+    if (!packet || !packet.userId || !packet.deviceId || !packet.hashes) {
       console.log('purchaseStream failed. Packet: ', packet);
       return res.status(400).json({ error: 'Ensure all fields are included' });
     }
 
     try {
       // Find TX on network and parse
-      const data = await findTx(packet, IOTA);
+      const data = await findTx(packet.hashes, IOTA);
       // Make sure TX is valid
       if (!IOTA.utils.validateSignatures(data, data.find(tx => tx.value < -1).address)) {
         console.log('purchaseStream failed. Transaction is invalid for: ', data);
@@ -233,7 +233,7 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
       }
 
       return res.json({
-        success: await setPurchase(packet.id, packet.device),
+        success: await setPurchase(packet.userId, packet.deviceId),
       });
     } catch (e) {
       console.log('purchaseStream failed. Error: ', e.message);
@@ -426,24 +426,6 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
       return res.json({ success: await updateBalance(packet.userId, packet.balance) });
     } catch (e) {
       console.log('updateBalance failed. Error: ', e.message);
-      return res.status(403).json({ error: e.message });
-    }
-  });
-});
-
-exports.getWallet = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
-    // Check Fields
-    const packet = req.body;
-    if (!packet || !packet.userId) {
-      console.log('getWallet failed. Packet: ', packet);
-      return res.status(400).json({ error: 'Malformed Request' });
-    }
-
-    try {
-      return res.json(await getWallet(packet.userId));
-    } catch (e) {
-      console.log('getWallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });

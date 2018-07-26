@@ -45,19 +45,17 @@ const Button = styled.button`
 export default class extends React.Component {
   static defaultProps = {
     desc: 'Loading wallet',
-    wallet: { balance: 0 },
-    walletInit: false,
     walletLoading: true,
   };
 
   render() {
-    const { desc, fund, walletInit, walletLoading, wallet } = this.props;
+    const { desc, fund, walletLoading, wallet } = this.props;
     return (
       <Block>
         <Desc>{desc}</Desc>
         {walletLoading ? (
           <Loading />
-        ) : walletInit ? (
+        ) : wallet.balance ? (
           <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
         ) : (
           <Button onClick={fund}>Fund Wallet</Button>
