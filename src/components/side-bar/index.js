@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
-import { reducer } from '../../lib/utils';
+import { reducer } from '../../utils/utils';
 
 const Sidebar = styled.aside`
   background-image: linear-gradient(-189deg, #0d3497 1%, #1857eb 95%);
