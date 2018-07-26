@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import React from 'react';
-import { generateDeviceAddress } from '../../lib/utils';
+import { generateDeviceAddress } from '../../utils/utils';
 import Card from '../card';
 
 const Heading = state => <Header>New Device</Header>;

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
 import { loadUser, logout } from '../store/user/actions';
-import FB from '../lib/firebase';
+import FB from '../utils/firebase';
 import api from '../utils/api';
 import DeviceNav from '../components/device-nav';
 import LoginModal from '../components/login-modal';

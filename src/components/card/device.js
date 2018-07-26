@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { getZip } from '../../lib/zip';
+import { getZip } from '../../utils/zip';
 
 import Card from './index.js';
 
