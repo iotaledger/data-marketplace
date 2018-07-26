@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import FB from '../lib/firebase';
 import Mam from 'mam.client.js';
 import { isEmpty } from 'lodash';
-import { getData, getDevice, userAuth } from '../lib/auth-user';
+import { loadUser } from '../store/user/actions';
+import { loadSensor } from '../store/sensor/actions';
+import { getData, userAuth } from '../lib/auth-user';
 import { iota, purchaseData, getBalance } from '../lib/utils';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
@@ -11,13 +14,12 @@ import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
 import api from '../utils/api';
 
-export default class extends React.Component {
+class Sensor extends Component {
   static async getInitialProps({ query }) {
     return { id: query.id };
   }
 
   state = {
-    deviceInfo: {},
     packets: [],
     purchase: false,
     button: true,
@@ -33,18 +35,20 @@ export default class extends React.Component {
   async componentDidMount() {
     // Firebase
     const firebase = await FB();
-    const { uid } = await userAuth(firebase);
+    const userId = (await userAuth(firebase)).uid;
     const {
       match: {
-        params: { id },
+        params: { deviceId },
       },
     } = this.props;
 
     // Init Wallet
-    this.fetchWallet(uid);
+    this.fetchWallet(userId);
+
+    await this.props.loadSensor(deviceId);
 
     // Get data
-    const device = await getDevice(id);
+    const device = this.props.sensor;
 
     if (device.address) {
       device.balance = await getBalance(device.address);
@@ -68,12 +72,11 @@ ID and try again`,
     });
 
     this.setState({
-      deviceInfo: device,
       layout,
-      uid,
+      userId,
     });
     // MAM
-    this.fetch(uid);
+    this.fetch(userId);
   }
 
   throw = (error, button) => {
@@ -87,11 +90,11 @@ ID and try again`,
   fetch = async userId => {
     const {
       match: {
-        params: { id },
+        params: { deviceId },
       },
     } = this.props;
 
-    let data = await getData(userId, id);
+    let data = await getData(userId, deviceId);
     if (typeof data === 'string') {
       return this.setState({ loading: false });
     }
@@ -119,14 +122,15 @@ ID and try again`,
       }
 
       const mamState = Mam.init(iota);
-      mamState.channel.security = this.state.deviceInfo.security || 2;
+      const device = this.props.sensor;
+      mamState.channel.security = device.security || 2;
 
       const packets = data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
         const result = await Mam.fetchSingle(
           root,
           sidekey !== '' ? 'restricted' : null,
           sidekey !== '' ? sidekey : null,
-          this.state.deviceInfo.hash === 'curlp27' ? 27 : undefined
+          device.hash === 'curlp27' ? 27 : undefined
         );
 
         if (result && result.payload) {
@@ -134,7 +138,7 @@ ID and try again`,
         } else {
           this.throw({
             body: 'Unable to read the packets of data from the device.',
-            heading: `Device Misconfigured`,
+            heading: 'Device Misconfigured',
           });
         }
       });
@@ -163,21 +167,20 @@ ID and try again`,
   };
 
   fetchWallet = async userId => {
-    const wallet = await api('getWallet', { userId });
+    await this.props.loadUser(userId);
+    const wallet = this.props.user.wallet;
     if (isEmpty(wallet) || !wallet.balance) {
       this.setState({ desc: 'Wallet not funded', walletLoading: false });
     } else {
       this.setState({
         desc: 'IOTA wallet balance:',
-        wallet,
-        walletInit: true,
         walletLoading: false,
       });
     }
   };
 
   fund = async () => {
-    const userId = this.state.uid;
+    const { userId } = this.state;
     this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
       await api('setWallet', { userId });
       this.fetchWallet(userId);
@@ -185,9 +188,13 @@ ID and try again`,
   };
 
   purchase = async () => {
-    const device = this.state.deviceInfo;
+    const { userId } = this.state;
+    const device = this.props.sensor;
     // Make sure we have wallet
-    const wallet = await api('getWallet', { userId: this.state.uid });
+    if (!this.props.user || !this.props.user.wallet) {
+      await this.props.loadUser(userId);
+    }
+    const wallet = this.props.user.wallet;
     if (isEmpty(wallet) || wallet.error)
       return this.throw(
         {
@@ -231,12 +238,12 @@ ID and try again`,
           async () => {
             const {
               match: {
-                params: { id },
+                params: { deviceId },
               },
             } = this.props;
             const packet = {
-              id: this.state.uid,
-              device: id,
+              userId,
+              deviceId,
               full: true,
               hashes: purchaseResp.map(bundle => bundle.hash),
             };
@@ -246,14 +253,14 @@ ID and try again`,
               // Modify wallet balance
               wallet.balance = Number(wallet.balance) - device.value;
               // Start Fetching data
-              this.fetch(this.state.uid);
+              this.fetch(userId);
               // Update wallet.
-              await api('updateBalance', { userId: this.state.uid, balance: wallet.balance });
+              await api('updateBalance', { userId, deviceId });
+              await this.props.loadUser(userId);
 
               return this.setState({
                 loading: true,
                 purchase: true,
-                wallet,
               });
             } else {
               return this.throw({
@@ -279,9 +286,14 @@ ID and try again`,
     const { purchase, loading, error, button } = this.state;
     return (
       <Main>
-        <SensorNav {...this.state} fund={this.fund} />
+        <SensorNav
+          {...this.state}
+          device={this.props.sensor}
+          wallet={this.props.user.wallet || {}}
+          fund={this.fund}
+        />
         <Data>
-          <Sidebar {...this.state} />
+          <Sidebar {...this.state} device={this.props.sensor} />
           <DataStream {...this.state} func={this.loadMore} />
         </Data>
         <Modal
@@ -309,3 +321,18 @@ const Data = styled.section`
     flex-direction: column;
   }
 `;
+
+const mapStateToProps = state => ({
+  sensor: state.sensor,
+  user: state.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadSensor: deviceId => dispatch(loadSensor(deviceId)),
+  loadUser: userId => dispatch(loadUser(userId)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Sensor);

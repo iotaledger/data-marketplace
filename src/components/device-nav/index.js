@@ -92,11 +92,7 @@ export default props => (
 
     <Header>
       <Block>
-        <Desc>
-          Owner:
-          {/* Google sign-in */}
-          {/* {props.deviceInfo.type ? props.deviceInfo.type : 'Loading Device'} */}
-        </Desc>
+        <Desc>Owner:</Desc>
         <DeviceID>{props.user.displayName || '--'}</DeviceID>
       </Block>
     </Header>
