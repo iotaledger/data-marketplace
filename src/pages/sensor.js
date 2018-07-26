@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import FB from '../lib/firebase';
+import FB from '../utils/firebase';
 import Mam from 'mam.client.js';
 import { isEmpty } from 'lodash';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
-import { getData, userAuth } from '../lib/auth-user';
-import { iota, purchaseData, getBalance } from '../lib/utils';
+import { getData, userAuth } from '../utils/auth-user';
+import { iota, purchaseData, getBalance } from '../utils/utils';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';

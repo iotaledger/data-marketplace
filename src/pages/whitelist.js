@@ -2,8 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 // import { Link } from '../routes.js'
 import { Link } from 'react-router-dom';
-import FB from '../lib/firebase';
-import { allDevices } from '../lib/auth-user';
+import FB from '../utils/firebase';
+import { allDevices } from '../utils/auth-user';
 import api from '../utils/api';
 
 export default class extends React.Component {

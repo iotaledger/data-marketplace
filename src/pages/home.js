@@ -11,8 +11,8 @@ import Form from '../components/form';
 import Footer from '../components/footer';
 import Map from '../components/map';
 
-import FB from '../lib/firebase';
-import { allDevices } from '../lib/auth-user';
+import FB from '../utils/firebase';
+import { allDevices } from '../utils/auth-user';
 
 // const Map = dynamic(import('../components/map'), {
 //   ssr: false,
