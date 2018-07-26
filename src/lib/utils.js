@@ -1,14 +1,9 @@
 import IOTA from 'iota.lib.js';
 import curl from 'curl.lib.js';
-import { provider, walletSeed } from '../config.json';
+import { provider } from '../config.json';
 import api from '../utils/api';
 
 export const iota = new IOTA({ provider });
-
-export const initWallet = async () => {
-  const response = await fetch(walletSeed);
-  return await response.json();
-};
 
 export const purchaseData = async (seed, address, value) => {
   try {
