@@ -1,6 +1,7 @@
 {
   "hosting": {
     "public": "build",
+    "cleanUrls": true,
     "headers": [
       {
         "source": "**/*",
@@ -23,6 +24,23 @@
       "src/**",
       "firebase_functions/**",
       ".git/**"
-    ]
+    ],
+    "redirects": [ {
+      "source" : "/whitelist",
+      "destination" : "/#/whitelist",
+      "type" : 301
+    }, {
+      "source": "/dashboard",
+      "destination": "/#/dashboard",
+      "type" : 301
+    }, {
+      "source": "/sensor/:deviceId",
+      "destination": "/#/sensor/:deviceId",
+      "type" : 301
+    }, {
+      "source" : "/cookies",
+      "destination" : "/#/cookies",
+      "type" : 301
+    } ]
   }
 }
