@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { HashRouter, Switch, Route } from 'react-router-dom';
 import HomePage from './pages/home';
 import SensorPage from './pages/sensor';
 import CookiesPage from './pages/cookies';
@@ -15,7 +15,7 @@ class Router extends Component {
 
   render() {
     return (
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <HashRouter>
         <Switch>
           <Route path="/" component={HomePage} exact />
           <Route path="/dashboard" component={DashboardPage} />
@@ -24,7 +24,7 @@ class Router extends Component {
           <Route path="/whitelist" component={WhitelistPage} />
           <Route component={HomePage} />
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
     );
   }
 }
