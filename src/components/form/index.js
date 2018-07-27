@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import Recaptcha from 'react-recaptcha';
+import { connect } from 'react-redux';
 import api from '../../utils/api';
 
-export default class extends React.Component {
+class Form extends Component {
   state = {
     name: '',
     email: '',
@@ -44,6 +45,8 @@ export default class extends React.Component {
 
   render() {
     const { name, email, body, company, success, error, captcha, loading } = this.state;
+    const { devices, settings } = this.props;
+
     return (
       <S id="contact">
         <C>
@@ -76,11 +79,8 @@ export default class extends React.Component {
               placeholder={'Your message here...'}
               onChange={e => this.setState({ body: e.target.value })}
             />
-            {this.props.devices.length !== 0 && (
-              <Recaptcha
-                sitekey="6LeIFTsUAAAAAHRqa-Y9JtoN8Bopd3gQBDM2ItCm"
-                verifyCallback={this.verify}
-              />
+            {devices.length !== 0 && (
+              <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
             )}
             {captcha && !loading && <Button type={'submit'}>Submit</Button>}
             {loading && <Button>Sending</Button>}
@@ -96,6 +96,12 @@ export default class extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => ({
+  settings: state.settings,
+});
+
+export default connect(mapStateToProps)(Form);
 
 const Bottom = styled.div`
   position: absolute;
