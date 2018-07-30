@@ -1,8 +1,10 @@
 const fetch = require('node-fetch');
-const { endpoint } = require('./config.json');
+const { debug, endpoint, secretKey, sensorId } = require('./config.json');
 
-// Push keys to market place.
-const storeKey = async (root, sidekey, sensorId, secretKey) => {
+// Push key to data marketplace.
+const storeKey = async (root, sidekey) => {
+  if (debug) return 'Debug mode';
+
   const packet = {
     sidekey,
     root,
