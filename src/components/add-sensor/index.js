@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import React from 'react';
-import { generateDeviceAddress } from '../../utils/utils';
+import { generateDeviceAddress } from '../../utils/iota';
 import Card from '../card';
+import Loading from '../loading';
 
 const Heading = state => <Header>New Device</Header>;
 
@@ -27,6 +28,11 @@ export default class extends React.Component {
     dataTypes.push({ id: '', name: '', unit: '' });
     this.setState({ dataTypes });
   };
+
+  activate = () => this.setState({ active: true });
+
+  deactivate = () => this.setState({ active: false });
+
   remove = i => {
     const dataTypes = this.state.dataTypes;
     if (dataTypes.length === 1) return alert('You must have at least one data field.');
@@ -176,7 +182,7 @@ export default class extends React.Component {
             </Row>
             <Row style={{ justifyContent: 'space-between' }}>
               <Header>Data Fields:</Header>
-              <Add onClick={() => this.addRow()}>
+              <Add onClick={this.addRow}>
                 <IconButton src="/static/icons/icon-add.svg" />
               </Add>
             </Row>
@@ -232,19 +238,19 @@ export default class extends React.Component {
         ) : null}
         {loading && (
           <LoadingBox>
-            <Loading />
+            <Loading color="#e2e2e2" size="130" />
           </LoadingBox>
         )}
         {active ? (
           <FootRow>
-            <FooterButton grey onClick={() => this.setState({ active: false })}>
+            <FooterButton grey onClick={this.deactivate}>
               Cancel
             </FooterButton>
-            <FooterButton onClick={() => this.submit()}>Submit</FooterButton>
+            <FooterButton onClick={this.submit}>Submit</FooterButton>
           </FootRow>
         ) : (
           <FootRow>
-            <FooterButton onClick={() => this.setState({ active: true })}>Add device</FooterButton>
+            <FooterButton onClick={this.activate}>Add device</FooterButton>
           </FootRow>
         )}
       </Card>
@@ -258,35 +264,8 @@ const LoadingBox = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 20px;
 `;
-
-const Loading = () => {
-  return (
-    <svg
-      style={{ padding: '20' }}
-      xmlns="http://www.w3.org/2000/svg"
-      width="130"
-      height="130"
-      viewBox="0 0 38 38"
-      stroke="#e2e2e2">
-      <g fill="none" fillRule="evenodd">
-        <g transform="translate(1 1)" strokeWidth="2">
-          <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
-          <path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(319.698 18 18)">
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="0 18 18"
-              to="360 18 18"
-              dur="1s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </g>
-      </g>
-    </svg>
-  );
-};
 
 const Form = styled.form`
   transition: all 0.5s ease;
@@ -300,6 +279,7 @@ const Header = styled.span`
   position: relative;
   color: #009fff;
 `;
+
 const FootRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -311,38 +291,19 @@ const FootRow = styled.div`
   }
 `;
 
-// const InfoKey = styled.span`
-//     color: #808b92;
-//     text-transform: capitalize;
-//     font: 12px/16px 'Nunito Sans', sans-serif;
-// `
-
-// const InfoValue = styled.span`
-//     font-size: 12px;
-//     line-height: 16px;
-//     font-weight: 800;
-// `
-
-// const Label = styled.p``
-// const Para = styled.p`
-//   font-weight: 300;
-// `;
-// const Bold = Para.extend`
-//     font-size: 110%;
-//     font-weight: 600;
-// `
-
 const Column = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
 `;
+
 const Small = Column.extend`
   width: 30%;
   @media (max-width: 760px) {
     width: 100%;
   }
 `;
+
 const Row = styled.div`
   display: flex;
   flex-direction: row;
@@ -377,9 +338,8 @@ const Input = styled.input`
   margin: 0px 5px 10px 0;
   border-bottom: 2px solid #eee;
   background: transparent;
-  &::placeholder {
-  }
 `;
+
 const Add = styled.div`
   height: 100%;
   display: flex;
