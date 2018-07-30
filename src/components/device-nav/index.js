@@ -3,6 +3,24 @@ import styled from 'styled-components';
 import { isEmpty } from 'lodash';
 import { Link } from 'react-router-dom';
 
+export default props => (
+  <Main>
+    <Back to={`/#map`}>
+      <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
+    </Back>
+
+    <Header>
+      <Block>
+        <Desc>Owner:</Desc>
+        <DeviceID>{props.user.displayName || '--'}</DeviceID>
+      </Block>
+    </Header>
+    <RightHeader>
+      {!isEmpty(props.user) && <FooterButton onClick={props.logout}>Log Out</FooterButton>}
+    </RightHeader>
+  </Main>
+);
+
 const Main = styled.nav`
   display: flex;
   justify-content: space-between;
@@ -18,6 +36,7 @@ const Main = styled.nav`
     height: 66px;
   }
 `;
+
 const Header = styled.header`
   margin: 10px auto 0 30px;
   display: flex;
@@ -63,46 +82,13 @@ const RightHeader = styled.div`
     width: 120px;
   }
 `;
+
 const Block = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 `;
-// const NavGraphics = styled.img`
-//   height: 100%;
-//   width: auto;
-//   @media (max-width: 760px) {
-//     width: 66px;
-//     object-fit: cover;
-//   }
-// `;
 
-// const SensorIcon = styled.img`
-//   margin-right: 10px;
-//   @media (max-width: 760px) {
-//     display: none;
-//   }
-// `;
-
-export default props => (
-  <Main>
-    <Back to={`/#map`}>
-      <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
-    </Back>
-
-    <Header>
-      <Block>
-        <Desc>Owner:</Desc>
-        <DeviceID>{props.user.displayName || '--'}</DeviceID>
-      </Block>
-    </Header>
-    <RightHeader>
-      {!isEmpty(props.user) && (
-        <FooterButton onClick={() => props.logout()}>{`Log Out`}</FooterButton>
-      )}
-    </RightHeader>
-  </Main>
-);
 const FooterButton = styled.button`
   color: ${props => (props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`)};
   padding: 5px 15px;
