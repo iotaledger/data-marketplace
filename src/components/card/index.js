@@ -3,9 +3,9 @@ import styled from 'styled-components';
 
 export default props => (
   <Card data-component="SensorCard">
-    {props.header && <CardHeader>{props.header}</CardHeader>}
+    {props.header ? <CardHeader>{props.header}</CardHeader> : null}
     {props.children}
-    {props.footer && <CardFooter>{props.footer}</CardFooter>}
+    {props.footer ? <CardFooter>{props.footer}</CardFooter> : null}
   </Card>
 );
 
@@ -34,6 +34,7 @@ const Card = styled.a`
     box-shadow: 0 23px 50px 0 rgba(25, 54, 80, 0.1);
   }
 `;
+
 const CardHeader = styled.header`
   position: relative;
   padding: 0 30px 8px 30px;
