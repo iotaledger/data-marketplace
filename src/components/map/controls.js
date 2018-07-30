@@ -1,18 +1,17 @@
-import { experimental } from 'react-map-gl'
+import { experimental } from 'react-map-gl';
 
 export default class MyMapControls extends experimental.MapControls {
   constructor() {
-    super()
+    super();
     // subscribe to additional events
-    this.events = ['click']
+    this.events = ['click'];
   }
 
   // override the default handler in MapControls
   handle(event) {
-    console.log(event)
     if (event.type === 'wheel') {
-      return false
+      return false;
     }
-    return super.handle(event)
+    return super.handle(event);
   }
 }
