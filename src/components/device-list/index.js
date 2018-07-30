@@ -2,7 +2,24 @@ import React from 'react';
 import styled from 'styled-components';
 import DeviceCard from '../card/device';
 import AddCard from '../add-sensor';
-// import Inview from '../inview'
+
+export default props => (
+  <InfoCol>
+    {props.devices.length && (
+      <CardWrapper>
+        {props.devices.map((device, i) => (
+          <DeviceCard index={i} key={i} device={device} delete={props.delete} />
+        ))}
+        {props.devices.length < props.maxDevices ? (
+          <AddCard create={props.create} />
+        ) : (
+          <End>{`You can create up to ${props.maxDevices ||
+            3} devices. Delete a device to add another.`}</End>
+        )}
+      </CardWrapper>
+    )}
+  </InfoCol>
+);
 
 const InfoCol = styled.main`
   position: relative;
@@ -28,24 +45,6 @@ const CardWrapper = styled.div`
     align-items: center;
   }
 `;
-
-export default props => (
-  <InfoCol>
-    {props.devices.length && (
-      <CardWrapper>
-        {props.devices.map((device, i) => (
-          <DeviceCard index={i} key={i} device={device} delete={props.delete} />
-        ))}
-        {props.devices.length < props.maxDevices ? (
-          <AddCard create={props.create} />
-        ) : (
-          <End>{`You can create up to ${props.maxDevices ||
-            3} devices. Delete a device to add another.`}</End>
-        )}
-      </CardWrapper>
-    )}
-  </InfoCol>
-);
 
 const End = styled.span`
   padding: 15px 0 50px;
