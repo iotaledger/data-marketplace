@@ -1,9 +1,40 @@
 import React from 'react';
 import styled from 'styled-components';
-// import { Link } from '../../routes'
 import { Link } from 'react-router-dom';
-
 import Card from './index';
+
+const content = ({ device, purchase }) => (
+  <Internal>
+    <img
+      src="/static/icons/icon-padlock.png"
+      srcSet="/static/icons/icon-padlock@2x.png 2x"
+      alt="Icon padlock"
+    />
+    <Heading>Purchase device stream</Heading>
+    <Info>You can purchase access to this device's data stream by clicking below.</Info>
+    <Button type="button" className="btn btn-accent txt-bold modal-trigger" onClick={purchase}>
+      Purchase Access for {device && device.price} IOTA
+    </Button>
+  </Internal>
+);
+
+const error = ({ error, button }) => (
+  <Internal>
+    <Heading>{error.heading}</Heading>
+    <Info>{error.body}</Info>
+    {button && (
+      <Link to={'/'}>
+        <Button type="button" className="btn btn-accent txt-bold modal-trigger">
+          Go back
+        </Button>
+      </Link>
+    )}
+  </Internal>
+);
+
+export default props => (
+  <Card {...props} cardContent={content(props)} errorContent={error(props)} />
+);
 
 const Heading = styled.p`
   font-size: 28px;
@@ -13,6 +44,7 @@ const Heading = styled.p`
   text-align: center;
   color: #009fff;
 `;
+
 const Info = styled.p`
   font-size: 17px;
   line-height: 28px;
@@ -20,6 +52,7 @@ const Info = styled.p`
   text-align: center;
   margin-bottom: auto;
 `;
+
 const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -38,6 +71,7 @@ const Button = styled.button`
   font-weight: 700;
   background-color: #009fff;
 `;
+
 const Internal = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -45,49 +79,3 @@ const Internal = styled.div`
   align-items: center;
   width: 100%;
 `;
-// const Input = styled.input`
-//   background: transparent;
-//   border: none;
-//   border-bottom: 1px solid white;
-//   padding: 4px 10px;
-//   color: white;
-//   &:placeholder {
-//     color: rgba(0, 0, 0, 0.3);
-//   }
-// `;
-
-const content = props => (
-  <Internal>
-    <img
-      src="/static/icons/icon-padlock.png"
-      srcSet="/static/icons/icon-padlock@2x.png 2x"
-      alt="Icon padlock"
-    />
-    <Heading>Purchase device stream</Heading>
-    <Info>You can purchase access to this device's data stream by clicking below.</Info>
-    <Button
-      type="button"
-      className="btn btn-accent txt-bold modal-trigger"
-      onClick={() => props.purchase()}>
-      Purchase Access for {props.device && props.device.price} IOTA
-    </Button>
-  </Internal>
-);
-
-const error = props => (
-  <Internal>
-    <Heading>{props.error.heading}</Heading>
-    <Info>{props.error.body}</Info>
-    {props.button && (
-      <Link to={'/'}>
-        <Button type="button" className="btn btn-accent txt-bold modal-trigger">
-          Go back
-        </Button>
-      </Link>
-    )}
-  </Internal>
-);
-
-export default props => (
-  <Card {...props} cardContent={content(props)} errorContent={error(props)} />
-);
