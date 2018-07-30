@@ -1,5 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
+import Loading from '../loading';
+
+const Wallet = ({ desc, fund, walletLoading, wallet }) => (
+  <Block>
+    <Desc>{desc}</Desc>
+    {walletLoading ? (
+      <div style={{ margin: '8px 0 0 ' }}>
+        <Loading size="26" color="#0d3497" />
+      </div>
+    ) : wallet.balance ? (
+      <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
+    ) : (
+      <Button onClick={fund}>Fund Wallet</Button>
+    )}
+  </Block>
+);
+
+Wallet.defaultProps = {
+  desc: 'Loading wallet',
+  walletLoading: true,
+};
+
+export default Wallet;
 
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
@@ -17,11 +40,13 @@ const Balance = styled.span`
     top: -4px;
   }
 `;
+
 const Block = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
 `;
+
 const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -42,54 +67,3 @@ const Button = styled.button`
     margin: 3px 0;
   }
 `;
-export default class extends React.Component {
-  static defaultProps = {
-    desc: 'Loading wallet',
-    walletLoading: true,
-  };
-
-  render() {
-    const { desc, fund, walletLoading, wallet } = this.props;
-    return (
-      <Block>
-        <Desc>{desc}</Desc>
-        {walletLoading ? (
-          <Loading />
-        ) : wallet.balance ? (
-          <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
-        ) : (
-          <Button onClick={fund}>Fund Wallet</Button>
-        )}
-      </Block>
-    );
-  }
-}
-
-const Loading = () => {
-  return (
-    <div style={{ margin: '8px 0 0 ' }}>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="26"
-        height="26"
-        viewBox="0 0 38 38"
-        stroke="#0d3497">
-        <g fill="none" fillRule="evenodd">
-          <g transform="translate(1 1)" strokeWidth="2">
-            <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
-            <path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(319.698 18 18)">
-              <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="0 18 18"
-                to="360 18 18"
-                dur="1s"
-                repeatCount="indefinite"
-              />
-            </path>
-          </g>
-        </g>
-      </svg>
-    </div>
-  );
-};
