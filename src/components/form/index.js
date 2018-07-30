@@ -29,16 +29,20 @@ class Form extends Component {
 
   submit = async e => {
     e.preventDefault();
-    let state = this.state;
-    if (state.loading) return;
+    const { captcha, loading, name, email, body } = this.state;
 
-    if (!state.name || !state.email || !state.body)
+    if (loading) return;
+
+    if (!name || !email || !body) {
       return this.setState({ error: 'Please fill out all fields' });
+    }
 
-    if (!state.captcha) return this.setState({ error: 'Please complete the captcha' });
+    if (!captcha) {
+      return this.setState({ error: 'Please complete the captcha' });
+    }
 
     this.setState({ loading: true }, async () => {
-      await api('sendEmail', state);
+      await api('sendEmail', this.state);
       this.setState({ success: true });
     });
   };
@@ -46,6 +50,7 @@ class Form extends Component {
   render() {
     const { name, email, body, company, success, error, captcha, loading } = this.state;
     const { devices, settings } = this.props;
+    if (!settings.recaptchaSiteKey) return <div />;
 
     return (
       <S id="contact">
@@ -56,27 +61,27 @@ class Form extends Component {
           <F onSubmit={this.submit}>
             {error && <Error>{error}</Error>}
             <I
-              type={'text'}
-              placeholder={'Your Full Name'}
+              type="text"
+              placeholder="Your Full Name"
               value={name}
               onChange={e => this.setState({ name: e.target.value })}
             />
 
             <I
-              type={'email'}
-              placeholder={'Your email'}
+              type="email"
+              placeholder="Your Email"
               value={email}
               onChange={e => this.setState({ email: e.target.value })}
             />
             <I
-              type={'text'}
-              placeholder={'Your Company'}
+              type="text"
+              placeholder="Your Company"
               value={company}
               onChange={e => this.setState({ company: e.target.value })}
             />
             <T
               value={body}
-              placeholder={'Your message here...'}
+              placeholder="Your message here..."
               onChange={e => this.setState({ body: e.target.value })}
             />
             {devices.length !== 0 && (
@@ -107,6 +112,7 @@ const Bottom = styled.div`
   position: absolute;
   height: 50px;
 `;
+
 const F = styled.form`
   display: flex;
   margin: 0 auto;
@@ -128,6 +134,7 @@ const I = styled.input`
     color: rgba(0, 0, 0, 0.3);
   }
 `;
+
 const T = styled.textarea`
   height: 100px;
   width: 100%;
@@ -145,13 +152,12 @@ const T = styled.textarea`
 const S = styled.section`
   background-image: linear-gradient(-189deg, #eaf0f4 1%, #f3f8fa 95%);
   padding: 90px 0 70px;
-  /* transform: skewY(-2deg); */
   @media (max-width: 760px) {
     padding-bottom: 45px;
   }
 `;
+
 const C = styled.div`
-  /* transform: skewY(2deg); */
   width: 100%;
   max-width: 1440px;
   padding: 0 15px;
@@ -159,6 +165,7 @@ const C = styled.div`
   margin-left: auto;
   margin-top: 60px;
 `;
+
 const H = styled.p`
   font-size: 13px;
   font-weight: 800;
@@ -170,6 +177,7 @@ const H = styled.p`
     margin-bottom: 40px;
   }
 `;
+
 const Error = styled.p`
   padding: 15px 0 0px;
   font-size: 13px;
@@ -183,38 +191,6 @@ const Error = styled.p`
   }
 `;
 
-// const Ul = styled.ul`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   flex-wrap: wrap;
-//   margin: 40px auto;
-//   width: 80%;
-//   list-style: none;
-//   @media (max-width: 1120px) {
-//     justify-content: space-around;
-//   }
-//   @media (max-width: 760px) {
-//     flex-flow: row wrap;
-//     max-width: 370px;
-//     margin: 0 auto;
-//   }
-// `;
-// const Li = styled.li`
-//   margin: 0;
-//   padding: 0;
-//   border: 0;
-//   font-size: 100%;
-//   vertical-align: baseline;
-//   @media (max-width: 1120px) {
-//     &:not(:last-of-type) {
-//       margin-right: 0;
-//     }
-//   }
-//   @media (max-width: 760px) {
-//     margin-bottom: 40px;
-//   }
-// `;
 const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;

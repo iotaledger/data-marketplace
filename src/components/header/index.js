@@ -1,68 +1,61 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-// import { Link } from '../../routes'
 import { Link } from 'react-router-dom';
 
-export default class extends React.Component {
-  state = {};
-
-  render() {
-    const { onAnchorClick } = this.props;
-    return (
-      <Header>
-        <Container>
-          <Info>
-            <a href="https://iota.org">
-              <img src="/static/logotypes/logo-header.svg" alt="Logo IOTA" />
-            </a>
-            <Heading>
-              IOTA makes it<br className="desktop-hidden-later mobile-hidden-later" /> possible<br className="tablet-hidden-later mobile-hidden-later" />{' '}
-              to securely<br className="desktop-hidden-later mobile-hidden-later" /> store, sell,<br className="tablet-hidden-later mobile-hidden-later" />{' '}
-              and access<br className="desktop-hidden-later mobile-hidden" /> data streams.
-            </Heading>
-            <Tagline>
-              Never has getting access to diverse, fine-granular data been this easy!
-            </Tagline>
-            <a href={'https://blog.iota.org/iota-data-marketplace-cb6be463ac7f'} target={'_blank'}>
-              <Button type="button">About the Marketplace</Button>
-            </a>
-            <Link to={'/#map'} onClick={() => onAnchorClick('map')}>
-              <SubLink>{'Try the Marketplace'.toUpperCase()}</SubLink>
-            </Link>
-            <Link to={'/#participants'} onClick={() => onAnchorClick('participants')}>
-              <SubLink>{'Participants'.toUpperCase()}</SubLink>
-            </Link>
-
-            <Link to={'/#contact'} onClick={() => onAnchorClick('contact')}>
-              <SubLink>{'Get involved'.toUpperCase()}</SubLink>
-            </Link>
-          </Info>
-          <Graphics>
-            <Graphic1
-              src="/static/illustrations/header-image-3.png"
-              srcSet="/static/illustrations/header-image-3@2x.png 2x"
-              alt="IOTA sensor data image"
-            />
-            <Graphic2
-              src="/static/illustrations/header-image-1.png"
-              srcSet="/static/illustrations/header-image-1@2x.png 2x"
-              alt="IOTA sensor data image"
-            />
-            <Graphic3
-              src="/static/illustrations/header-image-2.png"
-              srcSet="/static/illustrations/header-image-2@2x.png 2x"
-              alt="IOTA sensor data image"
-            />
-            <GraphicBlock />
-          </Graphics>
-        </Container>
-        <Shape1 src="/static/shapes/shape-header-bg-1.svg" alt="Background shape" />
-        <Shape2 src="/static/shapes/shape-header-bg-2.svg" alt="Background shape" />
-        <Shape3 src="/static/shapes/shape-header-hero.svg" alt="Background shape" />
-      </Header>
-    );
-  }
-}
+export default ({ onAnchorClick }) => (
+  <Header>
+    <Container>
+      <Info>
+        <a href="https://iota.org">
+          <img src="/static/logotypes/logo-header.svg" alt="Logo IOTA" />
+        </a>
+        <Heading>
+          IOTA makes it<br className="desktop-hidden-later mobile-hidden-later" /> possible<br className="tablet-hidden-later mobile-hidden-later" />{' '}
+          to securely<br className="desktop-hidden-later mobile-hidden-later" /> store, sell,<br className="tablet-hidden-later mobile-hidden-later" />{' '}
+          and access<br className="desktop-hidden-later mobile-hidden" /> data streams.
+        </Heading>
+        <Tagline>Never has getting access to diverse, fine-granular data been this easy!</Tagline>
+        <a
+          href="https://blog.iota.org/iota-data-marketplace-cb6be463ac7f"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Button type="button">About the Marketplace</Button>
+        </a>
+        <Link to={'/#map'} onClick={() => onAnchorClick('map')}>
+          <SubLink>{'Try the Marketplace'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/#participants'} onClick={() => onAnchorClick('participants')}>
+          <SubLink>{'Participants'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/#contact'} onClick={() => onAnchorClick('contact')}>
+          <SubLink>{'Get involved'.toUpperCase()}</SubLink>
+        </Link>
+      </Info>
+      <Graphics>
+        <Graphic1
+          src="/static/illustrations/header-image-3.png"
+          srcSet="/static/illustrations/header-image-3@2x.png 2x"
+          alt="IOTA sensor data image"
+        />
+        <Graphic2
+          src="/static/illustrations/header-image-1.png"
+          srcSet="/static/illustrations/header-image-1@2x.png 2x"
+          alt="IOTA sensor data image"
+        />
+        <Graphic3
+          src="/static/illustrations/header-image-2.png"
+          srcSet="/static/illustrations/header-image-2@2x.png 2x"
+          alt="IOTA sensor data image"
+        />
+        <GraphicBlock />
+      </Graphics>
+    </Container>
+    <Shape1 src="/static/shapes/shape-header-bg-1.svg" alt="Background shape" />
+    <Shape2 src="/static/shapes/shape-header-bg-2.svg" alt="Background shape" />
+    <Shape3 src="/static/shapes/shape-header-hero.svg" alt="Background shape" />
+  </Header>
+);
 
 const SubLink = styled.p`
   @media (max-width: 760px) {
@@ -91,6 +84,7 @@ const Header = styled.header`
   transform: skewY(-4deg);
   background-image: linear-gradient(190deg, #f3f8fa 1%, #eaf0f4 95%);
 `;
+
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -99,6 +93,7 @@ const Container = styled.div`
   margin-right: auto;
   margin-left: auto;
 `;
+
 const Info = styled.div`
   position: relative;
   top: 30px;
@@ -123,6 +118,7 @@ const Info = styled.div`
     margin-left: 5px;
   }
 `;
+
 const Heading = styled.h1`
   font-size: 42px;
   line-height: 62px;
@@ -146,6 +142,7 @@ const Heading = styled.h1`
     margin-bottom: 20px;
   }
 `;
+
 const Tagline = styled.h2`
   font-size: 22px;
   line-height: 36px;
@@ -265,6 +262,7 @@ const Graphics = styled.div`
     }
   }
 `;
+
 const GraphicBlock = styled.div`
   position: relative;
   bottom: 50px;
@@ -298,6 +296,7 @@ const Graphic = styled.img`
   position: relative;
   z-index: 50;
 `;
+
 const Graphic1 = Graphic.extend`
   top: 30px;
   left: 75%;
@@ -310,6 +309,7 @@ const Graphic1 = Graphic.extend`
     display: none;
   }
 `;
+
 const Graphic2 = Graphic.extend`
   animation: 5s ${float(2)} ease infinite 0s;
 
@@ -335,6 +335,7 @@ const Graphic2 = Graphic.extend`
     left: 150px;
   }
 `;
+
 const Graphic3 = Graphic.extend`
   top: 20px;
   left: 115px;
@@ -371,6 +372,7 @@ const Shape2 = Shape.extend`
   top: 50px;
   left: 36vw;
 `;
+
 const Shape3 = Shape.extend`
   top: -165px;
   left: 56vw;

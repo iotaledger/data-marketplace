@@ -1,6 +1,41 @@
 import React from 'react';
 import styled from 'styled-components';
 
+export default props => (
+  <Container>
+    <div>
+      <Header>How it works?</Header>
+      <Tagline>{''}</Tagline>
+    </div>
+    <InfoRow>
+      <InfoCol>
+        <Image src="/static/illustrations/choose.svg" alt="IOTA process illustration" />
+        <InfoHeading>Choose</InfoHeading>
+        <Text>
+          Pick a sensor from which you want to access the data from. Take a look at the map<br className="tablet-hidden" />{' '}
+          below and pick any type of sensor.
+        </Text>
+      </InfoCol>
+      <InfoCol>
+        <Image src="/static/illustrations/pay.svg" alt="IOTA process illustration" />
+        <InfoHeading>Pay</InfoHeading>
+        <Text>
+          For each sensor you can purchase direct access to the data stream. Thanks<br className="tablet-hidden" />{' '}
+          to the power of micropayments.
+        </Text>
+      </InfoCol>
+      <InfoCol>
+        <Image src="/static/illustrations/access.svg" alt="IOTA process illustration" />
+        <InfoHeading>Access</InfoHeading>
+        <Text>
+          Continuously access the data from the sensor and use that data to fuel your reports,
+          applications and data analytics.
+        </Text>
+      </InfoCol>
+    </InfoRow>
+  </Container>
+);
+
 const Container = styled.section`
   width: 100%;
   max-width: 1170px;
@@ -11,6 +46,7 @@ const Container = styled.section`
     margin: 40px 0 20px;
   }
 `;
+
 const Header = styled.h3`
   @media (max-width: 760px) {
     font-size: 24px;
@@ -23,6 +59,7 @@ const Header = styled.h3`
   text-align: center;
   color: #009fff;
 `;
+
 const Tagline = styled.h4`
   @media (max-width: 760px) {
     font-size: 18px;
@@ -35,6 +72,7 @@ const Tagline = styled.h4`
   text-align: center;
   color: #4e5a61;
 `;
+
 const InfoRow = styled.div`
   @media (max-width: 760px) {
     flex-direction: column;
@@ -46,6 +84,7 @@ const InfoRow = styled.div`
   justify-content: space-between;
   margin-bottom: 100px;
 `;
+
 const InfoCol = styled.div`
   @media (max-width: 760px) {
     margin-bottom: 40px;
@@ -54,6 +93,7 @@ const InfoCol = styled.div`
   max-width: 350px;
   text-align: center;
 `;
+
 const Image = styled.img`
   @media (max-width: 760px) {
     margin-bottom: 18px;
@@ -70,6 +110,7 @@ const InfoHeading = styled.p`
   line-height: 42px;
   margin-bottom: 10px;
 `;
+
 const Text = styled.p`
   @media (max-width: 1120px) {
     font-size: 16px;
@@ -81,44 +122,3 @@ const Text = styled.p`
   line-height: 32px;
   color: #4e5a61;
 `;
-
-export default class extends React.Component {
-  state = {};
-
-  render() {
-    return (
-      <Container>
-        <div>
-          <Header>How it works?</Header>
-          <Tagline>{''}</Tagline>
-        </div>
-        <InfoRow>
-          <InfoCol>
-            <Image src="/static/illustrations/choose.svg" alt="IOTA process illustration" />
-            <InfoHeading>Choose</InfoHeading>
-            <Text>
-              Pick a sensor from which you want to access the data from. Take a look at the map<br className="tablet-hidden" />{' '}
-              below and pick any type of sensor.
-            </Text>
-          </InfoCol>
-          <InfoCol>
-            <Image src="/static/illustrations/pay.svg" alt="IOTA process illustration" />
-            <InfoHeading>Pay</InfoHeading>
-            <Text>
-              For each sensor you can purchase direct access to the data stream. Thanks<br className="tablet-hidden" />{' '}
-              to the power of micropayments.
-            </Text>
-          </InfoCol>
-          <InfoCol>
-            <Image src="/static/illustrations/access.svg" alt="IOTA process illustration" />
-            <InfoHeading>Access</InfoHeading>
-            <Text>
-              Continuously access the data from the sensor and use that data to fuel your reports,
-              applications and data analytics.
-            </Text>
-          </InfoCol>
-        </InfoRow>
-      </Container>
-    );
-  }
-}
