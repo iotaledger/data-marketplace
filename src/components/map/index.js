@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled, { injectGlobal } from 'styled-components';
 import MapGL, { Popup, NavigationControl } from 'react-map-gl';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import './css';
 import Controls from './controls';
 import Markers from './markers';
 
 const mapControls = new Controls();
 
-export default class extends React.Component {
+class Map extends Component {
   state = {
     viewport: {
       latitude: 52.23,
@@ -22,6 +23,7 @@ export default class extends React.Component {
     popupInfo: null,
     mapHeight: 900,
   };
+
   componentDidMount() {
     window.addEventListener('resize', this._resize);
     this._resize();
@@ -39,9 +41,7 @@ export default class extends React.Component {
   }
 
   _resize = () => {
-    let mapHeight;
-    if (window.innerWidth < 760) mapHeight = 500;
-    if (window.innerWidth > 760) mapHeight = 900;
+    const mapHeight = window.innerWidth < 760 ? 500 : 900;
 
     this.setState({
       viewport: {
@@ -52,6 +52,7 @@ export default class extends React.Component {
       mapHeight,
     });
   };
+
   _updateViewport = viewport => {
     this.setState({
       viewport: { ...this.state.viewport, ...viewport },
@@ -71,7 +72,8 @@ export default class extends React.Component {
           longitude={Number(popupInfo.lon)}
           latitude={Number(popupInfo.lat)}
           closeOnClick={true}
-          onClose={() => this.setState({ popupInfo: null })}>
+          onClose={() => this.setState({ popupInfo: null })}
+        >
           <SensorCard to={`/sensor/${popupInfo.sensorId}`}>
             <CardHeader>
               <SensorType>
@@ -107,12 +109,16 @@ export default class extends React.Component {
       )
     );
   };
+
   _openPopup = device => {
     this.setState({ popupInfo: device });
   };
 
   render() {
     const { viewport, mapHeight, popupInfo } = this.state;
+    const { settings } = this.props;
+    if (!settings.mapboxApiAccessToken) return <div />;
+
     return (
       <Main id="map">
         <Header>
@@ -127,10 +133,11 @@ export default class extends React.Component {
           maxZoom={11.5}
           {...viewport}
           height={mapHeight}
-          mapStyle="mapbox://styles/iotafoundation/cj8y282t417092rlgv4j9wcxg"
+          mapStyle={settings.mapboxStyles}
           onViewportChange={this._updateViewport}
           onClick={() => (popupInfo ? this.setState({ popupInfo: null }) : null)}
-          mapboxApiAccessToken={`pk.eyJ1IjoiaW90YWZvdW5kYXRpb24iLCJhIjoiY2o4eTFnMnJyMjhjazMzbWI1cTdmcndmMCJ9.9tZ4MHPpl54wJvOrAWiE7g`}>
+          mapboxApiAccessToken={settings.mapboxApiAccessToken}
+        >
           <div style={{ position: 'absolute', right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this._updateViewport} />
           </div>
@@ -153,15 +160,11 @@ export default class extends React.Component {
   }
 }
 
-// const Clear = styled.div`
-//   position: absolute;
-//   top: 0;
-//   bottom: 0;
-//   left: 0;
-//   right: 0;
-//   z-index: 999;
-//   /* pointer-events: none; */
-// `;
+const mapStateToProps = state => ({
+  settings: state.settings,
+});
+
+export default connect(mapStateToProps)(Map);
 
 const Main = styled.div`
   position: relative;
@@ -195,14 +198,6 @@ const Header = styled.div`
   }
 `;
 
-// const Nav = styled.div`
-//   position: absolute;
-//   top: 0px;
-//   left: 0px;
-//   padding: 10px;
-//   z-index: 100;
-// `;
-
 const Heading = styled.h3`
   text-transform: capitalize;
   text-align: left;
@@ -217,6 +212,7 @@ const Heading = styled.h3`
     margin-bottom: 10px;
   }
 `;
+
 const Subtitle = styled.h4`
   font-size: 19px;
   font-weight: 400;
@@ -233,6 +229,7 @@ const Subtitle = styled.h4`
     line-height: 28px;
   }
 `;
+
 const HeaderBg = styled.img`
   position: absolute;
   top: -120px;
@@ -273,16 +270,6 @@ const HeaderBgMobile = styled.img`
   }
 `;
 
-// const SensorCardWrapper = styled.div`
-//   position: absolute;
-//   bottom: 20px;
-//   left: 50%;
-//   transform: translateX(-50%);
-//   @media (max-width: 760px) {
-//     display: block;
-//   }
-// `;
-
 const SensorCard = styled(Link)`
   display: block;
   border-radius: 6px;
@@ -315,6 +302,7 @@ const CardFooter = styled.footer`
   border-top: none;
   background-color: transparent;
 `;
+
 const FootRow = styled.div`
   display: flex;
   justify-content: space-between;
@@ -335,18 +323,18 @@ const InfoValue = styled.span`
   font-weight: 400;
   color: #fff;
 `;
-// const CardIcon = styled.img`
-//   margin-right: 10px;
-// `;
+
 const LocationIcon = styled.img`
   margin: 0 6px 0 13px;
 `;
+
 const SensorType = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   position: absolute;
   top: -8px;
   color: #738fd4;
 `;
+
 const SensorId = styled.span`
   font-size: 20px;
   top: 4px;
@@ -354,6 +342,7 @@ const SensorId = styled.span`
   line-height: 42px;
   position: relative;
 `;
+
 //override
 injectGlobal`
  .mapboxgl-popup-close-button {
