@@ -1,9 +1,67 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
-// import { Link } from '../../routes'
 import { Link } from 'react-router-dom';
-
 import Card from './index';
+
+const content = (state, change, submit) => (
+  <Internal>
+    <Heading>Grandfather Old Device</Heading>
+    <Info>Enter you device's ID and Secret Key (Used in the publish script).</Info>
+    <Input
+      type="text"
+      placeholder="Enter Device ID"
+      value={state.id}
+      name="id"
+      onChange={e => change(e)}
+    />
+    <Input
+      type="text"
+      placeholder="Enter Secret Key"
+      value={state.sk}
+      name="sk"
+      onChange={e => change(e)}
+    />
+    <Button type="button" className="btn btn-accent txt-bold modal-trigger" onClick={submit}>
+      Load Device
+    </Button>
+  </Internal>
+);
+
+const error = ({ button, error }) => (
+  <Internal>
+    <Heading>{error.heading}</Heading>
+    <Info>{error.body}</Info>
+    {button && (
+      <Link to={'/'}>
+        <Button type="button" className="btn btn-accent txt-bold modal-trigger">
+          Go back
+        </Button>
+      </Link>
+    )}
+  </Internal>
+);
+
+export default class extends Component {
+  state = { id: '', sk: '' };
+
+  change = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
+
+  submit = () => {
+    this.props.grandfather(this.state.id, this.state.sk);
+  };
+
+  render() {
+    return (
+      <Card
+        {...this.props}
+        cardContent={content(this.state, this.change, this.submit)}
+        errorContent={error(this.props)}
+      />
+    );
+  }
+}
 
 const Heading = styled.p`
   font-size: 28px;
@@ -13,6 +71,7 @@ const Heading = styled.p`
   text-align: center;
   color: #009fff;
 `;
+
 const Info = styled.p`
   font-size: 17px;
   line-height: 28px;
@@ -20,6 +79,7 @@ const Info = styled.p`
   text-align: center;
   margin-bottom: auto;
 `;
+
 const Button = styled.button`
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -38,6 +98,7 @@ const Button = styled.button`
   font-weight: 700;
   background-color: #009fff;
 `;
+
 const Internal = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -45,6 +106,7 @@ const Internal = styled.div`
   align-items: center;
   width: 100%;
 `;
+
 const Input = styled.input`
   background: transparent;
   border: none;
@@ -55,65 +117,3 @@ const Input = styled.input`
     color: rgba(0, 0, 0, 0.3);
   }
 `;
-
-const content = (state, change, submit) => (
-  <Internal>
-    <Heading>Grandfather Old Device</Heading>
-    <Info>Enter you device's ID and Secret Key (Used in the publish script).</Info>
-    <Input
-      type="text"
-      placeholder={'Enter Device ID'}
-      value={state.id}
-      name={'id'}
-      onChange={e => change(e)}
-    />
-    <Input
-      type="text"
-      placeholder={'Enter Secret Key'}
-      value={state.sk}
-      name={'sk'}
-      onChange={e => change(e)}
-    />
-    <Button
-      type="button"
-      className="btn btn-accent txt-bold modal-trigger"
-      onClick={() => submit()}
-    >
-      Load Device
-    </Button>
-  </Internal>
-);
-
-const error = props => (
-  <Internal>
-    <Heading>{props.error.heading}</Heading>
-    <Info>{props.error.body}</Info>
-    {props.button && (
-      <Link to={'/'}>
-        <Button type="button" className="btn btn-accent txt-bold modal-trigger">
-          Go back
-        </Button>
-      </Link>
-    )}
-  </Internal>
-);
-
-export default class extends React.Component {
-  state = { id: '', sk: '' };
-  change = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  submit = () => {
-    this.props.grandfather(this.state.id, this.state.sk);
-  };
-  render() {
-    return (
-      <Card
-        {...this.props}
-        cardContent={content(this.state, this.change, this.submit)}
-        errorContent={error(this.props)}
-      />
-    );
-  }
-}
