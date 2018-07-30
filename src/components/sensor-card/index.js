@@ -1,63 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import * as moment from 'moment';
 
-export default class extends React.Component {
+export default class extends Component {
   state = {};
+
   componentDidMount = () => {
     setTimeout(() => this.setState({ visible: true }), 300);
   };
 
   render() {
+    const { layout, packet } = this.props;
     return (
       <SensorCard visible={this.state.visible}>
         <CardHeader>
           <HeaderRow>
-            <HeaderAccent>{moment(this.props.packet.time).format('dddd')}</HeaderAccent>{' '}
-            {moment(this.props.packet.time).format('DD MMMM, YYYY H:mm a ')}
+            <HeaderAccent>{moment(packet.time).format('dddd')}</HeaderAccent>{' '}
+            {moment(packet.time).format('DD MMMM, YYYY H:mm a ')}
           </HeaderRow>
         </CardHeader>
-        {this.props.layout.map((row, i) => (
+        {layout.map((row, i) => (
           <Row key={`sensor-${i}`}>
             {row.map((item, i) => (
               <RowHalf key={`item-${i}`}>
                 <RowDesc>{item && item.name}:</RowDesc>
                 <RowValue>
-                  {(this.props.packet &&
-                    this.props.packet.data[item.id] !== typeof 'object' &&
-                    (this.props.packet.data[item.id] ||
-                      this.props.packet.data[item.id.toLowerCase()])) ||
-                    JSON.stringify(this.props.packet.data, null, 2)}
+                  {(packet &&
+                    packet.data[item.id] !== typeof 'object' &&
+                    (packet.data[item.id] || packet.data[item.id.toLowerCase()])) ||
+                    JSON.stringify(packet.data, null, 2)}
                   <RowUnit>{item && item.unit}</RowUnit>
                 </RowValue>
               </RowHalf>
             ))}
           </Row>
         ))}
-
-        {/* <Row>
-          <RowHalf>
-            <RowDesc>Wind derection:</RowDesc>
-            <RowValue>
-              <WindIcon
-                src="/static/icons/icon-wind-dir.svg"
-                className="icon-wind-dir"
-                alt="Icon wind direction"
-              />
-              <RowUnit>NNE</RowUnit>
-            </RowValue>
-          </RowHalf>
-          <RowHalf>
-            <RowDesc>Wind speed:</RowDesc>
-            <RowValue>
-              10,5 <RowUnit>m/s</RowUnit>
-            </RowValue>
-          </RowHalf>
-        </Row> */}
       </SensorCard>
     );
   }
 }
+
 const SensorCard = styled.div`
   position: relative;
   width: 360px;
@@ -143,10 +125,12 @@ const CardHeader = styled.header`
   padding: 0 30px 8px 30px;
   border-bottom: 1px solid #eaecee;
 `;
+
 const HeaderRow = styled.p`
   font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
 `;
+
 const HeaderAccent = styled.span`
   font-size: 18px;
   line-height: 33px;
@@ -173,6 +157,7 @@ const Row = styled.div`
     padding-bottom: 10px;
   }
 `;
+
 const RowHalf = styled.div`
   padding: 20px 30px 8px;
   display: inline-block;
@@ -199,11 +184,13 @@ const RowHalf = styled.div`
     }
   }
 `;
+
 const RowDesc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
   color: #808b92;
   margin: 0;
 `;
+
 const RowValue = styled.p`
   font-size: 26px;
   font-weight: 800;
@@ -214,6 +201,7 @@ const RowValue = styled.p`
     line-height: 0;
   }
 `;
+
 const RowUnit = styled.span`
   font-size: 14px;
   font-weight: 400;
@@ -226,9 +214,3 @@ const RowUnit = styled.span`
     top: -4px;
   }
 `;
-
-// const WindIcon = styled.img`
-//   transform: rotate(-57deg);
-//   position: relative;
-//   top: -2px;
-// `

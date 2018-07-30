@@ -1,8 +1,76 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
-import { reducer } from '../../utils/utils';
+import { reducer } from '../../utils/helpers';
+import Loading from '../loading';
+
+const SideBar = ({ device, settings, fetching, dataEnd, packets }) => (
+  <Sidebar>
+    <Details>
+      <Label>Sensor details:</Label>
+      <div>
+        {!isEmpty(settings) ? (
+          <a
+            href={`${settings.tangleExplorer}${device.address}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <DetailRow>
+              <DetailKey>Device Balance:</DetailKey>
+              <DetailValue>{device.balance ? reducer(device.balance) : '--'}</DetailValue>
+            </DetailRow>
+          </a>
+        ) : (
+          <DetailRow>
+            <DetailKey>Device Balance:</DetailKey>
+            <DetailValue>{device.balance ? reducer(device.balance) : '--'}</DetailValue>
+          </DetailRow>
+        )}
+        <DetailRow>
+          <DetailKey>Location:</DetailKey>
+          <DetailValue>
+            {' '}
+            {device.location && device.location.city && device.location.country
+              ? `${device.location.city}, ${device.location.country}`
+              : '--'}
+          </DetailValue>
+        </DetailRow>
+        <DetailRow>
+          <DetailKey>Owner:</DetailKey>
+          <DetailValue>{device.company ? device.company : '--'}</DetailValue>
+        </DetailRow>
+      </div>
+    </Details>
+    <Fetcher>
+      {dataEnd && <More>End of data reached</More>}
+      {fetching && packets[0] && !dataEnd ? <Loading /> : null}
+    </Fetcher>
+  </Sidebar>
+);
+
+const mapStateToProps = state => ({
+  settings: state.settings,
+});
+
+export default connect(mapStateToProps)(SideBar);
+
+const More = styled.div`
+  color: white;
+  padding: 20px 20px 10px;
+  margin: 10px 0 20px;
+`;
+
+const Fetcher = styled.div`
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  justify-content: center;
+  @media (max-width: 760px) {
+    display: none;
+  }
+`;
 
 const Sidebar = styled.aside`
   background-image: linear-gradient(-189deg, #0d3497 1%, #1857eb 95%);
@@ -40,6 +108,7 @@ const Details = styled.div`
     background-color: rgba(115, 143, 212, 0.15);
   }
 `;
+
 const Label = styled.label`
   font-size: 14px;
   font-weight: 800;
@@ -51,6 +120,7 @@ const Label = styled.label`
   text-transform: uppercase;
   color: #009fff;
 `;
+
 const DetailRow = styled.div`
   @media (max-width: 760px) {
     display: flex;
@@ -58,156 +128,15 @@ const DetailRow = styled.div`
     align-items: center;
   }
 `;
+
 const DetailKey = styled.p`
   font-size: 12px;
   line-height: 16px;
   color: #738fd4;
 `;
+
 const DetailValue = styled.p`
   font-size: 16px;
   line-height: 32px;
   color: #fff;
 `;
-
-class SideBar extends Component {
-  componentWillReceiveProps = props => {
-    this.setState(props);
-  };
-
-  render() {
-    const { device, settings } = this.props;
-    return (
-      <Sidebar>
-        <Details>
-          <Label>Sensor details:</Label>
-          <div>
-            {!isEmpty(settings) ? (
-              <a href={`${settings.tangleExplorer}${device.address}`} target={`_blank`}>
-                <DetailRow>
-                  <DetailKey>Device Balance:</DetailKey>
-                  <DetailValue>{device.balance ? reducer(device.balance) : `--`}</DetailValue>
-                </DetailRow>
-              </a>
-            ) : (
-              <DetailRow>
-                <DetailKey>Device Balance:</DetailKey>
-                <DetailValue>{device.balance ? reducer(device.balance) : `--`}</DetailValue>
-              </DetailRow>
-            )}
-            <DetailRow>
-              <DetailKey>Location:</DetailKey>
-              <DetailValue>
-                {' '}
-                {device.location ? `${device.location.city}, ${device.location.country} ` : `--`}
-              </DetailValue>
-            </DetailRow>
-            {/* <DetailRow>
-              <DetailKey>Owner:</DetailKey>
-              <DetailValue>
-                {" "}
-                {device.owner ? device.owner : `--`}
-              </DetailValue>
-            </DetailRow>{" "} */}
-            <DetailRow>
-              <DetailKey>Owner:</DetailKey>
-              <DetailValue> {device.company ? device.company : `--`}</DetailValue>
-            </DetailRow>
-            {/* <DetailRow>
-              <DetailKey>Data Types:</DetailKey>
-              {device.dataTypes &&
-                device.dataTypes.map((type, i) => (
-                  <DetailValue key={i}>{` - ${type.name}`}</DetailValue>
-                ))}
-            </DetailRow> */}
-          </div>
-        </Details>
-        {/* <Details className="sensor-data-wrapper">
-          <Label>Sensor data:</Label>
-          <div className="sensor-data">
-            <div className="chart-wrapper">
-              <header className="chart-header">
-                <span className="chart-desc">AVG Temperature</span>
-                <span className="chart-value">
-                  68 <span>°F</span>
-                </span>
-              </header>
-              <canvas id="temperatureChart" width={400} height={205} />
-            </div>
-            <div className="chart-wrapper">
-              <header className="chart-header">
-                <span className="chart-desc">AVG Humidity</span>
-                <span className="chart-value">15%</span>
-              </header>
-              <canvas id="humidityChart" width={400} height={205} />
-            </div>
-            <div className="chart-wrapper">
-              <header className="chart-header">
-                <span className="chart-desc">AVG Presure</span>
-                <span className="chart-value">990 hPa</span>
-              </header>
-              <canvas id="pressureChart" width={400} height={205} />
-            </div>
-          </div>
-        </Details> */}
-        <Fetcher>
-          {this.props.dataEnd && <More>{`End of data reached`}</More>}
-          {this.props.fetching && this.props.packets[0] && !this.props.dataEnd ? <Loading /> : null}
-        </Fetcher>
-      </Sidebar>
-    );
-  }
-}
-
-// const A = styled.a`
-//   text-decoration: none;
-// `
-
-const More = styled.div`
-  color: white;
-  padding: 20px 20px 10px;
-  margin: 10px 0 20px;
-`;
-
-const Fetcher = styled.div`
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  display: flex;
-  justify-content: center;
-  @media (max-width: 760px) {
-    display: none;
-  }
-`;
-
-const Loading = () => {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="80"
-      height="80"
-      viewBox="0 0 38 38"
-      stroke="#fff">
-      <g fill="none" fillRule="evenodd">
-        <g transform="translate(1 1)" strokeWidth="2">
-          <circle strokeOpacity=".5" cx="18" cy="18" r="18" />
-          <path d="M36 18c0-9.94-8.06-18-18-18" transform="rotate(319.698 18 18)">
-            <animateTransform
-              attributeName="transform"
-              type="rotate"
-              from="0 18 18"
-              to="360 18 18"
-              dur="1s"
-              repeatCount="indefinite"
-            />
-          </path>
-        </g>
-      </g>
-    </svg>
-  );
-};
-
-const mapStateToProps = state => ({
-  settings: state.settings,
-});
-
-export default connect(mapStateToProps)(SideBar);
