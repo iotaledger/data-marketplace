@@ -59,8 +59,8 @@ export default class extends React.Component {
       sensorId: this.state.deviceID,
       type: this.state.deviceType,
       dataTypes: this.state.dataTypes,
-      lat: this.state.deviceLat,
-      lon: this.state.deviceLon,
+      lat: parseFloat(this.state.deviceLat),
+      lon: parseFloat(this.state.deviceLon),
       company: this.state.company,
       price: this.state.devicePrice,
       address: deviceAddress,
@@ -112,9 +112,9 @@ export default class extends React.Component {
             <Column>
               <label>Device ID:</label>
               <Input
-                placeholder={'eg. fitbit-x910'}
-                type={'text'}
-                name={'deviceID'}
+                placeholder="eg. fitbit-x910"
+                type="text"
+                name="deviceID"
                 value={this.state.deviceID}
                 onChange={this.change}
               />
@@ -122,9 +122,9 @@ export default class extends React.Component {
             <Column>
               <label>Device Type:</label>
               <Input
-                placeholder={'eg. Weather Station'}
-                type={'text'}
-                name={'deviceType'}
+                placeholder="eg. Weather Station"
+                type="text"
+                name="deviceType"
                 value={this.state.deviceType}
                 onChange={this.change}
               />
@@ -132,9 +132,9 @@ export default class extends React.Component {
             <Column>
               <label>Company:</label>
               <Input
-                placeholder={'eg. Datacentrix.Biz or Private'}
-                type={'text'}
-                name={'company'}
+                placeholder="eg. Datacentrix.Biz or Private"
+                type="text"
+                name="company"
                 value={this.state.company}
                 onChange={this.change}
               />
@@ -143,16 +143,16 @@ export default class extends React.Component {
               <label>Location:</label>
               <Row>
                 <Input
-                  placeholder={'eg. Berlin'}
-                  type={'text'}
-                  name={'city'}
+                  placeholder="eg. Berlin"
+                  type="text"
+                  name="city"
                   value={this.state.city}
                   onChange={this.change}
                 />
                 <Input
-                  placeholder={'eg. Germany'}
-                  type={'text'}
-                  name={'country'}
+                  placeholder="eg. Germany"
+                  type="text"
+                  name="country"
                   value={this.state.country}
                   onChange={this.change}
                 />
@@ -162,9 +162,9 @@ export default class extends React.Component {
               <Column>
                 <label>Latitude:</label>
                 <Input
-                  placeholder={'Lat: 52.312'}
-                  type={'number'}
-                  name={'deviceLat'}
+                  placeholder="eg. 52.312"
+                  type="number"
+                  name="deviceLat"
                   value={this.state.deviceLat}
                   onChange={this.change}
                 />
@@ -172,9 +172,9 @@ export default class extends React.Component {
               <Column>
                 <label>Longitude:</label>
                 <Input
-                  placeholder={'Lon: -12.221'}
-                  type={'number'}
-                  name={'deviceLon'}
+                  placeholder="eg. -12.221"
+                  type="number"
+                  name="deviceLon"
                   value={this.state.deviceLon}
                   onChange={this.change}
                 />
@@ -191,9 +191,9 @@ export default class extends React.Component {
                 <Small>
                   <label>Field ID:</label>
                   <Input
-                    placeholder={'eg. temp'}
-                    type={'text'}
-                    name={'id'}
+                    placeholder="eg. temp"
+                    type="text"
+                    name="id"
                     value={this.state.dataTypes[i].id}
                     onChange={e => this.changeRow(e, i)}
                   />
@@ -201,9 +201,9 @@ export default class extends React.Component {
                 <Small>
                   <label>Field Name:</label>
                   <Input
-                    placeholder={'eg. Temperature'}
-                    type={'text'}
-                    name={'name'}
+                    placeholder="eg. Temperature"
+                    type="text"
+                    name="name"
                     value={this.state.dataTypes[i].name}
                     onChange={e => this.changeRow(e, i)}
                   />
@@ -212,9 +212,9 @@ export default class extends React.Component {
                 <Small>
                   <label>Field Unit:</label>
                   <Input
-                    placeholder={'eg. c'}
-                    type={'text'}
-                    name={'unit'}
+                    placeholder="eg. c"
+                    type="text"
+                    name="unit"
                     value={this.state.dataTypes[i].unit}
                     onChange={e => this.changeRow(e, i)}
                   />
@@ -228,8 +228,8 @@ export default class extends React.Component {
               <label>Price of the data stream:</label>
               <Input
                 placeholder={50000}
-                type={'number'}
-                name={'devicePrice'}
+                type="number"
+                name="devicePrice"
                 value={this.state.devicePrice}
                 onChange={this.change}
               />
