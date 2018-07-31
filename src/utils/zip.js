@@ -14,18 +14,19 @@ const getFileContent = path => {
       };
       rawFile.send(null);
     } catch (error) {
+      console.error('getFileContent error', error);
       reject(error);
     }
   });
 };
 
 const getConfigFileContent = device => `{
-  "provider": "${provider}",
-  "endpoint": "https://${api}.${domainName}/newData",
-  "serverUrl": "https://swapi.co/api/vehicles/",
   "sensorId": "${device.sensorId}",
   "secretKey": "${device.sk}",
-  "debug": true
+  "debug": true,
+  "provider": "${provider}",
+  "endpoint": "https://${api}.${domainName}/newData",
+  "serverUrl": "https://swapi.co/api/vehicles/"
 }`;
 
 export const getZip = async device => {
@@ -43,6 +44,6 @@ export const getZip = async device => {
     .generateAsync({ type: 'blob', compression: 'DEFLATE' })
     .then(
       blob => FileSaver.saveAs(blob, device.sensorId + '-template.zip'),
-      error => console.log('getZip error', error)
+      error => console.error('getZip error', error)
     );
 };
