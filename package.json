@@ -1,6 +1,21 @@
 {
-  "name": "poc-template",
-  "version": "0.5.0",
+  "name": "data-marketplace",
+  "version": "2.0.0",
+  "description": "IOTA Data Marketplace",
+  "contributors": [{ "name": "Alexey Sobolev" }, { "name": "Lewis Freiberg" }],
+  "author": {
+    "name": "Lewis Freiberg, Alexey Sobolev (IOTA Foundation)",
+    "website": "https://iota.org"
+  },
+  "keywords": ["iota", "tangle", "mam", "data marketplace", "sensor", "API"],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/iotaledger/data-marketplace/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/data-marketplace.git"
+  },
   "private": true,
   "dependencies": {
     "@firebase/app-types": "^0.3.1",
