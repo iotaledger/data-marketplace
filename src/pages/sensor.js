@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import FB from '../utils/firebase';
 import Mam from 'mam.client.js';
 import { isEmpty } from 'lodash';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
-import { getData, userAuth } from '../utils/auth-user';
-import { iota, purchaseData, getBalance } from '../utils/utils';
+import { userAuth } from '../utils/firebase';
+import { iota, getData, purchaseData, getBalance } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -15,27 +14,21 @@ import DataStream from '../components/data-stream';
 import api from '../utils/api';
 
 class Sensor extends Component {
-  static async getInitialProps({ query }) {
-    return { id: query.id };
-  }
-
   state = {
     packets: [],
     purchase: false,
     button: true,
     index: 0,
     loading: {
-      heading: `Loading Device`,
-      body: `Fetching device information and your purchase history. `,
+      heading: 'Loading Device',
+      body: 'Fetching device information and your purchase history.',
     },
     error: false,
     fetching: false,
   };
 
   async componentDidMount() {
-    // Firebase
-    const firebase = await FB();
-    const userId = (await userAuth(firebase)).uid;
+    const userId = (await userAuth()).uid;
     const {
       match: {
         params: { deviceId },
@@ -56,8 +49,7 @@ class Sensor extends Component {
 
     if (typeof device === 'string') {
       return this.throw({
-        body: ` The device you are looking for doesn't exist, check the device
-ID and try again`,
+        body: `The device you are looking for doesn't exist, check the device ID and try again`,
         heading: `Device doesn't exist`,
       });
     }
@@ -111,8 +103,8 @@ ID and try again`,
       });
     }
     console.log(data.length + ' Packets found.');
+    this.setState({ mamData: data, streamLength: data.length });
     this.fetchMam(data);
-    this.setState({ mamData: data });
   };
 
   fetchMam = data => {
@@ -146,7 +138,8 @@ ID and try again`,
         }
       });
       return packets;
-    } catch (e) {
+    } catch (error) {
+      console.error('fetchMam error', error);
       this.setState({ dataEnd: true });
     }
   };
@@ -163,9 +156,8 @@ ID and try again`,
         fetching: false,
         index: i,
       });
-    } catch (e) {
-      console.error(e);
-      console.log('Failing input: ', input);
+    } catch (error) {
+      console.error('saveData error', error, input);
     }
   };
 
@@ -204,7 +196,7 @@ ID and try again`,
     if (!wallet || isEmpty(wallet) || wallet.error) {
       return this.throw(
         {
-          body: ` Setup wallet by clicking the top right, to get a prefunded IOTA wallet.`,
+          body: 'Setup wallet by clicking the top right, to get a prefunded IOTA wallet.',
           heading: `Wallet doesn't exist`,
         },
         false
@@ -212,15 +204,15 @@ ID and try again`,
     }
     if (Number(wallet.balance) < Number(device.price))
       return this.throw({
-        body: `You have run out of IOTA. Click below to refill you wallet with IOTA.`,
-        heading: `Not enough Balance`,
+        body: 'You have run out of IOTA. Click below to refill you wallet with IOTA.',
+        heading: 'Not enough Balance',
       });
 
     this.setState(
       {
         loading: {
-          heading: `Purchasing Stream`,
-          body: `You are doing Proof of Work to attach this purchase to the network.`,
+          heading: 'Purchasing Stream',
+          body: 'You are doing Proof of Work to attach this purchase to the network.',
         },
       },
       async () => {
@@ -228,10 +220,10 @@ ID and try again`,
         let purchaseResp;
         try {
           purchaseResp = await purchaseData(wallet.seed, device.address, Number(device.price));
-        } catch (e) {
-          console.log(e);
+        } catch (error) {
+          console.error('purchase error', error);
           return this.throw({
-            body: e.message,
+            body: error.message,
             heading: 'Purchase Failed',
           });
         }
@@ -239,7 +231,7 @@ ID and try again`,
           {
             loading: {
               heading: 'Success!',
-              body: `Your purchase was successfully. Fetching MAM stream and decoding data.`,
+              body: 'Your purchase was successfully. Fetching MAM stream and decoding data.',
             },
           },
           async () => {
@@ -317,20 +309,6 @@ ID and try again`,
     );
   }
 }
-const Main = styled.main`
-  width: 100vw;
-  height: 100vh;
-`;
-
-const Data = styled.section`
-  background-image: linear-gradient(-189deg, #06236c 1%, #1449c6 95%);
-  min-height: 90vh;
-  position: relative;
-  display: flex;
-  @media (max-width: 760px) {
-    flex-direction: column;
-  }
-`;
 
 const mapStateToProps = state => ({
   sensor: state.sensor,
@@ -346,3 +324,18 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Sensor);
+
+const Main = styled.main`
+  width: 100vw;
+  height: 100vh;
+`;
+
+const Data = styled.section`
+  background-image: linear-gradient(-189deg, #06236c 1%, #1449c6 95%);
+  min-height: 90vh;
+  position: relative;
+  display: flex;
+  @media (max-width: 760px) {
+    flex-direction: column;
+  }
+`;
