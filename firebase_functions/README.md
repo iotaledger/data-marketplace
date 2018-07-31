@@ -26,6 +26,14 @@ Project is written in TypeScript, so you'll need to build it before deploying. T
 cd functions && yarn build
 ```
 
+## Testing
+
+To test this locally, run
+`firebase functions:shell`
+
+Then call a function with parameters
+`getDevices.post('/getDevices').form({})`
+
 #### Deploy fo Firebase
 
 1.  Check `.firebaserc`, make sure the Firebase project name is correct
