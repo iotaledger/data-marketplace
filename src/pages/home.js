@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-// import dynamic from 'next/dynamic';
-
+import firebase from 'firebase/app';
 import Header from '../components/header';
 import Features from '../components/feature-section';
 import SensorList from '../components/sensor-list';
@@ -10,13 +9,7 @@ import Benefits from '../components/benefits';
 import Form from '../components/form';
 import Footer from '../components/footer';
 import Map from '../components/map';
-
-import FB from '../utils/firebase';
-import { allDevices } from '../utils/auth-user';
-
-// const Map = dynamic(import('../components/map'), {
-//   ssr: false,
-// });
+import { allDevices } from '../utils/firebase';
 
 export default class extends React.Component {
   state = {
@@ -26,8 +19,6 @@ export default class extends React.Component {
   };
 
   componentDidMount = async () => {
-    // Firebase
-    const firebase = await FB();
     const devices = await allDevices(firebase);
     this.setState({ devices, loading: false });
   };
