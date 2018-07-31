@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
+import firebase from 'firebase/app';
 import { loadUser, logout } from '../store/user/actions';
-import FB from '../utils/firebase';
 import api from '../utils/api';
 import DeviceNav from '../components/device-nav';
 import LoginModal from '../components/login-modal';
@@ -24,8 +24,8 @@ class Dashboard extends Component {
     grandModal: false,
     index: 0,
     loading: {
-      heading: `Loading User`,
-      body: `Fetching your devices and account statistcs`,
+      heading: 'Loading User',
+      body: 'Fetching your devices and account statistcs',
     },
     error: false,
     fetching: false,
@@ -34,11 +34,11 @@ class Dashboard extends Component {
   async componentDidMount() {
     if (this.props.grandfather) this.setState({ grandfather: true });
     // Init Wallet
-    this.firebase = await FB();
     this.checkLogin();
   }
+
   checkLogin = () => {
-    this.firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {
         // User is signed in.
         this.setState({ user });
@@ -49,31 +49,25 @@ class Dashboard extends Component {
       }
     });
   };
-  auth = channel => {
-    let provider;
-    switch (channel) {
-      case 'google':
-        provider = new this.firebase.auth.GoogleAuthProvider();
-        provider.addScope('email');
-        provider.addScope('profile');
-        break;
-      default:
-        break;
-    }
 
-    this.firebase
+  auth = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    provider.addScope('email');
+    provider.addScope('profile');
+
+    firebase
       .auth()
       .signInWithPopup(provider)
       .then(result => {
         // This gives you a Google Access Token. You can use it to access the Google API.
-        // var token = result.credential.accessToken;
+        // const token = result.credential.accessToken;
         // The signed-in user info.
         const user = result.user;
         this.setState({ user });
         this.getUser();
       })
       .catch(error => {
-        // Handle Errors here.
+        console.error('auth error', error);
       });
   };
 
@@ -104,7 +98,7 @@ class Dashboard extends Component {
     // Deactivate the Device
     device.inactive = true;
 
-    return new Promise(async (res, rej) => {
+    return new Promise(async (response, reject) => {
       const packet = {
         apiKey: userData.apiKey,
         id: device.sensorId,
@@ -117,7 +111,7 @@ class Dashboard extends Component {
       if (data.success) {
         this.findDevices();
       }
-      res(data);
+      response(data);
     });
   };
 
@@ -140,7 +134,7 @@ class Dashboard extends Component {
 
   logout = () => {
     this.props.logout();
-    this.firebase
+    firebase
       .auth()
       .signOut()
       .then(() => {
@@ -149,7 +143,7 @@ class Dashboard extends Component {
         this.setState({ user: {}, devices: [] });
       })
       .catch(error => {
-        // An error happened.
+        console.error('logout error', error);
       });
   };
 
@@ -181,7 +175,7 @@ class Dashboard extends Component {
           this.throw({ heading: 'Error', body: data.error }, true);
         } else {
           console.log('Dashboard grandfather', data);
-          // location.reload();
+          window.location.reload(true);
         }
       }
     );
@@ -220,20 +214,6 @@ class Dashboard extends Component {
     );
   }
 }
-const Main = styled.main`
-  width: 100vw;
-  height: 100vh;
-`;
-
-const Data = styled.section`
-  background-image: linear-gradient(-189deg, #06236c 1%, #1449c6 95%);
-  min-height: 90vh;
-  position: relative;
-  display: flex;
-  @media (max-width: 760px) {
-    flex-direction: column;
-  }
-`;
 
 const mapStateToProps = state => ({
   userData: state.user,
@@ -248,3 +228,18 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(Dashboard);
+
+const Main = styled.main`
+  width: 100vw;
+  height: 100vh;
+`;
+
+const Data = styled.section`
+  background-image: linear-gradient(-189deg, #06236c 1%, #1449c6 95%);
+  min-height: 90vh;
+  position: relative;
+  display: flex;
+  @media (max-width: 760px) {
+    flex-direction: column;
+  }
+`;
