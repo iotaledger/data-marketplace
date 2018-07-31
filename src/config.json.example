@@ -1,0 +1,12 @@
+{
+  "apiKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "authDomain": "XXXXXXXXXXXXX.firebaseapp.com",
+  "databaseURL": "https://XXXXXXXXXXXXX.firebaseio.com",
+  "projectId": "XXXXXXXXXXXXX",
+  "storageBucket": "XXXXXXXXXXXXX.appspot.com",
+  "messagingSenderId": "0000000",
+  "provider": "https://nodes.testnet.iota.org/",
+  "rootURL": "https://us-central1-XXXXXXXXXXXXX.cloudfunctions.net",
+  "api": "staging",
+  "domainName": "marketplace.tangle.works"
+}

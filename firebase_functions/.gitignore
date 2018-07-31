@@ -1,0 +1,12 @@
+# Logs
+logs
+*.log
+.firebaserc0
+email_config.json
+
+# Compiled binary addons
+build/Release
+/functions/lib
+
+# Dependency directory
+node_modules

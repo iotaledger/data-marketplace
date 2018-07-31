@@ -1,0 +1,46 @@
+{
+  "hosting": {
+    "public": "build",
+    "cleanUrls": true,
+    "headers": [
+      {
+        "source": "**/*",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "*"
+          }
+        ]
+      }
+    ],
+    "ignore": [
+      "firebase.json",
+      "package.json",
+      "README.md",
+      "**/.*",
+      "**/node_modules/**",
+      "node_modules/**",
+      "public/**",
+      "src/**",
+      "firebase_functions/**",
+      ".git/**"
+    ],
+    "redirects": [ {
+      "source" : "/whitelist",
+      "destination" : "/#/whitelist",
+      "type" : 301
+    }, {
+      "source": "/dashboard",
+      "destination": "/#/dashboard",
+      "type" : 301
+    }, {
+      "source": "/sensor/:deviceId",
+      "destination": "/#/sensor/:deviceId",
+      "type" : 301
+    }, {
+      "source" : "/cookies",
+      "destination" : "/#/cookies",
+      "type" : 301
+    } ]
+  }
+}

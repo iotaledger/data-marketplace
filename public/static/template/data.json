@@ -1,0 +1,92 @@
+[
+  {
+    "name": "AT-AT",
+    "model": "All Terrain Armored Transport",
+    "manufacturer": "Imperial Department of Military Research",
+    "vehicle_class": "assault walker"
+  },
+  {
+    "name": "Imperial Speeder Bike",
+    "model": "74-Z speeder bike",
+    "manufacturer": "Aratech Repulsor Company",
+    "vehicle_class": "speeder"
+  },
+  {
+    "name": "Sith speeder",
+    "model": "FC-20 speeder bike",
+    "manufacturer": "Razalon",
+    "vehicle_class": "speeder"
+  },
+  {
+    "name": "X-34 landspeeder",
+    "model": "X-34 landspeeder",
+    "manufacturer": "SoroSuub Corporation",
+    "vehicle_class": "repulsorcraft"
+  },
+  {
+    "name": "C-9979 landing craft",
+    "model": "C-9979 landing craft",
+    "manufacturer": "Haor Chall Engineering",
+    "vehicle_class": "landing craft"
+  },
+  {
+    "name": "Droid tri-fighter",
+    "model": "tri-fighter",
+    "manufacturer": "Phlac-Arphocc Automata Industries",
+    "vehicle_class": "droid starfighter"
+  },
+  {
+    "name": "Storm IV Twin-Pod cloud car",
+    "model": "Storm IV Twin-Pod",
+    "manufacturer": "Bespin Motors",
+    "vehicle_class": "repulsorcraft"
+  },
+  {
+    "name": "Snowspeeder",
+    "model": "t-47 airspeeder",
+    "manufacturer": "Incom corporation",
+    "vehicle_class": "airspeeder"
+  },
+  {
+    "name": "X-34 landspeeder",
+    "model": "X-34 landspeeder",
+    "manufacturer": "SoroSuub Corporation",
+    "vehicle_class": "repulsorcraft"
+  },
+  {
+    "name": "Neimoidian shuttle",
+    "model": "Sheathipede-class transport shuttle",
+    "manufacturer": "Haor Chall Engineering",
+    "vehicle_class": "transport"
+  },
+  {
+    "name": "LAAT/c",
+    "model": "Low Altitude Assault Transport/carrier",
+    "manufacturer": "Rothana Heavy Engineering",
+    "vehicle_class": "gunship"
+  },
+  {
+    "name": "Sand Crawler",
+    "model": "Digger Crawler",
+    "manufacturer": "Corellia Mining Corporation",
+    "vehicle_class": "wheeled"
+  },
+  {
+    "name": "X-34 landspeeder",
+    "model": "X-34 landspeeder",
+    "manufacturer": "SoroSuub Corporation",
+    "vehicle_class": "repulsorcraft"
+  },
+  {
+    "name": "Neimoidian shuttle",
+    "model": "Sheathipede-class transport shuttle",
+    "manufacturer": "Haor Chall Engineering",
+    "vehicle_class": "transport"
+  },
+  {
+    "name": "TIE/LN starfighter",
+    "model": "Twin Ion Engine/Ln Starfighter",
+    "manufacturer": "Sienar Fleet Systems",
+    "vehicle_class": "starfighter"
+  }
+]
