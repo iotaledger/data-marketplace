@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash';
 import { reducer } from '../../utils/helpers';
 import Loading from '../loading';
 
-const SideBar = ({ device, settings, fetching, dataEnd, packets }) => (
+const SideBar = ({ device, settings, fetching, dataEnd, packets, streamLength }) => (
   <Sidebar>
     <Details>
       <Label>Sensor details:</Label>
@@ -43,8 +43,7 @@ const SideBar = ({ device, settings, fetching, dataEnd, packets }) => (
       </div>
     </Details>
     <Fetcher>
-      {dataEnd && <More>End of data reached</More>}
-      {fetching && packets[0] && !dataEnd ? <Loading /> : null}
+      {fetching && packets[0] && !dataEnd && packets.length !== streamLength ? <Loading /> : null}
     </Fetcher>
   </Sidebar>
 );
@@ -54,12 +53,6 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(SideBar);
-
-const More = styled.div`
-  color: white;
-  padding: 20px 20px 10px;
-  margin: 10px 0 20px;
-`;
 
 const Fetcher = styled.div`
   position: absolute;
