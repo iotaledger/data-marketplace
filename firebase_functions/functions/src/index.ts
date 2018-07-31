@@ -180,7 +180,12 @@ exports.getDevice = functions.https.onRequest((req, res) => {
     }
 
     try {
-      return res.json(await getDevice(packet.deviceId));
+      const device = await getDevice(packet.deviceId);
+      if (device && !device.price) {
+        const settings = await getSettings();
+        device.price = settings.defaultPrice;
+      }
+      return res.json(device);
     } catch (e) {
       console.log('getDevice failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
