@@ -88,7 +88,7 @@ export default class Partners extends Component {
           <H>Marketplace Participants</H>
           <Ul>
             {partners.map(({ alt, src }) => (
-              <Li>
+              <Li key={alt}>
                 <I
                   src={`/static/logotypes/${src}`}
                   srcSet={`/static/logotypes/${src} 2x`}

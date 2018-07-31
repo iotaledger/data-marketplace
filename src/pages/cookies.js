@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default class extends React.Component {
+export default class extends Component {
   state = { visible: false };
 
   componentDidMount = async () => {
@@ -9,7 +9,6 @@ export default class extends React.Component {
   };
 
   render() {
-    const { visible } = this.state;
-    return <div visible={visible}>Hellooo</div>;
+    return <div visible={this.state.visible}>Cookie policy</div>;
   }
 }
