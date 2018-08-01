@@ -1,15 +1,15 @@
 # Data Marketplace
 
-The Proof of Concept data markertplace built using MAM and IOTA.
+The Proof of Concept Data Marketplace built using MAM and IOTA.
 
 ## Getting started
 
-To run for development (HMR etc)
+To run for development.
 
 ```javascript
 yarn
 
-yarn dev
+yarn start
 ```
 
 To run for Production:
@@ -19,5 +19,5 @@ yarn
 
 yarn build
 
-yarn start
+firebase deploy
 ```
