@@ -70,6 +70,7 @@ const partners = [
   { src: 'uio.png', alt: 'uio' },
   { src: 'undc.png', alt: 'undc' },
   { src: 'USC_viterbi.png', alt: 'USC Viterbi' },
+  { src: 'wondrwall.png', alt: 'wondrwall'},
   { src: 'yield.png', alt: 'yield' },
 ];
 
