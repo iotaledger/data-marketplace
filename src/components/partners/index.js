@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { upperFirst } from 'lodash';
 
@@ -70,10 +70,11 @@ const partners = [
   { src: 'uio.png', alt: 'uio' },
   { src: 'undc.png', alt: 'undc' },
   { src: 'USC_viterbi.png', alt: 'USC Viterbi' },
+  { src: 'wondrwall.png', alt: 'wondrwall'},
   { src: 'yield.png', alt: 'yield' },
 ];
 
-export default class Partners extends Component {
+export default class Partners extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.anchor && nextProps.anchor === 'participants') {
       const target = document.querySelector('#participants');

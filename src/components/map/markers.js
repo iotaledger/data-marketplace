@@ -1,9 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Marker } from 'react-map-gl';
 
-export default class extends Component {
-  state = { devices: [] };
+export default class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { devices: [] };
+
+    this.sanitiseCoordinates = this.sanitiseCoordinates.bind(this);
+    this.sanatiseDevice = this.sanatiseDevice.bind(this);
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.state.devices.length > 0) return;
@@ -20,10 +26,11 @@ export default class extends Component {
     this.setState({ devices });
   }
 
-  sanitiseCoordinates = coordinate =>
-    typeof coordinate === 'number' ? coordinate : Number(coordinate.replace(/[^0-9.]/g, ''));
+  sanitiseCoordinates(coordinate) {
+    return typeof coordinate === 'number' ? coordinate : Number(coordinate.replace(/[^0-9.]/g, ''));
+  }
 
-  sanatiseDevice = device => {
+  sanatiseDevice(device) {
     if (!device.lon || !device.lat || device.inactive) return false;
     if (device.lat >= 90 || device.lat <= -90) return false;
     if (device.lon >= 180 || device.lon <= -180) return false;

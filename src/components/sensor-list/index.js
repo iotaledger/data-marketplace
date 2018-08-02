@@ -1,19 +1,25 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export default class extends Component {
-  state = { devices: [], slideIndex: 0 };
+export default class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { devices: [], slideIndex: 0 };
 
-  componentWillReceiveProps = nextProps => {
-    this.setState({ devices: this.sort(nextProps.devices) });
-  };
+    this.shift = this.shift.bind(this);
+    this.sort = this.sort.bind(this);
+  }
 
-  componentDidMount = async () => {
+  componentDidMount() {
     this.setState({ devices: this.sort(this.props.devices) });
   };
 
-  sort = devices => {
+  componentWillReceiveProps(nextProps) {
+    this.setState({ devices: this.sort(nextProps.devices) });
+  };
+
+  sort(devices) {
     const slides = [];
     let count = -1;
     devices.filter(device => !device.inactive).forEach((device, i) => {
@@ -26,7 +32,7 @@ export default class extends Component {
     return slides;
   };
 
-  shift = direction => {
+  shift(direction) {
     if (direction === 'right') {
       this.setState({ slideIndex: this.state.slideIndex + 1 });
     } else {

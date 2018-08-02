@@ -37,7 +37,6 @@ export const userAuth = async () => {
 export const allDevices = () => {
   return new Promise(async (resolve, reject) => {
     const devices = await api('getDevices');
-    console.log('allDevices', devices);
     resolve(devices);
   });
 };

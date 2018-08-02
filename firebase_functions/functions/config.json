@@ -1,5 +1,5 @@
 {
-  "provider": "https://testnet140.tangle.works",
+  "provider": "https://nodes.testnet.iota.org",
   "walletSeed": "https://marketseeds.tangle.works",
   "iotaApiVersion": 1
 }

@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class extends Component {
-  state = { visible: false };
+export default class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { visible: false };
+  }
 
-  componentDidMount = async () => {
+  async componentDidMount() {
     const visible = await localStorage.getItem('cookie');
     this.setState({ visible });
   };

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -16,10 +16,14 @@ const Box = styled.div`
   background-image: linear-gradient(190deg, #f3f8fa 1%, #eaf0f4 95%);
 `;
 
-export default class extends Component {
-  state = { visible: false };
+export default class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { visible: false };
+    this.agree = this.agree.bind(this);
+  }
 
-  componentDidMount = async () => {
+  async componentDidMount() {
     const visible = JSON.parse(await localStorage.getItem('cookie'));
     if (!visible) {
       this.setState({ visible: true });
@@ -30,7 +34,7 @@ export default class extends Component {
     }
   };
 
-  agree = () => {
+  agree() {
     localStorage.setItem('cookie', JSON.stringify(true));
     this.setState({ visible: false });
   };

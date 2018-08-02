@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled, { injectGlobal } from 'styled-components';
 import MapGL, { Popup, NavigationControl } from 'react-map-gl';
 import { Link } from 'react-router-dom';
@@ -9,24 +9,32 @@ import Markers from './markers';
 
 const mapControls = new Controls();
 
-class Map extends Component {
-  state = {
-    viewport: {
-      latitude: 52.23,
-      longitude: 11.16,
-      zoom: 3.74,
-      bearing: 0,
-      pitch: 15,
-      width: 800,
-      height: 900,
-    },
-    popupInfo: null,
-    mapHeight: 900,
-  };
+class Map extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      viewport: {
+        latitude: 52.23,
+        longitude: 11.16,
+        zoom: 3.74,
+        bearing: 0,
+        pitch: 15,
+        width: 800,
+        height: 900,
+      },
+      popupInfo: null,
+      mapHeight: 900,
+    };
+
+    this.openPopup = this.openPopup.bind(this);
+    this.resize = this.resize.bind(this);
+    this.renderPopup = this.renderPopup.bind(this);
+    this.updateViewport = this.updateViewport.bind(this);
+  }
 
   componentDidMount() {
-    window.addEventListener('resize', this._resize);
-    this._resize();
+    window.addEventListener('resize', this.resize);
+    this.resize();
   }
 
   componentWillReceiveProps(nextProps) {
@@ -37,10 +45,10 @@ class Map extends Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this._resize);
+    window.removeEventListener('resize', this.resize);
   }
 
-  _resize = () => {
+  resize() {
     const mapHeight = window.innerWidth < 760 ? 500 : 900;
 
     this.setState({
@@ -53,13 +61,13 @@ class Map extends Component {
     });
   };
 
-  _updateViewport = viewport => {
+  updateViewport(viewport) {
     this.setState({
       viewport: { ...this.state.viewport, ...viewport },
     });
   };
 
-  _renderPopup = () => {
+  renderPopup() {
     const { popupInfo } = this.state;
     return (
       popupInfo && (
@@ -110,7 +118,7 @@ class Map extends Component {
     );
   };
 
-  _openPopup = device => {
+  openPopup(device) {
     this.setState({ popupInfo: device });
   };
 
@@ -134,15 +142,15 @@ class Map extends Component {
           {...viewport}
           height={mapHeight}
           mapStyle={settings.mapboxStyles}
-          onViewportChange={this._updateViewport}
+          onViewportChange={this.updateViewport}
           onClick={() => (popupInfo ? this.setState({ popupInfo: null }) : null)}
           mapboxApiAccessToken={settings.mapboxApiAccessToken}
         >
           <div style={{ position: 'absolute', right: 20, top: 10 }}>
-            <NavigationControl onViewportChange={this._updateViewport} />
+            <NavigationControl onViewportChange={this.updateViewport} />
           </div>
-          <Markers devices={this.props.devices} openPopup={this._openPopup} />
-          {this._renderPopup()}
+          <Markers devices={this.props.devices} openPopup={this.openPopup} />
+          {this.renderPopup()}
         </MapGL>
 
         <HeaderBg

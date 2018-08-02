@@ -9,7 +9,7 @@ export default props => (
   </Card>
 );
 
-const Card = styled.a`
+const Card = styled.div`
   color: inherit;
   text-decoration: none;
   position: relative;

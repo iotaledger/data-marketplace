@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { isEmpty } from 'lodash';
 import styled from 'styled-components';
@@ -11,25 +11,39 @@ import GrandModal from '../components/modal/grandfather';
 import Sidebar from '../components/user-sidebar';
 import DeviceList from '../components/device-list';
 
-class Dashboard extends Component {
+class Dashboard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      devices: [],
+      packets: [],
+      user: {},
+      button: true,
+      grandModal: false,
+      index: 0,
+      loading: {
+        heading: 'Loading User',
+        body: 'Fetching your devices and account statistcs',
+      },
+      error: false,
+      fetching: false,
+    };
+
+    this.checkLogin = this.checkLogin.bind(this);
+    this.auth = this.auth.bind(this);
+    this.getUser = this.getUser.bind(this);
+    this.findDevices = this.findDevices.bind(this);
+    this.createDevice = this.createDevice.bind(this);
+    this.deleteDevice = this.deleteDevice.bind(this);
+    this.logout = this.logout.bind(this);
+    this.grandfather = this.grandfather.bind(this);
+    this.toggleGrand = this.toggleGrand.bind(this);
+    this.throw = this.throw.bind(this);
+  }
+
   static async getInitialProps({ query }) {
     return { grandfather: query.grandfather !== undefined };
   }
-
-  state = {
-    devices: [],
-    packets: [],
-    user: {},
-    button: true,
-    grandModal: false,
-    index: 0,
-    loading: {
-      heading: 'Loading User',
-      body: 'Fetching your devices and account statistcs',
-    },
-    error: false,
-    fetching: false,
-  };
 
   async componentDidMount() {
     if (this.props.grandfather) this.setState({ grandfather: true });
@@ -37,7 +51,7 @@ class Dashboard extends Component {
     this.checkLogin();
   }
 
-  checkLogin = () => {
+  checkLogin() {
     firebase.auth().onAuthStateChanged(user => {
       if (user && !user.isAnonymous) {
         // User is signed in.
@@ -50,7 +64,7 @@ class Dashboard extends Component {
     });
   };
 
-  auth = () => {
+  auth() {
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.addScope('email');
     provider.addScope('profile');
@@ -71,19 +85,19 @@ class Dashboard extends Component {
       });
   };
 
-  getUser = async () => {
+  async getUser() {
     this.findDevices();
     await this.props.loadUser(this.state.user.uid);
     this.setState({ loading: false });
   };
 
-  findDevices = async () => {
+  async findDevices() {
     this.setState({ loading: true });
     const devices = await api('getDevicesByUser', { uid: this.state.user.uid });
     return this.setState({ devices, loading: false });
   };
 
-  throw = (error, button) => {
+  throw(error, button) {
     this.setState({
       loading: false,
       error,
@@ -91,7 +105,7 @@ class Dashboard extends Component {
     });
   };
 
-  createDevice = device => {
+  createDevice(device) {
     const { userData } = this.props;
     // Assign to user
     device.owner = this.state.user.uid;
@@ -115,7 +129,7 @@ class Dashboard extends Component {
     });
   };
 
-  deleteDevice = async deviceId => {
+  async deleteDevice(deviceId) {
     this.setState({ loading: true });
     const { userData } = this.props;
     const data = await api('removeDevice', { apiKey: userData.apiKey, id: deviceId });
@@ -125,14 +139,14 @@ class Dashboard extends Component {
         devices: [...this.state.devices.filter(device => device.sensorId !== deviceId)],
       });
     } else {
-      alert(`Couldn't Delete Device`);
+      alert('Could not Delete Device');
       return this.setState({
         loading: false,
       });
     }
   };
 
-  logout = () => {
+  logout() {
     this.props.logout();
     firebase
       .auth()
@@ -148,11 +162,11 @@ class Dashboard extends Component {
   };
 
   // Show grandfather modal
-  toggleGrand = () => {
+  toggleGrand() {
     this.setState({ grandModal: true });
   };
 
-  grandfather = (id, sk) => {
+  grandfather(id, sk) {
     this.setState(
       {
         loading: {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Card from './index';
@@ -41,14 +41,20 @@ const error = ({ button, error }) => (
   </Internal>
 );
 
-export default class extends Component {
-  state = { id: '', sk: '' };
+export default class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { id: '', sk: '' };
 
-  change = e => {
+    this.change = this.change.bind(this);
+    this.submit = this.submit.bind(this);
+  }
+
+  change(e) {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  submit = () => {
+  submit() {
     this.props.grandfather(this.state.id, this.state.sk);
   };
 
