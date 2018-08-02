@@ -163,6 +163,18 @@ exports.setDevice = async (deviceId: string, sk: string, device: any) => {
     .doc(deviceId)
     .set(device);
 
+  // Add device to owners' purchases
+  await admin
+    .firestore()
+    .collection('users')
+    .doc(device.owner)
+    .collection('purchases')
+    .doc(deviceId)
+    .set({
+      full: true,
+      time: Date.now(),
+    });
+
   return true;
 };
 
