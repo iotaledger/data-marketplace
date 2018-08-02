@@ -449,21 +449,21 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
   });
 });
 
-// // Query Devices
-// exports.listDevicesWithBadAddress = functions.https.onRequest((req, res) => {
-//     cors(req, res, async () => {
-//         try {
-//             const reg = /^.+?\D$/gm // all strings that ends in NOT 9
-//             const devices = await getDevices()
-//             devices.map(({ sensorId, address, owner }) => {
-//                 if (reg.test(address)) {
-//                     console.log(address, sensorId, owner)
-//                 }
-//             })
-//             return res.json({ data: 'ok' })
-//         } catch (e) {
-//             console.log('getDevices failed. Error: ', e.message)
-//             return res.status(403).json({ error: e.message })
-//         }
-//     })
-// })
+// Query Devices
+exports.listDevicesWithBadAddress = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const reg = /^.+?\D$/gm; // all strings that ends in NOT 9
+      const devices = await getDevices();
+      devices.map(({ sensorId, address, owner }) => {
+        if (reg.test(address)) {
+          console.log(address, sensorId, owner);
+        }
+      });
+      return res.json({ data: 'ok' });
+    } catch (e) {
+      console.log('getDevices failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});

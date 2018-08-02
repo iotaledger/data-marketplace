@@ -231,7 +231,7 @@ class Sensor extends Component {
           {
             loading: {
               heading: 'Success!',
-              body: 'Your purchase was successfully. Fetching MAM stream and decoding data.',
+              body: 'Your purchase was successful. Fetching MAM stream and decoding data.',
             },
           },
           async () => {
