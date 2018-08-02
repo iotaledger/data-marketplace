@@ -210,11 +210,32 @@ exports.deleteDevice = async (device: any) => {
     .collection('keys')
     .doc(device)
     .delete();
+
   await admin
     .firestore()
     .collection('deviceList')
     .doc(device)
     .delete();
+
+  // Get device data
+  const querySnapshot = await admin
+    .firestore()
+    .collection('devices')
+    .doc(device)
+    .collection('data')
+    .get();
+
+  querySnapshot.docs.forEach(async doc => {
+    // Delete device data
+    await admin
+      .firestore()
+      .collection('devices')
+      .doc(device)
+      .collection('data')
+      .doc(doc.id)
+      .delete();
+  });
+
   await admin
     .firestore()
     .collection('devices')
