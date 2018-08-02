@@ -1,5 +1,5 @@
-import styled from 'styled-components';
 import React from 'react';
+import styled from 'styled-components';
 import { generateDeviceAddress } from '../../utils/iota';
 import Card from '../card';
 import Loading from '../loading';
@@ -7,50 +7,66 @@ import Loading from '../loading';
 const Heading = state => <Header>New Device</Header>;
 
 export default class extends React.Component {
-  state = {
-    loading: false,
-    active: false,
-    submit: false,
-    city: '',
-    country: '',
-    company: '',
-    deviceID: '',
-    deviceType: '',
-    deviceLocation: '',
-    deviceLat: '',
-    deviceLon: '',
-    devicePrice: '',
-    dataTypes: [{ id: '', name: '', unit: '' }],
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+      active: false,
+      submit: false,
+      city: '',
+      country: '',
+      company: '',
+      deviceID: '',
+      deviceType: '',
+      deviceLocation: '',
+      deviceLat: '',
+      deviceLon: '',
+      devicePrice: '',
+      dataTypes: [{ id: '', name: '', unit: '' }],
+    };
 
-  addRow = () => {
+    this.addRow = this.addRow.bind(this);
+    this.activate = this.activate.bind(this);
+    this.deactivate = this.deactivate.bind(this);
+    this.remove = this.remove.bind(this);
+    this.change = this.change.bind(this);
+    this.changeRow = this.changeRow.bind(this);
+    this.generateDeviceAddressCallback = this.generateDeviceAddressCallback.bind(this);
+    this.submit = this.submit.bind(this);
+  }
+
+  addRow() {
     const dataTypes = this.state.dataTypes;
     dataTypes.push({ id: '', name: '', unit: '' });
     this.setState({ dataTypes });
   };
 
-  activate = () => this.setState({ active: true });
+  activate() {
+    this.setState({ active: true });
+  }
 
-  deactivate = () => this.setState({ active: false });
+  deactivate() {
+    this.setState({ active: false });
+  }
 
-  remove = i => {
+  remove(i) {
     const dataTypes = this.state.dataTypes;
     if (dataTypes.length === 1) return alert('You must have at least one data field.');
     dataTypes.splice(i, 1);
     this.setState({ dataTypes });
   };
 
-  change = e => {
+  change(e) {
     this.setState({ [e.target.name]: e.target.value });
   };
 
-  changeRow = (e, i) => {
+  changeRow(e, i) {
     const dataTypes = this.state.dataTypes;
     dataTypes[i][e.target.name] = e.target.value;
     this.setState({ dataTypes });
   };
 
-  generateDeviceAddressCallback = async deviceAddress => {
+  async generateDeviceAddressCallback(deviceAddress) {
     const device = {
       location: {
         city: this.state.city,
@@ -89,7 +105,7 @@ export default class extends React.Component {
     });
   };
 
-  submit = async () => {
+  async submit() {
     if (!this.state.deviceID) return alert('Please enter a device ID. eg. company-32');
     if (!this.state.deviceType)
       return alert('Specify type of device. eg. Weather station or Wind Vein');

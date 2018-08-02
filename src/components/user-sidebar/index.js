@@ -1,12 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Clipboard from 'react-clipboard.js';
 
-class UserSidebar extends Component {
-  state = { alert: false, alertMessage: '' };
+class UserSidebar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { alert: false, alertMessage: '' };
+    this.alert = this.alert.bind(this);
+  }
 
-  alert = text => {
+  alert(text) {
     this.setState({ alert: text, alertMessage: text }, () =>
       setTimeout(() => this.setState({ alert: false, alertMessage: text }), 1500)
     );

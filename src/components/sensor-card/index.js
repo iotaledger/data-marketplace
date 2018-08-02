@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import * as moment from 'moment';
 
-export default class extends Component {
-  state = {};
+export default class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
 
-  componentDidMount = () => {
+  componentDidMount() {
     setTimeout(() => this.setState({ visible: true }), 300);
   };
 
