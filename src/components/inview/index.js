@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React from 'react';
 import InView from 'in-view';
 
-export default class extends Component {
+export default class extends React.Component {
   componentDidMount() {
     InView('.inview').on('enter', el => this.props.func());
   }

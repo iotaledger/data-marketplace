@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { getZip } from '../../utils/zip';
 import Card from './index.js';
 
@@ -7,7 +8,9 @@ const Heading = ({ sensorId, type }, func) => (
   <Full>
     <SensorType>{type}</SensorType>
     {sensorId ? (
+      <Link to={`/sensor/${sensorId}`}>
       <SensorId>{sensorId.length > 20 ? `${sensorId.substr(0, 20)}...` : sensorId}</SensorId>
+      </Link>
     ) : null}
     <Delete onClick={() => func(sensorId)}>
       <IconButton src="/static/icons/icon-delete.svg" />

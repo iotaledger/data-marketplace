@@ -6,13 +6,21 @@ import { allDevices } from '../utils/firebase';
 import api from '../utils/api';
 
 export default class extends React.Component {
-  state = { devices: [], filtered: [] };
+  constructor(props) {
+    super(props);
+    this.state = { devices: [], filtered: [], search: '' };
+
+    this.change = this.change.bind(this);
+    this.checkUser = this.checkUser.bind(this);
+    this.search = this.search.bind(this);
+    this.toggle = this.toggle.bind(this);
+  }
 
   componentDidMount() {
     this.checkUser();
   }
 
-  checkUser = () => {
+  checkUser() {
     firebase.auth().onAuthStateChanged(async user => {
       if (user.email.substr('iota.org')) {
         // User is signed in.
@@ -25,13 +33,13 @@ export default class extends React.Component {
     });
   };
 
-  change = e => {
+  change(e) {
     this.setState({ search: e.target.value });
     return this.search(e.target.value);
   };
 
   // Search Func
-  search = term => {
+  search(term) {
     if (!term || term === '') {
       return this.setState({ filtered: this.state.devices });
     }
@@ -44,7 +52,7 @@ export default class extends React.Component {
     return this.setState({ filtered });
   };
 
-  toggle = async device => {
+  async toggle(device) {
     try {
       device.inactive = !device.inactive;
       await api('toggleWhitelist', {
@@ -60,6 +68,7 @@ export default class extends React.Component {
       alert(e.message);
     }
   };
+
   render() {
     const { search, filtered } = this.state;
     return (
