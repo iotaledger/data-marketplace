@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Mam from 'mam.client.js';
@@ -13,19 +13,31 @@ import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
 import api from '../utils/api';
 
-class Sensor extends Component {
-  state = {
-    packets: [],
-    purchase: false,
-    button: true,
-    index: 0,
-    loading: {
-      heading: 'Loading Device',
-      body: 'Fetching device information and your purchase history.',
-    },
-    error: false,
-    fetching: false,
-  };
+class Sensor extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      packets: [],
+      purchase: false,
+      button: true,
+      index: 0,
+      loading: {
+        heading: 'Loading Device',
+        body: 'Fetching device information and your purchase history.',
+      },
+      error: false,
+      fetching: false,
+    };
+
+    this.fetch = this.fetch.bind(this);
+    this.fetchMam = this.fetchMam.bind(this);
+    this.fetchWallet = this.fetchWallet.bind(this);
+    this.fund = this.fund.bind(this);
+    this.loadMore = this.loadMore.bind(this);
+    this.purchase = this.purchase.bind(this);
+    this.saveData = this.saveData.bind(this);
+    this.throw = this.throw.bind(this);
+  }
 
   async componentDidMount() {
     const userId = (await userAuth()).uid;
@@ -71,7 +83,7 @@ class Sensor extends Component {
     this.fetch(userId);
   }
 
-  throw = (error, button) => {
+  throw(error, button) {
     this.setState({
       loading: false,
       error,
@@ -79,7 +91,7 @@ class Sensor extends Component {
     });
   };
 
-  fetch = async userId => {
+  async fetch(userId) {
     const {
       match: {
         params: { deviceId },
@@ -107,7 +119,7 @@ class Sensor extends Component {
     this.fetchMam(data);
   };
 
-  fetchMam = data => {
+  fetchMam(data) {
     try {
       if (!data[0]) {
         this.throw({
@@ -144,8 +156,7 @@ class Sensor extends Component {
     }
   };
 
-  // Append datax
-  saveData = (data, i) => {
+  saveData(data, i) {
     const input = iota.utils.fromTrytes(data);
     try {
       const packet = JSON.parse(input);
@@ -161,7 +172,7 @@ class Sensor extends Component {
     }
   };
 
-  fetchWallet = async userId => {
+  async fetchWallet(userId) {
     await this.props.loadUser(userId);
     const wallet = this.props.user.wallet;
     if (isEmpty(wallet) || !wallet.balance) {
@@ -175,7 +186,7 @@ class Sensor extends Component {
     }
   };
 
-  fund = async () => {
+  async fund() {
     const { userId } = this.state;
     this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
       await api('setWallet', { userId });
@@ -183,7 +194,7 @@ class Sensor extends Component {
     });
   };
 
-  purchase = async () => {
+  async purchase() {
     const { userId } = this.state;
     const device = this.props.sensor;
 
@@ -197,7 +208,7 @@ class Sensor extends Component {
       return this.throw(
         {
           body: 'Setup wallet by clicking the top right, to get a prefunded IOTA wallet.',
-          heading: `Wallet doesn't exist`,
+          heading: 'Wallet does not exist',
         },
         false
       );
@@ -279,7 +290,7 @@ class Sensor extends Component {
     );
   };
 
-  loadMore = () => {
+  loadMore() {
     if (this.state.packets[0] && !this.state.fetching) {
       this.setState({ fetching: true }, () => {
         this.fetchMam(this.state.mamData);

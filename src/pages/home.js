@@ -12,18 +12,25 @@ import Map from '../components/map';
 import { allDevices } from '../utils/firebase';
 
 export default class extends React.Component {
-  state = {
-    devices: [],
-    loading: true,
-    anchor: null,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      devices: [],
+      loading: true,
+      anchor: null,
+    };
 
-  componentDidMount = async () => {
+    this.onAnchorClick = this.onAnchorClick.bind(this);
+  }
+  
+  async componentDidMount() {
     const devices = await allDevices(firebase);
     this.setState({ devices, loading: false });
   };
 
-  onAnchorClick = anchor => this.setState({ anchor });
+  onAnchorClick(anchor) {
+    this.setState({ anchor });
+  }
 
   render() {
     return (
