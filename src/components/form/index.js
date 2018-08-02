@@ -1,20 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Recaptcha from 'react-recaptcha';
 import { connect } from 'react-redux';
 import api from '../../utils/api';
 
-class Form extends Component {
-  state = {
-    name: '',
-    email: '',
-    body: '',
-    company: '',
-    captcha: null,
-    loading: false,
-    success: false,
-    error: null,
-  };
+class Form extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      name: '',
+      email: '',
+      body: '',
+      company: '',
+      captcha: null,
+      loading: false,
+      success: false,
+      error: null,
+    };
+
+    this.submit = this.submit.bind(this);
+    this.verify = this.verify.bind(this);
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.anchor && nextProps.anchor === 'contact') {
@@ -23,11 +29,11 @@ class Form extends Component {
     }
   }
 
-  verify = data => {
+  verify(data) {
     this.setState({ captcha: data, loading: false });
   };
 
-  submit = async e => {
+  async submit(e) {
     e.preventDefault();
     const { captcha, loading, name, email, body } = this.state;
 
