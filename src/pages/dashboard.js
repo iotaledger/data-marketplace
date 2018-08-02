@@ -125,7 +125,7 @@ class Dashboard extends Component {
         devices: [...this.state.devices.filter(device => device.sensorId !== deviceId)],
       });
     } else {
-      alert(`Couldn't Delete Device`);
+      alert('Could not Delete Device');
       return this.setState({
         loading: false,
       });

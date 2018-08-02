@@ -6,7 +6,7 @@ const getFileContent = path => {
   return new Promise((resolve, reject) => {
     try {
       const rawFile = new XMLHttpRequest();
-      rawFile.open('GET', path, false);
+      rawFile.open('GET', path);
       rawFile.onreadystatechange = () => {
         if (rawFile.readyState === 4 && (rawFile.status === 200 || rawFile.status === 0)) {
           resolve(rawFile.responseText);
