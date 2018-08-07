@@ -23,7 +23,9 @@ export const userAuth = async () => {
           .auth()
           .signInAnonymously()
           .then(data => {
-            resolve(data);
+            if (data.user) {
+              resolve(data.user);
+            }
           })
           .catch(error => {
             console.error('userAuth error', error);
