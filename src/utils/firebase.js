@@ -26,9 +26,11 @@ export const userAuth = async () => {
             if (data.user) {
               resolve(data.user);
             }
+            reject(data);
           })
           .catch(error => {
             console.error('userAuth error', error);
+            reject(error.message);
             return error.message;
           });
       }
