@@ -89,7 +89,7 @@ class Sensor extends React.Component {
       error,
       button,
     });
-  };
+  }
 
   async fetch(userId) {
     const {
@@ -117,7 +117,7 @@ class Sensor extends React.Component {
     console.log(data.length + ' Packets found.');
     this.setState({ mamData: data, streamLength: data.length });
     this.fetchMam(data);
-  };
+  }
 
   fetchMam(data) {
     try {
@@ -154,7 +154,7 @@ class Sensor extends React.Component {
       console.error('fetchMam error', error);
       this.setState({ dataEnd: true });
     }
-  };
+  }
 
   saveData(data, i) {
     const input = iota.utils.fromTrytes(data);
@@ -170,7 +170,7 @@ class Sensor extends React.Component {
     } catch (error) {
       console.error('saveData error', error, input);
     }
-  };
+  }
 
   async fetchWallet(userId) {
     await this.props.loadUser(userId);
@@ -184,7 +184,7 @@ class Sensor extends React.Component {
         error: false,
       });
     }
-  };
+  }
 
   async fund() {
     const { userId } = this.state;
@@ -192,7 +192,7 @@ class Sensor extends React.Component {
       await api('setWallet', { userId });
       this.fetchWallet(userId);
     });
-  };
+  }
 
   async purchase() {
     const { userId } = this.state;
@@ -288,7 +288,7 @@ class Sensor extends React.Component {
         );
       }
     );
-  };
+  }
 
   loadMore() {
     if (this.state.packets[0] && !this.state.fetching) {
@@ -296,7 +296,7 @@ class Sensor extends React.Component {
         this.fetchMam(this.state.mamData);
       });
     }
-  };
+  }
 
   render() {
     const { purchase, loading, error, button } = this.state;
