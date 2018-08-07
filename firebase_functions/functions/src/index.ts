@@ -259,7 +259,7 @@ exports.setupUser = functions.auth.user().onCreate(event => {
       try {
         const apiKey = generateUUID();
         const seed = seedGen();
-        const numberOfDevices = (await getNumberOfDevices()) || 3;
+        const numberOfDevices = (await getNumberOfDevices()) || 5;
 
         await setUser(user.uid, {
           apiKey,

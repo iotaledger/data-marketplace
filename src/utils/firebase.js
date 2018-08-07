@@ -23,10 +23,14 @@ export const userAuth = async () => {
           .auth()
           .signInAnonymously()
           .then(data => {
-            resolve(data);
+            if (data.user) {
+              resolve(data.user);
+            }
+            reject(data);
           })
           .catch(error => {
             console.error('userAuth error', error);
+            reject(error.message);
             return error.message;
           });
       }
