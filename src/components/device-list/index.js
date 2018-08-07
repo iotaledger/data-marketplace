@@ -7,7 +7,7 @@ export default props => (
   <InfoCol>
     <CardWrapper>
       {props.devices.map((device, i) => (
-        <DeviceCard index={i} key={i} device={device} delete={props.delete} />
+        <DeviceCard index={i} key={device.sensorId} device={device} delete={props.delete} />
       ))}
       {props.devices.length < props.maxDevices ? (
         <AddCard create={props.create} />
