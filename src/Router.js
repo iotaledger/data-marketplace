@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 import HomePage from './pages/home';
+import DemoPage from './pages/demo';
+import TechSpecsPage from './pages/specs';
+import BusinessPage from './pages/business';
+import GetInvolvedPage from './pages/involved';
 import SensorPage from './pages/sensor';
 import CookiesPage from './pages/cookies';
 import DashboardPage from './pages/dashboard';
@@ -18,6 +22,10 @@ class Router extends Component {
       <HashRouter>
         <Switch>
           <Route path="/" component={HomePage} exact />
+          <Route path="/demo" component={DemoPage} />
+          <Route path="/specs" component={TechSpecsPage} />
+          <Route path="/business" component={BusinessPage} />
+          <Route path="/involved" component={GetInvolvedPage} />
           <Route path="/dashboard" component={DashboardPage} />
           <Route path="/sensor/:deviceId" component={SensorPage} />
           <Route path="/cookies" component={CookiesPage} />

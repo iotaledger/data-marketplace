@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export default ({ onAnchorClick }) => (
+export default ({ links }) => (
   <Header>
     <Container>
       <Info>
@@ -22,15 +22,13 @@ export default ({ onAnchorClick }) => (
         >
           <Button type="button">About the Marketplace</Button>
         </a>
-        <Link to={'/#map'} onClick={() => onAnchorClick('map')}>
-          <SubLink>{'Try the Marketplace'.toUpperCase()}</SubLink>
-        </Link>
-        <Link to={'/#participants'} onClick={() => onAnchorClick('participants')}>
-          <SubLink>{'Participants'.toUpperCase()}</SubLink>
-        </Link>
-        <Link to={'/#contact'} onClick={() => onAnchorClick('contact')}>
-          <SubLink>{'Get involved'.toUpperCase()}</SubLink>
-        </Link>
+        {
+          links.map(({link, text}) =>
+            <Link to={`/${link}`}>
+              <SubLink>{text.toUpperCase()}</SubLink>
+            </Link>
+          )
+        }
       </Info>
       <Graphics>
         <Graphic1

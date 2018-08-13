@@ -25,22 +25,42 @@
       "firebase_functions/**",
       ".git/**"
     ],
-    "redirects": [ {
-      "source" : "/whitelist",
-      "destination" : "/#/whitelist",
-      "type" : 301
-    }, {
-      "source": "/dashboard",
-      "destination": "/#/dashboard",
-      "type" : 301
-    }, {
-      "source": "/sensor/:deviceId",
-      "destination": "/#/sensor/:deviceId",
-      "type" : 301
-    }, {
-      "source" : "/cookies",
-      "destination" : "/#/cookies",
-      "type" : 301
-    } ]
+    "redirects": [
+      {
+        "source": "/whitelist",
+        "destination": "/#/whitelist",
+        "type": 301
+      },
+      {
+        "source": "/demo",
+        "destination": "/#/demo",
+        "type": 301
+      },
+      {
+        "source": "/specs",
+        "destination": "/#/specs",
+        "type": 301
+      },
+      {
+        "source": "/involved",
+        "destination": "/#/involved",
+        "type": 301
+      },
+      {
+        "source": "/dashboard",
+        "destination": "/#/dashboard",
+        "type": 301
+      },
+      {
+        "source": "/sensor/:deviceId",
+        "destination": "/#/sensor/:deviceId",
+        "type": 301
+      },
+      {
+        "source": "/cookies",
+        "destination": "/#/cookies",
+        "type": 301
+      }
+    ]
   }
 }

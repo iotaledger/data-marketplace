@@ -86,7 +86,7 @@ export default class Partners extends React.Component {
     return (
       <S id="participants">
         <C>
-          <H>Marketplace Participants</H>
+          <H>Selected Participants</H>
           <Ul>
             {partners.map(({ alt, src }) => (
               <Li key={alt}>
@@ -106,7 +106,7 @@ export default class Partners extends React.Component {
 
 const S = styled.section`
   background-image: linear-gradient(-189deg, #eaf0f4 1%, #f3f8fa 95%);
-  padding: 90px 0 70px;
+  padding: 120px 0 100px;
   transform: skewY(-2deg);
   @media (max-width: 760px) {
     padding-bottom: 45px;
