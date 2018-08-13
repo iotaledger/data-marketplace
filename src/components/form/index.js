@@ -3,22 +3,35 @@ import styled from 'styled-components';
 import Recaptcha from 'react-recaptcha';
 import { connect } from 'react-redux';
 import api from '../../utils/api';
+import Dropdown from './dropdown';
 
 class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      acceptedDisclaimer: false,
+      newsletter: false,
       name: '',
+      role: '',
       email: '',
-      body: '',
+      phone: '',
+      comments: '',
       company: '',
+      country: '',
+      website: '',
+      category: '',
+      industry: '',
       captcha: null,
       loading: false,
       success: false,
       error: null,
+      categoryList: ['', 'Large', 'Middle', 'Small'],
+      industryList: ['', 'Machinery', 'Pharma', 'Supply'],
     };
 
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.submit = this.submit.bind(this);
+    this.selectItem = this.selectItem.bind(this);
     this.verify = this.verify.bind(this);
   }
 
@@ -29,17 +42,53 @@ class Form extends React.Component {
     }
   }
 
+  handleInputChange({ target }) {
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+
+    this.setState(
+      {
+        [name]: value,
+      },
+      () => console.log(this.state)
+    );
+  }
+
+  selectItem(type, title) {
+    this.setState({ [type]: title });
+  }
+
   verify(data) {
     this.setState({ captcha: data, loading: false });
-  };
+  }
 
   async submit(e) {
     e.preventDefault();
-    const { captcha, loading, name, email, body } = this.state;
+    const {
+      captcha,
+      loading,
+      name,
+      email,
+      role,
+      phone,
+      country,
+      website,
+      company,
+      acceptedDisclaimer,
+    } = this.state;
 
     if (loading) return;
 
-    if (!name || !email || !body) {
+    if (
+      !acceptedDisclaimer ||
+      !name ||
+      !email ||
+      !role ||
+      !phone ||
+      !country ||
+      !website ||
+      !company
+    ) {
       return this.setState({ error: 'Please fill out all fields' });
     }
 
@@ -51,10 +100,29 @@ class Form extends React.Component {
       await api('sendEmail', this.state);
       this.setState({ success: true });
     });
-  };
+  }
 
   render() {
-    const { name, email, body, company, success, error, captcha, loading } = this.state;
+    const {
+      acceptedDisclaimer,
+      name,
+      role,
+      phone,
+      email,
+      comments,
+      country,
+      website,
+      company,
+      success,
+      error,
+      captcha,
+      loading,
+      industry,
+      category,
+      newsletter,
+      categoryList,
+      industryList,
+    } = this.state;
     const { devices, settings } = this.props;
     if (!settings.recaptchaSiteKey) return <div />;
 
@@ -70,26 +138,87 @@ class Form extends React.Component {
               type="text"
               placeholder="Your Full Name"
               value={name}
-              onChange={e => this.setState({ name: e.target.value })}
+              name="name"
+              onChange={this.handleInputChange}
             />
-
+            <I
+              type="text"
+              placeholder="Your Role/Title"
+              value={role}
+              name="role"
+              onChange={this.handleInputChange}
+            />
             <I
               type="email"
               placeholder="Your Email"
               value={email}
-              onChange={e => this.setState({ email: e.target.value })}
+              name="email"
+              onChange={this.handleInputChange}
+            />
+            <I
+              type="text"
+              placeholder="Your Telephone"
+              value={phone}
+              name="phone"
+              onChange={this.handleInputChange}
             />
             <I
               type="text"
               placeholder="Your Company"
               value={company}
-              onChange={e => this.setState({ company: e.target.value })}
+              name="company"
+              onChange={this.handleInputChange}
+            />
+            <I
+              type="text"
+              placeholder="Your Company Website"
+              value={website}
+              name="website"
+              onChange={this.handleInputChange}
+            />
+            <I
+              type="text"
+              placeholder="Your Country"
+              value={country}
+              name="country"
+              onChange={this.handleInputChange}
+            />
+            <Dropdown
+              title={industry || 'Select industry'}
+              list={industryList}
+              selectItem={this.selectItem}
+              type="industry"
+            />
+            <Dropdown
+              title={category || 'Select category'}
+              list={categoryList}
+              selectItem={this.selectItem}
+              type="category"
             />
             <T
-              value={body}
-              placeholder="Your message here..."
-              onChange={e => this.setState({ body: e.target.value })}
+              value={comments}
+              placeholder="Additional comments..."
+              name="comments"
+              onChange={this.handleInputChange}
             />
+            <label>
+              <I
+                name="acceptedDisclaimer"
+                type="checkbox"
+                checked={acceptedDisclaimer}
+                onChange={this.handleInputChange}
+              />
+              Acknowledgement of Disclaimer clause
+            </label>
+            <label>
+              <I
+                name="newsletter"
+                type="checkbox"
+                checked={newsletter}
+                onChange={this.handleInputChange}
+              />
+              Please add me to the newsletter
+            </label>
             {devices.length !== 0 && (
               <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
             )}
