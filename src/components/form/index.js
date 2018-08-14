@@ -208,7 +208,7 @@ class Form extends React.Component {
                 checked={acceptedDisclaimer}
                 onChange={this.handleInputChange}
               />
-              I hereby confirm acknowledgement of our disclaimer
+              Acknowledgement of Disclaimer clause
             </label>
             <label>
               <I
