@@ -1,23 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
+import Heading from './heading';
 
-export default ({content: {title, text}}) => (
+export default ({ content: { title, text } }) => (
   <S>
+    {title ? <Heading title={title} /> : null}
     <C>
-      <H>
-        <H3>{title}</H3>
-      </H>
       <P dangerouslySetInnerHTML={{ __html: text }} />
     </C>
   </S>
 );
 
 const S = styled.section`
-  position: relative;
-  top: -40px;
-  z-index: 100;
-  padding-top: 90px;
-  margin-bottom: 30px;
+  max-width: 724px;
+  z-index: 10;
+  padding-top: 20px;
+  margin-bottom: 20px;
   background-color: #fff;
   @media (max-width: 760px) {
     margin-bottom: -30px;
@@ -25,11 +23,8 @@ const S = styled.section`
 `;
 
 const C = styled.div`
-  width: 100%;
-  max-width: 1170px;
-  padding: 0 15px;
-  margin-right: auto;
-  margin-left: auto;
+  display: flex;
+  justify-content: center;
 
   &::after {
     content: '';
@@ -37,7 +32,6 @@ const C = styled.div`
     bottom: -175px;
     left: 0;
     z-index: -10;
-    width: 100vw;
     height: 210px;
     transform: skewY(6deg);
     background-color: #fff;
@@ -49,95 +43,14 @@ const C = styled.div`
   }
 `;
 
-const H = styled.header`
-  margin-bottom: 90px;
-`;
-
-const H3 = styled.h3`
-  font-size: 28px;
-  font-weight: 100;
-  line-height: 42px;
-  margin-bottom: 12px;
-  text-align: center;
-  color: #009fff;
-  @media (max-width: 760px) {
-    font-size: 24px;
-    margin-bottom: 0;
-  }
-`;
-
-const H4 = styled.h4`
-  font-size: 19px;
-  font-weight: 400;
-  line-height: 33px;
-  margin-bottom: 60px;
-  text-align: center;
-  color: #4e5a61;
-  @media (max-width: 760px) {
-    font-size: 18px;
-    line-height: 28px;
-  }
-`;
-
-const R = styled.div`
-  justify-content: space-between;
-  position: relative;
-  width: 100%;
-  max-width: 945px;
-  margin: 0 auto;
-  display: flex;
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 1px;
-    height: 100%;
-    background-color: #eaecee;
-  }
-  @media (max-width: 1120px) {
-    max-width: 800px;
-  }
-  @media (max-width: 760px) {
-    flex-direction: column;
-    align-items: center;
-    &::before {
-      width: 0;
-    }
-  }
-`;
-
-const Col = styled.div`
-  width: 100%;
-  max-width: 360px;
-  margin-bottom: 10px;
-  text-align: center;
-  @media (max-width: 760px) {
-    &:not(:last-of-type) {
-      margin-bottom: 40px;
-    }
-  }
-`;
-
-const I = styled.img`
-  height: auto;
-  width: auto;
-  min-height: 210px;
-  min-width: 210px;
-`;
-
-const T = styled.p`
-  font-size: 24px;
-  line-height: 42px;
-  margin: 30px 0 10px;
-  @media (max-width: 760px) {
-    font-size: 22px;
-    margin: 20px 0 0;
-  }
-`;
-
 const P = styled.p`
+  @media (max-width: 1120px) {
+    font-size: 16px;
+    line-height: 27px;
+    margin: 0 auto;
+  }
+  font-size: 17px;
   line-height: 32px;
   color: #4e5a61;
+  max-width: 724px;
 `;
