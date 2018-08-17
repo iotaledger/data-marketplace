@@ -101,6 +101,11 @@ section {
 
 a {
   text-decoration: none;
+  color: #009fff;
+
+  &:visited {
+    color: #009fff;
+  }
 }
 
 body {

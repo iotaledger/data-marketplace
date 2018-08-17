@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+// import styled from 'styled-components';
 
 export default class Dropdown extends React.Component {
   constructor(props) {
@@ -30,7 +30,7 @@ export default class Dropdown extends React.Component {
   }
 
   render() {
-    const { list, selectItem, title, type } = this.props;
+    const { list, title, type } = this.props;
     const { listOpen } = this.state;
     return (
       <div className="dd-wrapper">

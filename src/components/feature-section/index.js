@@ -1,37 +1,70 @@
 import React from 'react';
 import styled from 'styled-components';
+import Card from '../content/card';
 
 export default props => (
   <Container>
-    <div>
-      <Header>How it works?</Header>
-      <Tagline>{''}</Tagline>
-    </div>
     <InfoRow>
-      <InfoCol>
-        <Image src="/static/illustrations/choose.svg" alt="IOTA process illustration" />
-        <InfoHeading>Choose</InfoHeading>
-        <Text>
-          Pick a sensor from which you want to access the data from. Take a look at the map<br className="tablet-hidden" />{' '}
-          below and pick any type of sensor.
-        </Text>
-      </InfoCol>
-      <InfoCol>
-        <Image src="/static/illustrations/pay.svg" alt="IOTA process illustration" />
-        <InfoHeading>Pay</InfoHeading>
-        <Text>
-          For each sensor you can purchase direct access to the data stream. Thanks<br className="tablet-hidden" />{' '}
-          to the power of micropayments.
-        </Text>
-      </InfoCol>
-      <InfoCol>
-        <Image src="/static/illustrations/access.svg" alt="IOTA process illustration" />
-        <InfoHeading>Access</InfoHeading>
-        <Text>
-          Continuously access the data from the sensor and use that data to fuel your reports,
-          applications and data analytics.
-        </Text>
-      </InfoCol>
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-4.svg"
+        imageAlt="Smart Sharing Economy"
+        heading="Smart Sharing Economy"
+        text="ElaadNL + Innoenergy + OBO in Smart Energy Community in Sweden"
+        link="https://blog.iota.org/iota-partners-with-innoenergy-on-smart-energy-community-5dc483b42aa0"
+      />
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-2.svg"
+        imageAlt="Smart Farming"
+        heading="Smart Farming"
+        text="TINE, Norway’s leading dairy product cooperative, develops a data marketplace related to Milk production"
+        link="https://premium.obforum.no/sensor"
+      />
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-3.svg"
+        imageAlt="Smart Energy"
+        heading="Smart Energy"
+        text="+cityxchange, EU Horizon 2020 project with 7 smart cities and 30 partners"
+        link="https://blog.iota.org/green-light-from-the-eu-commission-for-iota-and-the-european-smart-city-consortium-cityxchange-f7928aef33ac"
+      />
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-1.svg"
+        imageAlt="Smart buildings"
+        heading="Smart buildings"
+        text="3for2 smart building in Singapore has been running an IOTA PoC"
+      />
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-5.svg"
+        imageAlt="SDK"
+        heading="SDK"
+        text="Nordic Semiconductor and NTNU onboard the data marketplace"
+        link="https://blog.iota.org/nordic-semiconductor-and-ntnu-in-norway-explore-iota-and-the-data-marketplace-f9bc7efee3"
+      />
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-6.svg"
+        imageAlt="Financial Services"
+        heading="Financial Services"
+        text="Financial services: DNB onboarding in the data marketplace to explore data marketplace, personal data and Economy of Things"
+        link="https://blog.iota.org/dnb-teams-up-with-iota-to-explore-the-economy-of-things-and-mydata-gdpr-as-an-opportunity-20c41461e3f5"
+      />
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-7.svg"
+        imageAlt="Workshops & Webinars"
+        heading="Workshops & Webinars"
+        text="2 webinars were organised on the data marketplace and the MAM module. Workshops were conducted in Oslo and Berlin on the topics of Trusted IoT and MyData/personal data"
+      />
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-8.svg"
+        imageAlt="Hackathons"
+        heading="Hackathons"
+        text="IOTA participated to two hackathons where the Data Marketplace was used as basis/starting point"
+        link="https://blog.iota.org/blockchaingers-2018-boosting-co-creation-with-iota-8086c215caad"
+      />
+      <Card
+        imageSrc="/static/icons/exploring_together/icon-9.svg"
+        imageAlt="Smart cities testbed"
+        heading="Smart cities testbed"
+        text="Initial work towards smart cities development are being triggered in Los Angeles at USC’s smart campus, as proxy for a smart cities"
+      />
     </InfoRow>
   </Container>
 );
@@ -47,78 +80,15 @@ const Container = styled.section`
   }
 `;
 
-const Header = styled.h3`
-  @media (max-width: 760px) {
-    font-size: 24px;
-    margin-bottom: 0;
-  }
-  font-size: 28px;
-  font-weight: 100;
-  line-height: 42px;
-  margin-bottom: 12px;
-  text-align: center;
-  color: #009fff;
-`;
-
-const Tagline = styled.h4`
-  @media (max-width: 760px) {
-    font-size: 18px;
-    line-height: 28px;
-  }
-  font-size: 19px;
-  font-weight: 400;
-  line-height: 33px;
-  margin-bottom: 60px;
-  text-align: center;
-  color: #4e5a61;
-`;
-
 const InfoRow = styled.div`
-  @media (max-width: 760px) {
+  @media (max-width: 767px) {
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-bottom: none;
   }
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
   margin-bottom: 100px;
-`;
-
-const InfoCol = styled.div`
-  @media (max-width: 760px) {
-    margin-bottom: 40px;
-  }
-  width: 100%;
-  max-width: 350px;
-  text-align: center;
-`;
-
-const Image = styled.img`
-  @media (max-width: 760px) {
-    margin-bottom: 18px;
-  }
-  margin-bottom: 35px;
-`;
-
-const InfoHeading = styled.p`
-  @media (max-width: 760px) {
-    font-size: 22px;
-    margin-bottom: 0;
-  }
-  font-size: 24px;
-  line-height: 42px;
-  margin-bottom: 10px;
-`;
-
-const Text = styled.p`
-  @media (max-width: 1120px) {
-    font-size: 16px;
-    line-height: 27px;
-    max-width: 260px;
-    margin: 0 auto;
-  }
-  font-size: 17px;
-  line-height: 32px;
-  color: #4e5a61;
 `;

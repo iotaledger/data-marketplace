@@ -12,9 +12,7 @@ class Form extends React.Component {
       acceptedDisclaimer: false,
       newsletter: false,
       name: '',
-      role: '',
       email: '',
-      phone: '',
       comments: '',
       company: '',
       country: '',
@@ -25,8 +23,56 @@ class Form extends React.Component {
       loading: false,
       success: false,
       error: null,
-      categoryList: ['', 'Large', 'Middle', 'Small'],
-      industryList: ['', 'Machinery', 'Pharma', 'Supply'],
+      categoryList: [
+        '',
+        'Consortium',
+        'Consulting firm',
+        'Event',
+        'Freelance influencer',
+        'International institutions',
+        'Investor & VC',
+        'Incubator & Cluster',
+        'Large corporation',
+        'Medium size corporation',
+        'Not-for-profit organisation',
+        'Public sector',
+        'Research & Academia',
+        'Startup',
+        'Testbed, Prototyping, Living lab',
+        'Other',
+      ],
+      industryList: [
+        '',
+        'Agriculture / Smart Farming',
+        'Consulting',
+        'Education',
+        'Finance',
+        'Food & Beverages',
+        'Global Trade & Supply Chain',
+        'Government',
+        'Hardware Technology & Electronics',
+        'Healthcare & Pharma',
+        'Industry 4.0 / Industrial IoT',
+        'Insurance',
+        'IoT / M2M',
+        'Maritime',
+        'Materials',
+        'Media & Entertainment',
+        'Mobility',
+        'Personal Data',
+        'Oil & Gas',
+        'Power & Utilities',
+        'Public institutions',
+        'Real Estate, Smart Buildings',
+        'Retail',
+        'Sales & Marketing',
+        'SDGs',
+        'Smart cities',
+        'Software Tech & Internet',
+        'Telecom',
+        'Several',
+        'Other',
+      ],
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -69,8 +115,6 @@ class Form extends React.Component {
       loading,
       name,
       email,
-      role,
-      phone,
       country,
       website,
       company,
@@ -79,16 +123,7 @@ class Form extends React.Component {
 
     if (loading) return;
 
-    if (
-      !acceptedDisclaimer ||
-      !name ||
-      !email ||
-      !role ||
-      !phone ||
-      !country ||
-      !website ||
-      !company
-    ) {
+    if (!acceptedDisclaimer || !name || !email || !country || !website || !company) {
       return this.setState({ error: 'Please fill out all fields' });
     }
 
@@ -106,8 +141,6 @@ class Form extends React.Component {
     const {
       acceptedDisclaimer,
       name,
-      role,
-      phone,
       email,
       comments,
       country,
@@ -123,7 +156,7 @@ class Form extends React.Component {
       categoryList,
       industryList,
     } = this.state;
-    const { devices, settings } = this.props;
+    const { settings } = this.props;
     if (!settings.recaptchaSiteKey) return <div />;
 
     return (
@@ -136,68 +169,54 @@ class Form extends React.Component {
             {error && <Error>{error}</Error>}
             <I
               type="text"
-              placeholder="Your Full Name"
+              placeholder="Name"
               value={name}
               name="name"
               onChange={this.handleInputChange}
             />
             <I
-              type="text"
-              placeholder="Your Role/Title"
-              value={role}
-              name="role"
-              onChange={this.handleInputChange}
-            />
-            <I
               type="email"
-              placeholder="Your Email"
+              placeholder="Email"
               value={email}
               name="email"
               onChange={this.handleInputChange}
             />
             <I
               type="text"
-              placeholder="Your Telephone"
-              value={phone}
-              name="phone"
-              onChange={this.handleInputChange}
-            />
-            <I
-              type="text"
-              placeholder="Your Company"
+              placeholder="Company"
               value={company}
               name="company"
               onChange={this.handleInputChange}
             />
             <I
               type="text"
-              placeholder="Your Company Website"
-              value={website}
-              name="website"
-              onChange={this.handleInputChange}
-            />
-            <I
-              type="text"
-              placeholder="Your Country"
+              placeholder="Country"
               value={country}
               name="country"
               onChange={this.handleInputChange}
             />
+            <I
+              type="text"
+              placeholder="Company Website"
+              value={website}
+              name="website"
+              onChange={this.handleInputChange}
+            />
             <Dropdown
-              title={industry || 'Select industry'}
+              title={industry || 'Industry'}
               list={industryList}
               selectItem={this.selectItem}
               type="industry"
             />
             <Dropdown
-              title={category || 'Select category'}
+              title={category || 'Category'}
               list={categoryList}
               selectItem={this.selectItem}
               type="category"
             />
             <T
               value={comments}
-              placeholder="Additional comments..."
+              placeholder="Comments"
               name="comments"
               onChange={this.handleInputChange}
             />
@@ -208,7 +227,7 @@ class Form extends React.Component {
                 checked={acceptedDisclaimer}
                 onChange={this.handleInputChange}
               />
-              Acknowledgement of Disclaimer clause
+              <strong>Acknowledgement</strong> of <strong>Disclaimer</strong> clause
             </label>
             <label>
               <I
@@ -219,9 +238,7 @@ class Form extends React.Component {
               />
               Please add me to the newsletter
             </label>
-            {devices.length !== 0 && (
-              <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
-            )}
+            <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
             {captcha && !loading && <Button type={'submit'}>Submit</Button>}
             {loading && <Button>Sending</Button>}
           </F>
