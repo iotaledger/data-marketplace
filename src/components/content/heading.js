@@ -1,11 +1,23 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default ({ title }) => (
-  <H>
-    <H3>{title}</H3>
-  </H>
-);
+export default class Heading extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.anchor) {
+      const target = document.querySelector(`#${nextProps.anchor}`);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  render() {
+    const { id, title } = this.props;
+    return (
+      <H id={id || null}>
+        <H3>{title}</H3>
+      </H>
+    );
+  }
+}
 
 const H = styled.header`
   margin-bottom: 20px;
