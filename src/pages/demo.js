@@ -80,22 +80,7 @@ const Container = styled.div`
 const Info = styled.div`
   width: 40%;
   max-width: 600px;
-  padding: 87px 0 40px 100px;
-  @media (max-width: 1120px) {
-    max-width: 420px;
-    padding: 30px 0 180px;
-    margin-left: 65px;
-  }
-  @media (max-width: 760px) {
-    padding-bottom: 90px;
-    margin-left: 10px;
-  }
-  @media (max-width: 700px) {
-    max-width: 400px;
-  }
-  @media (max-width: 600px) {
-    margin-left: 5px;
-  }
+  padding: 133px 0 40px 120px;
 `;
 
 const SubLink = styled.p`
@@ -129,8 +114,8 @@ const Tagline = styled.h2`
   letter-spacing: normal;
   text-align: center;
   position: absolute;
-  top: 245px;
-  left: 35vw;
+  top: 216px;
+  left: 31vw;
 `;
 
 const Shapes = styled.div`
@@ -143,15 +128,15 @@ const Shape = styled.img`
 `;
 
 const Shape1 = Shape.extend`
-  transform: skew(-65deg, 66deg);
+  transform: skew(75deg, -69deg);
   top: 254px;
   right: 71vw;
-  width: 7%;
+  width: 6%;
 `;
 
 const Shape2 = Shape.extend`
-  transform: skew(-14deg, 195deg);
-  top: 130px;
-  left: 29vw;
-  width: 33%;
+  transform: skew(-42deg, 204deg);
+  top: 156px;
+  left: 33vw;
+  width: 29%;
 `;
