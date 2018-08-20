@@ -38,8 +38,8 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor && nextProps.anchor === 'map') {
-      const target = document.querySelector('#map');
+    if (nextProps.anchor) {
+      const target = document.querySelector(`#${nextProps.anchor}`);
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -59,13 +59,13 @@ class Map extends React.Component {
       },
       mapHeight,
     });
-  };
+  }
 
   updateViewport(viewport) {
     this.setState({
       viewport: { ...this.state.viewport, ...viewport },
     });
-  };
+  }
 
   renderPopup() {
     const { popupInfo } = this.state;
@@ -80,8 +80,7 @@ class Map extends React.Component {
           longitude={Number(popupInfo.lon)}
           latitude={Number(popupInfo.lat)}
           closeOnClick={true}
-          onClose={() => this.setState({ popupInfo: null })}
-        >
+          onClose={() => this.setState({ popupInfo: null })}>
           <SensorCard to={`/sensor/${popupInfo.sensorId}`}>
             <CardHeader>
               <SensorType>
@@ -116,11 +115,11 @@ class Map extends React.Component {
         </Popup>
       )
     );
-  };
+  }
 
   openPopup(device) {
     this.setState({ popupInfo: device });
-  };
+  }
 
   render() {
     const { viewport, mapHeight, popupInfo } = this.state;
@@ -144,8 +143,7 @@ class Map extends React.Component {
           mapStyle={settings.mapboxStyles}
           onViewportChange={this.updateViewport}
           onClick={() => (popupInfo ? this.setState({ popupInfo: null }) : null)}
-          mapboxApiAccessToken={settings.mapboxApiAccessToken}
-        >
+          mapboxApiAccessToken={settings.mapboxApiAccessToken}>
           <div style={{ position: 'absolute', right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this.updateViewport} />
           </div>
