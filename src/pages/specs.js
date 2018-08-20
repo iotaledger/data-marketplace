@@ -1,11 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import MiniHeader from '../components/header/mini-header';
 import Content from '../components/content';
 import List from '../components/content/list';
 import Footer from '../components/footer';
 
 const content1 = {
+  id: 'devnet',
   title: 'The Devnet, also known as Testnet',
   text: `Aside from the mainnet, the IOTA Foundation operates a separate Tangle network called <a href="https://blog.iota.org/first-of-the-new-testnets-live-f8f41b99e9a3">“the devnet”</a>. It is a version of the Tangle meant for development and testing purposes.
 <br /><br />The Devnet runs the latest stable version of IRI, and allow developers to work on their apps without getting in their way — or costing them any real tokens.
@@ -13,6 +15,7 @@ const content1 = {
 };
 
 const content2 = {
+  id: 'mam',
   title: 'Masked Authenticated Messaging (MAM)',
   text: `Masked Authenticated Messaging (MAM) is a second layer data communication protocol which adds functionality to emit and access encrypted data stream, like RSS, over the Tangle (IOTA’s distributed ledger) regardless of the size or cost of device. IOTA’s consensus protocol adds integrity to these message streams. Given these properties, MAM fulfills an important need in industries where integrity and privacy are required.
 <br /><br />MAM uses Encrypted Messaging Streams, to emit and access a forward-secret and encrypted data stream over the Tangle.
@@ -27,6 +30,7 @@ const content2 = {
 };
 
 const content3 = {
+  id: 'payment',
   title: 'Payment',
   text: `Data can be decrypted if payment is made. Price of the data stream is defined by sensor owner, and usually set between 1000 and 50000 IOTAs.
 <br /><br />A buyer can ”fund” the wallet for free and will be granted with 10,000,000 virtual IOTAs, which he/she can spend exclusively for purchasing sensor data.
@@ -37,6 +41,7 @@ const content3 = {
 };
 
 const content4 = {
+  id: 'storage',
   title: 'Data storage in the Cloud',
   text: `The Data Marketplace PoCt uses a cloud backend service provided by Google Firebase. All information is stored securely and confidentially. Google cloud services are used for user authentication and access rights management.
 <br />All other information is currently stored in the Firebase cloud database as well, but can be easily migrated to any other cloud provider like Amazon AWS or Microsoft Azure.
@@ -44,6 +49,7 @@ const content4 = {
 };
 
 const content5 = {
+  id: 'streaming',
   title: 'Data Streaming',
   text: `New data packets can be added with a recommended minimum time interval of 5-10 min. More frequent additions are possible, but you need to keep in mind that <a href="https://docs.iota.org/introduction/tangle/proof-of-work">“Proof-of-Work”</a> functionality might require to run up to 60 seconds for every new packet.
 <br /><br />A Publish Script, provided with every onboarded sensor, contains preconfigured examples on how to send sensor data packages from a static file, database, remote server using API. the script can be run in a loop with defined time interval in order to ensure continuous streaming.
@@ -51,6 +57,7 @@ const content5 = {
 };
 
 const content6 = {
+  id: 'data',
   title: 'Which data',
   text: `The Data Marketplace is not just aimed at IoT data, an example could be financial data from an API could also be stored and sold on the marketplace.
 <br /><br />Existing functional examples of MAM being utilised on embedded devices.
@@ -70,6 +77,7 @@ const content8 = {
 };
 
 const content9 = {
+  id: 'sensors',
   title: 'Sensors',
   text: `The data marketplace is agnostic to the sensors and the data that you connect to it. Any sensor that has the ability to transmit data and has an easy way to get regular data readings (e.g. through an API) can be used for the data marketplace. In order to submit the data to the marketplace, all you have to do is execute a NodeJS script (as listed in the Example Page).
 <br /><br /><strong>Example Sensors to utilize</strong>
@@ -82,6 +90,7 @@ const content10 = {
 };
 
 const content11 = {
+  id: 'opensource',
   title: 'Opensource Code',
   text: `As of August 2018, the code developed during the initiative is opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in Discord is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
 };
@@ -114,38 +123,110 @@ const workInProgress = [
   'Visualisation / graph tools',
 ];
 
-export default () => (
-  <Main>
-    <MiniHeader />
-    <ImgContainer>
-      <Image src="/static/illustrations/vision.png" alt="Proof of Concept Illustration" />
-    </ImgContainer>
-    <Content content={content1} />
-    <Content content={content2} />
-    <Content content={content3} />
-    <ImgContainer>
-      <Image src="/static/illustrations/proof_of_concept.png" alt="IOTA Proof of Concept" />
-    </ImgContainer>
-    <Content content={content4} />
-    <Content content={content5} />
-    <Content content={content6} />
-    <ImgContainer>
-      <Image src="/static/illustrations/use_case_ideation.png" alt="IOTA process illustration" />
-    </ImgContainer>
-    <Content content={content7} />
-    <ImgContainer>
-      <Image src="/static/illustrations/MAM.png" alt="IOTA process illustration" />
-    </ImgContainer>
-    <Content content={content8} />
-    <Content content={content9} />
-    <List items={listSensors} />
-    <List items={limitations} title="Limitations of the current version" />
-    <Content content={content10} />
-    <List items={workInProgress} />
-    <Content content={content11} />
-    <Footer />
-  </Main>
-);
+const Header = ({ onAnchorClick }) => {
+  return (
+    <Container>
+      <Shapes>
+        <Shape1 src="/static/shapes/proof_of_concept/shape-5.svg" alt="Background shape" />
+        <Shape2
+          src="/static/shapes/proof_of_concept/shape-header-hero.svg"
+          alt="Background shape"
+        />
+        <Tagline>Proof of Concept</Tagline>
+        <SubTagline>Technical specifications</SubTagline>
+      </Shapes>
+      <Info>
+        <Link to={'/specs/#devnet'} onClick={() => onAnchorClick('devnet')}>
+          <SubLink>{'The Devnet'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/specs/#mam'} onClick={() => onAnchorClick('mam')}>
+          <SubLink>{'Masked Authenticated Messaging'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/specs/#payment'} onClick={() => onAnchorClick('payment')}>
+          <SubLink>{'Payment'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/specs/#storage'} onClick={() => onAnchorClick('storage')}>
+          <SubLink>{'Data storage in the Cloud'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/specs/#streaming'} onClick={() => onAnchorClick('streaming')}>
+          <SubLink>{'Data Streaming'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/specs/#data'} onClick={() => onAnchorClick('data')}>
+          <SubLink>{'Which data'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/specs/#sensors'} onClick={() => onAnchorClick('sensors')}>
+          <SubLink>{'Sensors'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/specs/#limitations'} onClick={() => onAnchorClick('limitations')}>
+          <SubLink>{'Limitations of the current version'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/specs/#opensource'} onClick={() => onAnchorClick('opensource')}>
+          <SubLink>{'Opensource Code'.toUpperCase()}</SubLink>
+        </Link>
+      </Info>
+    </Container>
+  );
+};
+
+export default class extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      anchor: null,
+    };
+
+    this.onAnchorClick = this.onAnchorClick.bind(this);
+  }
+
+  onAnchorClick(anchor) {
+    this.setState({ anchor });
+  }
+
+  render() {
+    const { anchor } = this.state;
+    return (
+      <Main id="main">
+        <MiniHeader />
+        <Header onAnchorClick={this.onAnchorClick} />
+        <ImgContainer>
+          <Image src="/static/illustrations/vision.png" alt="Proof of Concept Illustration" />
+        </ImgContainer>
+        <Content content={content1} anchor={anchor} />
+        <Content content={content2} anchor={anchor} />
+        <Content content={content3} anchor={anchor} />
+        <ImgContainer>
+          <Image src="/static/illustrations/proof_of_concept.png" alt="IOTA Proof of Concept" />
+        </ImgContainer>
+        <Content content={content4} anchor={anchor} />
+        <Content content={content5} anchor={anchor} />
+        <Content content={content6} anchor={anchor} />
+        <ImgContainer>
+          <Image
+            src="/static/illustrations/use_case_ideation.png"
+            alt="IOTA process illustration"
+          />
+        </ImgContainer>
+        <Content content={content7} />
+        <ImgContainer>
+          <Image src="/static/illustrations/MAM.png" alt="IOTA process illustration" />
+        </ImgContainer>
+        <Content content={content8} />
+        <Content content={content9} anchor={anchor} />
+        <List items={listSensors} />
+        <List
+          items={limitations}
+          title="Limitations of the current version"
+          id="limitations"
+          anchor={anchor}
+        />
+        <Content content={content10} />
+        <List items={workInProgress} />
+        <Content content={content11} anchor={anchor} />
+        <Footer />
+      </Main>
+    );
+  }
+}
 
 const Main = styled.div`
   overflow-x: hidden;
@@ -160,4 +241,105 @@ const Image = styled.img`
   width: 40%;
   height: 40%;
   padding: 10px 0;
+`;
+
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+  max-width: 1170px;
+  padding: 0 15px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-bottom: 80px;
+`;
+
+const Info = styled.div`
+  width: 40%;
+  max-width: 600px;
+  padding-left: 100px;
+  @media (max-width: 1120px) {
+    max-width: 420px;
+    padding: 30px 0 180px;
+    margin-left: 65px;
+  }
+  @media (max-width: 760px) {
+    padding-bottom: 90px;
+    margin-left: 10px;
+  }
+  @media (max-width: 700px) {
+    max-width: 400px;
+  }
+  @media (max-width: 600px) {
+    margin-left: 5px;
+  }
+`;
+
+const SubLink = styled.p`
+  @media (max-width: 760px) {
+    font-size: 18px;
+    line-height: 28px;
+  }
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  line-height: 33px;
+  padding: 7px 15px 0;
+  color: rgba(78, 90, 97, 1);
+  opacity: 0.5;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
+`;
+
+const Tagline = styled.h2`
+  line-height: 1.48;
+  max-width: 400px;
+  margin-bottom: 40px;
+  color: #fff;
+  font-size: 42px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-align: center;
+  position: absolute;
+  top: 241px;
+  left: 35vw;
+`;
+
+const SubTagline = styled.p`
+  line-height: 1.48;
+  max-width: 400px;
+  margin-bottom: 40px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-align: center;
+  position: absolute;
+  top: 320px;
+  left: 38vw;
+`;
+
+const Shapes = styled.div`
+  width: 60%;
+`;
+
+const Shape = styled.img`
+  position: absolute;
+  z-index: -10;
+`;
+
+const Shape1 = Shape.extend`
+  top: 218px;
+  right: 55vw;
+  width: 24%;
+`;
+
+const Shape2 = Shape.extend`
+  top: 130px;
+  left: 31vw;
+  width: 31%;
 `;

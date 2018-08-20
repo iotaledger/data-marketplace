@@ -217,7 +217,6 @@ const SubLink = styled.p`
 `;
 
 const Tagline = styled.h2`
-  font-size: 22px;
   line-height: 1.48;
   max-width: 400px;
   margin-bottom: 40px;
@@ -229,18 +228,6 @@ const Tagline = styled.h2`
   position: absolute;
   top: 245px;
   left: 35vw;
-  @media (max-width: 1120px) {
-    margin-bottom: 25px;
-  }
-  @media (max-width: 700px) {
-    font-size: 18px;
-    line-height: 28px;
-    max-width: 300px;
-    margin-bottom: 30px;
-  }
-  @media (max-width: 470px) {
-    max-width: 230px;
-  }
 `;
 
 const Shapes = styled.div`
