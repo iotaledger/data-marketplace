@@ -2,17 +2,30 @@ import React from 'react';
 import styled from 'styled-components';
 import Heading from './heading';
 
-export default ({ content: { title, text } }) => (
-  <S>
-    {title ? <Heading title={title} /> : null}
-    <C>
-      <P dangerouslySetInnerHTML={{ __html: text }} />
-    </C>
-  </S>
-);
+export default class Content extends React.Component {
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.anchor) {
+      const target = document.querySelector(`#${nextProps.anchor}`);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  render() {
+    const {
+      content: { id, title, text },
+    } = this.props;
+    return (
+      <S id={id || null}>
+        {title ? <Heading title={title} /> : null}
+        <C>
+          <P dangerouslySetInnerHTML={{ __html: text }} />
+        </C>
+      </S>
+    );
+  }
+}
 
 const S = styled.section`
-  max-width: 724px;
   z-index: 10;
   padding-top: 20px;
   margin-bottom: 20px;

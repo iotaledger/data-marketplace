@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const Card = ({ imageSrc, imageAlt, heading, text }) => (
+const Card = ({ imageSrc, imageAlt, heading, text, scale }) => (
   <InfoCol>
-    <Image src={imageSrc} alt={imageAlt} />
+    <Image scale={scale} src={imageSrc} alt={imageAlt} />
     <InfoHeading>{heading}</InfoHeading>
     <Text>{text}</Text>
   </InfoCol>
@@ -33,8 +33,8 @@ const Image = styled.img`
     margin-bottom: 18px;
   }
   margin-bottom: 35px;
-  width: 100px;
   height: 100px;
+  width: ${props => (props.scale ? `${props.scale}%` : '100px')};
 `;
 
 const InfoHeading = styled.p`
