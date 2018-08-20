@@ -1,7 +1,8 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
+import { Link } from 'react-router-dom';
 
-export default props => (
+export default ({ onAnchorClick }) => (
   <Header>
     <Container>
       <Info>
@@ -17,6 +18,12 @@ export default props => (
           rel="noopener noreferrer">
           <Button type="button">About the Marketplace</Button>
         </a>
+        <Link to={'/#about'} onClick={() => onAnchorClick('about')}>
+          <SubLink>{'About Data Marketplace'.toUpperCase()}</SubLink>
+        </Link>
+        <Link to={'/#participants'} onClick={() => onAnchorClick('participants')}>
+          <SubLink>{'Participants'.toUpperCase()}</SubLink>
+        </Link>
       </Info>
       <Graphics>
         <Graphic1
@@ -47,6 +54,27 @@ const Header = styled.header`
   position: relative;
   background-image: linear-gradient(190deg, #f3f8fa 1%, #eaf0f4 95%);
   margin-bottom: 40px;
+`;
+
+const SubLink = styled.p`
+  @media (max-width: 760px) {
+    font-size: 18px;
+    line-height: 28px;
+  }
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+  line-height: 33px;
+  padding: 7px 15px 0;
+  color: rgba(78, 90, 97, 1);
+  opacity: 0.5;
+  -webkit-transition: all 0.3s ease;
+  -moz-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const Container = styled.div`

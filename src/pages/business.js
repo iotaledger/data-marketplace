@@ -179,7 +179,6 @@ const SubLink = styled.p`
 `;
 
 const Tagline = styled.h2`
-  font-size: 22px;
   line-height: 1.48;
   max-width: 400px;
   margin-bottom: 40px;
