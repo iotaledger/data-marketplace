@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
 const links = [
-  { link: 'demo', text: 'Try the Data Marketplace' },
-  { link: 'specs', text: 'Technical specifications' },
+  { link: '', text: 'Home' },
+  { link: 'demo', text: 'Try the Marketplace' },
+  { link: 'specs', text: 'Specifications' },
   { link: 'business', text: 'Co-Creation Ecosystem' },
   { link: 'involved', text: 'Get involved' },
 ];

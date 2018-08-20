@@ -56,7 +56,6 @@ const Ul = styled.ul`
 `;
 
 const Li = styled.li`
-  padding-left: 16px;
   color: #cedbe2;
   display: flex;
   @media (max-width: 760px) {
