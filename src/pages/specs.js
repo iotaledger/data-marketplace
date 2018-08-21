@@ -93,7 +93,7 @@ const content10 = {
 const content11 = {
   id: 'opensource',
   title: 'Opensource Code',
-  text: `As of August 2018, the code developed during the initiative is opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in Discord is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
+  text: `As of August 2018, the code developed during the initiative is opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in <a href="https://discord.gg/BFPFD33">Discord</a> is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
 };
 
 const listSensors = [
@@ -199,6 +199,7 @@ export default class extends React.Component {
         </ImgContainer>
         <Content content={content1} anchor={anchor} />
         <Content content={content2} anchor={anchor} />
+        <Shape3 src="/static/shapes/proof_of_concept/shape-5.svg" alt="Background shape" />
         <Content content={content3} anchor={anchor} />
         <ImgContainer>
           <Image src="/static/illustrations/proof_of_concept.png" alt="IOTA Proof of Concept" />
@@ -349,4 +350,11 @@ const Shape2 = Shape.extend`
   top: 130px;
   left: 31vw;
   width: 31%;
+`;
+
+const Shape3 = Shape.extend`
+  z-index: 1;
+  top: 200%;
+  left: -8vw;
+  width: 24%;
 `;
