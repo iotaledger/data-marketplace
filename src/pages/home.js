@@ -6,6 +6,7 @@ import Header from '../components/header';
 import Content from '../components/content';
 import Partners from '../components/partners';
 import Footer from '../components/footer';
+import ScrollToTop from '../components/scroll-to-top';
 
 const content1 = {
   id: 'about',
@@ -33,6 +34,11 @@ class HomePage extends React.Component {
     this.setState({ anchor });
   }
 
+  onScrollToTop() {
+    const target = document.querySelector('#main');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   render() {
     const { anchor } = this.state;
     return (
@@ -45,6 +51,7 @@ class HomePage extends React.Component {
         </ImgContainer>
         <Content content={content2} />
         <Partners anchor={anchor || (this.props.location && this.props.location.hash)} />
+        <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
     );
