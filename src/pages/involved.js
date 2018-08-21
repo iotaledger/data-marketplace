@@ -6,14 +6,9 @@ import Content from '../components/content';
 import Form from '../components/form';
 import Heading from '../components/content/heading';
 import List from '../components/content/list';
+import WhyJoin from '../components/feature-section/why-join';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
-
-const contentSigningUp = {
-  id: 'signup',
-  title: 'Signing up',
-  text: 'Please submit the form below to download our technical onboarding guideline.',
-};
 
 const content1 = {
   text: `IOTA is now streamlining open access to the demo and will continue signing up organisations to grow the co-creation ecosystem.`,
@@ -122,9 +117,20 @@ export default class extends React.Component {
           />
         </ImgContainer>
         <Content content={content1} />
-        <List items={whyJoin} title="Why join the Data Marketplace?" />
-        <Content content={contentSigningUp} anchor={anchor} />
-        <Form />
+        <TitleWrapper>
+          <H2>Why join the Data Marketplace?</H2>
+        </TitleWrapper>
+        <WhyJoin />
+        <FormContainer>
+          <Introduction>
+            <IntroductionHeader>
+              <H2>Signing up</H2>
+              <Arrow src="/static/icons/get_involved/arrow.png" alt="sign up" />
+            </IntroductionHeader>
+            <p>Please submit the form below to download our technical onboarding guideline.</p>
+          </Introduction>
+          <Form anchor={anchor} />
+        </FormContainer>
 
         <Heading title="Joint Use Case Development" id="joint-development" anchor={anchor} />
         <ImgContainer>
@@ -158,6 +164,37 @@ export default class extends React.Component {
 
 const Main = styled.div`
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+`;
+
+const FormContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+  max-width: 1170px;
+`;
+
+const Introduction = styled.div`
+  width: 35%;
+  padding: 130px 25px 0 0;
+`;
+
+const IntroductionHeader = styled.div`
+  position: relative;
+`;
+
+const H2 = styled.h2`
+  font-size: 24px;
+  font-weight: normal;
+  color: #292929;
+  padding-bottom: 50px;
+`;
+
+const Arrow = styled.img`
+  position: absolute;
+  right: -70px;
+  top: -45px;
 `;
 
 const ImgContainer = styled.div`
@@ -178,7 +215,12 @@ const Container = styled.div`
   padding: 0 15px;
   margin-right: auto;
   margin-left: auto;
-  margin-bottom: 150px;
+  margin-bottom: 100px;
+`;
+
+const TitleWrapper = styled.div`
+  margin-top: 30px;
+  text-align: center;
 `;
 
 const Info = styled.div`

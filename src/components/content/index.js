@@ -29,7 +29,6 @@ const S = styled.section`
   z-index: 10;
   padding-top: 20px;
   margin-bottom: 20px;
-  background-color: #fff;
   @media (max-width: 760px) {
     margin-bottom: -30px;
   }
