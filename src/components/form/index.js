@@ -157,90 +157,89 @@ class Form extends React.Component {
       industryList,
     } = this.state;
     const { settings } = this.props;
-    if (!settings.recaptchaSiteKey) return <div />;
 
     return (
-      <S id="contact">
-        <C>
-          <H>Get Involved</H>
-        </C>
+      <FormWrapper id="contact">
         {!success ? (
           <F onSubmit={this.submit}>
             {error && <Error>{error}</Error>}
-            <I
-              type="text"
-              placeholder="Name"
-              value={name}
-              name="name"
-              onChange={this.handleInputChange}
-            />
-            <I
-              type="email"
-              placeholder="Email"
-              value={email}
-              name="email"
-              onChange={this.handleInputChange}
-            />
-            <I
-              type="text"
-              placeholder="Company"
-              value={company}
-              name="company"
-              onChange={this.handleInputChange}
-            />
-            <I
-              type="text"
-              placeholder="Country"
-              value={country}
-              name="country"
-              onChange={this.handleInputChange}
-            />
-            <I
-              type="text"
-              placeholder="Company Website"
-              value={website}
-              name="website"
-              onChange={this.handleInputChange}
-            />
-            <Dropdown
-              title={industry || 'Industry'}
-              list={industryList}
-              selectItem={this.selectItem}
-              type="industry"
-            />
-            <Dropdown
-              title={category || 'Category'}
-              list={categoryList}
-              selectItem={this.selectItem}
-              type="category"
-            />
-            <T
-              value={comments}
-              placeholder="Comments"
-              name="comments"
-              onChange={this.handleInputChange}
-            />
-            <label>
-              <I
-                name="acceptedDisclaimer"
-                type="checkbox"
-                checked={acceptedDisclaimer}
-                onChange={this.handleInputChange}
-              />
-              <strong>Acknowledgement</strong> of <strong>Disclaimer</strong> clause
-            </label>
-            <label>
-              <I
-                name="newsletter"
-                type="checkbox"
-                checked={newsletter}
-                onChange={this.handleInputChange}
-              />
-              Please add me to the newsletter
-            </label>
-            <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
-            {captcha && !loading && <Button type={'submit'}>Submit</Button>}
-            {loading && <Button>Sending</Button>}
+            <InputFormWrapper>
+              <ColumnFormWrapper>
+                  <I
+                    type="text"
+                    placeholder="Name"
+                    value={name}
+                    name="name"
+                    onChange={this.handleInputChange}
+                  />
+                  <I
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    name="email"
+                    onChange={this.handleInputChange}
+                  />
+                  <I
+                    type="text"
+                    placeholder="Company"
+                    value={company}
+                    name="company"
+                    onChange={this.handleInputChange}
+                  />
+                  <I
+                    type="text"
+                    placeholder="Country"
+                    value={country}
+                    name="country"
+                    onChange={this.handleInputChange}
+                  />
+              </ColumnFormWrapper>
+              <ColumnFormWrapper>
+                  <I
+                    type="text"
+                    placeholder="Company Website"
+                    value={website}
+                    name="website"
+                    onChange={this.handleInputChange}
+                  />
+                  <Dropdown
+                    title={industry || 'Industry'}
+                    list={industryList}
+                    selectItem={this.selectItem}
+                    type="industry"
+                  />
+                  <Dropdown
+                    title={category || 'Category'}
+                    list={categoryList}
+                    selectItem={this.selectItem}
+                    type="category"
+                  />
+                  <CheckboxWrapper>
+                      <Label>
+                        <Input
+                          name="acceptedDisclaimer"
+                          type="checkbox"
+                          checked={acceptedDisclaimer}
+                          onChange={this.handleInputChange}
+                        />
+                        <strong>Acknowledgement</strong> of <Disclaimer>Disclaimer clause</Disclaimer>
+                      </Label>
+                      <Label>
+                        <Input
+                          name="newsletter"
+                          type="checkbox"
+                          checked={newsletter}
+                          onChange={this.handleInputChange}
+                        />
+                        Please add me to the newsletter
+                      </Label>
+                  </CheckboxWrapper>
+              </ColumnFormWrapper>
+            </InputFormWrapper>
+            <ControllWrapper>
+              <Button type={'submit'}>Submit</Button>
+              {loading && <Button>Sending</Button>}
+            </ControllWrapper>
           </F>
         ) : (
           <C>
@@ -249,7 +248,7 @@ class Form extends React.Component {
         )}
 
         <Bottom />
-      </S>
+      </FormWrapper>
     );
   }
 }
@@ -266,56 +265,84 @@ const Bottom = styled.div`
 `;
 
 const F = styled.form`
-  display: flex;
-  margin: 0 auto;
-  padding: 0 10px;
-  flex-direction: column;
-  align-items: center;
-  max-width: 400px;
+  width: 100%;
 `;
+ const Disclaimer = styled.strong`
+  color: rgba(0, 15, 210, 0.6);
+  text-decoration: underline;
 
+ `;
+const CheckboxWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
+  margin-top: 13px;
+`;
+const Input = styled.input`
+
+`;
+const Label = styled.label`
+   opacity: 0.6;
+   font-family: NunitoSans;
+   font-size: 12px;
+   font-weight: normal;
+   font-style: italic;
+   font-stretch: normal;
+   line-height: normal;
+   letter-spacing: normal;
+   text-align: left;
+   color: rgba(78, 90, 97, 0.6);
+`;
 const I = styled.input`
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+  border: solid 1px #d8d8d8;
+  height: 45px;
+  border-radius: 20px;
   padding: 9px 14px;
   font-size: 105%;
-  margin: 30px 0 0;
+  margin: 10px 0 0;
   width: 100%;
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.3);
-  }
+  opacity: 0.6;
+  font-family: NunitoSans;
+  font-size: 14px;
+  font-weight: normal;
+  font-style: normal;
 `;
 
 const T = styled.textarea`
-  height: 100px;
+`;
+
+const FormWrapper = styled.section`
+  display: flex;
+  justify-content: center;
+  width: 774px;
+  border-radius: 10px;
+  background-color: #f0f6f8;
+  padding: 75px 60px;
+  text-align: center;
+  margin: auto;
+`;
+
+const ControllWrapper = styled.section`
   width: 100%;
-  font-size: 105%;
-  padding: 9px 14px;
-  margin: 30px 0;
-  border: none;
-  background: transparent;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-  &::placeholder {
-    color: rgba(0, 0, 0, 0.3);
-  }
+`;
+
+const InputFormWrapper = styled.section`
+  display: flex;
+`;
+
+const ColumnFormWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0px 20px;
 `;
 
 const S = styled.section`
-  background-image: linear-gradient(-189deg, #eaf0f4 1%, #f3f8fa 95%);
-  padding: 90px 0 70px;
-  @media (max-width: 760px) {
-    padding-bottom: 45px;
-  }
+
 `;
 
 const C = styled.div`
-  width: 100%;
-  max-width: 1440px;
-  padding: 0 15px;
-  margin-right: auto;
-  margin-left: auto;
-  margin-top: 60px;
 `;
 
 const H = styled.p`
@@ -357,7 +384,9 @@ const Button = styled.button`
   letter-spacing: 0.38px;
   padding: 12px 21px;
   margin: 30px 0 0;
-  box-shadow: 0 10px 20px 0 rgba(10, 32, 86, 0.4);
+  box-shadow: 0px 9px 26.1px 2.9px rgba(0, 138, 221, 0.3);
   font-weight: 700;
   background-color: #009fff;
+  width: 100%;
+  height: 60px;
 `;
