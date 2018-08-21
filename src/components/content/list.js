@@ -61,6 +61,7 @@ const Ul = styled.ul`
     max-width: 290px;
     margin-bottom: 20px;
   }
+  width: 100%;
   max-width: 724px;
   list-style: none;
   padding: 0;

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default props => (
-  <F>
+  <F id="footer">
     <Container>
       <C>
         <L>
@@ -55,6 +55,11 @@ const A = styled.a`
   margin: 14px auto 0;
   color: rgb(255, 255, 255);
   text-decoration: none;
+  color: #ffffff;
+
+  &:visited {
+    color: #ffffff;
+  }
 `;
 
 const F = styled.footer`
