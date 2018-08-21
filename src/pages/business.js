@@ -5,6 +5,7 @@ import MiniHeader from '../components/header/mini-header';
 import Content from '../components/content';
 import Features from '../components/feature-section';
 import Footer from '../components/footer';
+import ScrollToTop from '../components/scroll-to-top';
 
 const content1 = {
   text: `IOTA is a not for profit Foundation developing the Tangle, a new opensource permissionless Distributed Ledger Technology fit for the IoT / M2M economy. As such, IOTA seeks to enable a large spectrum of innovation across multiple industries and geographies so as to catalyse the adoption of the IOTA Tangle in to the Backbone for the Internet of (every)Things.`,
@@ -79,6 +80,11 @@ export default class extends React.Component {
     this.setState({ anchor });
   }
 
+  onScrollToTop() {
+    const target = document.querySelector('#main');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   render() {
     const { anchor } = this.state;
     return (
@@ -105,6 +111,7 @@ export default class extends React.Component {
         <Content content={content5} />
         <Content content={content6} anchor={anchor} />
         <Features />
+        <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
     );
