@@ -101,11 +101,6 @@ section {
 
 a {
   text-decoration: none;
-  color: #009fff;
-
-  &:visited {
-    color: #009fff;
-  }
 }
 
 body {
@@ -177,6 +172,27 @@ button {
   box-shadow: none !important;
   padding: none !important;
   pointer-events: auto;
+}
+
+#main {
+  a {
+    text-decoration: none;
+    color: #009fff;
+
+    &:visited {
+      color: #009fff;
+    }
+  }
+
+  #footer {
+    a {
+      color: #ffffff;
+
+      &:visited {
+        color: #ffffff;
+      }
+    }
+  }
 }
 
 @font-face {
