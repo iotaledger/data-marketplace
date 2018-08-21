@@ -7,6 +7,7 @@ import Form from '../components/form';
 import Heading from '../components/content/heading';
 import List from '../components/content/list';
 import Footer from '../components/footer';
+import ScrollToTop from '../components/scroll-to-top';
 
 const contentSigningUp = {
   id: 'signup',
@@ -101,6 +102,11 @@ export default class extends React.Component {
     this.setState({ anchor });
   }
 
+  onScrollToTop() {
+    const target = document.querySelector('#main');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   render() {
     const { anchor } = this.state;
     return (
@@ -143,6 +149,7 @@ export default class extends React.Component {
         <Content content={content4} />
         <List items={examples} />
         <Content content={content5} />
+        <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
     );

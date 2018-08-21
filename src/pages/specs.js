@@ -5,6 +5,7 @@ import MiniHeader from '../components/header/mini-header';
 import Content from '../components/content';
 import List from '../components/content/list';
 import Footer from '../components/footer';
+import ScrollToTop from '../components/scroll-to-top';
 
 const content1 = {
   id: 'devnet',
@@ -182,6 +183,11 @@ export default class extends React.Component {
     this.setState({ anchor });
   }
 
+  onScrollToTop() {
+    const target = document.querySelector('#main');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   render() {
     const { anchor } = this.state;
     return (
@@ -222,6 +228,7 @@ export default class extends React.Component {
         <Content content={content10} />
         <List items={workInProgress} />
         <Content content={content11} anchor={anchor} />
+        <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
     );

@@ -6,6 +6,7 @@ import MiniHeader from '../components/header/mini-header';
 import SensorList from '../components/sensor-list';
 import Footer from '../components/footer';
 import Map from '../components/map';
+import ScrollToTop from '../components/scroll-to-top';
 import { allDevices } from '../utils/firebase';
 
 const Header = ({ onAnchorClick }) => {
@@ -49,14 +50,19 @@ export default class extends React.Component {
     this.setState({ anchor });
   }
 
+  onScrollToTop() {
+    const target = document.querySelector('#main');
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   render() {
-    const { anchor } = this.state;
     return (
-      <Main>
+      <Main id="main">
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
         <Map {...this.state} />
         <SensorList {...this.state} />
+        <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
     );
