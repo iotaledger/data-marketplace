@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import MiniHeader from '../components/header/mini-header';
 import Content from '../components/content';
-import Features from '../components/feature-section';
+import Initiatives from '../components/feature-section/initiatives';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
 
@@ -110,7 +110,7 @@ export default class extends React.Component {
         </ImgContainer>
         <Content content={content5} />
         <Content content={content6} anchor={anchor} />
-        <Features />
+        <Initiatives />
         <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
