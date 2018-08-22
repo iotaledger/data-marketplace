@@ -97,11 +97,11 @@ const content11 = {
 };
 
 const listSensors = [
-  '<a href="https://www.netatmo.com/en-US/product/weather/">Netatmo Weather Station</a>',
-  '<a href="https://xdk.bosch-connectivity.com/">Bosch XDK</a>',
-  '<a href="https://www.artik.io/modules/artik-0-family/">Samsung Artik</a>',
-  '<a href="http://www.nordicsemi.com/eng/Products/Nordic-Thingy-52">Nordic Semiconductor Thingy:52</a>',
-  '<a href="https://www.adafruit.com/product/2733">Or simple Raspberry Pi’s, with a sensor kit</a>',
+  {label: 'Netatmo Weather Station', logo: '/static/logotypes/logo_netatmo.png', link: 'https://www.netatmo.com/en-US/product/weather/'},
+  {label: 'Bosch XDK', logo: '/static/logotypes/bosch.png', link: 'https://xdk.bosch-connectivity.com'},
+  {label: 'Samsung Artik', logo: '/static/logotypes/artik.png', link: 'https://www.artik.io/modules/artik-0-family/'},
+  {label: 'Nordic Semiconductor Thingy:52', logo: '/static/logotypes/nordic_semiconductor.png', link: 'http://www.nordicsemi.com/eng/Products/Nordic-Thingy-52'},
+  {label: 'Or simple Raspberry Pi’s, with a sensor kit', logo: '/static/logotypes/adafruit.png', link: 'https://www.adafruit.com/product/2733'}
 ];
 
 const limitations = [
@@ -218,8 +218,23 @@ export default class extends React.Component {
           <Image src="/static/illustrations/MAM.png" alt="IOTA process illustration" />
         </ImgContainer>
         <Content content={content8} />
-        <Content content={content9} anchor={anchor} />
-        <List items={listSensors} />
+        <Sensors>
+          <section id={content9.id}>
+            {content9.title ? <MainTitle>{content9.title}</MainTitle> : null}
+            <div>
+              <p dangerouslySetInnerHTML={{ __html: content9.text }} />
+            </div>
+          </section>
+        </Sensors>
+        <SensorsList>
+          <SensorsListWrapper>
+            {listSensors.map(item => (
+              <div key={item.label}>
+                <img src={item.logo} style={{width: '100px', margin: '25px'}} />
+              </div>
+            ))}
+          </SensorsListWrapper>
+        </SensorsList>
         <List
           items={limitations}
           title="Limitations of the current version"
@@ -235,6 +250,44 @@ export default class extends React.Component {
     );
   }
 }
+
+const Sensors = styled.section`
+   background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
+  font-size: 17px;
+  line-height: 32px;
+  color: #4e5a61;
+  padding: 15px;
+`;
+const SensorsList = styled.section`
+   //background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
+  font-size: 17px;
+  line-height: 32px;
+  color: #4e5a61;
+  padding: 15px;
+`;
+
+const SensorsListWrapper = styled.div`
+   //background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
+  font-size: 17px;
+  line-height: 32px;
+  color: #4e5a61;
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+const MainTitle = styled.div`
+ font-family: NunitoSans;
+ font-size: 24px;
+ font-weight: normal;
+ font-style: normal;
+ font-stretch: normal;
+ line-height: 1.33;
+ letter-spacing: normal;
+ color: #009fff;
+ text-align: center;
+padding-bottom: 35px;
+`;
 
 const Main = styled.div`
   overflow-x: hidden;
