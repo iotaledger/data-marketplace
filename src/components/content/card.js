@@ -26,6 +26,10 @@ const InfoCol = styled.div`
   text-align: center;
   padding: 0 30px;
   margin-bottom: 80px;
+
+  @media (max-width: 767px) {
+    margin-bottom: 30px;
+  }
 `;
 
 const Image = styled.img`
