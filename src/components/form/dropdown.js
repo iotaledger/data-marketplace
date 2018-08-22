@@ -36,6 +36,7 @@ export default class Dropdown extends React.Component {
       <DropdownWrapper>
         <DropdownHeaderWrapper onClick={() => this.toggleList()}>
           <Header>{title}</Header>
+          <Image src="/static/icons/arrow-down.svg" />
         </DropdownHeaderWrapper>
         {listOpen && (
           <Dropdownlist>
@@ -53,9 +54,12 @@ export default class Dropdown extends React.Component {
 
 const DropdownWrapper = styled.div`
   width: 100%;
+  position: relative;
 `;
 
-const DropdownHeaderWrapper = styled.div``;
+const DropdownHeaderWrapper = styled.div`
+  position: relative;
+`;
 
 const Header = styled.div`
   text-align: left;
@@ -69,7 +73,7 @@ const Header = styled.div`
   font-size: 14px;
   font-weight: normal;
   font-style: normal;
-  color: rgba(78, 90, 97, 0.6);
+  color: rgba(78, 90, 97, 1);
 `;
 
 const Dropdownlist = styled.ul`
@@ -80,7 +84,15 @@ const Dropdownlist = styled.ul`
   border: solid 1px #d8d8d8;
   border-top: none;
   margin-left: 18px;
-  width: 247px;
+  width: 85%;
+
+  @media (max-width: 900px) {
+    width: 88%;
+  }
+
+  @media (max-width: 768px) {
+    width: 91%;
+  }
 `;
 
 const DropdownItem = styled.li`
@@ -91,5 +103,16 @@ const DropdownItem = styled.li`
   &:hover {
     cursor: pointer;
     color: #009fff;
+  }
+`;
+
+const Image = styled.img`
+  width: 5%;
+  position: absolute;
+  top: 17px;
+  right: 20px;
+
+  @media (max-width: 768px) {
+    width: 4%;
   }
 `;

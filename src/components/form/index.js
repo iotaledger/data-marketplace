@@ -278,7 +278,7 @@ const F = styled.form`
   width: 100%;
 `;
 const Disclaimer = styled.strong`
-  color: rgba(0, 15, 210, 0.6);
+  color: rgba(0, 15, 210, 1);
   text-decoration: underline;
 `;
 const CheckboxWrapper = styled.section`
@@ -286,7 +286,9 @@ const CheckboxWrapper = styled.section`
   flex-direction: column;
   margin-top: 13px;
 `;
-const Input = styled.input``;
+const Input = styled.input`
+  margin: 0 10px 0 5px;
+`;
 const Label = styled.label`
   font-size: 14px;
   font-weight: normal;
@@ -295,7 +297,7 @@ const Label = styled.label`
   line-height: normal;
   letter-spacing: normal;
   text-align: left;
-  color: rgba(78, 90, 97, 0.6);
+  color: rgba(78, 90, 97, 1);
   margin-bottom: 5px;
 `;
 const I = styled.input`
@@ -306,7 +308,6 @@ const I = styled.input`
   padding: 9px 14px;
   margin: 10px 0 0;
   width: 100%;
-  opacity: 0.6;
   font-size: 14px;
   font-weight: normal;
 `;
@@ -319,17 +320,29 @@ const FormWrapper = styled.section`
   width: 774px;
   border-radius: 10px;
   background-color: #f0f6f8;
-  padding: 65px 60px;
+  padding: 4% 3%;
   text-align: center;
   margin: auto;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const ControllWrapper = styled.section`
   width: 100%;
+
+  @media (max-width: 980px) {
+    padding: 0 20px;
+  }
 `;
 
 const InputFormWrapper = styled.section`
   display: flex;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 const ColumnFormWrapper = styled.div`
@@ -337,6 +350,11 @@ const ColumnFormWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   margin: 0px 20px;
+
+  @media (max-width: 768px) {
+    margin: 0;
+    padding: 0 20px;
+  }
 `;
 
 const S = styled.section``;
