@@ -29,7 +29,7 @@ const content4 = {
 };
 
 const content5 = {
-  text: `Please submit your interest at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a>preferably by 31st August.`,
+  text: `Please submit your interest at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a>preferably by 15st Sept.`,
 };
 
 const whyJoin = [
@@ -127,7 +127,7 @@ export default class extends React.Component {
               <H2>Signing up</H2>
               <Arrow src="/static/icons/get_involved/arrow.png" alt="sign up" />
             </IntroductionHeader>
-            <p>Please submit the form below to download our technical onboarding guideline.</p>
+            <p>Please submit the form to download our technical onboarding guideline.</p>
           </Introduction>
           <Form anchor={anchor} />
         </FormContainer>
@@ -173,11 +173,23 @@ const FormContainer = styled.div`
   flex-direction: row;
   align-self: center;
   max-width: 1170px;
+  padding: 0 20px;
+  margin-bottom: 50px;
+
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
 `;
 
 const Introduction = styled.div`
   width: 35%;
   padding: 130px 25px 0 0;
+
+  @media (max-width: 900px) {
+    width: 100%;
+    text-align: center;
+    padding: 0 0 30px;
+  }
 `;
 
 const IntroductionHeader = styled.div`
@@ -189,12 +201,32 @@ const H2 = styled.h2`
   font-weight: normal;
   color: #292929;
   padding-bottom: 50px;
+
+  @media (max-width: 900px) {
+    padding-bottom: 20px;
+  }
 `;
 
 const Arrow = styled.img`
   position: absolute;
   right: -70px;
   top: -45px;
+  width: 80%;
+
+  @media (max-width: 1150px) {
+    top: -25px;
+    width: 70%;
+  }
+
+  @media (max-width: 1000px) {
+    right: -50px;
+    top: -13px;
+    width: 63%;
+  }
+
+  @media (max-width: 900px) {
+    display: none;
+  }
 `;
 
 const ImgContainer = styled.div`
