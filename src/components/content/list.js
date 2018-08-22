@@ -35,36 +35,13 @@ const C = styled.div`
   margin-left: auto;
   display: flex;
   justify-content: center;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -175px;
-    left: 0;
-    z-index: -10;
-    // width: 100vw;
-    height: 210px;
-    transform: skewY(6deg);
-    background-color: #fff;
-  }
-  @media (max-width: 760px) {
-    &::after {
-      bottom: -65px;
-    }
-  }
 `;
 
 const Ul = styled.ul`
-  @media (max-width: 760px) {
-    flex-flow: row wrap;
-    justify-content: center;
-    max-width: 290px;
-    margin-bottom: 20px;
-  }
   width: 100%;
   max-width: 724px;
   list-style: none;
-  padding: 0;
+  padding: 0 20px;
   margin: 0;
 `;
 
@@ -87,7 +64,6 @@ const SPAN = styled.span`
   @media (max-width: 1120px) {
     font-size: 16px;
     line-height: 27px;
-    margin: 0 auto;
   }
   font-size: 17px;
   line-height: 32px;
