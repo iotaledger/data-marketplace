@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import MiniHeader from '../components/header/mini-header';
+import Cards from '../components/feature-section/feature-cards';
+import Carousel from '../components/carousel';
 import Content from '../components/content';
 import Form from '../components/form';
 import Heading from '../components/content/heading';
@@ -15,29 +17,25 @@ const content1 = {
 };
 
 const content2 = {
-  text: `Organisations can team up to develop use cases together. IOTA will support by streamlining access to information and providing guidance in developing on IOTA Tangle.
-<br /><br />Partners and initiatives with the following characteristics are particularly attractive to the IOTA Foundation:`,
+  text: `Organisations can team up to develop use cases together. IOTA will support by streamlining access to information and providing guidance in developing on IOTA Tangle.`,
 };
 
 const content3 = {
-  text: `Please send us an email at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a>`,
+  text: `Partners and initiatives with the following characteristics are particularly attractive to the IOTA Foundation:`,
 };
 
 const content4 = {
+  text: `Please send us an email at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a>`,
+};
+
+const content5 = {
   text: `The Foundation aims at launching in Q3/4 2018 a global virtual initiative to catalyse co-creation and bring developers and organisations to develop and showcase together their capabilities and creativity. New solutions across industries and geographies will be developed as hybrid, addons or use case proof of concept on top of an <a href="https://github.com/iotaledger/data-marketplace">opensource</a> version of the Data marketplace.
 <br /><br />We are currently gathering interest from our ecosystem and <a href="#/home#participants">potential partners</a> willing to help shape this unique initiative. Examples include:`,
 };
 
-const content5 = {
-  text: `Please submit your interest at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a>preferably by 15st Sept.`,
+const content6 = {
+  text: `Please submit your interest at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a> preferably by 15th Sept.`,
 };
-
-const whyJoin = [
-  'Accelerate learning about Distributed Ledger Technologies and IOTA',
-  'Run a free to join and simple trial at your office to explore technically the data marketplace potential',
-  'Catalyse the exploration of new business models with your colleagues via structured experimentation',
-  'Initiate open innovation initiatives with the rest of the IOTA ecosystem',
-];
 
 const characteristics = [
   'Ambition to explore and develop new business models with the backing of management',
@@ -141,8 +139,13 @@ export default class extends React.Component {
           />
         </ImgContainer>
         <Content content={content2} />
-        <List items={characteristics} />
-        <Content content={content3} />
+        <ContentOuterWrapper>
+          <ContentInnerWrapper>
+            <Content content={content3} />
+            <List items={characteristics} />
+            <Content content={content4} />
+          </ContentInnerWrapper>
+        </ContentOuterWrapper>
 
         <Heading
           title="Call for Cooperation: Data Marketplace virtual hackathon"
@@ -152,9 +155,10 @@ export default class extends React.Component {
         <ImgContainer>
           <Image src="/static/illustrations/hackathon.png" alt="IOTA process illustration" />
         </ImgContainer>
-        <Content content={content4} />
-        <List items={examples} />
         <Content content={content5} />
+        <Cards items={examples} />
+        <Carousel items={examples} />
+        <Content content={content6} />
         <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
@@ -166,6 +170,19 @@ const Main = styled.div`
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
+`;
+
+const ContentOuterWrapper = styled.div`
+  background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
+  transform: skewY(4deg);
+  margin: 40px 0 60px;
+`;
+
+const ContentInnerWrapper = styled.div`
+  transform: skewY(-4deg);
+  display: flex;
+  flex-direction: column;
+  padding: 40px 0;
 `;
 
 const FormContainer = styled.div`
@@ -253,6 +270,10 @@ const Container = styled.div`
 const TitleWrapper = styled.div`
   margin-top: 30px;
   text-align: center;
+
+  @media (max-width: 767px) {
+    margin-top: 60px;
+  }
 `;
 
 const Info = styled.div`
