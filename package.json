@@ -2,12 +2,26 @@
   "name": "data-marketplace",
   "version": "2.0.0",
   "description": "IOTA Data Marketplace",
-  "contributors": [{ "name": "Alexey Sobolev" }, { "name": "Lewis Freiberg" }],
+  "contributors": [
+    {
+      "name": "Alexey Sobolev"
+    },
+    {
+      "name": "Lewis Freiberg"
+    }
+  ],
   "author": {
     "name": "Lewis Freiberg, Alexey Sobolev (IOTA Foundation)",
     "website": "https://iota.org"
   },
-  "keywords": ["iota", "tangle", "mam", "data marketplace", "sensor", "API"],
+  "keywords": [
+    "iota",
+    "tangle",
+    "mam",
+    "data marketplace",
+    "sensor",
+    "API"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/iotaledger/data-marketplace/issues"
@@ -71,12 +85,14 @@
     "react-redux": "^5.0.7",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "react-slick": "^0.23.1",
     "redux": "^4.0.0",
     "redux-logger": "^3.0.6",
     "redux-pack": "^0.1.5",
     "resolve": "1.6.0",
     "rimraf": "^2.6.2",
     "sass-loader": "^7.0.1",
+    "slick-carousel": "^1.8.1",
     "style-loader": "0.19.0",
     "styled-components": "^3.3.3",
     "sw-precache-webpack-plugin": "0.11.4",
@@ -93,7 +109,9 @@
     "build": "yarn clean && node scripts/build.js"
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
