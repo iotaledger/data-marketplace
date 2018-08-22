@@ -35,9 +35,6 @@ const Container = styled.section`
   padding: 0 15px;
   margin-right: auto;
   margin-left: auto;
-  @media (max-width: 760px) {
-    margin: 40px 0 20px;
-  }
 `;
 
 const InfoRow = styled.div`
@@ -48,4 +45,8 @@ const InfoRow = styled.div`
   }
   display: flex;
   justify-content: space-evenly;
+
+  @media (max-width: 960px) {
+    flex-wrap: wrap;
+  }
 `;

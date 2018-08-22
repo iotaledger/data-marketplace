@@ -38,9 +38,9 @@ export default class Sticky extends PureComponent {
           ? window.pageYOffset
           : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 
-      if (scrollTop >= this.props.top) {
+      if (scrollTop >= top) {
         elem.style.position = 'fixed';
-        elem.style.top = `${this.props.top}px`;
+        elem.style.top = `${top}px`;
       } else {
         elem.style.position = 'relative';
         elem.style.top = 0;
