@@ -189,6 +189,13 @@ class Form extends React.Component {
                 />
                 <I
                   type="text"
+                  placeholder="Company Website *"
+                  value={website}
+                  name="website"
+                  onChange={this.handleInputChange}
+                />
+                <I
+                  type="text"
                   placeholder="Country *"
                   value={country}
                   name="country"
@@ -196,13 +203,6 @@ class Form extends React.Component {
                 />
               </ColumnFormWrapper>
               <ColumnFormWrapper>
-                <I
-                  type="text"
-                  placeholder="Company Website *"
-                  value={website}
-                  name="website"
-                  onChange={this.handleInputChange}
-                />
                 <Dropdown
                   title={industry || 'Industry'}
                   list={industryList}
@@ -215,28 +215,35 @@ class Form extends React.Component {
                   selectItem={this.selectItem}
                   type="category"
                 />
-                <CheckboxWrapper>
-                  <Label>
-                    <Input
-                      name="acceptedDisclaimer"
-                      type="checkbox"
-                      checked={acceptedDisclaimer}
-                      onChange={this.handleInputChange}
-                    />
-                    <strong>Acknowledgement</strong> of <Disclaimer>Disclaimer clause</Disclaimer>
-                  </Label>
-                  <Label>
-                    <Input
-                      name="newsletter"
-                      type="checkbox"
-                      checked={newsletter}
-                      onChange={this.handleInputChange}
-                    />
-                    Please add me to the newsletter
-                  </Label>
-                </CheckboxWrapper>
+                <T
+                  value={comments}
+                  placeholder="Comments"
+                  name="comments"
+                  onChange={this.handleInputChange}
+                />
               </ColumnFormWrapper>
             </InputFormWrapper>
+            <CheckboxWrapper>
+              <Label>
+                <Input
+                  name="acceptedDisclaimer"
+                  type="checkbox"
+                  checked={acceptedDisclaimer}
+                  onChange={this.handleInputChange}
+                />
+                <strong>Acknowledgement</strong> of{' '}
+                <a href="https://www.iota.org/research/privacy-policy">Disclaimer clause</a>
+              </Label>
+              <Label>
+                <Input
+                  name="newsletter"
+                  type="checkbox"
+                  checked={newsletter}
+                  onChange={this.handleInputChange}
+                />
+                Please add me to the newsletter
+              </Label>
+            </CheckboxWrapper>
             <ControllWrapper>
               <RecaptchaContainer>
                 <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
@@ -277,14 +284,12 @@ const Bottom = styled.div`
 const F = styled.form`
   width: 100%;
 `;
-const Disclaimer = styled.strong`
-  color: rgba(0, 15, 210, 1);
-  text-decoration: underline;
-`;
+
 const CheckboxWrapper = styled.section`
   display: flex;
   flex-direction: column;
   margin-top: 13px;
+  margin-left: 20px;
 `;
 const Input = styled.input`
   margin: 0 10px 0 5px;
@@ -312,7 +317,22 @@ const I = styled.input`
   font-weight: normal;
 `;
 
-const T = styled.textarea``;
+const T = styled.textarea`
+  height: 155px;
+  width: 100%;
+  font-size: 14px;
+  padding: 9px 14px;
+  margin: 10px 0 0;
+  border: none;
+  background: transparent;
+  border: solid 1px #d8d8d8;
+  border-radius: 25px;
+  &::placeholder {
+    color: rgba(78, 90, 97, 1);
+    font-size: 14px;
+    font-weight: normal;
+  }
+`;
 
 const FormWrapper = styled.section`
   display: flex;
@@ -357,20 +377,13 @@ const ColumnFormWrapper = styled.div`
   }
 `;
 
-const S = styled.section``;
-
-const C = styled.div``;
-
-const H = styled.p`
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.84px;
-  text-align: center;
-  text-transform: uppercase;
-  color: rgba(137, 156, 166, 1);
-  @media (max-width: 760px) {
-    margin-bottom: 40px;
-  }
+const C = styled.div`
+  width: 100%;
+  max-width: 1440px;
+  padding: 0 15px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 60px;
 `;
 
 const Error = styled.p`
