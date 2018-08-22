@@ -84,7 +84,7 @@ const Dropdownlist = styled.ul`
   border: solid 1px #d8d8d8;
   border-top: none;
   margin-left: 18px;
-  width: 85%;
+  width: 86%;
 
   @media (max-width: 900px) {
     width: 88%;
