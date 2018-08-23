@@ -62,6 +62,8 @@ export default withRouter(HomePage);
 
 const Main = styled.div`
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ImgContainer = styled.div`

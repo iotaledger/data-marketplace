@@ -238,6 +238,8 @@ export default class extends React.Component {
 
 const Main = styled.div`
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ImgContainer = styled.div`
