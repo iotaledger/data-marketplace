@@ -25,7 +25,7 @@ const InfoCol = styled.div`
   max-width: 350px;
   text-align: center;
   padding: 0 30px;
-  margin-bottom: 80px;
+  margin-bottom: 60px;
 
   @media (max-width: 767px) {
     margin-bottom: 30px;
