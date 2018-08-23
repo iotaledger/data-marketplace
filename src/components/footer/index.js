@@ -3,41 +3,57 @@ import styled from 'styled-components';
 
 export default props => (
   <F id="footer">
-    <Container>
-      <C>
-        <L>
-          <A href="https://www.iota.org/">www.iota.org</A>
-          <A href="https://blog.iota.org/">blog.iota.org</A>
-          <a href="https://www.iota.org/">
-            <IMG
-              src="/static/logotypes/logo-footer.png"
-              srcSet="/static/logotypes/logo-footer@2x.png 2x"
-              alt="IOTA logotype"
-            />
-          </a>
-          <A href="http://ecosystem.iota.org/">ecosystem.iota.org</A>
-          <A href="http://docs.iota.org/">docs.iota.org</A>
-        </L>
-        <N>
-          <Copy>© 2017 IOTA Foundation. All rights reserved.</Copy>
-        </N>
-      </C>
-      <W>
-        <P>
-          Disclaimer: This experimental IOTA Data Marketplace runs on the IOTA testnet. Participants
-          can choose to make their data available for free to other marketplace participants or to
-          offer it for fictional "sales" in IOTA testnet tokens. No real world payments or other
-          real world financial consequences will result from this experiment. All data being
-          contributed to this proof of concept is either non-sensitive data of which the
-          participants are the authorized owners and/or is publicly available data which the
-          participants may freely choose to share. Participation in the IOTA Data Marketplace takes
-          place on a voluntary, non-contractual basis. Participants may choose to discontinue their
-          participation at any time.
-        </P>
-      </W>
-    </Container>
+    <ContentOuterWrapper>
+      <ContentInnerWrapper>
+        <C>
+          <L>
+            <A href="https://www.iota.org/">www.iota.org</A>
+            <A href="https://blog.iota.org/">blog.iota.org</A>
+            <a href="https://www.iota.org/">
+              <IMG
+                src="/static/logotypes/logo-footer.png"
+                srcSet="/static/logotypes/logo-footer@2x.png 2x"
+                alt="IOTA logotype"
+              />
+            </a>
+            <A href="http://ecosystem.iota.org/">ecosystem.iota.org</A>
+            <A href="http://docs.iota.org/">docs.iota.org</A>
+          </L>
+          <N>
+            <Copy>© 2017 IOTA Foundation. All rights reserved.</Copy>
+          </N>
+        </C>
+        <W>
+          <P>
+            Disclaimer: This experimental IOTA Data Marketplace runs on the IOTA testnet.
+            Participants can choose to make their data available for free to other marketplace
+            participants or to offer it for fictional "sales" in IOTA testnet tokens. No real world
+            payments or other real world financial consequences will result from this experiment.
+            All data being contributed to this proof of concept is either non-sensitive data of
+            which the participants are the authorized owners and/or is publicly available data which
+            the participants may freely choose to share. Participation in the IOTA Data Marketplace
+            takes place on a voluntary, non-contractual basis. Participants may choose to
+            discontinue their participation at any time.
+          </P>
+        </W>
+      </ContentInnerWrapper>
+    </ContentOuterWrapper>
   </F>
 );
+
+const ContentOuterWrapper = styled.div`
+  transform: skewY(2deg);
+  position: relative;
+  bottom: -35px;
+  background-image: linear-gradient(-329deg, #1857eb 31%, #0d3497 65%);
+`;
+
+const ContentInnerWrapper = styled.div`
+  transform: skewY(-2deg);
+  display: flex;
+  flex-direction: column;
+  padding: 40px 0;
+`;
 
 const IMG = styled.img`
   padding: 0px 75px;
@@ -63,16 +79,8 @@ const A = styled.a`
 `;
 
 const F = styled.footer`
-  background-image: linear-gradient(-329deg, #1857eb 31%, #0d3497 65%);
-  padding: 70px 0 20px;
-  @media (max-width: 760px) {
-    padding: 90px 0 3px;
-  }
-  // transform: skewY(3deg);
-`;
-
-const Container = styled.div`
-  // transform: skewY(-3deg);
+  padding: 10px 0;
+  overflow: hidden;
 `;
 
 const C = styled.div`
