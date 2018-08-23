@@ -265,6 +265,14 @@ const Container = styled.div`
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 100px;
+
+  @media (max-width: 660px) {
+    background-image: url(/static/shapes/get_involved/shape-header-hero1.svg);
+    background-repeat: no-repeat;
+    background-size: 585px 364px;
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const TitleWrapper = styled.div`
@@ -282,26 +290,25 @@ const Info = styled.div`
   padding: 87px 0 40px 100px;
   @media (max-width: 1120px) {
     max-width: 420px;
-    padding: 30px 0 180px;
+    padding: 30px 0 40px;
     margin-left: 65px;
+    width: 50%;
   }
-  @media (max-width: 760px) {
-    padding-bottom: 90px;
-    margin-left: 10px;
+  @media (max-width: 820px) {
+    width: 60%;
+    padding-bottom: 0;
+  }
+  @media (max-width: 767px) {
+    width: 70%;
+    padding-bottom: 0;
   }
   @media (max-width: 700px) {
-    max-width: 400px;
-  }
-  @media (max-width: 600px) {
-    margin-left: 5px;
+    width: 85%;
+    padding: 30px 0 0;
   }
 `;
 
 const SubLink = styled.p`
-  @media (max-width: 760px) {
-    font-size: 18px;
-    line-height: 28px;
-  }
   font-size: 14px;
   letter-spacing: 1.5px;
   font-weight: 600;
@@ -315,6 +322,13 @@ const SubLink = styled.p`
   cursor: pointer;
   &:hover {
     opacity: 1;
+  }
+
+  @media (max-width: 660px) {
+    color: #ffffff;
+    opacity: 0.7;
+    line-height: 20px;
+    margin: 15px 0;
   }
 `;
 
@@ -330,6 +344,33 @@ const Tagline = styled.h2`
   position: absolute;
   top: 245px;
   left: 35vw;
+
+  @media (max-width: 1120px) {
+    top: 224px;
+    left: 26vw;
+  }
+
+  @media (max-width: 1050px) {
+    top: 208px;
+    left: 24vw;
+  }
+
+  @media (max-width: 960px) {
+    font-size: 30px;
+    left: 26vw;
+  }
+
+  @media (max-width: 760px) {
+    left: 13vw;
+    top: 200px;
+  }
+
+  @media (max-width: 660px) {
+    top: 100px;
+    text-align: right;
+    right: 5vw;
+    color: #4e5a61;
+  }
 `;
 
 const Shapes = styled.div`
@@ -346,6 +387,14 @@ const Shape1 = Shape.extend`
   top: 254px;
   right: 71vw;
   width: 7%;
+  @media (max-width: 1120px) {
+    top: 254px;
+    right: 78vw;
+  }
+
+  @media (max-width: 760px) {
+    display: none;
+  }
 `;
 
 const Shape2 = Shape.extend`
@@ -353,4 +402,18 @@ const Shape2 = Shape.extend`
   top: 130px;
   left: 29vw;
   width: 33%;
+  max-width: 540px;
+  @media (max-width: 1120px) {
+    top: 130px;
+    left: 20vw;
+  }
+
+  @media (max-width: 760px) {
+    left: 8vw;
+    width: 35%;
+  }
+
+  @media (max-width: 660px) {
+    display: none;
+  }
 `;
