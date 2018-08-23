@@ -46,6 +46,7 @@ const partners = [
   { src: 'intelzone.png', alt: 'intelzone' },
   { src: 'ismb.png', alt: 'ismb' },
   { src: 'kpmg.png', alt: 'kpmg' },
+  { src: 'kryha.png', alt: 'kryha' },
   { src: 'movimento.png', alt: 'movimento' },
   { src: 'multiconsult.png', alt: 'multiconsult' },
   { src: 'nordic.png', alt: 'nordic' },
