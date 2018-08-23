@@ -32,6 +32,7 @@ const S = styled.section`
   width: 100%;
   display: flex;
   align-self: center;
+  flex-direction: column;
 `;
 
 const C = styled.div`
