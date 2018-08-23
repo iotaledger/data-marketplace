@@ -88,10 +88,9 @@ const InfoRow = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: none;
   }
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
-  margin-bottom: 100px;
+  margin-top: 20px;
 `;
