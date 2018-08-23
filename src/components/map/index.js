@@ -202,6 +202,13 @@ const Header = styled.div`
   @media (max-width: 760px) {
     padding-top: 50px;
   }
+  @media (max-width: 520px) {
+    width: 200px;
+  }
+  @media (max-width: 400px) {
+    padding-top: 0;
+    margin-top: -100px;
+  }
 `;
 
 const Heading = styled.h3`
@@ -245,12 +252,7 @@ const HeaderBg = styled.img`
     right: 67vw;
   }
   @media (max-width: 760px) {
-    top: -100px;
-    right: 55vw;
     display: none;
-  }
-  @media (max-width: 520px) {
-    right: 35vw;
   }
 `;
 
@@ -268,11 +270,9 @@ const HeaderBgMobile = styled.img`
     right: 55vw;
     display: block;
   }
-  @media (max-width: 520px) {
-    right: 35vw;
-  }
-  @media (max-width: 370px) {
-    right: 25vw;
+  @media (max-width: 400px) {
+    top: -250px;
+    right: 50vw;
   }
 `;
 
