@@ -7,17 +7,25 @@ export default props => (
       <ContentInnerWrapper>
         <C>
           <L>
-            <A href="https://www.iota.org/">www.iota.org</A>
-            <A href="https://blog.iota.org/">blog.iota.org</A>
-            <a href="https://www.iota.org/">
+            <A order={1} href="https://www.iota.org/">
+              www.iota.org
+            </A>
+            <A order={2} href="https://blog.iota.org/">
+              blog.iota.org
+            </A>
+            <AIMG order={3} href="https://www.iota.org/">
               <IMG
                 src="/static/logotypes/logo-footer.png"
                 srcSet="/static/logotypes/logo-footer@2x.png 2x"
                 alt="IOTA logotype"
               />
-            </a>
-            <A href="http://ecosystem.iota.org/">ecosystem.iota.org</A>
-            <A href="http://docs.iota.org/">docs.iota.org</A>
+            </AIMG>
+            <A order={4} href="http://ecosystem.iota.org/">
+              ecosystem.iota.org
+            </A>
+            <A order={5} href="http://docs.iota.org/">
+              docs.iota.org
+            </A>
           </L>
           <N>
             <Copy>© 2017 IOTA Foundation. All rights reserved.</Copy>
@@ -56,7 +64,11 @@ const ContentInnerWrapper = styled.div`
 `;
 
 const IMG = styled.img`
-  padding: 0px 75px;
+  padding: 0 75px;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
 `;
 
 const P = styled.p`
@@ -72,9 +84,18 @@ const A = styled.a`
   color: rgb(255, 255, 255);
   text-decoration: none;
   color: #ffffff;
+  order: ${props => (props.order ? props.order : 'unset')};
 
   &:visited {
     color: #ffffff;
+  }
+`;
+
+const AIMG = A.extend`
+  margin: 0;
+  @media (max-width: 650px) {
+    order: 0;
+    align-self: center;
   }
 `;
 
@@ -100,6 +121,10 @@ const L = styled.div`
   margin-bottom: 20px;
   display: flex;
   justify-content: space-around;
+
+  @media (max-width: 650px) {
+    flex-direction: column;
+  }
 `;
 
 const N = styled.nav`
