@@ -1,0 +1,19 @@
+<svg width="77.3" height="75.9" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <style type="text/css">.st0{fill:#009FFF;}
+	.st1{fill:#FFFFFF;}</style>
+
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="77.9" width="79.3" y="-1" x="-1"/>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <g id="svg_1">
+   <image x="-72" y="-267" id="svg_2" opacity="0.3" transform="matrix(1,0,0,1,33.4803,227.3703) " xlink:href="EDFC9D70.png" height="156" width="156"/>
+   <g id="svg_3">
+    <circle id="svg_4" r="35" cy="37.9" cx="39" class="st0"/>
+   </g>
+  </g>
+  <path id="svg_5" d="m48.1,41.3l-8.7,-8.7c-0.1,-0.1 -0.3,-0.2 -0.4,-0.2c-0.2,0 -0.3,0.1 -0.4,0.2l-8.7,8.7c-0.1,0.1 -0.2,0.3 -0.2,0.4c0,0.2 0.1,0.3 0.2,0.4l0.9,0.9c0.1,0.1 0.3,0.2 0.4,0.2c0.2,0 0.3,-0.1 0.4,-0.2l7.3,-7.3l7.3,7.3c0.1,0.1 0.3,0.2 0.4,0.2c0.2,0 0.3,-0.1 0.4,-0.2l0.9,-0.9c0.1,-0.1 0.2,-0.3 0.2,-0.4c0.2,-0.1 0.1,-0.3 0,-0.4l0,0zm0,0" class="st1"/>
+ </g>
+</svg>

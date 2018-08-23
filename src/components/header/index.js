@@ -6,9 +6,6 @@ export default ({ onAnchorClick }) => (
   <Header>
     <Container>
       <Info>
-        <a href="https://iota.org">
-          <img src="/static/logotypes/logo-header.svg" alt="Logo IOTA" />
-        </a>
         <Heading>
           IOTA makes it<br className="desktop-hidden-later mobile-hidden-later" /> possible<br className="tablet-hidden-later mobile-hidden-later" />{' '}
           to securely<br className="desktop-hidden-later mobile-hidden-later" /> store, sell,<br className="tablet-hidden-later mobile-hidden-later" />{' '}
@@ -18,18 +15,14 @@ export default ({ onAnchorClick }) => (
         <a
           href="https://blog.iota.org/iota-data-marketplace-cb6be463ac7f"
           target="_blank"
-          rel="noopener noreferrer"
-        >
+          rel="noopener noreferrer">
           <Button type="button">About the Marketplace</Button>
         </a>
-        <Link to={'/#map'} onClick={() => onAnchorClick('map')}>
-          <SubLink>{'Try the Marketplace'.toUpperCase()}</SubLink>
+        <Link to={'/#about'} onClick={() => onAnchorClick('about')}>
+          <SubLink>{'About Data Marketplace'.toUpperCase()}</SubLink>
         </Link>
         <Link to={'/#participants'} onClick={() => onAnchorClick('participants')}>
           <SubLink>{'Participants'.toUpperCase()}</SubLink>
-        </Link>
-        <Link to={'/#contact'} onClick={() => onAnchorClick('contact')}>
-          <SubLink>{'Get involved'.toUpperCase()}</SubLink>
         </Link>
       </Info>
       <Graphics>
@@ -50,12 +43,18 @@ export default ({ onAnchorClick }) => (
         />
         <GraphicBlock />
       </Graphics>
+      <Shape3 src="/static/shapes/shape-header-hero.svg" alt="Background shape" />
     </Container>
     <Shape1 src="/static/shapes/shape-header-bg-1.svg" alt="Background shape" />
     <Shape2 src="/static/shapes/shape-header-bg-2.svg" alt="Background shape" />
-    <Shape3 src="/static/shapes/shape-header-hero.svg" alt="Background shape" />
   </Header>
 );
+
+const Header = styled.header`
+  position: relative;
+  background-image: linear-gradient(190deg, #f3f8fa 1%, #eaf0f4 95%);
+  margin-bottom: 40px;
+`;
 
 const SubLink = styled.p`
   @media (max-width: 760px) {
@@ -78,13 +77,6 @@ const SubLink = styled.p`
   }
 `;
 
-const Header = styled.header`
-  position: relative;
-  top: -45px;
-  transform: skewY(-4deg);
-  background-image: linear-gradient(190deg, #f3f8fa 1%, #eaf0f4 95%);
-`;
-
 const Container = styled.div`
   display: flex;
   width: 100%;
@@ -101,7 +93,7 @@ const Info = styled.div`
   max-width: 600px;
   margin: 0 auto 0 95px;
   padding: 40px 0 160px;
-  transform: skewY(4deg);
+  // transform: skewY(4deg);
   @media (max-width: 1120px) {
     max-width: 420px;
     padding: 30px 0 180px;
@@ -184,7 +176,7 @@ const Graphics = styled.div`
   position: relative;
   top: 45px;
   z-index: 100;
-  transform: skewY(4deg);
+  // transform: skewY(4deg);
   @media (max-width: 1120px) {
     width: 360px;
     left: -15vw;
@@ -359,8 +351,7 @@ const Graphic3 = Graphic.extend`
 
 const Shape = styled.img`
   position: absolute;
-  z-index: -10;
-  transform: skewY(4deg);
+  z-index: 2;
 `;
 
 const Shape1 = Shape.extend`
@@ -369,24 +360,16 @@ const Shape1 = Shape.extend`
 `;
 
 const Shape2 = Shape.extend`
-  top: 50px;
+  top: 0;
   left: 36vw;
 `;
 
 const Shape3 = Shape.extend`
-  top: -165px;
+  z-index: 5;
+  top: 8px;
   left: 56vw;
-  @media (max-width: 1120px) {
-    top: -40px;
-    left: 61vw;
-    width: 480px;
-  }
-  @media (max-width: 760px) {
-    top: -220px;
-    left: 70vw;
-  }
+  height: 105%;
   @media (max-width: 700px) {
-    top: -220px;
-    left: 80vw;
+    left: 67vw;
   }
 `;

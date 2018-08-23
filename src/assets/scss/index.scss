@@ -174,6 +174,27 @@ button {
   pointer-events: auto;
 }
 
+#main {
+  a {
+    text-decoration: none;
+    color: #009fff;
+
+    &:visited {
+      color: #009fff;
+    }
+  }
+
+  #footer {
+    a {
+      color: #ffffff;
+
+      &:visited {
+        color: #ffffff;
+      }
+    }
+  }
+}
+
 @font-face {
   font-family: 'Nunito Sans';
   src: url('/static/fonts/NunitoSans-ExtraLight.ttf');

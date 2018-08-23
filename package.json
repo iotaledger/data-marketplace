@@ -2,12 +2,29 @@
   "name": "data-marketplace",
   "version": "2.0.0",
   "description": "IOTA Data Marketplace",
-  "contributors": [{ "name": "Alexey Sobolev" }, { "name": "Lewis Freiberg" }],
+  "contributors": [
+    {
+      "name": "Alexey Sobolev"
+    },
+    {
+      "name": "Lewis Freiberg"
+    },
+    {
+      "name": "Marwen Trabelsi"
+    }
+  ],
   "author": {
     "name": "Lewis Freiberg, Alexey Sobolev (IOTA Foundation)",
     "website": "https://iota.org"
   },
-  "keywords": ["iota", "tangle", "mam", "data marketplace", "sensor", "API"],
+  "keywords": [
+    "iota",
+    "tangle",
+    "mam",
+    "data marketplace",
+    "sensor",
+    "API"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/iotaledger/data-marketplace/issues"
@@ -93,7 +110,9 @@
     "build": "yarn clean && node scripts/build.js"
   },
   "babel": {
-    "presets": ["react-app"]
+    "presets": [
+      "react-app"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"

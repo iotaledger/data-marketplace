@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { withRouter } from 'react-router';
 import { upperFirst } from 'lodash';
 
 const partners = [
@@ -32,6 +33,7 @@ const partners = [
   { src: 'ey.png', alt: 'ey' },
   { src: 'farmboek.png', alt: 'farmboek' },
   { src: 'farmforce.png', alt: 'farmforce' },
+  { src: 'festo.png', alt: 'festo' },
   { src: 'fourc.png', alt: 'fourc' },
   { src: 'frankfurt.png', alt: 'frankfurt' },
   { src: 'fujitsu.png', alt: 'fujitsu' },
@@ -60,6 +62,7 @@ const partners = [
   { src: 'schuco.png', alt: 'schuco' },
   { src: 'south-east-water.png', alt: 'South East Water' },
   { src: 'sweco.png', alt: 'sweco' },
+  { src: 'techMahindra.png', alt: 'techMahindra' },
   { src: 'tele2.png', alt: 'tele2' },
   { src: 'telstra.png', alt: 'telstra' },
   { src: 'tine.png', alt: 'tine' },
@@ -70,11 +73,19 @@ const partners = [
   { src: 'uio.png', alt: 'uio' },
   { src: 'undc.png', alt: 'undc' },
   { src: 'USC_viterbi.png', alt: 'USC Viterbi' },
-  { src: 'wondrwall.png', alt: 'wondrwall'},
+  { src: 'XDK2MAM.png', alt: 'XDK2MAM' },
+  { src: 'wondrwall.png', alt: 'wondrwall' },
   { src: 'yield.png', alt: 'yield' },
 ];
 
-export default class Partners extends React.Component {
+class Partners extends React.Component {
+  // componentDidMount() {
+  //   if (this.props.location && this.props.location.hash) {
+  //     const target = document.querySelector(this.props.location.hash);
+  //     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  //   }
+  // }
+  //
   componentWillReceiveProps(nextProps) {
     if (nextProps.anchor && nextProps.anchor === 'participants') {
       const target = document.querySelector('#participants');
@@ -86,7 +97,7 @@ export default class Partners extends React.Component {
     return (
       <S id="participants">
         <C>
-          <H>Marketplace Participants</H>
+          <H>Selected Participants</H>
           <Ul>
             {partners.map(({ alt, src }) => (
               <Li key={alt}>
@@ -104,17 +115,19 @@ export default class Partners extends React.Component {
   }
 }
 
+export default withRouter(Partners);
+
 const S = styled.section`
   background-image: linear-gradient(-189deg, #eaf0f4 1%, #f3f8fa 95%);
-  padding: 90px 0 70px;
-  transform: skewY(-2deg);
+  padding: 40px 0 20px;
+  // transform: skewY(-2deg);
   @media (max-width: 760px) {
-    padding-bottom: 45px;
+    padding-bottom: 20px;
   }
 `;
 
 const C = styled.div`
-  transform: skewY(2deg);
+  // transform: skewY(2deg);
   width: 100%;
   max-width: 1440px;
   padding: 0 15px;
