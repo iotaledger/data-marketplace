@@ -218,9 +218,7 @@ export default class extends React.Component {
           <Image src="/static/illustrations/MAM.png" alt="IOTA process illustration" />
         </ImgContainer>
         <Content content={content8} />
-        <Triangle src="/static/shapes/tri-3.svg" />
         <Sensors>
-
           <section id={content9.id} style={{ maxWidth: '380px' }}>
             {content9.title ? <MainTitle>{content9.title}</MainTitle> : null}
             <div>
@@ -256,15 +254,12 @@ export default class extends React.Component {
   }
 }
 
-const Triangle = styled.img`
-  width: 100%;
-  position: relative;
-  bottom: -248px;
-  z-index: -1;
-`;
 
 const Sensors = styled.section`
-  background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
+  background-image: url("/static/shapes/triangle-4.svg");
+  background-repeat: no-repeat;
+  background-size: 220%;
+  background-position: center;
   font-size: 17px;
   line-height: 32px;
   color: #4e5a61;
