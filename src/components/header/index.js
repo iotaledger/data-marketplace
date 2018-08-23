@@ -57,10 +57,6 @@ const Header = styled.header`
 `;
 
 const SubLink = styled.p`
-  @media (max-width: 760px) {
-    font-size: 18px;
-    line-height: 28px;
-  }
   font-size: 14px;
   letter-spacing: 1.5px;
   font-weight: 600;
@@ -68,8 +64,6 @@ const SubLink = styled.p`
   padding: 7px 15px 0;
   color: rgba(78, 90, 97, 1);
   opacity: 0.5;
-  -webkit-transition: all 0.3s ease;
-  -moz-transition: all 0.3s ease;
   transition: all 0.3s ease;
   cursor: pointer;
   &:hover {
@@ -93,7 +87,6 @@ const Info = styled.div`
   max-width: 600px;
   margin: 0 auto 0 95px;
   padding: 40px 0 160px;
-  // transform: skewY(4deg);
   @media (max-width: 1120px) {
     max-width: 420px;
     padding: 30px 0 180px;
@@ -159,8 +152,6 @@ const Tagline = styled.h2`
 const Button = styled.button`
   background-color: #009fff;
   box-shadow: 0 16px 25px 0 rgba(0, 159, 255, 0.27);
-  -webkit-appearance: none;
-  -moz-appearance: none;
   appearance: none;
   font: 15px 'Nunito Sans', sans-serif;
   letter-spacing: 0.47px;
@@ -176,7 +167,6 @@ const Graphics = styled.div`
   position: relative;
   top: 45px;
   z-index: 100;
-  // transform: skewY(4deg);
   @media (max-width: 1120px) {
     width: 360px;
     left: -15vw;
@@ -357,6 +347,10 @@ const Shape = styled.img`
 const Shape1 = Shape.extend`
   bottom: -70px;
   right: 86vw;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
 
 const Shape2 = Shape.extend`
@@ -371,5 +365,9 @@ const Shape3 = Shape.extend`
   height: 105%;
   @media (max-width: 700px) {
     left: 67vw;
+  }
+
+  @media (max-width: 470px) {
+    display: none;
   }
 `;

@@ -32,6 +32,7 @@ const S = styled.section`
   width: 100%;
   display: flex;
   align-self: center;
+  align-items: flex-start;
   flex-direction: column;
 `;
 
