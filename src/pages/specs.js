@@ -324,6 +324,8 @@ padding-bottom: 35px;
 
 const Main = styled.div`
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
 `;
 
 const ImgContainer = styled.div`

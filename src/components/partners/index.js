@@ -73,7 +73,7 @@ const partners = [
   { src: 'uio.png', alt: 'uio' },
   { src: 'undc.png', alt: 'undc' },
   { src: 'USC_viterbi.png', alt: 'USC Viterbi' },
-  { src: 'XDK2MAM.png', alt: 'XDK2MAM' },
+  { src: 'XDK2MAM.png', alt: 'XDK2MAM', height: 200, width: 270 },
   { src: 'wondrwall.png', alt: 'wondrwall' },
   { src: 'yield.png', alt: 'yield' },
 ];
@@ -99,12 +99,14 @@ class Partners extends React.Component {
         <C>
           <H>Selected Participants</H>
           <Ul>
-            {partners.map(({ alt, src }) => (
+            {partners.map(({ alt, src, height = null, width = null }) => (
               <Li key={alt}>
                 <I
                   src={`/static/logotypes/${src}`}
                   srcSet={`/static/logotypes/${src} 2x`}
                   alt={upperFirst(alt)}
+                  height={height}
+                  width={width}
                 />
               </Li>
             ))}
@@ -120,14 +122,15 @@ export default withRouter(Partners);
 const S = styled.section`
   background-image: linear-gradient(-189deg, #eaf0f4 1%, #f3f8fa 95%);
   padding: 40px 0 20px;
-  // transform: skewY(-2deg);
+  margin: 50px 0 -50px;
+  transform: skewY(2deg);
   @media (max-width: 760px) {
     padding-bottom: 20px;
   }
 `;
 
 const C = styled.div`
-  // transform: skewY(2deg);
+  transform: skewY(-2deg);
   width: 100%;
   max-width: 1440px;
   padding: 0 15px;
@@ -161,7 +164,6 @@ const Ul = styled.ul`
   }
   @media (max-width: 760px) {
     flex-flow: row wrap;
-    max-width: 370px;
     margin: 0 auto;
   }
 `;
@@ -183,10 +185,11 @@ const Li = styled.li`
 `;
 
 const I = styled.img`
-  max-height: 120px;
-  max-width: 200px;
+  max-width: ${props => (props.width ? `${props.width}px` : '200px')};
+  max-height: ${props => (props.height ? `${props.height}px` : '120px')};
   padding: 10px 15px;
   @media (max-width: 760px) {
-    max-width: 150px;
+    max-width: ${props => (props.width ? `${props.width * 0.7}px` : '150px')};
+    max-height: ${props => (props.height ? `${props.height * 0.7}px` : '120px')};
   }
 `;

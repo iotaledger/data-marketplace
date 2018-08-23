@@ -29,27 +29,17 @@ const S = styled.section`
   z-index: 10;
   padding-top: 20px;
   margin-bottom: 20px;
+  padding: 20px;
+  max-width: 724px;
+  width: 100%;
+  display: flex;
+  align-self: center;
+  flex-direction: column;
 `;
 
 const C = styled.div`
   display: flex;
   justify-content: center;
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -175px;
-    left: 0;
-    z-index: -10;
-    height: 210px;
-    transform: skewY(6deg);
-    background-color: #fff;
-  }
-  @media (max-width: 760px) {
-    &::after {
-      bottom: -65px;
-    }
-  }
 `;
 
 const P = styled.p`

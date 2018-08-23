@@ -4,7 +4,6 @@ import styled from 'styled-components';
 export default class Sticky extends PureComponent {
   static defaultProps = {
     top: 350,
-    scrollingStop: Infinity,
   };
 
   constructor(props) {
@@ -20,15 +19,6 @@ export default class Sticky extends PureComponent {
     window.removeEventListener('scroll', this.setSticky);
   }
 
-  getOffset() {
-    if (this.props.offsetTop !== undefined) {
-      return this.props.offsetTop;
-    }
-    // If no offsetTop provided as prop use the initial offset of the element from top
-    this.offsetTop = this.offsetTop ? this.offsetTop : this.elem.getBoundingClientRect().top;
-    return this.offsetTop;
-  }
-
   setSticky() {
     const { elem } = this;
     const { top } = this.props;
@@ -38,9 +28,9 @@ export default class Sticky extends PureComponent {
           ? window.pageYOffset
           : (document.documentElement || document.body.parentNode || document.body).scrollTop;
 
-      if (scrollTop >= this.props.top) {
+      if (scrollTop >= top) {
         elem.style.position = 'fixed';
-        elem.style.top = `${this.props.top}px`;
+        elem.style.top = `${top}px`;
       } else {
         elem.style.position = 'relative';
         elem.style.top = 0;
@@ -52,7 +42,7 @@ export default class Sticky extends PureComponent {
     const { onClick, top } = this.props;
     return (
       <div
-        style={{ top, right: 50, cursor: 'pointer' }}
+        style={{ top, right: 50, cursor: 'pointer', zIndex: 10 }}
         ref={elem => (this.elem = elem)}
         onClick={onClick}>
         <Image src="/static/icons/arrow-up.svg" alt="scrollToTop" />
