@@ -4,7 +4,6 @@ import styled from 'styled-components';
 export default class Sticky extends PureComponent {
   static defaultProps = {
     top: 350,
-    scrollingStop: Infinity,
   };
 
   constructor(props) {
@@ -18,15 +17,6 @@ export default class Sticky extends PureComponent {
 
   componentWillUnmount() {
     window.removeEventListener('scroll', this.setSticky);
-  }
-
-  getOffset() {
-    if (this.props.offsetTop !== undefined) {
-      return this.props.offsetTop;
-    }
-    // If no offsetTop provided as prop use the initial offset of the element from top
-    this.offsetTop = this.offsetTop ? this.offsetTop : this.elem.getBoundingClientRect().top;
-    return this.offsetTop;
   }
 
   setSticky() {
