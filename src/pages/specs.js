@@ -226,8 +226,13 @@ export default class extends React.Component {
           id="limitations"
           anchor={anchor}
         />
-        <Content content={content10} />
-        <List items={workInProgress} />
+
+        <ContentOuterWrapper>
+          <ContentInnerWrapper>
+            <Content content={content10} />
+            <List items={workInProgress} />
+          </ContentInnerWrapper>
+        </ContentOuterWrapper>
         <Content content={content11} anchor={anchor} />
         <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
@@ -261,6 +266,19 @@ const Container = styled.div`
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 80px;
+`;
+
+const ContentOuterWrapper = styled.div`
+  background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
+  transform: skewY(2deg);
+  margin: 40px 0 60px;
+`;
+
+const ContentInnerWrapper = styled.div`
+  transform: skewY(-2deg);
+  display: flex;
+  flex-direction: column;
+  padding: 40px 0 60px;
 `;
 
 const Info = styled.div`
