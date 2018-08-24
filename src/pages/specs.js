@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import MiniHeader from '../components/header/mini-header';
 import Content from '../components/content';
 import List from '../components/content/list';
+import Sensors from '../components/example-sensors';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
 
@@ -80,9 +81,7 @@ const content8 = {
 const content9 = {
   id: 'sensors',
   title: 'Sensors',
-  text: `The data marketplace is agnostic to the sensors and the data that you connect to it. Any sensor that has the ability to transmit data and has an easy way to get regular data readings (e.g. through an API) can be used for the data marketplace. In order to submit the data to the marketplace, all you have to do is execute a NodeJS script (as listed in the Example Page).
-<br /><br /><strong>Example Sensors to utilize</strong>
-  `,
+  text: `The data marketplace is agnostic to the sensors and the data that you connect to it. Any sensor that has the ability to transmit data and has an easy way to get regular data readings (e.g. through an API) can be used for the data marketplace. In order to submit the data to the marketplace, all you have to do is execute a NodeJS script.`,
 };
 
 const content10 = {
@@ -95,14 +94,6 @@ const content11 = {
   title: 'Opensource Code',
   text: `As of August 2018, the code developed during the initiative is opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in <a href="https://discord.gg/BFPFD33">Discord</a> is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
 };
-
-const listSensors = [
-  '<a href="https://www.netatmo.com/en-US/product/weather/">Netatmo Weather Station</a>',
-  '<a href="https://xdk.bosch-connectivity.com/">Bosch XDK</a>',
-  '<a href="https://www.artik.io/modules/artik-0-family/">Samsung Artik</a>',
-  '<a href="http://www.nordicsemi.com/eng/Products/Nordic-Thingy-52">Nordic Semiconductor Thingy:52</a>',
-  '<a href="https://www.adafruit.com/product/2733">Or simple Raspberry Pi’s, with a sensor kit</a>',
-];
 
 const limitations = [
   'Maximum size of a single data packet is limited to 1kb',
@@ -214,8 +205,7 @@ export default class extends React.Component {
           <Image src="/static/illustrations/MAM.png" alt="IOTA process illustration" />
         </ImgContainer>
         <Content content={content8} />
-        <Content content={content9} anchor={anchor} />
-        <List items={listSensors} />
+        <Sensors content={content9} anchor={anchor} />
         <List
           items={limitations}
           title="Limitations of the current version"
@@ -454,12 +444,6 @@ const Shape1 = Shape.extend`
   @media (max-width: 767px) {
     display: none;
   }
-`;
-
-const Shape2 = Shape.extend`
-  top: 130px;
-  left: 31vw;
-  width: 31%;
 `;
 
 const Shape3 = Shape.extend`
