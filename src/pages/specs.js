@@ -104,7 +104,7 @@ const listSensors = [
   '<a href="https://www.adafruit.com/product/2733">Or simple Raspberry Pi’s, with a sensor kit</a>',
 ];
 
-const limitations = [
+const Limitations = [
   'Maximum size of a single data packet is limited to 1kb',
   'Google Mail or Google Business account required in order to onboard a new sensor',
   'Number of sensors per account is limited, but can be adjusted upon request',
@@ -158,7 +158,7 @@ const Header = ({ onAnchorClick }) => {
         <Link to={'/specs/#sensors'} onClick={() => onAnchorClick('sensors')}>
           <SubLink>{'Sensors'.toUpperCase()}</SubLink>
         </Link>
-        <Link to={'/specs/#limitations'} onClick={() => onAnchorClick('limitations')}>
+        <Link to={'/specs/#Limitations'} onClick={() => onAnchorClick('Limitations')}>
           <SubLink>{'Limitations of the current version'.toUpperCase()}</SubLink>
         </Link>
         <Link to={'/specs/#opensource'} onClick={() => onAnchorClick('opensource')}>
@@ -220,13 +220,26 @@ export default class extends React.Component {
         <Content content={content8} />
         <Content content={content9} anchor={anchor} />
         <List items={listSensors} />
-        <List
-          items={limitations}
-          title="Limitations of the current version"
-          id="limitations"
-          anchor={anchor}
-        />
 
+        <LimitationsMob>
+        <LimitationTitle>Limitations of the current version</LimitationTitle>
+          <LimitationsMobList>
+            {Limitations.map(item => (<LimitationItem>{item}</LimitationItem>))}
+          </LimitationsMobList>
+        </LimitationsMob>
+        <LimitationsDesk>
+          <LimitationsDeskWrapper>
+            <Globe>
+              <img src="/static/icons/proof_of_concept/globe.svg"  />
+            </Globe>
+            <FloatingText style={{ top: '-535px', right: '-125px' }}>{Limitations[0]}</FloatingText>
+            <FloatingText style={{ top: '-500px', right: '220px' }}>{Limitations[1]}</FloatingText>
+            <FloatingText style={{ top: '-346px', right: '220px' }}>{Limitations[2]}</FloatingText>
+            <FloatingText style={{ top: '-718px', right: '-456px' }}>{Limitations[3]}</FloatingText>
+            <FloatingText style={{ top: '-564px', right: '-452px' }}>{Limitations[4]}</FloatingText>
+            <FloatingText style={{ top: '-535px', right: '-125px' }}>{Limitations[5]}</FloatingText>
+          </LimitationsDeskWrapper>
+        </LimitationsDesk>
         <ContentOuterWrapper>
           <ContentInnerWrapper>
             <Content content={content10} />
@@ -240,6 +253,86 @@ export default class extends React.Component {
     );
   }
 }
+
+const FloatingText = styled.span`
+   font-family: NunitoSans;
+   font-size: 17px;
+   font-weight: normal;
+   font-style: normal;
+   font-stretch: normal;
+   line-height: 1.88;
+   letter-spacing: normal;
+   text-align: right;
+   color: #4e5a61;
+   position: relative;
+   width: 200px;
+   word-wrap:break-word;
+   display: block;
+   text-align: left;
+`;
+
+const Globe = styled.div`
+display: flex;
+justify-content: center;
+`;
+const LimitationsDeskWrapper = styled.div``;
+
+const LimitationsDesk = styled.section`
+  display: none;
+
+  @media (min-width: 760px) {
+    display: flex;
+    justify-content: center;
+    margin: 200px 0;
+  }
+`;
+const LimitationTitle = styled.section`
+  font-family: NunitoSans;
+  font-size: 24px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.33;
+  letter-spacing: normal;
+  text-align: center;
+  color: #009fff;
+  padding: 0 0 35px;
+`;
+
+const LimitationItem = styled.li`
+ font-family: NunitoSans;
+ font-size: 16px;
+ font-weight: normal;
+ font-style: normal;
+ font-stretch: normal;
+ line-height: 1.69;
+ letter-spacing: normal;
+ text-align: left;
+ color: #4e5a61;
+  &:before {
+    content: "●";
+    color: #009fff;
+    padding-right: 10px;
+  }
+`;
+
+const LimitationsMobList = styled.ul`
+  width: 100%;
+  max-width: 724px;
+  padding: 0 15px;
+  margin: 0;
+  list-style: none;
+`;
+
+const LimitationsMob = styled.section`
+  padding: 0 15px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 50px;
+  @media (min-width: 760px) {
+    display: none;
+  }
+`;
 
 const Main = styled.div`
   overflow-x: hidden;
