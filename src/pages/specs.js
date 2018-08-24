@@ -190,6 +190,7 @@ export default class extends React.Component {
 
   render() {
     const { anchor } = this.state;
+    const title = "Limitations of the current version"
     return (
       <Main id="main">
         <MiniHeader />
@@ -222,7 +223,7 @@ export default class extends React.Component {
         <List items={listSensors} />
 
         <LimitationsMob>
-        <LimitationTitle>Limitations of the current version</LimitationTitle>
+        <LimitationTitle>{title}</LimitationTitle>
           <LimitationsMobList>
             {Limitations.map(item => (<LimitationItem>{item}</LimitationItem>))}
           </LimitationsMobList>
@@ -238,6 +239,7 @@ export default class extends React.Component {
             <FloatingText style={{ top: '-718px', right: '-456px' }}>{Limitations[3]}</FloatingText>
             <FloatingText style={{ top: '-564px', right: '-452px' }}>{Limitations[4]}</FloatingText>
             <FloatingText style={{ top: '-535px', right: '-125px' }}>{Limitations[5]}</FloatingText>
+            <FloatingText style={{ top: '-916px', right: '-128px', textAlign: 'center', color: '#ffffff', fontSize: '28px' }}>{title}</FloatingText>
           </LimitationsDeskWrapper>
         </LimitationsDesk>
         <ContentOuterWrapper>
