@@ -13,8 +13,7 @@ const Header = ({ onAnchorClick }) => {
   return (
     <Container>
       <Shapes>
-        <Shape1 src="/static/shapes/get_involved/shape-5.svg" alt="Background shape" />
-        <Shape2 src="/static/shapes/get_involved/shape-header-hero1.svg" alt="Background shape" />
+        <Shape1 src="/static/shapes/demo/shape-5.svg" alt="Background shape" />
         <Tagline>Try the Data Marketplace</Tagline>
       </Shapes>
       <Info>
@@ -81,19 +80,69 @@ const Container = styled.div`
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 150px;
+
+  @media (max-width: 820px) {
+    margin-bottom: 80px;
+  }
+
+  @media (max-width: 660px) {
+    background-image: url(/static/shapes/demo/shape-header-hero.svg);
+    background-repeat: no-repeat;
+    background-size: 448px 209px;
+    padding: 48px 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 550px) {
+    background-size: 289px 167px;
+    padding: 38px 0;
+  }
+
+  @media (max-width: 400px) {
+    background-position-x: 100px;
+    background-position-y: 27px;
+  }
 `;
 
 const Info = styled.div`
   width: 40%;
   max-width: 600px;
-  padding: 133px 0 40px 120px;
+  padding: 100px 0 100px 100px;
+  @media (max-width: 1220px) {
+    width: 45%;
+    padding: 90px 0 100px 50px;
+  }
+  @media (max-width: 1120px) {
+    width: 40%;
+    padding: 90px 0 100px 0px;
+  }
+  @media (max-width: 960px) {
+    padding: 60px 0 70px 20px;
+  }
+  @media (max-width: 820px) {
+    width: 55%;
+  }
+  @media (max-width: 760px) {
+    padding: 35px 0 50px 0px;
+  }
+  @media (max-width: 660px) {
+    margin-left: 105px;
+    padding-top: 10px;
+  }
+  @media (max-width: 550px) {
+    margin-left: 30px;
+    padding-top: 0;
+    width: 400px;
+  }
+  @media (max-width: 400px) {
+    margin-left: 130px;
+    padding-top: 25px;
+    width: 395px;
+  }
 `;
 
 const SubLink = styled.p`
-  @media (max-width: 760px) {
-    font-size: 18px;
-    line-height: 28px;
-  }
   font-size: 14px;
   letter-spacing: 1.5px;
   font-weight: 600;
@@ -108,24 +157,62 @@ const SubLink = styled.p`
   &:hover {
     opacity: 1;
   }
+
+  @media (max-width: 660px) {
+    color: #ffffff;
+    opacity: 0.7;
+    line-height: 20px;
+    margin: 15px 0;
+  }
 `;
 
 const Tagline = styled.h2`
-  line-height: 1.48;
-  max-width: 400px;
-  margin-bottom: 40px;
-  color: #fff;
-  font-size: 42px;
+  display: none;
+  font-size: 20px;
   font-weight: 400;
-  letter-spacing: normal;
-  text-align: center;
-  position: absolute;
-  top: 216px;
-  left: 31vw;
+
+  @media (max-width: 660px) {
+    display: block;
+    position: absolute;
+    top: 115px;
+    right: 3vw;
+    color: #4e5a61;
+  }
 `;
 
 const Shapes = styled.div`
   width: 60%;
+
+  background-image: url(/static/shapes/demo/shape-header-hero-text.svg);
+  background-repeat: no-repeat;
+  background-size: 439px 269px;
+  background-position-x: 187px;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 1220px) {
+    background-position-x: 100px;
+    background-size: 580px 260px;
+  }
+
+  @media (max-width: 1120px) {
+    width: 60%;
+    background-size: 500px 260px;
+  }
+
+  @media (max-width: 970px) {
+    background-size: 478px 202px;
+  }
+
+  @media (max-width: 880px) {
+    width: 70%;
+    background-size: 370px 202px;
+    background-position-x: 50px;
+  }
+
+  @media (max-width: 767px) {
+    background-size: 319px 155px;
+  }
 `;
 
 const Shape = styled.img`
@@ -135,14 +222,31 @@ const Shape = styled.img`
 
 const Shape1 = Shape.extend`
   transform: skew(75deg, -69deg);
-  top: 254px;
-  right: 71vw;
+  top: 300px;
+  right: 73vw;
   width: 6%;
-`;
 
-const Shape2 = Shape.extend`
-  transform: skew(-42deg, 204deg);
-  top: 156px;
-  left: 33vw;
-  width: 29%;
+  @media (max-width: 1220px) {
+    right: 73vw;
+    top: 295px;
+  }
+
+  @media (max-width: 1120px) {
+    top: 254px;
+    right: 78vw;
+  }
+
+  @media (max-width: 970px) {
+    top: 261px;
+    right: 72vw;
+  }
+
+  @media (max-width: 880px) {
+    top: 293px;
+    right: 81vw;
+  }
+
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
