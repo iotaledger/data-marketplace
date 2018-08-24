@@ -129,10 +129,6 @@ const Header = ({ onAnchorClick }) => {
     <Container>
       <Shapes>
         <Shape1 src="/static/shapes/proof_of_concept/shape-5.svg" alt="Background shape" />
-        <Shape2
-          src="/static/shapes/proof_of_concept/shape-header-hero.svg"
-          alt="Background shape"
-        />
         <Tagline>Proof of Concept</Tagline>
         <SubTagline>Technical specifications</SubTagline>
       </Shapes>
@@ -266,6 +262,22 @@ const Container = styled.div`
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 80px;
+
+  @media (max-width: 820px) {
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 660px) {
+    background-image: url(/static/shapes/proof_of_concept/shape-header-hero.svg);
+    background-repeat: no-repeat;
+    background-size: 566px 422px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 560px) {
+    background-position-x: -25px;
+  }
 `;
 
 const ContentOuterWrapper = styled.div`
@@ -284,29 +296,34 @@ const ContentInnerWrapper = styled.div`
 const Info = styled.div`
   width: 40%;
   max-width: 600px;
-  padding-left: 100px;
+  padding-left: 50px;
   @media (max-width: 1120px) {
-    max-width: 420px;
-    padding: 30px 0 180px;
-    margin-left: 65px;
+    padding: 0;
+    width: 50%;
+  }
+  @media (max-width: 960px) {
+    padding: 0;
+    width: 55%;
   }
   @media (max-width: 760px) {
-    padding-bottom: 90px;
     margin-left: 10px;
   }
   @media (max-width: 700px) {
     max-width: 400px;
   }
-  @media (max-width: 600px) {
-    margin-left: 5px;
+  @media (max-width: 660px) {
+    padding: 3px 0 35px;
+    margin-left: 99px;
+    width: auto;
+  }
+  @media (max-width: 560px) {
+    padding: 24px 0 35px;
+    margin-left: 70px;
+    width: 300px;
   }
 `;
 
 const SubLink = styled.p`
-  @media (max-width: 760px) {
-    font-size: 18px;
-    line-height: 28px;
-  }
   font-size: 14px;
   letter-spacing: 1.5px;
   font-weight: 600;
@@ -321,38 +338,95 @@ const SubLink = styled.p`
   &:hover {
     opacity: 1;
   }
+
+  @media (max-width: 767px) {
+    padding: 7px 0 0;
+  }
+
+  @media (max-width: 660px) {
+    color: #ffffff;
+    opacity: 0.7;
+    line-height: 20px;
+    margin: 15px 0;
+  }
+
+  @media (max-width: 560px) {
+    margin: 8px 0;
+  }
 `;
 
 const Tagline = styled.h2`
-  line-height: 1.48;
-  max-width: 400px;
-  margin-bottom: 40px;
-  color: #fff;
-  font-size: 42px;
+  display: none;
+  font-size: 20px;
   font-weight: 400;
-  letter-spacing: normal;
-  text-align: center;
-  position: absolute;
-  top: 241px;
-  left: 35vw;
+
+  @media (max-width: 660px) {
+    display: block;
+    position: absolute;
+    top: 108px;
+    right: 7vw;
+    color: #4e5a61;
+  }
+  @media (max-width: 560px) {
+    right: 3.5vw;
+    top: 88px;
+  }
 `;
 
 const SubTagline = styled.p`
-  line-height: 1.48;
-  max-width: 400px;
-  margin-bottom: 40px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 22px;
+  display: none;
+  font-size: 16px;
   font-weight: 400;
-  letter-spacing: normal;
-  text-align: center;
-  position: absolute;
-  top: 320px;
-  left: 38vw;
+
+  @media (max-width: 660px) {
+    display: block;
+    position: absolute;
+    top: 142px;
+    right: 6vw;
+    color: #4e5a61;
+  }
+  @media (max-width: 560px) {
+    right: 2vw;
+    top: 115px;
+  }
 `;
 
 const Shapes = styled.div`
   width: 60%;
+
+  background-image: url(/static/shapes/proof_of_concept/shape-header-hero-text.svg);
+  background-repeat: no-repeat;
+  background-size: 585px 315px;
+  background-position-x: 187px;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 1220px) {
+    width: 55%;
+    background-position-x: 100px;
+    background-size: 560px 276px;
+  }
+
+  @media (max-width: 1120px) {
+    width: 50%;
+    background-size: 437px 260px;
+  }
+
+  @media (max-width: 999px) {
+    width: 45%;
+    background-size: 265px 260px;
+  }
+
+  @media (max-width: 860px) {
+    width: 50%;
+    background-size: 237px 248px;
+  }
+
+  @media (max-width: 767px) {
+    width: 45%;
+    background-size: 250px 216px;
+    background-position-x: 5px;
+  }
 `;
 
 const Shape = styled.img`
@@ -364,6 +438,22 @@ const Shape1 = Shape.extend`
   top: 218px;
   right: 55vw;
   width: 24%;
+
+  @media (max-width: 1220px) {
+    right: 63vw;
+  }
+
+  @media (max-width: 1120px) {
+    right: 67vw;
+  }
+
+  @media (max-width: 999px) {
+    right: 70vw;
+  }
+
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
 
 const Shape2 = Shape.extend`
