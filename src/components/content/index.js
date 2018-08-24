@@ -27,6 +27,8 @@ export default class Content extends React.Component {
 
 const S = styled.section`
   z-index: 10;
+  padding-top: 20px;
+  margin-bottom: 20px;
   padding: 20px;
   max-width: 724px;
   width: 100%;

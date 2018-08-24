@@ -81,7 +81,7 @@ const content9 = {
   id: 'sensors',
   title: 'Sensors',
   text: `The data marketplace is agnostic to the sensors and the data that you connect to it. Any sensor that has the ability to transmit data and has an easy way to get regular data readings (e.g. through an API) can be used for the data marketplace. In order to submit the data to the marketplace, all you have to do is execute a NodeJS script (as listed in the Example Page).
-<br /><br /><strong>Example Sensors to utilize</strong>
+<br /><br />
   `,
 };
 
@@ -97,11 +97,11 @@ const content11 = {
 };
 
 const listSensors = [
-  '<a href="https://www.netatmo.com/en-US/product/weather/">Netatmo Weather Station</a>',
-  '<a href="https://xdk.bosch-connectivity.com/">Bosch XDK</a>',
-  '<a href="https://www.artik.io/modules/artik-0-family/">Samsung Artik</a>',
-  '<a href="http://www.nordicsemi.com/eng/Products/Nordic-Thingy-52">Nordic Semiconductor Thingy:52</a>',
-  '<a href="https://www.adafruit.com/product/2733">Or simple Raspberry Pi’s, with a sensor kit</a>',
+  {label: 'Netatmo Weather Station', logo: '/static/logotypes/logo_netatmo.png', link: 'https://www.netatmo.com/en-US/product/weather/'},
+  {label: 'Bosch XDK', logo: '/static/logotypes/bosch.png', link: 'https://xdk.bosch-connectivity.com'},
+  {label: 'Samsung Artik', logo: '/static/logotypes/artic.png', link: 'https://www.artik.io/modules/artik-0-family/'},
+  {label: 'Nordic Semiconductor Thingy:52', logo: '/static/logotypes/nordic_semiconductor.png', link: 'http://www.nordicsemi.com/eng/Products/Nordic-Thingy-52'},
+  {label: 'Or simple Raspberry Pi’s, with a sensor kit', logo: '/static/logotypes/adafruit.png', link: 'https://www.adafruit.com/product/2733'}
 ];
 
 const limitations = [
@@ -214,8 +214,28 @@ export default class extends React.Component {
           <Image src="/static/illustrations/MAM.png" alt="IOTA process illustration" />
         </ImgContainer>
         <Content content={content8} />
-        <Content content={content9} anchor={anchor} />
-        <List items={listSensors} />
+        <Triangle src="/static/shapes/tri-3.svg" />
+        <Sensors>
+
+          <section id={content9.id} style={{ maxWidth: '380px' }}>
+            {content9.title ? <MainTitle>{content9.title}</MainTitle> : null}
+            <div>
+              <p dangerouslySetInnerHTML={{ __html: content9.text }} />
+            </div>
+          </section>
+
+          <SensorsList>
+            <SensorsListTitle>Example Sensors to utilize</SensorsListTitle>
+            <SensorsListWrapper>
+              {listSensors.map(item => (
+                <div key={item.label}>
+                  <img src={item.logo} style={{width: '100px', margin: '10px'}} />
+                </div>
+              ))}
+            </SensorsListWrapper>
+          </SensorsList>
+        </Sensors>
+
         <List
           items={limitations}
           title="Limitations of the current version"
@@ -236,6 +256,72 @@ export default class extends React.Component {
     );
   }
 }
+
+const Triangle = styled.img`
+  width: 100%;
+  position: relative;
+  bottom: -248px;
+  z-index: -1;
+`;
+
+const Sensors = styled.section`
+  background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
+  font-size: 17px;
+  line-height: 32px;
+  color: #4e5a61;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+`;
+
+const SensorsListTitle = styled.section`
+  font-family: NunitoSans;
+  font-size: 22px;
+  font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
+  line-height: 1.45;
+  letter-spacing: normal;
+  text-align: left;
+  color: #292929;
+  text-align: center;
+`;
+
+const SensorsList = styled.section`
+  background-image: url("static/shapes/proof_of_concept/shape-custom-1.svg");
+  background-position: right 50% bottom 23%;
+  background-repeat: no-repeat;
+  background-size: 117%;
+  margin-top: 48px;
+  max-width: 408px;
+  font-size: 17px;
+  line-height: 32px;
+  color: #4e5a61;
+  padding: 15px;
+`;
+
+const SensorsListWrapper = styled.div`
+   //background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
+  font-size: 17px;
+  line-height: 32px;
+  color: #4e5a61;
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+`;
+const MainTitle = styled.div`
+ font-family: NunitoSans;
+ font-size: 24px;
+ font-weight: normal;
+ font-style: normal;
+ font-stretch: normal;
+ line-height: 1.33;
+ letter-spacing: normal;
+ color: #009fff;
+ text-align: center;
+padding-bottom: 35px;
+`;
 
 const Main = styled.div`
   overflow-x: hidden;
