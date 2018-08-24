@@ -44,7 +44,6 @@ const Header = ({ onAnchorClick }) => {
     <Container>
       <Shapes>
         <Shape1 src="/static/shapes/business/shape-5.svg" alt="Background shape" />
-        <Shape2 src="/static/shapes/business/shape-header-hero.svg" alt="Background shape" />
         <Tagline>Exploring together new business models</Tagline>
       </Shapes>
       <Info>
@@ -143,34 +142,57 @@ const Container = styled.div`
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 80px;
+
+  @media (max-width: 820px) {
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 660px) {
+    background-image: url(/static/shapes/business/shape-header-hero.svg);
+    background-repeat: no-repeat;
+    background-size: 625px 364px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (max-width: 550px) {
+    background-size: 457px 350px;
+  }
 `;
 
 const Info = styled.div`
   width: 40%;
   max-width: 600px;
-  padding: 161px 0 40px 100px;
+  padding: 100px 0 100px 100px;
+  @media (max-width: 1220px) {
+    width: 45%;
+    padding: 90px 0 100px 50px;
+  }
   @media (max-width: 1120px) {
-    max-width: 420px;
-    padding: 30px 0 180px;
-    margin-left: 65px;
+    width: 40%;
+    padding: 90px 0 100px 0px;
+  }
+  @media (max-width: 960px) {
+    padding: 75px 0 50px 20px;
+  }
+  @media (max-width: 820px) {
+    width: 55%;
   }
   @media (max-width: 760px) {
-    padding-bottom: 90px;
-    margin-left: 10px;
+    padding: 56px 0 25px 0px;
   }
-  @media (max-width: 700px) {
-    max-width: 400px;
+  @media (max-width: 660px) {
+    width: 85%;
+    padding: 30px 0 0;
+    max-width: 420px;
+    margin-left: 120px;
   }
-  @media (max-width: 600px) {
-    margin-left: 5px;
+  @media (max-width: 550px) {
+    margin-left: 40px;
   }
 `;
 
 const SubLink = styled.p`
-  @media (max-width: 760px) {
-    font-size: 18px;
-    line-height: 28px;
-  }
   font-size: 14px;
   letter-spacing: 1.5px;
   font-weight: 600;
@@ -185,36 +207,64 @@ const SubLink = styled.p`
   &:hover {
     opacity: 1;
   }
+
+  @media (max-width: 660px) {
+    color: #ffffff;
+    opacity: 0.7;
+    line-height: 20px;
+    margin: 15px 0;
+  }
 `;
 
 const Tagline = styled.h2`
-  line-height: 1.48;
-  max-width: 400px;
-  margin-bottom: 40px;
-  color: #fff;
-  font-size: 42px;
+  display: none;
+  max-width: 210px;
+  font-size: 20px;
   font-weight: 400;
-  letter-spacing: normal;
-  text-align: center;
-  position: absolute;
-  top: 235px;
-  left: 32vw;
-  @media (max-width: 1120px) {
-    margin-bottom: 25px;
-  }
-  @media (max-width: 700px) {
-    font-size: 18px;
-    line-height: 28px;
-    max-width: 300px;
-    margin-bottom: 30px;
-  }
-  @media (max-width: 470px) {
-    max-width: 230px;
+
+  @media (max-width: 660px) {
+    display: block;
+    position: absolute;
+    top: 90px;
+    left: 3vw;
+    color: #4e5a61;
   }
 `;
 
 const Shapes = styled.div`
   width: 60%;
+
+  background-image: url(/static/shapes/business/shape-header-hero-text.svg);
+  background-repeat: no-repeat;
+  background-size: 585px 315px;
+  background-position-x: 187px;
+  display: flex;
+  flex-direction: column;
+
+  @media (max-width: 1220px) {
+    width: 55%;
+    background-position-x: 100px;
+    background-size: 560px 276px;
+  }
+
+  @media (max-width: 1120px) {
+    width: 60%;
+    background-size: 500px 260px;
+  }
+
+  @media (max-width: 960px) {
+    background-size: 330px 241px;
+    width: 55%;
+  }
+
+  @media (max-width: 820px) {
+    background-size: 260px 241px;
+  }
+
+  @media (max-width: 767px) {
+    background-size: 260px 200px;
+    background-position-x: 30px;
+  }
 `;
 
 const Shape = styled.img`
@@ -227,11 +277,22 @@ const Shape1 = Shape.extend`
   top: 311px;
   right: 71vw;
   width: 7%;
-`;
 
-const Shape2 = Shape.extend`
-  transform: skewY(177deg);
-  top: 130px;
-  left: 31vw;
-  width: 33%;
+  @media (max-width: 1220px) {
+    right: 73vw;
+    top: 295px;
+  }
+
+  @media (max-width: 1120px) {
+    top: 254px;
+    right: 78vw;
+  }
+
+  @media (max-width: 960px) {
+    top: 285px;
+  }
+
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
