@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" id="Слой_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 515.2 400.1" style="enable-background:new 0 0 515.2 400.1;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:url(#SVGID_1_);}
+</style>
+<linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="121.2862" y1="332.3506" x2="416.2303" y2="37.4065">
+	<stop  offset="0" style="stop-color:#0D3497"/>
+	<stop  offset="1" style="stop-color:#1857EB"/>
+</linearGradient>
+<path class="st0" d="M448.4,350.7l-345,47.4C49.8,409.9-0.8,368.6,0,313.7l2.9-193.4c0.6-41.7,31.4-76.8,72.6-82.8L322.6,0.9
+	c37.4-5.5,73.9,14.3,89.7,48.6l95,182.6C530,281.4,501.3,339,448.4,350.7z"/>
+<text x="50%" y="50%" style="fill:#ffffff; font-size: 3rem; font-family: 'Nunito Sans', sans-serif; font-weight: 300;font-style: normal; font-stretch: normal; letter-spacing: normal;" alignment-baseline="middle" text-anchor="middle">
+	<tspan x="47%" y="45%">Exploring together</tspan>
+	<tspan x="50%" y="60%">new business</tspan>
+	<tspan x="50%" y="75%">models</tspan>
+</text>
+</svg>
