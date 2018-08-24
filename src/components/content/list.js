@@ -35,6 +35,7 @@ const C = styled.div`
   margin-left: auto;
   display: flex;
   justify-content: center;
+  flex-direction: column;
 `;
 
 const Ul = styled.ul`
