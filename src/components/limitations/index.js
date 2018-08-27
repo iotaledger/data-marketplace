@@ -38,7 +38,7 @@ const Container = styled.div`
   justify-content: center;
   height: 470px;
 
-  background-image: url(/static/icons/proof_of_concept/globe-text.svg);
+  background-image: url(/static/icons/proof_of_concept/globe.svg);
   background-repeat: no-repeat;
   background-size: 800px 500px;
   background-position: center;
@@ -48,7 +48,7 @@ const Container = styled.div`
   }
 
   @media (max-width: 660px) {
-    background-size: 800px 420px;
+    background-size: 800px 400px;
   }
 
   @media (max-width: 610px) {
