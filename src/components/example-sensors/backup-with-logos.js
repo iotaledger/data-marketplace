@@ -3,23 +3,28 @@ import styled from 'styled-components';
 
 const sensors = [
   {
-    text: 'Netatmo',
+    alt: 'Netatmo Weather Station',
+    logo: '/static/icons/proof_of_concept/logos/netatmo.png',
     link: 'https://www.netatmo.com/en-US/product/weather/',
   },
   {
-    text: 'Bosch XDK',
+    alt: 'Bosch XDK',
+    logo: '/static/icons/proof_of_concept/logos/bosch.png',
     link: 'https://xdk.bosch-connectivity.com',
   },
   {
-    text: 'Samsung Artik',
+    alt: 'Samsung Artik',
+    logo: '/static/icons/proof_of_concept/logos/artik.png',
     link: 'https://www.artik.io/modules/artik-0-family/',
   },
   {
-    text: 'Thingy:52',
+    alt: 'Nordic Semiconductor Thingy:52',
+    logo: '/static/icons/proof_of_concept/logos/nordic.png',
     link: 'http://www.nordicsemi.com/eng/Products/Nordic-Thingy-52',
   },
   {
-    text: 'Raspberry Pi',
+    alt: 'Or simple Raspberry Pi’s, with a sensor kit',
+    logo: '/static/icons/proof_of_concept/logos/adafruit.png',
     link: 'https://www.adafruit.com/product/2733',
   },
 ];
@@ -48,9 +53,9 @@ export default class ExampleSensors extends React.Component {
             <Sensors>
               <SensorsListTitle>Example Sensors to utilize:</SensorsListTitle>
               <SensorsListWrapper>
-                {sensors.map(({ link, text }) => (
-                  <a href={link} key={text}>
-                    <P>{text}</P>
+                {sensors.map(({ alt, link, logo }) => (
+                  <a href={link} key={alt}>
+                    <IMG src={logo} alt={alt} />
                   </a>
                 ))}
               </SensorsListWrapper>
@@ -144,8 +149,7 @@ const SensorsListWrapper = styled.div`
   }
 
   @media (max-width: 580px) {
-    margin-top: 55px;
-    margin-bottom: 40px;
+    margin-top: 70px;
     width: 80%;
   }
 `;
@@ -165,14 +169,16 @@ const TextWrapper = styled.div`
 const Title = styled.h3`
   font-size: 24px;
   font-weight: normal;
+  font-style: normal;
+  font-stretch: normal;
   line-height: 1.33;
+  letter-spacing: normal;
   color: #009fff;
   text-align: left;
   padding-bottom: 35px;
 `;
 
-const P = styled.p`
-  font-size: 20px;
-  color: #009fff;
-  padding: 10px;
+const IMG = styled.img`
+  width: 100px;
+  margin: 10px;
 `;
