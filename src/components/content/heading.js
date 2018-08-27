@@ -10,14 +10,27 @@ export default class Heading extends React.Component {
   }
 
   render() {
-    const { id, title } = this.props;
+    const { id, title, img } = this.props;
     return (
       <H id={id || null}>
-        <H3>{title}</H3>
+        {img ? (
+          <HeaderWrapper>
+            <IMG src={img} alt={title} />
+            <H3IMG>{title}</H3IMG>
+          </HeaderWrapper>
+        ) : (
+          <H3>{title}</H3>
+        )}
       </H>
     );
   }
 }
+
+const HeaderWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
 
 const H = styled.header`
   margin-bottom: 20px;
@@ -26,7 +39,7 @@ const H = styled.header`
 
 const H3 = styled.h3`
   font-size: 28px;
-  font-weight: 100;
+  font-weight: normal;
   line-height: 32px;
   margin-bottom: 12px;
   text-align: center;
@@ -35,4 +48,15 @@ const H3 = styled.h3`
     font-size: 24px;
     margin-bottom: 0;
   }
+`;
+
+const H3IMG = H3.extend`
+  text-align: left;
+  color: #292929;
+  margin-bottom: 0;
+`;
+
+const IMG = styled.img`
+  width: 80px;
+  margin-right: 20px;
 `;

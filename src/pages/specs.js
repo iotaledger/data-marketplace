@@ -11,6 +11,7 @@ import ScrollToTop from '../components/scroll-to-top';
 
 const content1 = {
   id: 'devnet',
+  img: '/static/icons/proof_of_concept/icon-1.svg',
   title: 'The Devnet, also known as Testnet',
   text: `Aside from the mainnet, the IOTA Foundation operates a separate Tangle network called <a href="https://blog.iota.org/first-of-the-new-testnets-live-f8f41b99e9a3">“the devnet”</a>. It is a version of the Tangle meant for development and testing purposes.
 <br /><br />The Devnet runs the latest stable version of IRI, and allow developers to work on their apps without getting in their way — or costing them any real tokens.
@@ -19,6 +20,7 @@ const content1 = {
 
 const content2 = {
   id: 'mam',
+  img: '/static/icons/proof_of_concept/icon-2.svg',
   title: 'Masked Authenticated Messaging (MAM)',
   text: `Masked Authenticated Messaging (MAM) is a second layer data communication protocol which adds functionality to emit and access encrypted data stream, like RSS, over the Tangle (IOTA’s distributed ledger) regardless of the size or cost of device. IOTA’s consensus protocol adds integrity to these message streams. Given these properties, MAM fulfills an important need in industries where integrity and privacy are required.
 <br /><br />MAM uses Encrypted Messaging Streams, to emit and access a forward-secret and encrypted data stream over the Tangle.
@@ -34,6 +36,7 @@ const content2 = {
 
 const content3 = {
   id: 'payment',
+  img: '/static/icons/proof_of_concept/icon-3.svg',
   title: 'Payment',
   text: `Data can be decrypted if payment is made. Price of the data stream is defined by sensor owner, and usually set between 1000 and 50000 IOTAs.
 <br /><br />A buyer can ”fund” the wallet for free and will be granted with 10,000,000 virtual IOTAs, which he/she can spend exclusively for purchasing sensor data.
@@ -45,6 +48,7 @@ const content3 = {
 
 const content4 = {
   id: 'storage',
+  img: '/static/icons/proof_of_concept/icon-4.svg',
   title: 'Data storage in the Cloud',
   text: `The Data Marketplace PoCt uses a cloud backend service provided by Google Firebase. All information is stored securely and confidentially. Google cloud services are used for user authentication and access rights management.
 <br />All other information is currently stored in the Firebase cloud database as well, but can be easily migrated to any other cloud provider like Amazon AWS or Microsoft Azure.
@@ -54,6 +58,7 @@ const content4 = {
 const content5 = {
   id: 'streaming',
   title: 'Data Streaming',
+  img: '/static/icons/proof_of_concept/icon-5.svg',
   text: `New data packets can be added with a recommended minimum time interval of 5-10 min. More frequent additions are possible, but you need to keep in mind that <a href="https://docs.iota.org/introduction/tangle/proof-of-work">“Proof-of-Work”</a> functionality might require to run up to 60 seconds for every new packet.
 <br /><br />A Publish Script, provided with every onboarded sensor, contains preconfigured examples on how to send sensor data packages from a static file, database, remote server using API. the script can be run in a loop with defined time interval in order to ensure continuous streaming.
 <br /><br />Data readings should be timed between 5 to 10 minutes. More regular readings (every minute) are also possible, but not recommended.`,
@@ -61,6 +66,7 @@ const content5 = {
 
 const content6 = {
   id: 'data',
+  img: '/static/icons/proof_of_concept/icon-6.svg',
   title: 'Which data',
   text: `The Data Marketplace is not just aimed at IoT data, an example could be financial data from an API could also be stored and sold on the marketplace.
 <br /><br />Existing functional examples of MAM being utilised on embedded devices.
