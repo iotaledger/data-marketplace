@@ -12,11 +12,11 @@ export default class Content extends React.Component {
 
   render() {
     const {
-      content: { id, title, text },
+      content: { id, title, text, img = null },
     } = this.props;
     return (
       <S id={id || null}>
-        {title ? <Heading title={title} /> : null}
+        {title ? <Heading title={title} img={img} /> : null}
         <C>
           <P dangerouslySetInnerHTML={{ __html: text }} />
         </C>
