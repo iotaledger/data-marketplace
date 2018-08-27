@@ -46,7 +46,7 @@ const partners = [
   { src: 'intelzone.png', alt: 'intelzone' },
   { src: 'ismb.png', alt: 'ismb' },
   { src: 'kpmg.png', alt: 'kpmg' },
-  { src: 'kryha.png', alt: 'kryha' },
+  // { src: 'kryha.png', alt: 'kryha' },
   { src: 'movimento.png', alt: 'movimento' },
   { src: 'multiconsult.png', alt: 'multiconsult' },
   { src: 'nordic.png', alt: 'nordic' },
@@ -74,7 +74,7 @@ const partners = [
   { src: 'uio.png', alt: 'uio' },
   { src: 'undc.png', alt: 'undc' },
   { src: 'USC_viterbi.png', alt: 'USC Viterbi' },
-  { src: 'XDK2MAM.png', alt: 'XDK2MAM', height: 200, width: 270 },
+  { src: 'XDK2MAM.png', alt: 'XDK2MAM' },
   { src: 'wondrwall.png', alt: 'wondrwall' },
   { src: 'yield.png', alt: 'yield' },
 ];
@@ -86,10 +86,10 @@ class Partners extends React.Component {
   //     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   //   }
   // }
-  //
+
   componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor && nextProps.anchor === 'participants') {
-      const target = document.querySelector('#participants');
+    if (nextProps.anchor) {
+      const target = document.querySelector(`#${nextProps.anchor}`);
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -189,8 +189,4 @@ const I = styled.img`
   max-width: ${props => (props.width ? `${props.width}px` : '200px')};
   max-height: ${props => (props.height ? `${props.height}px` : '120px')};
   padding: 10px 15px;
-  @media (max-width: 760px) {
-    max-width: ${props => (props.width ? `${props.width * 0.7}px` : '150px')};
-    max-height: ${props => (props.height ? `${props.height * 0.7}px` : '120px')};
-  }
 `;
