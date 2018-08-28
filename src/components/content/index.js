@@ -43,12 +43,10 @@ const C = styled.div`
 
 const P = styled.p`
   @media (max-width: 1120px) {
-    font-size: 16px;
-    line-height: 27px;
     margin: 0 auto;
   }
-  font-size: 17px;
-  line-height: 32px;
+  font-size: 16px;
+  line-height: 27px;
   color: #4e5a61;
   max-width: 724px;
 `;
