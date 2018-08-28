@@ -50,9 +50,7 @@ const Ul = styled.ul`
 const Li = styled.li`
   color: #cedbe2;
   display: flex;
-  @media (max-width: 760px) {
-    line-height: 26px;
-  }
+  line-height: 16px;
 
   &::before {
     content: '•';
@@ -63,11 +61,7 @@ const Li = styled.li`
 `;
 
 const SPAN = styled.span`
-  @media (max-width: 1120px) {
-    font-size: 16px;
-    line-height: 27px;
-  }
-  font-size: 17px;
-  line-height: 32px;
+  font-size: 16px;
+  line-height: 27px;
   color: #4e5a61;
 `;
