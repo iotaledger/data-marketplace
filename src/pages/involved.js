@@ -66,9 +66,6 @@ const Header = ({ onAnchorClick }) => {
         <Link to={'/involved/#onboard'} onClick={() => onAnchorClick('onboard')}>
           <SubLink>{'Onboard the Data Marketplace'.toUpperCase()}</SubLink>
         </Link>
-        <Link to={'/involved/#signup'} onClick={() => onAnchorClick('signup')}>
-          <SubLink>{'Sign Up'.toUpperCase()}</SubLink>
-        </Link>
         <Link
           to={'/involved/#joint-development'}
           onClick={() => onAnchorClick('joint-development')}>
@@ -129,7 +126,7 @@ export default class extends React.Component {
             </IntroductionHeader>
             <p>Please submit the form to download our technical onboarding guideline.</p>
           </Introduction>
-          <Form anchor={anchor} />
+          <Form />
         </FormContainer>
 
         <Heading title="Joint Use Case Development" id="joint-development" anchor={anchor} />
