@@ -29,8 +29,8 @@ export default props => (
       />
       <Card
         imageSrc="/static/icons/business/icon-1.svg"
-        imageAlt="Smart buildings"
-        heading="Smart buildings"
+        imageAlt="Smart Buildings"
+        heading="Smart Buildings"
         text="3for2 smart building in Singapore has been running an IOTA PoC"
         scale={95}
       />
@@ -38,14 +38,14 @@ export default props => (
         imageSrc="/static/icons/business/icon-5.svg"
         imageAlt="SDK"
         heading="SDK"
-        text="Nordic Semiconductor and NTNU onboard the data marketplace"
+        text="Nordic Semiconductor and NTNU onboard the Data Marketplace"
         link="https://blog.iota.org/nordic-semiconductor-and-ntnu-in-norway-explore-iota-and-the-data-marketplace-f9bc7efee3"
       />
       <Card
         imageSrc="/static/icons/business/icon-6.svg"
         imageAlt="Financial Services"
         heading="Financial Services"
-        text="Financial services: DNB onboarding in the data marketplace to explore data marketplace, personal data and Economy of Things"
+        text="Financial services: DNB onboarding to explore Data Marketplace, personal data and Economy of Things"
         link="https://blog.iota.org/dnb-teams-up-with-iota-to-explore-the-economy-of-things-and-mydata-gdpr-as-an-opportunity-20c41461e3f5"
         scale={110}
       />
@@ -53,7 +53,7 @@ export default props => (
         imageSrc="/static/icons/business/icon-7.svg"
         imageAlt="Workshops & Webinars"
         heading="Workshops & Webinars"
-        text="2 webinars were organised on the data marketplace and the MAM module. Workshops were conducted in Oslo and Berlin on the topics of Trusted IoT and MyData/personal data"
+        text="2 webinars were organised on the Data Marketplace and the MAM module. Workshops were conducted in Oslo and Berlin on the topics of Trusted IoT and MyData/personal data"
       />
       <Card
         imageSrc="/static/icons/business/icon-8.svg"
@@ -64,8 +64,8 @@ export default props => (
       />
       <Card
         imageSrc="/static/icons/business/icon-9.svg"
-        imageAlt="Smart cities testbed"
-        heading="Smart cities testbed"
+        imageAlt="Smart Cities Testbed"
+        heading="Smart Cities Testbed"
         text="Initial work towards smart cities development are being triggered in Los Angeles at USC’s smart campus, as proxy for a smart cities"
       />
     </InfoRow>

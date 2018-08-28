@@ -14,9 +14,9 @@ const content1 = {
   id: 'devnet',
   img: '/static/icons/proof_of_concept/icon-1.svg',
   title: 'The Devnet, also known as Testnet',
-  text: `Aside from the mainnet, the IOTA Foundation operates a separate Tangle network called <a href="https://blog.iota.org/first-of-the-new-testnets-live-f8f41b99e9a3">“the devnet”</a>. It is a version of the Tangle meant for development and testing purposes.
+  text: `Aside from the mainnet, the IOTA Foundation operates a separate Tangle network called <a href="https://blog.iota.org/first-of-the-new-testnets-live-f8f41b99e9a3">“the Devnet”</a>. It is a version of the Tangle meant for development and testing purposes.
 <br /><br />The Devnet runs the latest stable version of IRI, and allow developers to work on their apps without getting in their way — or costing them any real tokens.
-<br /><br />Read more about the devnet <a href="https://blog.iota.org/first-of-the-new-testnets-live-f8f41b99e9a3">here</a>.`,
+<br /><br />Read more about the Devnet <a href="https://blog.iota.org/first-of-the-new-testnets-live-f8f41b99e9a3">here</a>.`,
 };
 
 const content2 = {
@@ -43,7 +43,7 @@ const content3 = {
 <br /><br />A buyer can ”fund” the wallet for free and will be granted with 10,000,000 virtual IOTAs, which he/she can spend exclusively for purchasing sensor data.
 <br /><br /><strong>Important note for data stream purchasers:</strong> please note that these are not real IOTAs. The current balance can’t currently be topped up or transferred to another wallet address. The only valid operation is purchasing of the sensor data.
 <br /><br /><strong>Important note for sensor owners:</strong> please note that received tokens are not real IOTAs. The collected balance can’t currently be withdrawn or transferred to another wallet address.
-<br /><br />Beyond the current PoC,  commercial data marketplaces will integrate with customers’ existing wallets, where real IOTA tokens will be transferred from data buyers to sensor owners.
+<br /><br />Beyond the current PoC, commercial data marketplaces will integrate with customers’ existing wallets, where real IOTA tokens will be transferred from data buyers to sensor owners.
 <br /><br />After the buyers clicks on the “Purchase access” button, the sensor is added to the list of your purchased data streams. In the background the <a href="https://docs.iota.org/introduction/tangle/proof-of-work">“Proof-of-Work”</a> is run to ensure the data integrity in the Tangle. This operation can take up to 60 seconds depending on the buyers computer and should not be interrupted by page reload.`,
 };
 
@@ -51,7 +51,7 @@ const content4 = {
   id: 'storage',
   img: '/static/icons/proof_of_concept/icon-4.svg',
   title: 'Data storage in the Cloud',
-  text: `The Data Marketplace PoCt uses a cloud backend service provided by Google Firebase. All information is stored securely and confidentially. Google cloud services are used for user authentication and access rights management.
+  text: `The Data Marketplace PoC uses a cloud backend service provided by Google Firebase. All information is stored securely and confidentially. Google cloud services are used for user authentication and access rights management.
 <br />All other information is currently stored in the Firebase cloud database as well, but can be easily migrated to any other cloud provider like Amazon AWS or Microsoft Azure.
 <br />Frontend application communicates with the cloud backend service over APIs, which makes the entire backend interchangeable.`,
 };
@@ -89,7 +89,7 @@ const content8 = {
 const content9 = {
   id: 'sensors',
   title: 'Sensors',
-  text: `The data marketplace is agnostic to the sensors and the data that you connect to it. Any sensor that has the ability to transmit data and has an easy way to get regular data readings (e.g. through an API) can be used for the data marketplace. In order to submit the data to the marketplace, all you have to do is execute a NodeJS script.`,
+  text: `The Data Marketplace is agnostic to the sensors and the data that you connect to it. Any sensor that has the ability to transmit data and has an easy way to get regular data readings (e.g. through an API) can be used for the Data Marketplace. In order to submit the data to the marketplace, all you have to do is execute a NodeJS script.`,
 };
 
 const content10 = {

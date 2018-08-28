@@ -11,8 +11,8 @@ import ScrollToTop from '../components/scroll-to-top';
 
 const content1 = {
   id: 'about',
-  text: `The IOTA Foundation launched in Q4 2017 a proof of concept and open innovation ecosystem called the Data Marketplace. The rationale and opportunity landscape related to this initiative is described in depth <a href="https://blog.iota.org/iota-data-marketplace-cb6be463ac7f">here</a>.
-<br /><br />As of July 2018, the initiative produced a PoC available online and continued to onboard selectively organisations able to contribute to the ecosystem of participants. Mid 2018, more than 70 organisations have signed up to join the data marketplace.`,
+  text: `The IOTA Foundation launched in Q4 2017 a proof of concept and open innovation ecosystem called the Data Marketplace. The rationale and opportunity landscape related to this initiative are described in depth <a href="https://blog.iota.org/iota-data-marketplace-cb6be463ac7f">here</a>.
+<br /><br />As of July 2018, the initiative produced a PoC available online and continued to onboard selectively organisations able to contribute to the ecosystem of participants. Mid 2018, more than 70 organisations have signed up to join the Data Marketplace.`,
 };
 
 const content2 = {

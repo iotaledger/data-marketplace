@@ -13,7 +13,7 @@ export default props => (
       <Card
         imageSrc="/static/icons/get_involved/icon-2.svg"
         imageAlt="simple trial"
-        text="Run a free to join and simple trial at your office to explore technically the data marketplace potential"
+        text="Run a free to join and simple trial at your office to explore technically the Data Marketplace potential"
       />
       <Card
         imageSrc="/static/icons/get_involved/icon-3.svg"
