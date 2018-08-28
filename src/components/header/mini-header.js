@@ -43,10 +43,15 @@ const Container = styled.div`
 `;
 
 const SubLink = styled.p`
-  @media (max-width: 1113px) {
-    line-height: 23px;
-    padding: 0 15px;
+  @media (max-width: 1050px) {
+    font-size: 12px;
+    padding: 7px 10px 0;
   }
+
+  @media (max-width: 910px) {
+    display: none;
+  }
+
   font-size: 14px;
   letter-spacing: 1.5px;
   font-weight: 600;
