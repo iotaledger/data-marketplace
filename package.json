@@ -77,6 +77,7 @@
     "raf": "3.4.0",
     "rbush": "^2.0.2",
     "react": "^16.3.1",
+    "react-burger-menu": "^2.5.2",
     "react-clipboard.js": "^2.0.0",
     "react-dev-utils": "^5.0.1",
     "react-dom": "^16.3.1",

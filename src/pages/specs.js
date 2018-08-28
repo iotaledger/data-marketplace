@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import BurgerMenu from '../components//header/burger';
 import MiniHeader from '../components/header/mini-header';
 import Content from '../components/content';
 import List from '../components/content/list';
@@ -177,6 +178,7 @@ export default class extends React.Component {
     const { anchor } = this.state;
     return (
       <Main id="main">
+        <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
         <ImgContainer>

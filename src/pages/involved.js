@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import BurgerMenu from '../components//header/burger';
 import MiniHeader from '../components/header/mini-header';
 import Cards from '../components/feature-section/feature-cards';
 import Carousel from '../components/carousel';
@@ -104,6 +105,7 @@ export default class extends React.Component {
     const { anchor } = this.state;
     return (
       <Main id="main">
+        <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
         <Heading title="Onboard the Data Marketplace" id="onboard" anchor={anchor} />
