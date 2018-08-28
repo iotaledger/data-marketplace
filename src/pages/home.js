@@ -71,10 +71,14 @@ const Main = styled.div`
 const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
+  height: 100%;
 `;
 
 const Image = styled.img`
-  width: 50%;
   height: 50%;
   padding: 10px 0;
+  width: 500px;
+  @media (max-width: 650px) {
+    width: 350px;
+  }
 `;

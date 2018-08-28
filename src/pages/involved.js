@@ -111,7 +111,7 @@ export default class extends React.Component {
         <Heading title="Onboard the Data Marketplace" id="onboard" anchor={anchor} />
         <ImgContainer>
           <Image
-            width={30}
+            width={250}
             src="/static/illustrations/onboarding.png"
             alt="IOTA process illustration"
           />
@@ -135,7 +135,7 @@ export default class extends React.Component {
         <Heading title="Joint Use Case Development" id="joint-development" anchor={anchor} />
         <ImgContainer>
           <Image
-            width={20}
+            width={200}
             src="/static/illustrations/joint_use_case_dev.png"
             alt="IOTA process illustration"
           />
@@ -251,12 +251,16 @@ const Arrow = styled.img`
 const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
+  height: 100%;
 `;
 
 const Image = styled.img`
-  width: ${props => (props.width ? `${props.width}%` : '35%')};
   height: 25%;
   padding: 10px 0;
+  width: ${props => (props.width ? `${props.width}px` : '300px')};
+  @media (max-width: 650px) {
+    width: ${props => (props.width ? `${props.width * 0.8}px` : '200px')};
+  }
 `;
 
 const Container = styled.div`
