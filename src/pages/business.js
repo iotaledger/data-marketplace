@@ -95,16 +95,13 @@ export default class extends React.Component {
         <Content content={content1} />
         <Content content={content2} anchor={anchor} />
         <ImgContainer>
-          <Image
-            width={30}
-            src="/static/illustrations/exploring.png"
-            alt="Open innovation ecosystem"
-          />
+          <Image src="/static/illustrations/exploring.png" alt="Open innovation ecosystem" />
         </ImgContainer>
         <Content content={content3} />
         <Content content={content4} anchor={anchor} />
         <ImgContainer>
           <Image
+            width={650}
             src="/static/illustrations/business_model_innovation.png"
             alt="Business model innovation"
           />
@@ -128,12 +125,16 @@ const Main = styled.div`
 const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
+  height: 100%;
 `;
 
 const Image = styled.img`
-  width: ${props => (props.width ? `${props.width}%` : '50%')};
-  height: 50%;
+  height: 100%;
   padding: 10px 0;
+  width: ${props => (props.width ? `${props.width}px` : '300px')};
+  @media (max-width: 650px) {
+    width: ${props => (props.width ? `${props.width * 0.5}px` : '200px')};
+  }
 `;
 
 const Container = styled.div`

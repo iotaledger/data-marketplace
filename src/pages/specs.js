@@ -182,7 +182,11 @@ export default class extends React.Component {
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
         <ImgContainer>
-          <Image src="/static/illustrations/vision.png" alt="Proof of Concept Illustration" />
+          <Image
+            width={400}
+            src="/static/illustrations/vision.png"
+            alt="Proof of Concept Illustration"
+          />
         </ImgContainer>
         <Content content={content1} anchor={anchor} />
         <Content content={content2} anchor={anchor} />
@@ -202,7 +206,7 @@ export default class extends React.Component {
         </ImgContainer>
         <Content content={content7} />
         <ImgContainer>
-          <Image src="/static/illustrations/MAM.png" alt="IOTA process illustration" />
+          <Image width={400} src="/static/illustrations/MAM.png" alt="IOTA process illustration" />
         </ImgContainer>
         <Content content={content8} />
         <Sensors content={content9} anchor={anchor} />
@@ -230,12 +234,16 @@ const Main = styled.div`
 const ImgContainer = styled.div`
   display: flex;
   justify-content: center;
+  height: 100%;
 `;
 
 const Image = styled.img`
-  width: 40%;
   height: 40%;
   padding: 10px 0;
+  width: ${props => (props.width ? `${props.width}px` : '350px')};
+  @media (max-width: 650px) {
+    width: ${props => (props.width ? `${props.width * 0.8}px` : '250px')};
+  }
 `;
 
 const Container = styled.div`
