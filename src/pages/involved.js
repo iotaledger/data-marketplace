@@ -30,7 +30,7 @@ const content4 = {
 };
 
 const content5 = {
-  text: `The Foundation aims at launching in Q3/4 2018 a global virtual initiative to catalyse co-creation and bring developers and organisations to develop and showcase together their capabilities and creativity. New solutions across industries and geographies will be developed as hybrid, addons or use case proof of concept on top of an <a href="https://github.com/iotaledger/data-marketplace">opensource</a> version of the Data marketplace.
+  text: `The Foundation aims at launching in Q3/4 2018 a global virtual initiative to catalyse co-creation and bring developers and organisations to develop and showcase together their capabilities and creativity. New solutions across industries and geographies will be developed as hybrid, addons or use case proof of concept on top of an <a href="https://github.com/iotaledger/data-marketplace">opensource</a> version of the Data Marketplace.
 <br /><br />We are currently gathering interest from our ecosystem and <a href="#/home#participants">potential partners</a> willing to help shape this unique initiative. Examples include:`,
 };
 
@@ -40,7 +40,7 @@ const content6 = {
 
 const characteristics = [
   'Ambition to explore and develop new business models with the backing of management',
-  'Access to inhouse understanding of DLT / Blockchain and built initial hypotheses of use cases to be explored. Onboarding the data marketplace helps to catalyse this process',
+  'Access to inhouse understanding of DLT / Blockchain and built initial hypotheses of use cases to be explored. Onboarding the Data Marketplace helps to catalyse this process',
   'Ready to provide human resources, especially in IT capabilities',
   'Access to tangible assets (facilities, lab, connected hardware…) available for testbed piloting',
   'Embraces open innovation principles. Openness to publish/showcase publicly',
@@ -75,7 +75,7 @@ const Header = ({ onAnchorClick }) => {
           <SubLink>{'Joint Use Case Development'.toUpperCase()}</SubLink>
         </Link>
         <Link to={'/involved/#cooperation'} onClick={() => onAnchorClick('cooperation')}>
-          <SubLink>{'Call for Cooperation'.toUpperCase()}</SubLink>
+          <SubLink>{'Virtual Hackathon Cooperation'.toUpperCase()}</SubLink>
         </Link>
       </Info>
     </Container>
