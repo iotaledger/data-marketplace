@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import firebase from 'firebase/app';
+import BurgerMenu from '../components//header/burger';
 import MiniHeader from '../components/header/mini-header';
 import SensorList from '../components/sensor-list';
 import Footer from '../components/footer';
@@ -57,6 +58,7 @@ export default class extends React.Component {
   render() {
     return (
       <Main id="main">
+        <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
         <Map {...this.state} />
