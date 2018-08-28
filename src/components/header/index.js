@@ -315,6 +315,7 @@ const Graphic2 = Graphic.extend`
   }
   @media (max-width: 400px) {
     left: 150px;
+    top: -115px;
   }
 `;
 
