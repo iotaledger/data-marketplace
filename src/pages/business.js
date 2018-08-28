@@ -161,6 +161,10 @@ const Container = styled.div`
   @media (max-width: 550px) {
     background-size: 457px 350px;
   }
+
+  @media (max-width: 400px) {
+    background-size: 457px 400px;
+  }
 `;
 
 const Info = styled.div`
@@ -192,6 +196,10 @@ const Info = styled.div`
   }
   @media (max-width: 550px) {
     margin-left: 40px;
+  }
+  @media (max-width: 400px) {
+    margin-left: 40px;
+    padding-top: 40px;
   }
 `;
 

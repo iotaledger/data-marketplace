@@ -279,6 +279,11 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
   }
+
+  @media (max-width: 400px) {
+    background-size: 584px 450px;
+    margin-bottom: 20px;
+  }
 `;
 
 const TitleWrapper = styled.div`
@@ -311,6 +316,9 @@ const Info = styled.div`
   @media (max-width: 700px) {
     width: 85%;
     padding: 30px 0 0;
+  }
+  @media (max-width: 400px) {
+    padding-top: 55px;
   }
 `;
 

@@ -197,7 +197,7 @@ const Header = styled.div`
   justify-contents: center;
   width: 300px;
   position: absolute;
-  z-index: 1100;
+  z-index: 900;
   padding-top: 140px;
   @media (max-width: 760px) {
     padding-top: 50px;
@@ -247,7 +247,7 @@ const HeaderBg = styled.img`
   position: absolute;
   top: -120px;
   right: 75vw;
-  z-index: 1000;
+  z-index: 800;
   @media (max-width: 1120px) {
     right: 67vw;
   }
@@ -260,7 +260,7 @@ const HeaderBgMobile = styled.img`
   position: absolute;
   top: -20px;
   right: 70vw;
-  z-index: 1000;
+  z-index: 800;
   display: none;
   @media (max-width: 1120px) {
     right: 67vw;
