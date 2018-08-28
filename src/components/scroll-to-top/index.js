@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
-import styled from 'styled-components';
 
 export default class Sticky extends PureComponent {
   static defaultProps = {
-    top: 350,
+    top: 380,
   };
 
   constructor(props) {
@@ -41,17 +40,9 @@ export default class Sticky extends PureComponent {
   render() {
     const { onClick, top } = this.props;
     return (
-      <div
-        style={{ top, right: 50, cursor: 'pointer', zIndex: 10 }}
-        ref={elem => (this.elem = elem)}
-        onClick={onClick}>
-        <Image src="/static/icons/arrow-up.svg" alt="scrollToTop" />
+      <div className="scroll-to-top" ref={elem => (this.elem = elem)} onClick={onClick}>
+        <img src="/static/icons/arrow-up.svg" alt="scrollToTop" />
       </div>
     );
   }
 }
-
-const Image = styled.img`
-  width: 70%;
-  padding: 10px 0;
-`;

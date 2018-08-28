@@ -195,6 +195,29 @@ button {
   }
 }
 
+.scroll-to-top {
+  right: 50px;
+  cursor: pointer;
+  z-index: 10;
+
+  img {
+    width: 70%;
+    padding: 10px 0;
+  }
+
+  @media screen and (max-width: 767px) {
+    right: 20px;
+  }
+
+  @media screen and (max-width: 600px) {
+    right: 0px;
+  }
+
+  @media screen and (max-width: 400px) {
+    right: -20px;
+  }
+}
+
 @font-face {
   font-family: 'Nunito Sans';
   src: url('/static/fonts/NunitoSans-ExtraLight.ttf');
