@@ -81,13 +81,6 @@ class Form extends React.Component {
     this.verify = this.verify.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor && nextProps.anchor === 'contact') {
-      const target = document.querySelector('#contact');
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
   handleInputChange({ target }) {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
@@ -160,7 +153,7 @@ class Form extends React.Component {
     if (!settings.recaptchaSiteKey) return <div />;
 
     return (
-      <FormWrapper id="signup">
+      <FormWrapper>
         {!success ? (
           <F onSubmit={this.submit}>
             {error && <Error>{error}</Error>}
