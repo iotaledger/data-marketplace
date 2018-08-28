@@ -98,12 +98,13 @@ const Container = styled.div`
 
   @media (max-width: 550px) {
     background-size: 289px 167px;
+    background-position-y: 50px;
     padding: 38px 0;
   }
 
   @media (max-width: 400px) {
-    background-position-x: 100px;
-    background-position-y: 27px;
+    background-image: none;
+    padding-top: 0;
   }
 `;
 
@@ -134,13 +135,17 @@ const Info = styled.div`
   }
   @media (max-width: 550px) {
     margin-left: 30px;
-    padding-top: 0;
+    padding-top: 45px;
+    padding-bottom: 0;
     width: 400px;
   }
   @media (max-width: 400px) {
-    margin-left: 130px;
-    padding-top: 25px;
-    width: 395px;
+    margin-left: 0;
+    padding-top: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -166,6 +171,10 @@ const SubLink = styled.p`
     line-height: 20px;
     margin: 15px 0;
   }
+
+  @media (max-width: 400px) {
+    color: #4e5a61;
+  }
 `;
 
 const Tagline = styled.h2`
@@ -179,6 +188,12 @@ const Tagline = styled.h2`
     top: 115px;
     right: 3vw;
     color: #4e5a61;
+  }
+
+  @media (max-width: 400px) {
+    display: flex;
+    position: static;
+    align-self: center;
   }
 `;
 
@@ -214,6 +229,11 @@ const Shapes = styled.div`
 
   @media (max-width: 767px) {
     background-size: 319px 155px;
+  }
+
+  @media (max-width: 400px) {
+    width: 100%;
+    background-image: none;
   }
 `;
 

@@ -270,6 +270,12 @@ const Container = styled.div`
   @media (max-width: 560px) {
     background-position-x: -25px;
   }
+
+  @media (max-width: 400px) {
+    background-position-x: -25px;
+    background-position-y: 40px;
+    padding-bottom: 45px;
+  }
 `;
 
 const ContentOuterWrapper = styled.div`
@@ -310,8 +316,11 @@ const Info = styled.div`
   }
   @media (max-width: 560px) {
     padding: 24px 0 35px;
-    margin-left: 70px;
-    width: 300px;
+    margin-left: 60px;
+    width: 245px;
+  }
+  @media (max-width: 400px) {
+    padding: 63px 0 0;
   }
 `;
 
