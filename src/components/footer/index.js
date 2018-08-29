@@ -2,11 +2,11 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default props => (
-  <F id="footer">
+  <Footer id="footer">
     <ContentOuterWrapper>
       <ContentInnerWrapper>
-        <C>
-          <L>
+        <LinksOuterWrapper>
+          <LinksInnerWrapper>
             <A order={1} href="https://www.iota.org/">
               www.iota.org
             </A>
@@ -26,12 +26,12 @@ export default props => (
             <A order={5} href="http://docs.iota.org/">
               docs.iota.org
             </A>
-          </L>
-          <N>
+          </LinksInnerWrapper>
+          <Nav>
             <Copy>© 2017 IOTA Foundation. All rights reserved.</Copy>
-          </N>
-        </C>
-        <W>
+          </Nav>
+        </LinksOuterWrapper>
+        <Wrapper>
           <P>
             Disclaimer: This experimental IOTA Data Marketplace runs on the IOTA testnet.
             Participants can choose to make their data available for free to other marketplace
@@ -43,10 +43,10 @@ export default props => (
             takes place on a voluntary, non-contractual basis. Participants may choose to
             discontinue their participation at any time.
           </P>
-        </W>
+        </Wrapper>
       </ContentInnerWrapper>
     </ContentOuterWrapper>
-  </F>
+  </Footer>
 );
 
 const ContentOuterWrapper = styled.div`
@@ -100,12 +100,12 @@ const AIMG = A.extend`
   }
 `;
 
-const F = styled.footer`
+const Footer = styled.footer`
   padding: 10px 0;
   overflow: hidden;
 `;
 
-const C = styled.div`
+const LinksOuterWrapper = styled.div`
   width: 100%;
   max-width: 1170px;
   padding: 0 15px;
@@ -113,12 +113,12 @@ const C = styled.div`
   margin-left: auto;
 `;
 
-const W = styled.div`
+const Wrapper = styled.div`
   margin-bottom: 20px;
   text-align: center;
 `;
 
-const L = styled.div`
+const LinksInnerWrapper = styled.div`
   margin-bottom: 20px;
   display: flex;
   justify-content: space-around;
@@ -128,7 +128,7 @@ const L = styled.div`
   }
 `;
 
-const N = styled.nav`
+const Nav = styled.nav`
   text-align: center;
 `;
 
