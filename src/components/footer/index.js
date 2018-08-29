@@ -93,6 +93,7 @@ const A = styled.a`
 
 const AIMG = A.extend`
   margin: 0;
+  text-align: center;
   @media (max-width: 650px) {
     order: 0;
     align-self: center;
