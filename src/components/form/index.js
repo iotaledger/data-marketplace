@@ -333,7 +333,7 @@ const FormWrapper = styled.section`
   width: 774px;
   border-radius: 10px;
   background-color: #f0f6f8;
-  padding: 4% 3%;
+  padding: 3em 2em;
   text-align: center;
   margin: auto;
 
