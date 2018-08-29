@@ -167,6 +167,7 @@ const Graphics = styled.div`
   position: relative;
   top: 45px;
   z-index: 100;
+  width: 50%;
   @media (max-width: 1120px) {
     width: 360px;
     left: -15vw;
