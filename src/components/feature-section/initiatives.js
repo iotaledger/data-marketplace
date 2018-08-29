@@ -84,13 +84,17 @@ const Container = styled.section`
 `;
 
 const InfoRow = styled.div`
-  @media (max-width: 767px) {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
   margin-top: 20px;
+
+  @media (max-width: 960px) {
+    justify-content: center;
+  }
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
