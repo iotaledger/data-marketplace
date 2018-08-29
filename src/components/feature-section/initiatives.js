@@ -64,9 +64,9 @@ export default props => (
       />
       <Card
         imageSrc="/static/icons/business/icon-9.svg"
-        imageAlt="Smart Cities Testbed"
-        heading="Smart Cities Testbed"
-        text="Initial work towards smart cities development are being triggered in Los Angeles at USC’s smart campus, as proxy for a smart cities"
+        imageAlt="Smart City Testbed"
+        heading="Smart City Testbed"
+        text="Initial work towards smart cities development are being triggered in Los Angeles at USC’s smart campus IoT Testbed, as proxy for a smart city"
       />
     </InfoRow>
   </Container>
