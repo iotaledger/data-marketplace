@@ -15,17 +15,17 @@ export default class Content extends React.Component {
       content: { id, title, text, img = null },
     } = this.props;
     return (
-      <S id={id || null}>
+      <SECTION id={id || null}>
         {title ? <Heading title={title} img={img} /> : null}
-        <C>
+        <DIV>
           <P dangerouslySetInnerHTML={{ __html: text }} />
-        </C>
-      </S>
+        </DIV>
+      </SECTION>
     );
   }
 }
 
-const S = styled.section`
+const SECTION = styled.section`
   z-index: 10;
   padding: 20px;
   max-width: 724px;
@@ -36,7 +36,7 @@ const S = styled.section`
   flex-direction: column;
 `;
 
-const C = styled.div`
+const DIV = styled.div`
   display: flex;
   justify-content: center;
 `;

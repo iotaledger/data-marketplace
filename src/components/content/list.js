@@ -13,7 +13,7 @@ export default class List extends React.Component {
   render() {
     const { id, items, title } = this.props;
     return (
-      <C id={id || null}>
+      <DIV id={id || null}>
         {title ? <Heading title={title} /> : null}
         <Ul>
           {items.map(item => (
@@ -22,12 +22,12 @@ export default class List extends React.Component {
             </Li>
           ))}
         </Ul>
-      </C>
+      </DIV>
     );
   }
 }
 
-const C = styled.div`
+const DIV = styled.div`
   width: 100%;
   max-width: 1170px;
   padding: 0 15px;

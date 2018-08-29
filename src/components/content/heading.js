@@ -12,7 +12,7 @@ export default class Heading extends React.Component {
   render() {
     const { id, title, img } = this.props;
     return (
-      <H id={id || null}>
+      <HEADER id={id || null}>
         {img ? (
           <HeaderWrapper>
             <IMG src={img} alt={title} />
@@ -21,7 +21,7 @@ export default class Heading extends React.Component {
         ) : (
           <H3>{title}</H3>
         )}
-      </H>
+      </HEADER>
     );
   }
 }
@@ -32,7 +32,7 @@ const HeaderWrapper = styled.div`
   align-items: center;
 `;
 
-const H = styled.header`
+const HEADER = styled.header`
   margin-bottom: 20px;
   width: 100%;
 `;
