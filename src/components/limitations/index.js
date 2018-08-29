@@ -54,6 +54,10 @@ const Container = styled.div`
   @media (max-width: 610px) {
     background-image: none;
   }
+
+  @media (max-width: 400px) {
+    margin: 35px 0;
+  }
 `;
 
 const ListContainer = styled.div`

@@ -253,11 +253,7 @@ const Container = styled.div`
   padding: 0 15px;
   margin-right: auto;
   margin-left: auto;
-  margin-bottom: 80px;
-
-  @media (max-width: 820px) {
-    margin-bottom: 40px;
-  }
+  margin-bottom: 40px;
 
   @media (max-width: 660px) {
     background-image: url(/static/shapes/proof_of_concept/shape-header-hero.svg);
@@ -436,12 +432,13 @@ const Shape = styled.img`
 `;
 
 const Shape1 = Shape.extend`
-  top: 218px;
-  right: 55vw;
-  width: 24%;
+  top: 180px;
+  right: 61vw;
+  width: 20%;
 
   @media (max-width: 1220px) {
     right: 63vw;
+    width: 24%;
   }
 
   @media (max-width: 1120px) {
