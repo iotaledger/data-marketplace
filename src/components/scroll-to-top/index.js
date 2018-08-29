@@ -38,9 +38,8 @@ export default class Sticky extends PureComponent {
   }
 
   render() {
-    const { onClick, top } = this.props;
     return (
-      <div className="scroll-to-top" ref={elem => (this.elem = elem)} onClick={onClick}>
+      <div className="scroll-to-top" ref={elem => (this.elem = elem)} onClick={this.props.onClick}>
         <img src="/static/icons/arrow-up.svg" alt="scrollToTop" />
       </div>
     );
