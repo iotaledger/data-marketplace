@@ -75,7 +75,7 @@ const ImgContainer = styled.div`
 `;
 
 const Image = styled.img`
-  height: 50%;
+  height: 100%;
   padding: 10px 0;
   width: 500px;
   @media (max-width: 650px) {
