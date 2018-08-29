@@ -252,7 +252,7 @@ const ImgContainer = styled.div`
 `;
 
 const Image = styled.img`
-  height: 25%;
+  height: 100%;
   padding: 10px 0;
   width: ${props => (props.width ? `${props.width}px` : '300px')};
   @media (max-width: 650px) {
