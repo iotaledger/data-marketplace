@@ -10,6 +10,22 @@ import Limitations from '../components/limitations';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
 
+const contentIntroduction1 = {
+  text: `In this PoC, Sensor owners onboard a new sensor and use a script provided by IOTA to submit sensor data to the Tangle. All data packets are securely stored and each packet is additionally encrypted with strong randomly generated password.
+<br />A price in IOTA Tokens can be defined, at which the data source will be “sold”.
+<br /><br />Data sources are accessible through the main website and referenced through a geomap or a list. These are available after approval from IOTA team.
+<br />Visitors of the website can select data sources and access the data sets directly from the browser after purchasing the sensor data.`,
+};
+
+const contentIntroduction2 = {
+  text: `Data sources can be paid in IOTA Tokens.
+<br />In this PoC a new user’s wallet is generated for every new user and filled up with 10,000,000 virtual IOTA tokens which can then be used to acquire data. Virtual Tokens can not be transferred to a different wallet or exchanged to any other virtual or fiat currency.
+<br /><br />When purchase request is started, user’s web browser runs an algorithm called Proof-of-Work to contribute to Tangle integrity. Once completed, the transaction is submitted to the IOTA ledger.
+<br />After the purchase is verified, IOTA tokens are transferred from the user’s wallet to a sensor owner’s wallet and a new balance is updated.
+<br />The payment is verified and data is then streamed from the Tangle using the Masked Authenticated Messaging (MAM) to emit and secure the data stream.
+<br /><br />The PoC runs on a Devnet and therefore is only a simulation using virtual IOTA token with no real value.`,
+};
+
 const content1 = {
   id: 'devnet',
   img: '/static/icons/proof_of_concept/icon-1.svg',
@@ -181,6 +197,7 @@ export default class extends React.Component {
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
+        <Content content={contentIntroduction1} />
         <ImgContainer>
           <Image
             width={400}
@@ -188,6 +205,7 @@ export default class extends React.Component {
             alt="Proof of Concept Illustration"
           />
         </ImgContainer>
+        <Content content={contentIntroduction2} />
         <Content content={content1} anchor={anchor} />
         <Content content={content2} anchor={anchor} />
         <Shape3 src="/static/shapes/proof_of_concept/shape-5.svg" alt="Background shape" />
