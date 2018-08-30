@@ -87,7 +87,7 @@ export default class extends React.Component {
         </Heading>
         <CardsList>
           {filtered.filter(dev => !dev.inactive).map(device => CardModule(device, this.toggle))}
-          {filtered.filter(dev => dev.inactive).map(device => CardModule(device, this.toggle))}
+          {filtered.filter(dev => dev.inactive).sort((a, b) => b.createTime > a.createTime).map(device => CardModule(device, this.toggle))}
         </CardsList>
       </Main>
     );

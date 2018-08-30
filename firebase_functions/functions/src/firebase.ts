@@ -93,6 +93,7 @@ exports.getDevices = async () => {
   return querySnapshot.docs.map(doc => {
     if (doc.exists) {
       const result = doc.data();
+      result.createTime = doc.createTime;
       delete result.sk;
       return result;
     } else {
