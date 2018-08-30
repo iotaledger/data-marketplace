@@ -9,13 +9,13 @@ import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
 
 const content1 = {
-  text: `IOTA is a not-for-profit Foundation developing the Tangle, a new opensource permissionless Distributed Ledger Technology fit for the IoT / M2M economy. As such, IOTA seeks to enable a large spectrum of innovation across multiple industries and geographies so as to catalyse the adoption of the IOTA Tangle in to the Backbone for the Internet of (every)Things.`,
+  text: `IOTA is a not-for-profit Foundation developing the Tangle, a new opensource permissionless Distributed Ledger Technology fit for the IoT / M2M economy. As such, IOTA seeks to enable a large spectrum of innovation across multiple industries and geographies in order to catalyse the adoption of the IOTA Tangle as the Backbone for the Internet of (every)Things.`,
 };
 
 const content2 = {
   id: 'open-innovation-ecosystem',
   title: 'A growing open innovation ecosystem',
-  text: `The Data Marketplace PoC is used to demystify IOTA via a  very simple experiment. Activities were driven via webinars and two workshops taking place in Oslo (Trusted IoT) and Berlin (Personal Data). Participants to the initiative are also joining a growing ecosystem of corporate institutions and not-for-profit organisations interested in exploring together the potential of IOTA.`,
+  text: `The Data Marketplace PoC is used to demystify IOTA via a very simple experiment. Webinars and workshops took place in Oslo (Trusted IoT) and Berlin (Personal Data) to catalyze co-creation between participants. IOTA is thereby growing an ecosystem of corporations, institutions, and not-for-profit organisations interested in exploring together the potential of IOTA.`,
 };
 
 const content3 = {
