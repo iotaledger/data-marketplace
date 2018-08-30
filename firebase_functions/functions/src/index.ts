@@ -161,6 +161,13 @@ exports.grandfather = functions.https.onRequest((req, res) => {
 exports.getDevices = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     try {
+      const packet = req.body;
+      if (packet && packet.page === 'whitelist') {
+        if (packet.email.indexOf('iota.org') !== -1) {
+          return res.json(await getDevices());
+        }
+        return res.status(403).json({ error: 'Not authorized' });
+      }
       return res.json(await getDevices());
     } catch (e) {
       console.log('getDevices failed. Error: ', e.message);

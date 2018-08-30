@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase/app';
+import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom';
 import { allDevices } from '../utils/firebase';
 import api from '../utils/api';
@@ -8,7 +9,7 @@ import api from '../utils/api';
 export default class extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { devices: [], filtered: [], search: '' };
+    this.state = { devices: [], filtered: [], search: '', forceRedirect: false };
 
     this.change = this.change.bind(this);
     this.checkUser = this.checkUser.bind(this);
@@ -22,13 +23,14 @@ export default class extends React.Component {
 
   checkUser() {
     firebase.auth().onAuthStateChanged(async user => {
-      if (user.email.substr('iota.org')) {
+      if (user && user.email) {
         // User is signed in.
-        const devices = await allDevices(firebase);
+        const devices = await allDevices(user.email, 'whitelist');
         this.setState({ devices, filtered: devices });
       } else {
-        // User is signed out.
-        console.log('Logged Out');
+        this.setState(() => ({
+          forceRedirect: true
+        }))
       }
     });
   };
@@ -70,7 +72,12 @@ export default class extends React.Component {
   };
 
   render() {
-    const { search, filtered } = this.state;
+    const { search, filtered, forceRedirect } = this.state;
+
+    if (forceRedirect) {
+      return <Redirect to='/' />
+    }
+
     return (
       <Main>
         <Heading>
