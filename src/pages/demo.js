@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import firebase from 'firebase/app';
 import BurgerMenu from '../components//header/burger';
 import MiniHeader from '../components/header/mini-header';
 import SensorList from '../components/sensor-list';
@@ -42,7 +41,7 @@ export default class extends React.Component {
   }
 
   async componentDidMount() {
-    const devices = await allDevices(firebase);
+    const devices = await allDevices();
     this.setState({ devices, loading: false });
   }
 
