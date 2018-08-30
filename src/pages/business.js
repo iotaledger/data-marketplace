@@ -154,16 +154,14 @@ const Container = styled.div`
     background-image: url(/static/shapes/business/shape-header-hero.svg);
     background-repeat: no-repeat;
     background-size: 625px 364px;
+    background-position-y: 10px;
     display: flex;
     flex-direction: column;
   }
 
   @media (max-width: 550px) {
-    background-size: 457px 350px;
-  }
-
-  @media (max-width: 400px) {
     background-size: 457px 400px;
+    background-position-y: 0;
   }
 `;
 
@@ -195,9 +193,6 @@ const Info = styled.div`
     margin-left: 120px;
   }
   @media (max-width: 550px) {
-    margin-left: 40px;
-  }
-  @media (max-width: 400px) {
     margin-left: 40px;
     padding-top: 40px;
   }
