@@ -28,7 +28,7 @@ export default props => (
             </A>
           </LinksInnerWrapper>
           <Nav>
-            <Copy>© 2017 IOTA Foundation. All rights reserved.</Copy>
+            <Copy>© 2018 IOTA Foundation. All rights reserved.</Copy>
           </Nav>
         </LinksOuterWrapper>
         <Wrapper>
