@@ -112,11 +112,15 @@ class Form extends React.Component {
       website,
       company,
       acceptedDisclaimer,
+      category,
+      industry,
+      newsletter,
+      comments,
     } = this.state;
 
     if (loading) return;
 
-    if (!acceptedDisclaimer || !name || !email || !country || !website || !company) {
+    if (!acceptedDisclaimer || !name || !email || !country || !company) {
       return this.setState({ error: 'Please fill out all fields' });
     }
 
@@ -125,7 +129,21 @@ class Form extends React.Component {
     }
 
     this.setState({ loading: true }, async () => {
-      await api('sendEmail', this.state);
+      const packet = {
+        captcha,
+        name,
+        email,
+        country,
+        website,
+        company,
+        acceptedDisclaimer,
+        category,
+        industry,
+        newsletter,
+        comments,
+      };
+
+      await api('sendEmail', packet);
       this.setState({ success: true });
     });
   }
@@ -182,7 +200,7 @@ class Form extends React.Component {
                 />
                 <I
                   type="text"
-                  placeholder="Company Website *"
+                  placeholder="Company Website"
                   value={website}
                   name="website"
                   onChange={this.handleInputChange}
@@ -242,7 +260,7 @@ class Form extends React.Component {
                 <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
               </RecaptchaContainer>
               {captcha && !loading && <Button type={'submit'}>Submit</Button>}
-              {loading && <Button>Sending</Button>}
+              {loading && <Error>Sending</Error>}
             </ControllWrapper>
           </F>
         ) : (
