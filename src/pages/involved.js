@@ -277,7 +277,7 @@ const Container = styled.div`
     flex-direction: column;
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     background-size: 584px 450px;
     margin-bottom: 20px;
   }
@@ -314,8 +314,9 @@ const Info = styled.div`
     width: 85%;
     padding: 30px 0 0;
   }
-  @media (max-width: 400px) {
-    padding-top: 55px;
+  @media (max-width: 430px) {
+    padding-top: 65px;
+    margin-left: 35px;
   }
 `;
 

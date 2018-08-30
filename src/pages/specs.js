@@ -277,15 +277,17 @@ const Container = styled.div`
     background-image: url(/static/shapes/proof_of_concept/shape-header-hero.svg);
     background-repeat: no-repeat;
     background-size: 566px 422px;
+    background-position-y: 30px;
     display: flex;
     flex-direction: column;
   }
 
   @media (max-width: 560px) {
     background-position-x: -25px;
+    background-position-y: 20px;
   }
 
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     background-position-x: -25px;
     background-position-y: 40px;
     padding-bottom: 45px;
@@ -324,17 +326,17 @@ const Info = styled.div`
     max-width: 400px;
   }
   @media (max-width: 660px) {
-    padding: 3px 0 35px;
+    padding: 30px 0 35px;
     margin-left: 99px;
     width: auto;
   }
   @media (max-width: 560px) {
-    padding: 24px 0 35px;
-    margin-left: 60px;
-    width: 245px;
+    padding: 30px 0 35px;
+    margin-left: 63px;
   }
-  @media (max-width: 400px) {
+  @media (max-width: 420px) {
     padding: 63px 0 0;
+    max-width: 305px;
   }
 `;
 
@@ -365,7 +367,7 @@ const SubLink = styled.p`
     margin: 15px 0;
   }
 
-  @media (max-width: 560px) {
+  @media (max-width: 420px) {
     margin: 8px 0;
   }
 `;
