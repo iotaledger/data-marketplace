@@ -369,7 +369,8 @@ exports.sendEmail = functions.https.onRequest((req, res) => {
       !packet.name ||
       !packet.company ||
       !packet.email ||
-      !packet.body ||
+      !packet.country ||
+      !packet.acceptedDisclaimer ||
       !packet.captcha
     ) {
       console.log('sendEmail failed. Packet: ', packet);
