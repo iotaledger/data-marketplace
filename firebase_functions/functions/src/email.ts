@@ -26,16 +26,31 @@ const mailgunSendEmail = packet => {
       'h:Reply-To': packet.email,
       subject: 'Marketplace Form Inquiry',
       html: `<div>
-          <p><strong>Name:</strong></p><p>${packet.name}</p>
+          <p><strong>Name: </strong>   ${packet.name}</p>
         </div>
         <div>
-          <p><strong>Company:</strong></p><p>${packet.company}</p>
+          <p><strong>Email: </strong>   ${packet.email}</p>
         </div>
         <div>
-          <p><strong>Email:</strong></p><p>${packet.email}</p>
+          <p><strong>Company: </strong>   ${packet.company}</p>
         </div>
         <div>
-          <p><strong>Message:</strong></p><p>${packet.body}</p>
+          <p><strong>Company Website: </strong>   ${packet.website}</p>
+        </div>
+        <div>
+          <p><strong>Country: </strong>   ${packet.country}</p>
+        </div>
+        <div>
+          <p><strong>Industry: </strong>   ${packet.industry}</p>
+        </div>
+        <div>
+          <p><strong>Category: </strong>   ${packet.category}</p>
+        </div>
+        <div>
+          <p><strong>Message:</strong></p><p>${packet.comments}</p>
+        </div>
+        <div>
+          <p><strong>Newsletter: </strong>   ${packet.newsletter}</p>
         </div>`,
     },
     (error, body) => {
@@ -45,21 +60,23 @@ const mailgunSendEmail = packet => {
     }
   );
 
-  const list = mg.lists(emailList);
-  const user = {
-    subscribed: true,
-    address: packet.email,
-    name: packet.name,
-    vars: {
-      company: packet.company,
-    },
-  };
+  if (packet.newsletter.toString() === 'true') {
+    const list = mg.lists(emailList);
+    const user = {
+      subscribed: true,
+      address: packet.email,
+      name: packet.name,
+      vars: {
+        company: packet.company,
+      },
+    };
 
-  list.members().create(user, (error, data) => {
-    if (error) {
-      console.log('Email members callback error', error);
-    }
-  });
+    list.members().create(user, (error, data) => {
+      if (error) {
+        console.log('Email members callback error', error);
+      }
+    });
+  }
 
   mg.messages().send(
     {
