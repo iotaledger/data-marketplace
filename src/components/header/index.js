@@ -19,7 +19,7 @@ export default ({ onAnchorClick }) => (
           <Button type="button">About the Marketplace</Button>
         </a>
         <Link to={'/#about'} onClick={() => onAnchorClick('about')}>
-          <SubLink>{'About Data Marketplace'.toUpperCase()}</SubLink>
+          <SubLink>{'About the initiative'.toUpperCase()}</SubLink>
         </Link>
         <Link to={'/#participants'} onClick={() => onAnchorClick('participants')}>
           <SubLink>{'Participants'.toUpperCase()}</SubLink>
