@@ -11,7 +11,7 @@ import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
 
 const contentIntroduction1 = {
-  text: `In this PoC, Sensor owners onboard a new sensor and use a script provided by IOTA to submit sensor data to the Tangle. All data packets are securely stored and each packet is additionally encrypted with strong randomly generated password.
+  text: `In this PoC, sensor owners onboard a new sensor and use a script provided by IOTA to submit sensor data to the Tangle. All data packets are securely stored and each packet is additionally encrypted with strong randomly generated password.
 <br />A price in IOTA Tokens can be defined, at which the data source will be “sold”.
 <br /><br />Data sources are accessible through the main website and referenced through a geomap or a list. These are available after approval from IOTA team.
 <br />Visitors of the website can select data sources and access the data sets directly from the browser after purchasing the sensor data.`,

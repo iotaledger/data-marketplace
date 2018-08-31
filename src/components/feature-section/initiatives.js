@@ -59,7 +59,7 @@ export default props => (
         imageSrc="/static/icons/business/icon-8.svg"
         imageAlt="Hackathons"
         heading="Hackathons"
-        text="IOTA participated to two hackathons where the Data Marketplace was used as basis/starting point"
+        text="IOTA participated in two hackathons where the Data Marketplace was used as basis/starting point"
         link="https://blog.iota.org/blockchaingers-2018-boosting-co-creation-with-iota-8086c215caad"
       />
       <Card

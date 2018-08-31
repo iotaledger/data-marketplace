@@ -48,7 +48,7 @@ const characteristics = [
 
 const examples = [
   '“We are a Blockchain Innovation Cluster and would like to train prospective participants with IOTA before the launch of the challenge.”',
-  '“My organisation is a leading player in our region and would like host a physical hub so that participants meet face to face during the event”',
+  '“My organisation is a leading player in our region and would like to host a physical hub so that participants meet face to face during the event”',
   '“Can my organisation provide sponsorship for a theme / Problem to be solved?”',
   '“Can we incentivize participants to use our IoT and connected devices as part of their solutions?”',
   '“We would like to provide exposure to the event via our Media or events”',
