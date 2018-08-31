@@ -6,7 +6,6 @@ import MiniHeader from '../components/header/mini-header';
 import Content from '../components/content';
 import List from '../components/content/list';
 import Sensors from '../components/example-sensors';
-import Limitations from '../components/limitations';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
 
@@ -119,6 +118,15 @@ const content11 = {
   text: `As of August 2018, the code developed during the initiative is opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in <a href="https://discord.gg/BFPFD33">Discord</a> is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
 };
 
+const limitations = [
+  'Maximum size of a single data packet is limited to 1kb',
+  'Google Mail or Google Business account required in order to onboard a new sensor',
+  'Number of sensors per account is limited, but can be adjusted upon request',
+  'New sensors require manual approval from IOTA team in order to be visible in the list/sensor map',
+  'Virtual payments, no real tokens can be sent or received. No transfer to a different wallet possible',
+  'No tokens to fiat currency exchange',
+];
+
 const workInProgress = [
   'Custom wallet configuration',
   'Migration over to Mainnet, real wallets and payments',
@@ -228,7 +236,12 @@ export default class extends React.Component {
         </ImgContainer>
         <Content content={content8} />
         <Sensors content={content9} anchor={anchor} />
-        <Limitations />
+        <List
+          items={limitations}
+          id="limitations"
+          title="Limitations of the current version"
+          anchor={anchor}
+        />
         <ContentOuterWrapper>
           <ContentInnerWrapper>
             <Content content={content10} />
