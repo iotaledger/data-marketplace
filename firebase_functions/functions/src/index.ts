@@ -417,7 +417,7 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const wallet = await initWallet();
+      const wallet = await initWallet(packet.userId);
       return res.json({ success: await setWallet(packet.userId, wallet) });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);
