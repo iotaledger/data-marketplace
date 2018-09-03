@@ -3,6 +3,7 @@ logs
 *.log
 .firebaserc0
 email_config.json
+wallet_config.json
 
 # Compiled binary addons
 build/Release
