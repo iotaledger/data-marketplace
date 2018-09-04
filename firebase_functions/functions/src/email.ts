@@ -1,24 +1,19 @@
 const axios = require('axios');
-const {
-  apiKey,
-  googleSecretKey,
-  domain,
-  emailRecepient,
-  emailReplyTo,
-  emailSender,
-  emailList,
-} = require('../email_config.json');
-const mg = require('mailgun-js')({ apiKey, domain });
+const { getEmailSettings } = require('./firebase');
 
-const checkRecaptcha = async captcha => {
+const checkRecaptcha = async (captcha, emailSettings) => {
   const response = await axios({
     method: 'post',
-    url: `https://www.google.com/recaptcha/api/siteverify?secret=${googleSecretKey}&response=${captcha}`,
+    url: `https://www.google.com/recaptcha/api/siteverify?secret=${emailSettings.googleSecretKey}&response=${captcha}`,
   });
   return response ? response.data : null;
 };
 
-const mailgunSendEmail = packet => {
+const mailgunSendEmail = (packet, emailSettings) => {
+  const {
+    apiKey, domain, emailRecepient, emailReplyTo, emailSender, emailList,
+  } = emailSettings;
+  const mg = require('mailgun-js')({ apiKey, domain });
   mg.messages().send(
     {
       from: `Data Market <${emailSender}>`,
@@ -116,6 +111,7 @@ const mailgunSendEmail = packet => {
 };
 
 exports.sendEmail = async (packet: any) => {
+  const emailSettings = await getEmailSettings();
   // Check Recaptcha
   const recaptcha = await checkRecaptcha(packet.captcha);
   if (!recaptcha || !recaptcha.success) {
@@ -124,6 +120,6 @@ exports.sendEmail = async (packet: any) => {
   }
 
   // Send message
-  mailgunSendEmail(packet);
+  mailgunSendEmail(packet, emailSettings);
   return true;
 };
