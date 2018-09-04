@@ -265,15 +265,9 @@ exports.setupUser = functions.auth.user().onCreate(event => {
       // Try saving
       try {
         const apiKey = generateUUID();
-        const seed = seedGen();
         const numberOfDevices = (await getNumberOfDevices()) || 5;
 
-        await setUser(user.uid, {
-          apiKey,
-          seed,
-          numberOfDevices,
-        });
-
+        await setUser(user.uid, { apiKey, numberOfDevices });
         await setApiKey(apiKey, user.uid);
 
         console.log('setupUser resolved for UID', user.uid);
