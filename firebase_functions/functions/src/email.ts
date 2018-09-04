@@ -114,7 +114,7 @@ const mailgunSendEmail = (packet, emailSettings) => {
 exports.sendEmail = async (packet: any) => {
   const emailSettings = await getEmailSettings();
   // Check Recaptcha
-  const recaptcha = await checkRecaptcha(packet.captcha);
+  const recaptcha = await checkRecaptcha(packet.captcha, emailSettings);
   if (!recaptcha || !recaptcha.success) {
     console.log('sendEmail failed. Recaptcha is incorrect. ', recaptcha['error-codes']);
     return 'Malformed Request';
