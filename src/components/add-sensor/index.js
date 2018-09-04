@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { generateDeviceAddress } from '../../utils/iota';
 import Card from '../card';
 import Loading from '../loading';
 
@@ -31,7 +30,6 @@ export default class extends React.Component {
     this.remove = this.remove.bind(this);
     this.change = this.change.bind(this);
     this.changeRow = this.changeRow.bind(this);
-    this.generateDeviceAddressCallback = this.generateDeviceAddressCallback.bind(this);
     this.submit = this.submit.bind(this);
   }
 
@@ -66,7 +64,18 @@ export default class extends React.Component {
     this.setState({ dataTypes });
   };
 
-  async generateDeviceAddressCallback(deviceAddress) {
+  async submit() {
+    if (!this.state.deviceID) return alert('Please enter a device ID. eg. company-32');
+    if (!this.state.deviceType)
+      return alert('Specify type of device. eg. Weather station or Wind Vein');
+    if (!this.state.city || !this.state.country) return alert('Enter city or country');
+    if (!this.state.deviceLat || !this.state.deviceLon)
+      return alert('Please enter a device coordinates');
+    if (!this.state.dataTypes || this.state.dataTypes.length < 1)
+      return alert('You must have a valid data field');
+
+    this.setState({ loading: true });
+
     const device = {
       location: {
         city: this.state.city,
@@ -79,7 +88,6 @@ export default class extends React.Component {
       lon: parseFloat(this.state.deviceLon),
       company: this.state.company,
       price: this.state.devicePrice,
-      address: deviceAddress,
     };
 
     const createDevive = await this.props.create(device);
@@ -103,20 +111,6 @@ export default class extends React.Component {
       devicePrice: '',
       dataTypes: [{ id: '', name: '', unit: '' }],
     });
-  };
-
-  async submit() {
-    if (!this.state.deviceID) return alert('Please enter a device ID. eg. company-32');
-    if (!this.state.deviceType)
-      return alert('Specify type of device. eg. Weather station or Wind Vein');
-    if (!this.state.city || !this.state.country) return alert('Enter city or country');
-    if (!this.state.deviceLat || !this.state.deviceLon)
-      return alert('Please enter a device coordinates');
-    if (!this.state.dataTypes || this.state.dataTypes.length < 1)
-      return alert('You must have a valid data field');
-
-    this.setState({ loading: true });
-    generateDeviceAddress(this.generateDeviceAddressCallback);
   };
 
   render() {

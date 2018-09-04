@@ -149,20 +149,20 @@ exports.setUser = async (uid: string, obj: any) => {
   return true;
 };
 
-exports.setDevice = async (deviceId: string, sk: string, device: any) => {
+exports.setDevice = async (deviceId: string, sk: string, address: string, seed: string, device: any) => {
   // Save users API key and Seed
   await admin
     .firestore()
     .collection('deviceList')
     .doc(deviceId)
-    .set({ sk });
+    .set({ sk, seed });
 
   // Add public device record
   await admin
     .firestore()
     .collection('devices')
     .doc(deviceId)
-    .set(device);
+    .set({ ...device, address });
 
   // Add device to owners' purchases
   await admin

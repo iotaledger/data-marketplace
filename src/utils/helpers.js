@@ -21,17 +21,3 @@ export const reducer = amount => {
     return num + 'Ti';
   }
 };
-
-export const generateSeed = length => {
-  if (window.crypto && window.crypto.getRandomValues) {
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
-    let result = '';
-    let values = new Uint32Array(length);
-    window.crypto.getRandomValues(values);
-    values.forEach(value => (result += charset[value % charset.length]));
-    return result;
-  } else {
-    console.error('generateSeed error');
-    throw new Error("Your browser is outdated and can't generate secure random numbers");
-  }
-};
