@@ -93,6 +93,7 @@ exports.getDevices = async () => {
   return querySnapshot.docs.map(doc => {
     if (doc.exists) {
       const result = doc.data();
+      result.createTime = doc.createTime;
       delete result.sk;
       return result;
     } else {
@@ -148,20 +149,20 @@ exports.setUser = async (uid: string, obj: any) => {
   return true;
 };
 
-exports.setDevice = async (deviceId: string, sk: string, device: any) => {
+exports.setDevice = async (deviceId: string, sk: string, address: string, seed: string, device: any) => {
   // Save users API key and Seed
   await admin
     .firestore()
     .collection('deviceList')
     .doc(deviceId)
-    .set({ sk });
+    .set({ sk, seed });
 
   // Add public device record
   await admin
     .firestore()
     .collection('devices')
     .doc(deviceId)
-    .set(device);
+    .set({ ...device, address });
 
   // Add device to owners' purchases
   await admin
@@ -284,7 +285,6 @@ exports.getUser = async (userId: string) => {
 };
 
 exports.getNumberOfDevices = async () => {
-  // Get API key
   const doc = await admin
     .firestore()
     .collection('settings')
@@ -345,4 +345,59 @@ exports.updateBalance = async (uid: string, balance: any) => {
     .doc(uid)
     .set({ wallet: { balance } }, { merge: true });
   return true;
+};
+
+exports.getWalletSeed = async () => {
+  const doc = await admin
+    .firestore()
+    .collection('settings')
+    .doc('settings')
+    .get();
+  if (doc.exists) {
+    const data = doc.data();
+    if (data.wallet && data.wallet.seed) {
+      return data.wallet.seed;
+    }
+  }
+  console.log('getWalletSeed failed. Setting does not exist', doc);
+  throw Error(`The getWalletSeed setting doesn't exist.`);
+};
+
+exports.getDefaultBalance = async () => {
+  const doc = await admin
+    .firestore()
+    .collection('settings')
+    .doc('settings')
+    .get();
+  if (doc.exists) {
+    const data = doc.data();
+    if (data.wallet && data.wallet.defaultBalance) {
+      return data.wallet.defaultBalance;
+    }
+  }
+  console.log('getDefaultBalance failed. Setting does not exist', doc);
+  throw Error(`The getDefaultBalance setting doesn't exist.`);
+};
+
+exports.updateWalletAddress = async (address: string) => {
+  await admin
+    .firestore()
+    .collection('settings')
+    .doc('settings')
+    .set({ wallet: { address } }, { merge: true });
+  return true;
+};
+
+exports.getEmailSettings = async () => {
+  const doc = await admin
+    .firestore()
+    .collection('settings')
+    .doc('settings')
+    .get();
+  if (doc.exists) {
+    const data = doc.data();
+    return data.email || null;
+  }
+  console.log('getEmailSettings failed. Setting does not exist', doc);
+  throw Error(`The getEmailSettings setting doesn't exist.`);
 };

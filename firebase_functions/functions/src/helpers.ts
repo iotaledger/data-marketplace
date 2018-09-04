@@ -1,8 +1,23 @@
 import * as crypto from 'crypto';
+const iotaCore = require('@iota/core');
+const IOTA = require('iota.lib.js');
 const axios = require('axios');
-const { provider, iotaApiVersion, walletSeed } = require('../config.json');
+const { provider, iotaApiVersion } = require('../config.json');
+const { getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
 
-exports.generateUUID = () => {
+const generateSeed = (length = 81) => {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
+  let seed = '';
+  while (seed.length < length) {
+    const byte = crypto.randomBytes(1)
+    if (byte[0] < 243) {
+      seed += charset.charAt(byte[0] % 27);
+    }
+  }
+  return seed;
+};
+
+const generateUUID = () => {
   let d = new Date().getTime();
   const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (d + Math.random() * 16) % 16 | 0;
@@ -12,17 +27,11 @@ exports.generateUUID = () => {
   return uuid;
 };
 
-exports.seedGen = (length = 81) => {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
-  const values = crypto.randomBytes(length).toString('hex');
-  let result = '';
-  Array(length)
-    .fill('')
-    .map((_, i) => (result += charset[values.charCodeAt(i) % charset.length]));
-  return result;
+const generateAddress = seed => {
+  return iotaCore.generateAddress(seed, 0, 2);
 };
 
-exports.sanatiseObject = (device: any) => {
+const sanatiseObject = (device: any) => {
   if (!device.sensorId) return 'Please enter a device ID. eg. company-32';
   if (!device.type) return 'Specify type of device. eg. Weather station or Wind Vein';
   if (!device.location || !device.location.city || !device.location.country)
@@ -30,12 +39,10 @@ exports.sanatiseObject = (device: any) => {
   if (!device.lat || !device.lon) return 'Please enter a device coordinates';
   if (!device.dataTypes || device.dataTypes.length < 1) return 'You must have a valid data fields';
   if (!device.owner) return 'You must specify an owner';
-  if (!device.address) return 'You must specify an address';
-  if (!device.price) return 'You must specify a price';
   return false;
 };
 
-exports.findTx = (hashes, IOTA) => {
+const findTx = (hashes, iota) => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'POST',
@@ -50,7 +57,7 @@ exports.findTx = (hashes, IOTA) => {
       },
     })
       .then(response => {
-        const txBundle = response.data.trytes.map(trytes => IOTA.utils.transactionObject(trytes));
+        const txBundle = response.data.trytes.map(trytes => iota.utils.transactionObject(trytes));
         console.log('txBundle', txBundle);
         resolve(txBundle);
       })
@@ -62,7 +69,52 @@ exports.findTx = (hashes, IOTA) => {
   });
 };
 
-exports.initWallet = async () => {
-  const response = await axios(walletSeed);
-  return response.data;
+const transferFunds = async (seed, address, value) => {
+  try {
+    const iota = new IOTA({ provider });
+    const promise = new Promise((resolve, reject) => {
+      // Depth or how far to go for tip selection entry point
+      const depth = 3
+
+      // Difficulty of Proof-of-Work required to attach transaction to tangle.
+      // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
+      const minWeightMagnitude = 9
+
+      const transfers = [{ address: iota.utils.addChecksum(address), value }];
+
+      iota.api.sendTransfer(seed, depth, minWeightMagnitude, transfers, (error, transactions) => {
+        if (error !== null) {
+          console.error('transferFunds error', error);
+          reject(error);
+        } else {
+          const newWalletAddress = transactions[transactions.length - 1].address;
+          updateWalletAddress(newWalletAddress);
+          resolve(transactions);
+        }
+      });
+    });
+    return promise;
+  } catch (error) {
+    console.error('transferFunds error', error);
+    return error
+  }
+}
+
+const initWallet = async () => {
+  const seed = generateSeed();
+  const address = generateAddress(seed);
+  const iotaWalletSeed = await getWalletSeed();
+  const balance = await getDefaultBalance();
+  const response = await transferFunds(iotaWalletSeed, address, balance);
+  return { address, balance, seed };
 };
+
+module.exports = {
+  generateUUID,
+  generateAddress,
+  generateSeed,
+  sanatiseObject,
+  findTx,
+  transferFunds,
+  initWallet,
+}

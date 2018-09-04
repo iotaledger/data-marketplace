@@ -29,7 +29,14 @@ const {
   updateBalance,
 } = require('./firebase');
 const { sendEmail } = require('./email');
-const { generateUUID, seedGen, sanatiseObject, findTx, initWallet } = require('./helpers');
+const {
+  generateUUID,
+  generateSeed,
+  generateAddress,
+  sanatiseObject,
+  findTx,
+  initWallet
+} = require('./helpers');
 
 // Take in data from device
 exports.newData = functions.https.onRequest((req, res) => {
@@ -73,14 +80,16 @@ exports.newDevice = functions.https.onRequest((req, res) => {
 
     try {
       const invalid = sanatiseObject(packet.device);
-      const secretKey = seedGen(15);
+      const secretKey = generateSeed(15);
+      const seed = generateSeed();
+      const address = generateAddress(seed);
       if (invalid) throw Error(invalid);
 
       const key = await getKey(<String>packet.apiKey);
       const userDevices = await getUserDevices(key.uid);
       if (userDevices.length <= 4) {
         return res.json({
-          success: await setDevice(packet.id, secretKey, packet.device),
+          success: await setDevice(packet.id, secretKey, address, seed, packet.device),
         });
       } else {
         console.log('newDevice failed. You have too many devices', userDevices.length);
@@ -161,6 +170,13 @@ exports.grandfather = functions.https.onRequest((req, res) => {
 exports.getDevices = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     try {
+      const packet = req.body;
+      if (packet && packet.page === 'whitelist') {
+        if (packet.email.indexOf('iota.org') !== -1) {
+          return res.json(await getDevices());
+        }
+        return res.status(403).json({ error: 'Not authorized' });
+      }
       return res.json(await getDevices());
     } catch (e) {
       console.log('getDevices failed. Error: ', e.message);
@@ -258,15 +274,9 @@ exports.setupUser = functions.auth.user().onCreate(event => {
       // Try saving
       try {
         const apiKey = generateUUID();
-        const seed = seedGen();
         const numberOfDevices = (await getNumberOfDevices()) || 5;
 
-        await setUser(user.uid, {
-          apiKey,
-          seed,
-          numberOfDevices,
-        });
-
+        await setUser(user.uid, { apiKey, numberOfDevices });
         await setApiKey(apiKey, user.uid);
 
         console.log('setupUser resolved for UID', user.uid);
@@ -369,7 +379,8 @@ exports.sendEmail = functions.https.onRequest((req, res) => {
       !packet.name ||
       !packet.company ||
       !packet.email ||
-      !packet.body ||
+      !packet.country ||
+      !packet.acceptedDisclaimer ||
       !packet.captcha
     ) {
       console.log('sendEmail failed. Packet: ', packet);
@@ -438,7 +449,7 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
           return res.json({ success: await updateBalance(packet.userId, newBalance) });
         }
         console.log('updateBalance failed. Not enough funds', packet);
-        return res.json({ error: 'Not enough funds' });
+        return res.json({ error: 'Not enough funds or your new wallet avaiting confirmation. Please try again in 5 min.' });
       }
       console.log('updateBalance failed. Wallet not set', packet);
       return res.json({ error: 'Wallet not set' });

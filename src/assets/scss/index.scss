@@ -174,6 +174,38 @@ button {
   pointer-events: auto;
 }
 
+#main {
+  a {
+    text-decoration: none;
+    color: #009fff;
+
+    &:visited {
+      color: #009fff;
+    }
+  }
+
+  #footer {
+    a {
+      color: #ffffff;
+
+      &:visited {
+        color: #ffffff;
+      }
+    }
+  }
+}
+
+.scroll-to-top {
+  right: -10px;
+  cursor: pointer;
+  z-index: 10;
+
+  img {
+    width: 70%;
+    padding: 10px 0;
+  }
+}
+
 @font-face {
   font-family: 'Nunito Sans';
   src: url('/static/fonts/NunitoSans-ExtraLight.ttf');
@@ -194,3 +226,6 @@ button {
   src: url('/static/fonts/NunitoSans-ExtraBold.ttf');
   font-weight: 800;
 }
+
+@import '~slick-carousel/slick/slick.css';
+@import '~slick-carousel/slick/slick-theme.css';

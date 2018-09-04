@@ -1,0 +1,38 @@
+//
+// Burger menu custom styles
+//
+.bm-burger-button {
+  position: fixed;
+  width: 30px;
+  height: 22px;
+  top: 36px;
+  left: initial;
+  right: 15px;
+  padding: 10px 0;
+  opacity: 0.8;
+}
+
+.bm-burger-bars {
+  background: #373a47;
+}
+
+.bm-morph-shape {
+  fill: #373a47;
+}
+
+.bm-menu {
+  background: #373a47;
+}
+
+#slide {
+  .bm-cross {
+    background: #bdc3c7;
+  }
+
+  .bm-menu {
+    padding: 2.5em 0.4em 0;
+    font-size: 1.15em;
+    width: 88%;
+    float: right;
+  }
+}

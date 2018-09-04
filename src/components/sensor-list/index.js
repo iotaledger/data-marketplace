@@ -13,11 +13,15 @@ export default class extends React.Component {
 
   componentDidMount() {
     this.setState({ devices: this.sort(this.props.devices) });
-  };
+  }
 
   componentWillReceiveProps(nextProps) {
     this.setState({ devices: this.sort(nextProps.devices) });
-  };
+    if (nextProps.anchor) {
+      const target = document.querySelector(`#${nextProps.anchor}`);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
 
   sort(devices) {
     const slides = [];
@@ -30,7 +34,7 @@ export default class extends React.Component {
       slides[count].push(device);
     });
     return slides;
-  };
+  }
 
   shift(direction) {
     if (direction === 'right') {
@@ -38,12 +42,12 @@ export default class extends React.Component {
     } else {
       this.setState({ slideIndex: this.state.slideIndex - 1 });
     }
-  };
+  }
 
   render() {
     const { devices, slideIndex } = this.state;
     return (
-      <Section>
+      <Section id="list">
         <Header>
           <Heading>Marketplace Sensors</Heading>
           <Tagline>Click below to view and purchase sensor data stream</Tagline>
@@ -55,8 +59,7 @@ export default class extends React.Component {
                 <Card
                   data-component="SensorCard"
                   key={`sensor-${index}`}
-                  to={`/sensor/${item.sensorId}`}
-                >
+                  to={`/sensor/${item.sensorId}`}>
                   <CardHeader>
                     <SensorType>{item.type}</SensorType>
                     <SensorId>
@@ -106,12 +109,10 @@ export default class extends React.Component {
           </Button>
           <Button
             type="button"
-            onClick={() => slideIndex < Object.keys(devices).length - 1 && this.shift('right')}
-          >
+            onClick={() => slideIndex < Object.keys(devices).length - 1 && this.shift('right')}>
             <Arrow
               style={{ transform: 'rotate(180deg)' }}
-              active={slideIndex < Object.keys(devices).length - 1}
-            >
+              active={slideIndex < Object.keys(devices).length - 1}>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14">
                 <polygon
                   fill="#CEDBE2"
