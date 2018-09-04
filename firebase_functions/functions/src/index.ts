@@ -417,7 +417,7 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const wallet = await initWallet(packet.userId);
+      const wallet = await initWallet();
       return res.json({ success: await setWallet(packet.userId, wallet) });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);
@@ -446,7 +446,7 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
           return res.json({ success: await updateBalance(packet.userId, newBalance) });
         }
         console.log('updateBalance failed. Not enough funds', packet);
-        return res.json({ error: 'Not enough funds' });
+        return res.json({ error: 'Not enough funds or your new wallet avaiting confirmation. Please try again in 5 min.' });
       }
       console.log('updateBalance failed. Wallet not set', packet);
       return res.json({ error: 'Wallet not set' });
