@@ -38,8 +38,8 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor && nextProps.anchor === 'map') {
-      const target = document.querySelector('#map');
+    if (nextProps.anchor) {
+      const target = document.querySelector(`#${nextProps.anchor}`);
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
@@ -59,13 +59,13 @@ class Map extends React.Component {
       },
       mapHeight,
     });
-  };
+  }
 
   updateViewport(viewport) {
     this.setState({
       viewport: { ...this.state.viewport, ...viewport },
     });
-  };
+  }
 
   renderPopup() {
     const { popupInfo } = this.state;
@@ -80,8 +80,7 @@ class Map extends React.Component {
           longitude={Number(popupInfo.lon)}
           latitude={Number(popupInfo.lat)}
           closeOnClick={true}
-          onClose={() => this.setState({ popupInfo: null })}
-        >
+          onClose={() => this.setState({ popupInfo: null })}>
           <SensorCard to={`/sensor/${popupInfo.sensorId}`}>
             <CardHeader>
               <SensorType>
@@ -116,11 +115,11 @@ class Map extends React.Component {
         </Popup>
       )
     );
-  };
+  }
 
   openPopup(device) {
     this.setState({ popupInfo: device });
-  };
+  }
 
   render() {
     const { viewport, mapHeight, popupInfo } = this.state;
@@ -144,8 +143,7 @@ class Map extends React.Component {
           mapStyle={settings.mapboxStyles}
           onViewportChange={this.updateViewport}
           onClick={() => (popupInfo ? this.setState({ popupInfo: null }) : null)}
-          mapboxApiAccessToken={settings.mapboxApiAccessToken}
-        >
+          mapboxApiAccessToken={settings.mapboxApiAccessToken}>
           <div style={{ position: 'absolute', right: 20, top: 10 }}>
             <NavigationControl onViewportChange={this.updateViewport} />
           </div>
@@ -199,10 +197,17 @@ const Header = styled.div`
   justify-contents: center;
   width: 300px;
   position: absolute;
-  z-index: 1100;
+  z-index: 900;
   padding-top: 140px;
   @media (max-width: 760px) {
     padding-top: 50px;
+  }
+  @media (max-width: 520px) {
+    width: 200px;
+  }
+  @media (max-width: 400px) {
+    padding-top: 0;
+    margin-top: -100px;
   }
 `;
 
@@ -242,17 +247,12 @@ const HeaderBg = styled.img`
   position: absolute;
   top: -120px;
   right: 75vw;
-  z-index: 1000;
+  z-index: 800;
   @media (max-width: 1120px) {
     right: 67vw;
   }
   @media (max-width: 760px) {
-    top: -100px;
-    right: 55vw;
     display: none;
-  }
-  @media (max-width: 520px) {
-    right: 35vw;
   }
 `;
 
@@ -260,7 +260,7 @@ const HeaderBgMobile = styled.img`
   position: absolute;
   top: -20px;
   right: 70vw;
-  z-index: 1000;
+  z-index: 800;
   display: none;
   @media (max-width: 1120px) {
     right: 67vw;
@@ -270,11 +270,9 @@ const HeaderBgMobile = styled.img`
     right: 55vw;
     display: block;
   }
-  @media (max-width: 520px) {
-    right: 35vw;
-  }
-  @media (max-width: 370px) {
-    right: 25vw;
+  @media (max-width: 400px) {
+    top: -250px;
+    right: 50vw;
   }
 `;
 
