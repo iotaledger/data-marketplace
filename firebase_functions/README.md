@@ -57,3 +57,8 @@ firebase login
 ```javascript
 firebase deploy
 ```
+
+#### Handling function timeouts
+Default timeout can be changed here https://console.cloud.google.com/functions/list
+After you select your function and then press "Edit" it is located under the "More" drop-down at the bottom of the page. The current max is 540 seconds.
+Read more https://firebase.google.com/docs/functions/manage-functions#set_timeout_and_memory_allocation
