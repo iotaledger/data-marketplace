@@ -2,7 +2,6 @@ import IOTA from 'iota.lib.js';
 import curl from 'curl.lib.js';
 import { provider } from '../config.json';
 import api, { fetchData } from './api';
-import { generateSeed } from './helpers';
 
 export const iota = new IOTA({ provider });
 
@@ -97,14 +96,4 @@ export const getBalance = async address => {
     console.error('getBalance error', error);
     return 0;
   }
-};
-
-export const generateDeviceAddress = callback => {
-  iota.api.getNewAddress(generateSeed(81), {}, (error, address) => {
-    if (error) {
-      console.error('generateDeviceAddress error', error);
-      throw error;
-    }
-    callback(address);
-  });
 };

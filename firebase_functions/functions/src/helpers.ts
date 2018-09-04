@@ -5,7 +5,7 @@ const axios = require('axios');
 const { provider, iotaApiVersion } = require('../config.json');
 const { getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
 
-const generateSeed = (length = 81) => {
+const seedGen = (length = 81) => {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
   let seed = '';
   while (seed.length < length) {
@@ -27,8 +27,12 @@ exports.generateUUID = () => {
   return uuid;
 };
 
-exports.seedGen = (length = 81) => {
-  return generateSeed(length);
+exports.generateSeed = (length = 81) => {
+  return seedGen(length);
+};
+
+exports.generateAddress = seed => {
+  return iotaCore.generateAddress(seed, 0, 2, true);
 };
 
 exports.sanatiseObject = (device: any) => {
@@ -39,8 +43,6 @@ exports.sanatiseObject = (device: any) => {
   if (!device.lat || !device.lon) return 'Please enter a device coordinates';
   if (!device.dataTypes || device.dataTypes.length < 1) return 'You must have a valid data fields';
   if (!device.owner) return 'You must specify an owner';
-  if (!device.address) return 'You must specify an address';
-  if (!device.price) return 'You must specify a price';
   return false;
 };
 
@@ -106,7 +108,7 @@ const fundWallet = async (seed, address, balance) => {
 }
 
 exports.initWallet = async () => {
-  const seed = generateSeed();
+  const seed = seedGen();
   const address = iotaCore.generateAddress(seed, 0, 2, true);
   const iotaWalletSeed = await getWalletSeed();
   const balance = await getDefaultBalance();
