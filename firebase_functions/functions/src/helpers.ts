@@ -5,7 +5,7 @@ const axios = require('axios');
 const { provider, iotaApiVersion } = require('../config.json');
 const { getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
 
-const seedGen = (length = 81) => {
+const generateSeed = (length = 81) => {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
   let seed = '';
   while (seed.length < length) {
@@ -17,7 +17,7 @@ const seedGen = (length = 81) => {
   return seed;
 };
 
-exports.generateUUID = () => {
+const generateUUID = () => {
   let d = new Date().getTime();
   const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (d + Math.random() * 16) % 16 | 0;
@@ -27,15 +27,11 @@ exports.generateUUID = () => {
   return uuid;
 };
 
-exports.generateSeed = (length = 81) => {
-  return seedGen(length);
+const generateAddress = seed => {
+  return iotaCore.generateAddress(seed, 0, 2);
 };
 
-exports.generateAddress = seed => {
-  return iotaCore.generateAddress(seed, 0, 2, true);
-};
-
-exports.sanatiseObject = (device: any) => {
+const sanatiseObject = (device: any) => {
   if (!device.sensorId) return 'Please enter a device ID. eg. company-32';
   if (!device.type) return 'Specify type of device. eg. Weather station or Wind Vein';
   if (!device.location || !device.location.city || !device.location.country)
@@ -46,7 +42,7 @@ exports.sanatiseObject = (device: any) => {
   return false;
 };
 
-exports.findTx = (hashes, iota) => {
+const findTx = (hashes, iota) => {
   return new Promise((resolve, reject) => {
     axios({
       method: 'POST',
@@ -73,7 +69,7 @@ exports.findTx = (hashes, iota) => {
   });
 };
 
-const fundWallet = async (seed, address, balance) => {
+const transferFunds = async (seed, address, value) => {
   try {
     const iota = new IOTA({ provider });
     const promise = new Promise((resolve, reject) => {
@@ -84,34 +80,41 @@ const fundWallet = async (seed, address, balance) => {
       // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
       const minWeightMagnitude = 9
 
-      const transfers = [{
-        address,
-        value: balance
-      }];
+      const transfers = [{ address: iota.utils.addChecksum(address), value }];
 
       iota.api.sendTransfer(seed, depth, minWeightMagnitude, transfers, (error, transactions) => {
         if (error !== null) {
-          console.error('fundWallet error', error);
+          console.error('transferFunds error', error);
           reject(error);
         } else {
           const newWalletAddress = transactions[transactions.length - 1].address;
           updateWalletAddress(newWalletAddress);
-          resolve();
+          resolve(transactions);
         }
       });
     });
     return promise;
   } catch (error) {
-    console.error('fundWallet error', error);
+    console.error('transferFunds error', error);
     return error
   }
 }
 
-exports.initWallet = async () => {
-  const seed = seedGen();
-  const address = iotaCore.generateAddress(seed, 0, 2, true);
+const initWallet = async () => {
+  const seed = generateSeed();
+  const address = generateAddress(seed);
   const iotaWalletSeed = await getWalletSeed();
   const balance = await getDefaultBalance();
-  const response = await fundWallet(iotaWalletSeed, address, balance);
+  const response = await transferFunds(iotaWalletSeed, address, balance);
   return { address, balance, seed };
 };
+
+module.exports = {
+  generateUUID,
+  generateAddress,
+  generateSeed,
+  sanatiseObject,
+  findTx,
+  transferFunds,
+  initWallet,
+}
