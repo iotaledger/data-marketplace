@@ -11,13 +11,14 @@ const checkRecaptcha = async (captcha, emailSettings) => {
 
 const mailgunSendEmail = (packet, emailSettings) => {
   const {
-    apiKey, domain, emailRecepient, emailReplyTo, emailSender, emailList,
+    apiKey, domain, emailRecepient, emailBcc, emailReplyTo, emailSender, emailList,
   } = emailSettings;
   const mg = require('mailgun-js')({ apiKey, domain });
   mg.messages().send(
     {
       from: `Data Market <${emailSender}>`,
       to: emailRecepient,
+      bcc: emailBcc,
       'h:Reply-To': packet.email,
       subject: 'Marketplace Form Inquiry',
       html: `<div>
