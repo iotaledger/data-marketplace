@@ -307,7 +307,24 @@ exports.getSettings = async () => {
     .collection('settings')
     .doc('settings')
     .get();
-  if (doc.exists) return doc.data();
+  if (doc.exists) {
+    const {
+      defaultPrice,
+      domainName,
+      mapboxApiAccessToken,
+      mapboxStyles,
+      recaptchaSiteKey,
+      tangleExplorer
+    } = doc.data();
+    return {
+      defaultPrice,
+      domainName,
+      mapboxApiAccessToken,
+      mapboxStyles,
+      recaptchaSiteKey,
+      tangleExplorer
+    };
+  }
   console.log('getSettings failed. Setting does not exist', doc);
   throw Error(`The getSettings setting doesn't exist.`);
 };
