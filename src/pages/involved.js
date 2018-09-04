@@ -124,7 +124,7 @@ export default class extends React.Component {
               <H2>Signing up</H2>
               <Arrow src="/static/icons/get_involved/arrow.png" alt="sign up" />
             </IntroductionHeader>
-            <p>Please submit the form to download our technical onboarding guideline.</p>
+            <p>Please submit the form to flag your interest in onboarding the Data Marketplace. We continue to onboard selectively organisations with the ambitions, capabilities and resources to contribute to our open ecosystem and co-creation initiatives.</p>
           </Introduction>
           <Form />
         </FormContainer>
