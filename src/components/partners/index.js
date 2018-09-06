@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
 import { upperFirst } from 'lodash';
 
 const partners = [
@@ -15,11 +14,13 @@ const partners = [
   { src: 'amrita.png', alt: 'amrita' },
   { src: 'aparito.png', alt: 'aparito' },
   { src: 'apgsga.png', alt: 'apgsga' },
+  { src: 'ariwonto.png', alt: 'ariwonto' },
   { src: 'arundo.png', alt: 'arundo' },
   { src: 'biilabs.png', alt: 'biilabs' },
   { src: 'bkk.png', alt: 'bkk' },
   { src: 'blocklab.png', alt: 'blocklab' },
   { src: 'bosch.png', alt: 'bosch' },
+  { src: 'cgi.png', alt: 'cgi' },
   { src: 'crayon.png', alt: 'crayon' },
   { src: 'dnvgl.png', alt: 'dnvgl' },
   { src: 'dt.png', alt: 'dt' },
@@ -73,20 +74,14 @@ const partners = [
   { src: 'tum.png', alt: 'Technical University of Munich' },
   { src: 'uio.png', alt: 'uio' },
   { src: 'undc.png', alt: 'undc' },
+  { src: 'unmsm.png', alt: 'Grupo de Investigación de Internet de las Cosas UNMSM' },
   { src: 'USC_viterbi.png', alt: 'USC Viterbi' },
   { src: 'XDK2MAM.png', alt: 'XDK2MAM' },
   { src: 'wondrwall.png', alt: 'wondrwall' },
   { src: 'yield.png', alt: 'yield' },
 ];
 
-class Partners extends React.Component {
-  // componentDidMount() {
-  //   if (this.props.location && this.props.location.hash) {
-  //     const target = document.querySelector(this.props.location.hash);
-  //     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  //   }
-  // }
-
+export default class extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.anchor) {
       const target = document.querySelector(`#${nextProps.anchor}`);
@@ -96,13 +91,13 @@ class Partners extends React.Component {
 
   render() {
     return (
-      <S id="participants">
-        <C>
-          <H>Selected Participants</H>
+      <Section id="participants">
+        <Div>
+          <P>Selected Participants</P>
           <Ul>
             {partners.map(({ alt, src, height = null, width = null }) => (
               <Li key={alt}>
-                <I
+                <Img
                   src={`/static/logotypes/${src}`}
                   srcSet={`/static/logotypes/${src} 2x`}
                   alt={upperFirst(alt)}
@@ -112,15 +107,13 @@ class Partners extends React.Component {
               </Li>
             ))}
           </Ul>
-        </C>
-      </S>
+        </Div>
+      </Section>
     );
   }
 }
 
-export default withRouter(Partners);
-
-const S = styled.section`
+const Section = styled.section`
   background-image: linear-gradient(-189deg, #eaf0f4 1%, #f3f8fa 95%);
   padding: 40px 0 20px;
   margin: 50px 0 -50px;
@@ -130,7 +123,7 @@ const S = styled.section`
   }
 `;
 
-const C = styled.div`
+const Div = styled.div`
   transform: skewY(-2deg);
   width: 100%;
   max-width: 1440px;
@@ -139,7 +132,7 @@ const C = styled.div`
   margin-left: auto;
 `;
 
-const H = styled.p`
+const P = styled.p`
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.84px;
@@ -185,7 +178,7 @@ const Li = styled.li`
   }
 `;
 
-const I = styled.img`
+const Img = styled.img`
   max-width: ${props => (props.width ? `${props.width}px` : '200px')};
   max-height: ${props => (props.height ? `${props.height}px` : '120px')};
   padding: 10px 15px;
