@@ -21,6 +21,7 @@ const partners = [
   { src: 'bkk.png', alt: 'bkk' },
   { src: 'blocklab.png', alt: 'blocklab' },
   { src: 'bosch.png', alt: 'bosch' },
+  { src: 'cgi.png', alt: 'cgi' },
   { src: 'crayon.png', alt: 'crayon' },
   { src: 'dnvgl.png', alt: 'dnvgl' },
   { src: 'dt.png', alt: 'dt' },
