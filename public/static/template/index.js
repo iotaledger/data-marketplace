@@ -1,22 +1,15 @@
 const fetch = require('node-fetch');
 const { publish } = require('./iota');
-const { storeKey } = require('./keyStorage');
 const { debug, serverUrl } = require('./config.json');
 const data = require('./data.json');
 
 // EXAMPLE 1: read static data from file/database
 data.map(payload => {
   if (debug) {
-    console.log({ time: Date.now(), data: { ...payload } });
+    console.log(payload);
   } else {
     // Publish sensor data to marketplace
-    publish(
-      {
-        time: Date.now(),
-        data: { ...payload }, // your sensor data goes here. Payload is any content in JSON format
-      },
-      storeKey
-    );
+    publish(payload); // your sensor data goes here. Payload is any content in JSON format
   }
 });
 
@@ -30,17 +23,12 @@ Array.from(Array(10), async () => {
   if (!(json.detail && json.detail === 'Not found')) {
     const { name, model, manufacturer, vehicle_class } = json;
     const payload = { name, model, manufacturer, vehicle_class };
+
     if (debug) {
-      console.log({ time: Date.now(), data: { ...payload } });
+      console.log(payload);
     } else {
       // Publish sensor data to marketplace
-      publish(
-        {
-          time: Date.now(),
-          data: { ...payload }, // your sensor data goes here. Payload is any content in JSON format
-        },
-        storeKey
-      );
+      publish(payload); // your sensor data goes here. Payload is any content in JSON format
     }
   }
 });
