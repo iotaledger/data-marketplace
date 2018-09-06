@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "iota.lib.js": "^0.4.7",
-    "lodash": "^4.17.10",
     "mam.client.js": "iotaledger/mam.client.js",
     "node-fetch": "^2.0.0"
   }
