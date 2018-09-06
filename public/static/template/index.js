@@ -1,5 +1,4 @@
 const fetch = require('node-fetch');
-const pick = require('lodash/pick');
 const { publish } = require('./iota');
 const { storeKey } = require('./keyStorage');
 const { debug, serverUrl } = require('./config.json');
@@ -29,7 +28,8 @@ Array.from(Array(10), async () => {
   const resp = await fetch(serverUrl + getRandomInt(73)); // construct URL to request a random star wars vehicle
   const json = await resp.json();
   if (!(json.detail && json.detail === 'Not found')) {
-    const payload = pick(json, ['name', 'model', 'manufacturer', 'vehicle_class']);
+    const { name, model, manufacturer, vehicle_class } = json;
+    const payload = { name, model, manufacturer, vehicle_class };
     if (debug) {
       console.log({ time: Date.now(), data: { ...payload } });
     } else {
