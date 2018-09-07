@@ -85,8 +85,8 @@ export default class extends React.Component {
                       <InfoValue>{item.company || '--'}</InfoValue>
                     </FootRow>
                     <FootRow>
-                      <InfoKey>Data price:</InfoKey>
-                      <InfoValue>{item.value ? `${item.value}i` : '--'}</InfoValue>
+                      <InfoKey>Price:</InfoKey>
+                      <InfoValue>{item.price || item.value ? `${item.price || item.value}i` : '--'}</InfoValue>
                     </FootRow>
                   </CardFooter>
                 </Card>
@@ -257,8 +257,10 @@ const CardHeader = styled.header`
 `;
 
 const RowHalf = styled.div`
-  padding: 20px 30px 14px;
+  padding: 20px 0 14px 30px;
   display: inline-block;
+  width: 50%;
+
   &:first-child {
     width: 180px;
     border-right: 1px solid #eaecee;
@@ -275,9 +277,13 @@ const RowHalf = styled.div`
 `;
 
 const Data = styled.p`
+  color: #000000;
   font-size: 18px;
   line-height: 30px;
   margin-top: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const RowDesc = styled.span`
@@ -292,6 +298,10 @@ const RowIcon = styled.img`
 `;
 
 const CardFooter = styled.footer`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 90px;
   padding: 20px 30px;
   background-color: rgba(206, 218, 226, 0.2);
   border-top: 1px solid #eaecee;
@@ -301,7 +311,7 @@ const FootRow = styled.div`
   display: flex;
   justify-content: space-between;
   &:not(:last-of-type) {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
 `;
 
@@ -315,6 +325,9 @@ const InfoValue = styled.span`
   font-size: 12px;
   line-height: 16px;
   font-weight: 800;
+  max-width: 250px;
+  text-align: right;
+  color: #000000;
 `;
 
 const SensorType = styled.span`
@@ -322,6 +335,10 @@ const SensorType = styled.span`
   position: absolute;
   top: -8px;
   color: #808b92;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
 `;
 
 const SensorId = styled.span`
