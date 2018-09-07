@@ -67,6 +67,7 @@ export default props => (
         imageAlt="Smart City Testbed"
         heading="Smart City Testbed"
         text="Initial work towards smart cities development are being triggered in Los Angeles at USC’s smart campus IoT Testbed, as proxy for a smart city"
+        link="https://cci.usc.edu/"
       />
     </InfoRow>
   </Container>
