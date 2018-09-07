@@ -12,7 +12,7 @@ const Card = ({ imageSrc, imageAlt, heading, text, scale }) => (
 export default props => {
   if (props.link) {
     return (
-      <a href={props.link}>
+      <a href={props.link} target="_blank" rel="noopener noreferrer">
         <Card {...props} />
       </a>
     );
