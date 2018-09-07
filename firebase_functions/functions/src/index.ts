@@ -87,7 +87,17 @@ exports.newDevice = functions.https.onRequest((req, res) => {
 
       const key = await getKey(<String>packet.apiKey);
       const userDevices = await getUserDevices(key.uid);
-      if (userDevices.length <= 4) {
+      const user = await getUser(key.uid);
+      if (!user.numberOfDevices) {
+        user.numberOfDevices = await getNumberOfDevices();
+      }
+      if (userDevices.length < user.numberOfDevices) {
+        const device = await getDevice(<String>packet.id);
+        if (device && device.owner !== key.uid) {
+          throw Error(`Device with ID ${packet.id} already exists. Please specify new unique ID`);
+          return res.json({ error: `Device with ID ${packet.id} already exists. Please specify new unique ID` });
+        }
+
         return res.json({
           success: await setDevice(packet.id, secretKey, address, seed, packet.device),
         });
@@ -116,6 +126,9 @@ exports.removeDevice = functions.https.onRequest((req, res) => {
       const { apiKey, id } = packet;
       const key = await getKey(<String>apiKey);
       const device = await getDevice(<String>id);
+      if (!device) {
+        throw Error(`Device doesn't exist`);
+      }
       if (device.owner === key.uid) {
         return res.json({
           success: await deleteDevice(<String>id),
@@ -197,6 +210,9 @@ exports.getDevice = functions.https.onRequest((req, res) => {
 
     try {
       const device = await getDevice(packet.deviceId);
+      if (!device) {
+        throw Error(`Device doesn't exist`);
+      }
       if (device && !device.price) {
         const settings = await getSettings();
         device.price = settings.defaultPrice;
@@ -441,6 +457,9 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
     try {
       const wallet = await getWallet(packet.userId);
       const device = await getDevice(packet.deviceId);
+      if (!device) {
+        throw Error(`Device doesn't exist`);
+      }
       const settings = await getSettings();
       if (wallet && wallet.balance && device) {
         const price = (device && device.price) || settings.defaultPrice;

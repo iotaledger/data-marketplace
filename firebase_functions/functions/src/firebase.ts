@@ -78,7 +78,7 @@ exports.getDevice = async (device: string) => {
     return result;
   }
   console.log('getDevice failed.', device, doc);
-  throw Error(`Device doesn't exist`);
+  return null;
 };
 
 exports.getDevices = async () => {
