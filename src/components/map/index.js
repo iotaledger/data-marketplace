@@ -107,8 +107,8 @@ class Map extends React.Component {
                 <InfoValue>{popupInfo.dataTypes.length}</InfoValue>
               </FootRow>
               <FootRow>
-                <InfoKey>Data price:</InfoKey>
-                <InfoValue>{popupInfo.value}i</InfoValue>
+                <InfoKey>Price:</InfoKey>
+                <InfoValue>{popupInfo.price || popupInfo.value}i</InfoValue>
               </FootRow>
             </CardFooter>
           </SensorCard>
