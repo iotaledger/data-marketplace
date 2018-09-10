@@ -19,5 +19,5 @@ yarn
 
 yarn build
 
-firebase deploy
+firebase deploy --project PROJECT_NAME
 ```
