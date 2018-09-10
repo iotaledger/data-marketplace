@@ -1,9 +1,6 @@
 import * as functions from 'firebase-functions';
 const cors = require('cors')({ origin: true });
-const iota = require('iota.lib.js');
-const { provider } = require('../config.json');
-
-const IOTA = new iota({ provider: `${provider}:443` });
+const IOTA = require('iota.lib.js');
 
 const {
   getKey,
@@ -261,10 +258,12 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
     }
 
     try {
+      const { iotaApiVersion, provider } = await getSettings();
+      const iota = new IOTA({ provider: `${provider}:443` });
       // Find TX on network and parse
-      const data = await findTx(packet.hashes, IOTA);
+      const data = await findTx(packet.hashes, provider, iotaApiVersion);
       // Make sure TX is valid
-      if (!IOTA.utils.validateSignatures(data, data.find(tx => tx.value < -1).address)) {
+      if (!iota.utils.validateSignatures(data, data.find(tx => tx.value < -1).address)) {
         console.log('purchaseStream failed. Transaction is invalid for: ', data);
         throw Error('Transaction is Invalid');
       }
@@ -436,7 +435,8 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const wallet = await initWallet();
+      const { provider } = await getSettings();
+      const wallet = await initWallet(provider);
       return res.json({ success: await setWallet(packet.userId, wallet) });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { getZip } from '../../utils/zip';
 import Card from './index.js';
 
@@ -18,18 +19,18 @@ const Heading = ({ sensorId, type }, func) => (
   </Full>
 );
 
-const Footer = props => (
-  <div onClick={() => getZip(props)}>
+const Footer = (device, provider) => (
+  <div onClick={() => getZip(device, provider)}>
     <FootRow>
       <FooterButton>Download Publish Script</FooterButton>
     </FootRow>
   </div>
 );
 
-export default props => {
-  const { device } = props;
+const Device = props => {
+  const { device, settings: { provider } } = props;
   return (
-    <Card header={Heading(device, props.delete)} footer={Footer(device)}>
+    <Card header={Heading(device, props.delete)} footer={Footer(device, provider)}>
       <RowHalf>
         <RowIcon src="/static/icons/icon-small-location.svg" alt="" />
         <RowDesc>Location</RowDesc>
@@ -47,6 +48,12 @@ export default props => {
     </Card>
   );
 };
+
+const mapStateToProps = state => ({
+  settings: state.settings,
+});
+
+export default connect(mapStateToProps)(Device);
 
 const RowHalf = styled.div`
   padding: 20px 30px 14px;
