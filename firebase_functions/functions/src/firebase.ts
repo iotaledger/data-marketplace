@@ -310,17 +310,21 @@ exports.getSettings = async () => {
   if (doc.exists) {
     const {
       defaultPrice,
-      domainName,
+      documentation,
+      iotaApiVersion,
       mapboxApiAccessToken,
       mapboxStyles,
+      provider,
       recaptchaSiteKey,
       tangleExplorer
     } = doc.data();
     return {
       defaultPrice,
-      domainName,
+      documentation,
+      iotaApiVersion,
       mapboxApiAccessToken,
       mapboxStyles,
+      provider,
       recaptchaSiteKey,
       tangleExplorer
     };

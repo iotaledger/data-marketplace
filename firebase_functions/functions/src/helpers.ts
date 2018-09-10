@@ -2,7 +2,6 @@ import * as crypto from 'crypto';
 const iotaCore = require('@iota/core');
 const IOTA = require('iota.lib.js');
 const axios = require('axios');
-const { provider, iotaApiVersion } = require('../config.json');
 const { getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
 
 const generateSeed = (length = 81) => {
@@ -42,7 +41,8 @@ const sanatiseObject = (device: any) => {
   return false;
 };
 
-const findTx = (hashes, iota) => {
+const findTx = (hashes, provider, iotaApiVersion) => {
+  const iota = new IOTA({ provider: `${provider}:443` });
   return new Promise((resolve, reject) => {
     axios({
       method: 'POST',
@@ -69,7 +69,7 @@ const findTx = (hashes, iota) => {
   });
 };
 
-const transferFunds = async (seed, address, value) => {
+const transferFunds = async (seed, address, value, provider) => {
   try {
     const iota = new IOTA({ provider });
     const promise = new Promise((resolve, reject) => {
@@ -100,12 +100,12 @@ const transferFunds = async (seed, address, value) => {
   }
 }
 
-const initWallet = async () => {
+const initWallet = async provider => {
   const seed = generateSeed();
   const address = generateAddress(seed);
   const iotaWalletSeed = await getWalletSeed();
   const balance = await getDefaultBalance();
-  const response = await transferFunds(iotaWalletSeed, address, balance);
+  const response = await transferFunds(iotaWalletSeed, address, balance, provider);
   return { address, balance, seed };
 };
 
