@@ -107,7 +107,10 @@
   "scripts": {
     "clean": "rimraf ./build",
     "start": "node scripts/start.js",
-    "build": "yarn clean && node scripts/build.js"
+    "build": "yarn clean && node scripts/build.js",
+    "install-all": "yarn && cd firebase_functions/functions && yarn && cd ../..",
+    "deploy-all": "f(){ yarn build && firebase deploy --project $1 && cd firebase_functions/functions && yarn build && cd .. && firebase deploy --project $1 && cd .. ;};f",
+    "deploy": "yarn deploy-all -- "
   },
   "babel": {
     "presets": [
