@@ -12,7 +12,7 @@ const SideBar = ({ device, settings, fetching, dataEnd, packets, streamLength })
       <div>
         {!isEmpty(settings) ? (
           <a
-            href={`${settings.tangleExplorer}${device.address}`}
+            href={`${settings.tangleExplorer}/${device.address}`}
             target="_blank"
             rel="noopener noreferrer"
           >
