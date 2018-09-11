@@ -68,7 +68,7 @@ class UserSidebar extends React.Component {
             <DetailRow>
               {settings && settings.documentation ? (
                 <a
-                  href={`https://${settings.documentation}`}
+                  href={settings.documentation}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
