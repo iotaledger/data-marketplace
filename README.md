@@ -4,20 +4,34 @@ The Proof of Concept Data Marketplace built using MAM and IOTA.
 
 ## Getting started
 
-To run for development.
+### To run for development.
 
 ```javascript
-yarn
+yarn install-all
 
 yarn start
 ```
 
-To run for Production:
+or
 
 ```javascript
-yarn
+npm run install-all
 
-yarn build
+npm run start
+```
 
-firebase deploy --project PROJECT_NAME
+### To run for Production:
+
+```javascript
+yarn install-all
+
+yarn deploy PROJECT_NAME
+```
+
+or
+
+```javascript
+npm run install-all
+
+npm run deploy PROJECT_NAME
 ```
