@@ -87,8 +87,7 @@ exports.getDevices = async () => {
     .firestore()
     .collection('devices')
     .get();
-  // Check there is data
-  if (querySnapshot.size === 0) throw Error('No devices to return');
+
   // Return data
   return querySnapshot.docs.map(doc => {
     if (doc.exists) {
