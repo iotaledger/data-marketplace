@@ -1,5 +1,6 @@
 import * as crypto from 'crypto';
 const iotaCore = require('@iota/core');
+const http = require('@iota/http-client');
 const IOTA = require('iota.lib.js');
 const axios = require('axios');
 const { getSettings, getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
@@ -26,8 +27,8 @@ const generateUUID = () => {
   return uuid;
 };
 
-const generateAddress = seed => {
-  return iotaCore.generateAddress(seed, 0, 2);
+const generateAddress = (seed, checksum = false) => {
+  return iotaCore.generateAddress(seed, 0, 2, checksum);
 };
 
 const sanatiseObject = (device: any) => {
@@ -71,7 +72,10 @@ const findTx = (hashes, provider, iotaApiVersion) => {
 
 const transferFunds = async (seed, address, value, provider) => {
   try {
-    const iota = new IOTA({ provider });
+    const provider = http.createHttpClient({ provider });
+    const prepareTransfers = iotaCore.createPrepareTransfers(provider);
+    const sendTrytes = iotaCore.createSendTrytes(provider);
+
     const promise = new Promise((resolve, reject) => {
       // Depth or how far to go for tip selection entry point
       const depth = 3
@@ -80,18 +84,19 @@ const transferFunds = async (seed, address, value, provider) => {
       // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
       const minWeightMagnitude = 9
 
-      const transfers = [{ address: iota.utils.addChecksum(address), value }];
+      const transfers = [{ address, value }];
 
-      iota.api.sendTransfer(seed, depth, minWeightMagnitude, transfers, (error, transactions) => {
-        if (error !== null) {
-          console.error('transferFunds error', error);
-          reject(error);
-        } else {
+      prepareTransfers(seed, transfers)
+        .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude))
+        .then(transactions => {
           const newWalletAddress = transactions[transactions.length - 1].address;
           updateWalletAddress(newWalletAddress);
           resolve(transactions);
-        }
-      });
+        })
+        .catch(error => {
+          console.error('transferFunds error', error);
+          reject(error);
+        })
     });
     return promise;
   } catch (error) {
@@ -131,7 +136,7 @@ const faucet = async address => {
 
 const initWallet = async () => {
   const seed = generateSeed();
-  const address = generateAddress(seed);
+  const address = generateAddress(seed, true);
   const iotaWalletSeed = await getWalletSeed();
   const balance = await getDefaultBalance();
   const { provider } = await getSettings();
