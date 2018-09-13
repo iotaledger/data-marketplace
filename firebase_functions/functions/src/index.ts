@@ -279,10 +279,8 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
 });
 
 // // Setup User with an API Key
-exports.setupUser = functions.auth.user().onCreate(event => {
+exports.setupUser = functions.auth.user().onCreate(user => {
   return new Promise(async (resolve, reject) => {
-    const user = event.data; // The Firebase user.
-
     if (!user.email) {
       reject();
     } else {
