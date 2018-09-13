@@ -246,7 +246,7 @@ exports.queryStream = functions.https.onRequest((req, res) => {
   });
 });
 
-// GIve access once a stream is purchased
+// Give access once a stream is purchased
 // Add bundle validation.
 exports.purchaseStream = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
