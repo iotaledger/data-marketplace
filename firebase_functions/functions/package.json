@@ -1,7 +1,6 @@
 {
   "name": "functions",
   "scripts": {
-    "dev": "yarn dev && firebase serve --only functions",
     "build": "./node_modules/.bin/tslint -p tslint.json && ./node_modules/.bin/tsc",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase experimental:functions:shell",
@@ -22,6 +21,5 @@
   "devDependencies": {
     "tslint": "^5.8.0",
     "typescript": "^2.5.3"
-  },
-  "private": true
+  }
 }
