@@ -75,6 +75,11 @@
         "type": 301
       },
       {
+        "source": "/faucet",
+        "destination": "/#/faucet",
+        "type": 301
+      },
+      {
         "source": "/cookies",
         "destination": "/#/cookies",
         "type": 301

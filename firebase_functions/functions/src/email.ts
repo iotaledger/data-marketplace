@@ -1,13 +1,5 @@
-const axios = require('axios');
 const { getEmailSettings } = require('./firebase');
-
-const checkRecaptcha = async (captcha, emailSettings) => {
-  const response = await axios({
-    method: 'post',
-    url: `https://www.google.com/recaptcha/api/siteverify?secret=${emailSettings.googleSecretKey}&response=${captcha}`,
-  });
-  return response ? response.data : null;
-};
+const { checkRecaptcha } = require('./helpers');
 
 const mailgunSendEmail = (packet, emailSettings) => {
   const {

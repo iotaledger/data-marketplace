@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 const iotaCore = require('@iota/core');
 const IOTA = require('iota.lib.js');
 const axios = require('axios');
-const { getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
+const { getSettings, getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
 
 const generateSeed = (length = 81) => {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
@@ -100,14 +100,53 @@ const transferFunds = async (seed, address, value, provider) => {
   }
 }
 
-const initWallet = async provider => {
+const fundWallet = async (seed, address, value, provider) => {
+  try {
+    const iota = new IOTA({ provider });
+    const promise = new Promise((resolve, reject) => {
+      const transfers = [{ address: iota.utils.addChecksum(address), value }];
+
+      iota.api.prepareTransfers(seed, transfers, {}, (error, transactions) => {
+        if (error) {
+          console.error('fundWallet error', error);
+          reject(error);
+        } else {
+          resolve(transactions);
+        }
+      });
+    });
+    return promise;
+  } catch (error) {
+    console.error('fundWallet error', error);
+    return error
+  }
+}
+
+const faucet = async address => {
+  const iotaWalletSeed = await getWalletSeed();
+  const balance = await getDefaultBalance();
+  const { provider } = await getSettings();
+  return await fundWallet(iotaWalletSeed, address, balance, provider);
+};
+
+const initWallet = async () => {
   const seed = generateSeed();
   const address = generateAddress(seed);
   const iotaWalletSeed = await getWalletSeed();
   const balance = await getDefaultBalance();
+  const { provider } = await getSettings();
   const response = await transferFunds(iotaWalletSeed, address, balance, provider);
   return { address, balance, seed };
 };
+
+const checkRecaptcha = async (captcha, emailSettings) => {
+  const response = await axios({
+    method: 'post',
+    url: `https://www.google.com/recaptcha/api/siteverify?secret=${emailSettings.googleSecretKey}&response=${captcha}`,
+  });
+  return response ? response.data : null;
+};
+
 
 module.exports = {
   generateUUID,
@@ -117,4 +156,6 @@ module.exports = {
   findTx,
   transferFunds,
   initWallet,
+  faucet,
+  checkRecaptcha,
 }

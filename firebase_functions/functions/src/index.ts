@@ -24,6 +24,8 @@ const {
   deleteDevice,
   toggleWhitelistDevice,
   updateBalance,
+  updateWalletAddress,
+  getEmailSettings,
 } = require('./firebase');
 const { sendEmail } = require('./email');
 const {
@@ -32,7 +34,9 @@ const {
   generateAddress,
   sanatiseObject,
   findTx,
-  initWallet
+  faucet,
+  initWallet,
+  checkRecaptcha,
 } = require('./helpers');
 
 // Take in data from device
@@ -438,8 +442,7 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const { provider } = await getSettings();
-      const wallet = await initWallet(provider);
+      const wallet = await initWallet();
       return res.json({ success: await setWallet(packet.userId, wallet) });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);
@@ -477,6 +480,51 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
       return res.json({ error: 'Wallet not set' });
     } catch (e) {
       console.log('updateBalance failed. Error: ', e.message, packet);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.faucet = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.address || !packet.captcha) {
+      console.log('faucet failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      const emailSettings = await getEmailSettings();
+      // Check Recaptcha
+      const recaptcha = await checkRecaptcha(packet.captcha, emailSettings);
+      if (!recaptcha || !recaptcha.success) {
+        console.log('faucet failed. Recaptcha is incorrect. ', recaptcha['error-codes']);
+        return res.status(403).json({ error: recaptcha['error-codes'] });
+      }
+
+      const trytes = await faucet(packet.address);
+      return res.json({ trytes });
+    } catch (e) {
+      console.log('faucet failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.newWalletAddress = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.address) {
+      console.log('newWalletAddress failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      return res.json({ success: await updateWalletAddress(packet.address) });
+    } catch (e) {
+      console.log('newWalletAddress failed. Error: ', e.message, packet);
       return res.status(403).json({ error: e.message });
     }
   });
