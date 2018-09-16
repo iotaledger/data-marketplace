@@ -10,6 +10,7 @@ import SensorPage from './pages/sensor';
 import CookiesPage from './pages/cookies';
 import DashboardPage from './pages/dashboard';
 import WhitelistPage from './pages/whitelist';
+import FaucetPage from './pages/faucet';
 import { storeProjectSettings } from './store/settings/actions';
 
 class Router extends Component {
@@ -30,6 +31,7 @@ class Router extends Component {
           <Route path="/sensor/:deviceId" component={SensorPage} />
           <Route path="/cookies" component={CookiesPage} />
           <Route path="/whitelist" component={WhitelistPage} />
+          <Route path="/faucet" component={FaucetPage} />
           <Route component={HomePage} />
         </Switch>
       </HashRouter>

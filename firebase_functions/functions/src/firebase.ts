@@ -3,6 +3,9 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp(functions.config().firebase);
 
+const firestore = admin.firestore();
+firestore.settings({ timestampsInSnapshots: true });
+
 exports.getKey = async (key: string) => {
   // Get API key
   const doc = await admin
