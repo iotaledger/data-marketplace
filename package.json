@@ -110,7 +110,9 @@
     "build": "npm run clean && node scripts/build.js",
     "install-all": "npm i && cd firebase_functions/functions && npm i && cd ../..",
     "deploy-all": "f(){ npm run build && firebase deploy --project $1 && cd firebase_functions/functions && npm run build && cd .. && firebase deploy --project $1 && cd .. ;};f",
-    "deploy": "npm run deploy-all"
+    "deploy": "npm run deploy-all",
+    "analyze": "NODE_ENV=production webpack -p --config config/webpack.config.prod.js --json --progress --profile > webpack-build-log.json && webpack-bundle-analyzer webpack-build-log.json dist/app",
+    "image": "webpack-bundle-analyzer webpack-build-log.json dist/app"
   },
   "babel": {
     "presets": [
@@ -123,5 +125,8 @@
   "engines": {
     "node": ">=6.0"
   },
-  "postcss": {}
+  "postcss": {},
+  "devDependencies": {
+    "webpack-bundle-analyzer": "^3.0.2"
+  }
 }
