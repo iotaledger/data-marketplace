@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import * as moment from 'moment';
+import format from 'date-fns/format'
 
 export default class extends React.Component {
   constructor(props) {
@@ -18,8 +18,8 @@ export default class extends React.Component {
       <SensorCard visible={this.state.visible}>
         <CardHeader>
           <HeaderRow>
-            <HeaderAccent>{moment(packet.time).format('dddd')}</HeaderAccent>{' '}
-            {moment(packet.time).format('DD MMMM, YYYY H:mm a ')}
+            <HeaderAccent>{format(packet.time, 'dddd')}</HeaderAccent>{' '}
+            {format(packet.time, 'DD MMMM, YYYY H:mm a ')}
           </HeaderRow>
         </CardHeader>
         {layout.map((row, i) => (
