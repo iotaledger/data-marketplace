@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { upperFirst } from 'lodash';
+import upperFirst from 'lodash-es/upperFirst';
 
 const partners = [
   { src: '42.png', alt: '42' },
