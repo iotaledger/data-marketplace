@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 const cors = require('cors')({ origin: true });
-const IOTA = require('iota.lib.js');
+const { validateBundleSignatures } = require('@iota/bundle-validator');
 
 const {
   getKey,
@@ -31,7 +31,7 @@ const { sendEmail } = require('./email');
 const {
   generateUUID,
   generateSeed,
-  generateAddress,
+  generateNewAddress,
   sanatiseObject,
   findTx,
   faucet,
@@ -83,7 +83,7 @@ exports.newDevice = functions.https.onRequest((req, res) => {
       const invalid = sanatiseObject(packet.device);
       const secretKey = generateSeed(15);
       const seed = generateSeed();
-      const address = generateAddress(seed);
+      const address = generateNewAddress(seed);
       if (invalid) throw Error(invalid);
 
       const key = await getKey(<String>packet.apiKey);
@@ -263,12 +263,12 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
 
     try {
       const { iotaApiVersion, provider } = await getSettings();
-      const iota = new IOTA({ provider: `${provider}:443` });
       // Find TX on network and parse
-      const data = await findTx(packet.hashes, provider, iotaApiVersion);
+      const bundle = await findTx(packet.hashes, provider, iotaApiVersion);
+
       // Make sure TX is valid
-      if (!iota.utils.validateSignatures(data, data.find(tx => tx.value < -1).address)) {
-        console.log('purchaseStream failed. Transaction is invalid for: ', data);
+      if (!validateBundleSignatures(bundle)) {
+        console.log('purchaseStream failed. Transaction is invalid for: ', bundle);
         throw Error('Transaction is Invalid');
       }
 

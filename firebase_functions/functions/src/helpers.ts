@@ -1,8 +1,7 @@
 import * as crypto from 'crypto';
-const iotaCore = require('@iota/core');
-const http = require('@iota/http-client');
-const IOTA = require('iota.lib.js');
 const axios = require('axios');
+const { composeAPI, createPrepareTransfers, generateAddress } = require('@iota/core');
+const { asTransactionObject } = require('@iota/transaction-converter');
 const { getSettings, getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
 
 const generateSeed = (length = 81) => {
@@ -27,8 +26,8 @@ const generateUUID = () => {
   return uuid;
 };
 
-const generateAddress = (seed, checksum = false) => {
-  return iotaCore.generateAddress(seed, 0, 2, checksum);
+const generateNewAddress = (seed, checksum = false) => {
+  return generateAddress(seed, 0, 2, checksum);
 };
 
 const sanatiseObject = (device: any) => {
@@ -43,7 +42,6 @@ const sanatiseObject = (device: any) => {
 };
 
 const findTx = (hashes, provider, iotaApiVersion) => {
-  const iota = new IOTA({ provider: `${provider}:443` });
   return new Promise((resolve, reject) => {
     axios({
       method: 'POST',
@@ -58,8 +56,7 @@ const findTx = (hashes, provider, iotaApiVersion) => {
       },
     })
       .then(response => {
-        const txBundle = response.data.trytes.map(trytes => iota.utils.transactionObject(trytes));
-        console.log('txBundle', txBundle);
+        const txBundle = response.data.trytes.map(trytes => asTransactionObject(trytes));
         resolve(txBundle);
       })
       .catch(error => {
@@ -72,17 +69,16 @@ const findTx = (hashes, provider, iotaApiVersion) => {
 
 const transferFunds = async (seed, address, value, provider) => {
   try {
-    const iotaProvider = http.createHttpClient({ provider });
-    const prepareTransfers = iotaCore.createPrepareTransfers(iotaProvider);
-    const sendTrytes = iotaCore.createSendTrytes(iotaProvider);
+    const { sendTrytes } = composeAPI({ provider });
+    const prepareTransfers = createPrepareTransfers();
 
     const promise = new Promise((resolve, reject) => {
       // Depth or how far to go for tip selection entry point
-      const depth = 3
+      const depth = 3;
 
       // Difficulty of Proof-of-Work required to attach transaction to tangle.
       // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
-      const minWeightMagnitude = 9
+      const minWeightMagnitude = 9;
 
       const transfers = [{ address, value }];
 
@@ -105,10 +101,9 @@ const transferFunds = async (seed, address, value, provider) => {
   }
 }
 
-const fundWallet = async (seed, address, value, provider) => {
+const fundWallet = async (seed, address, value) => {
   try {
-    const iotaProvider = http.createHttpClient({ provider });
-    const prepareTransfers = iotaCore.createPrepareTransfers(iotaProvider);
+    const prepareTransfers = createPrepareTransfers();
 
     const promise = new Promise((resolve, reject) => {
       const transfers = [{ address, value }];
@@ -130,13 +125,12 @@ const fundWallet = async (seed, address, value, provider) => {
 const faucet = async address => {
   const iotaWalletSeed = await getWalletSeed();
   const balance = await getDefaultBalance();
-  const { provider } = await getSettings();
-  return await fundWallet(iotaWalletSeed, address, balance, provider);
+  return await fundWallet(iotaWalletSeed, address, balance);
 };
 
 const initWallet = async () => {
   const seed = generateSeed();
-  const address = generateAddress(seed, true);
+  const address = generateNewAddress(seed, true);
   const iotaWalletSeed = await getWalletSeed();
   const balance = await getDefaultBalance();
   const { provider } = await getSettings();
@@ -155,7 +149,7 @@ const checkRecaptcha = async (captcha, emailSettings) => {
 
 module.exports = {
   generateUUID,
-  generateAddress,
+  generateNewAddress,
   generateSeed,
   sanatiseObject,
   findTx,
