@@ -6,7 +6,7 @@ import { isEmpty } from 'lodash';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
-import { iota, getData, purchaseData, getBalance } from '../utils/iota';
+import { getIota, getData, purchaseData, getBalance } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -45,6 +45,7 @@ class Sensor extends React.Component {
       match: {
         params: { deviceId },
       },
+      settings: { provider }
     } = this.props;
 
     // Init Wallet
@@ -56,7 +57,7 @@ class Sensor extends React.Component {
     const device = this.props.sensor;
 
     if (device.address) {
-      device.balance = await getBalance(device.address);
+      device.balance = await getBalance(device.address, provider);
     }
 
     if (typeof device === 'string') {
@@ -128,16 +129,16 @@ class Sensor extends React.Component {
         });
       }
 
-      const mamState = Mam.init(iota);
-      const device = this.props.sensor;
-      mamState.channel.security = device.security || 2;
+      const { sensor, settings: { provider } } = this.props;
+      const mamState = Mam.init(getIota(provider));
+      mamState.channel.security = sensor.security || 2;
 
       const packets = data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
         const result = await Mam.fetchSingle(
           root,
           sidekey !== '' ? 'restricted' : null,
           sidekey !== '' ? sidekey : null,
-          device.hash === 'curlp27' ? 27 : undefined
+          sensor.hash === 'curlp27' ? 27 : undefined
         );
 
         if (result && result.payload) {
@@ -157,6 +158,7 @@ class Sensor extends React.Component {
   }
 
   saveData(data, i) {
+    const iota = getIota(this.props.settings.provider);
     const input = iota.utils.fromTrytes(data);
     try {
       const packet = JSON.parse(input);
@@ -196,14 +198,22 @@ class Sensor extends React.Component {
 
   async purchase() {
     const { userId } = this.state;
-    const device = this.props.sensor;
+    const {
+      loadUser,
+      user,
+      sensor,
+      settings: { provider },
+      match: {
+        params: { deviceId },
+      },
+    } = this.props;
 
-    if (!this.props.user) {
-      await this.props.loadUser(userId);
+    if (!user) {
+      await loadUser(userId);
     }
 
     // Make sure we have wallet
-    const wallet = this.props.user.wallet;
+    const wallet = user.wallet;
     if (!wallet || isEmpty(wallet) || wallet.error) {
       return this.throw(
         {
@@ -213,7 +223,7 @@ class Sensor extends React.Component {
         false
       );
     }
-    if (Number(wallet.balance) < Number(device.price))
+    if (Number(wallet.balance) < Number(sensor.price))
       return this.throw({
         body: 'You have run out of IOTA. Click below to refill you wallet with IOTA.',
         heading: 'Not enough Balance',
@@ -230,7 +240,7 @@ class Sensor extends React.Component {
         // Try purchase
         let purchaseResp;
         try {
-          purchaseResp = await purchaseData(wallet.seed, device.address, Number(device.price));
+          purchaseResp = await purchaseData(wallet.seed, sensor.address, Number(sensor.price), provider);
         } catch (error) {
           console.error('purchase error', error);
           return this.throw({
@@ -246,11 +256,6 @@ class Sensor extends React.Component {
             },
           },
           async () => {
-            const {
-              match: {
-                params: { deviceId },
-              },
-            } = this.props;
             const packet = {
               userId,
               deviceId,
@@ -259,7 +264,7 @@ class Sensor extends React.Component {
             };
 
             const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
-            await this.props.loadUser(userId);
+            await loadUser(userId);
 
             if (balanceUpdateResponse.success) {
               const message = await api('purchaseStream', packet);
@@ -323,6 +328,7 @@ class Sensor extends React.Component {
 
 const mapStateToProps = state => ({
   sensor: state.sensor,
+  settings: state.settings,
   user: state.user,
 });
 

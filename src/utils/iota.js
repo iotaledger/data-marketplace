@@ -1,9 +1,8 @@
 import IOTA from 'iota.lib.js';
 import curl from 'curl.lib.js';
-import { provider } from '../config.json';
 import api, { fetchData } from './api';
 
-export const iota = new IOTA({ provider });
+export const getIota = provider => new IOTA({ provider });
 
 export const getData = async (userId, deviceId) => {
   try {
@@ -54,7 +53,8 @@ const getPacketsPartial = data => {
   });
 };
 
-export const purchaseData = async (seed, address, value) => {
+export const purchaseData = async (seed, address, value, provider) => {
+  const iota = getIota(provider);
   try {
     curl.init();
     curl.overrideAttachToTangle(iota);
@@ -79,7 +79,7 @@ export const purchaseData = async (seed, address, value) => {
   }
 };
 
-export const getBalance = async address => {
+export const getBalance = async (address, provider) => {
   try {
     const packet = {
       command: 'getBalances',

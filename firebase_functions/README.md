@@ -1,6 +1,6 @@
 ## Data Marketplace functions
 
-Firebase functions for Data Markertplace
+Firebase functions for Data Marketplace
 
 #### Install Firebase CLI
 
@@ -36,26 +36,16 @@ Then call a function with parameters
 
 #### Deploy fo Firebase
 
-1.  Check `.firebaserc`, make sure the Firebase project name is correct
-
-```javascript
-{
-  "projects": {
-    "default": "PROJECT_NAME_HERE"
-  }
-}
-```
-
-2.  Log in to Firebase (for the first time use). Follow instructions on the screen.
+1.  Log in to Firebase (for the first time use). Follow instructions on the screen.
 
 ```javascript
 firebase login
 ```
 
-3.  Deploy
+2.  Deploy
 
 ```javascript
-firebase deploy
+firebase deploy --project PROJECT_NAME
 ```
 
 #### Handling function timeouts

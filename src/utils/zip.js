@@ -1,6 +1,6 @@
 import JSZip from 'jszip';
 import FileSaver from 'file-saver';
-import { api, domainName, provider } from '../config.json';
+import { domain } from '../config.json';
 
 const getFileContent = path => {
   return new Promise((resolve, reject) => {
@@ -20,18 +20,18 @@ const getFileContent = path => {
   });
 };
 
-const getConfigFileContent = device => `{
+const getConfigFileContent = (device, provider) => `{
   "sensorId": "${device.sensorId}",
   "secretKey": "${device.sk}",
   "debug": true,
   "provider": "${provider}",
-  "endpoint": "https://${api}.${domainName}/newData",
+  "endpoint": "${domain}/newData",
   "serverUrl": "https://swapi.co/api/vehicles/"
 }`;
 
-export const getZip = async device => {
+export const getZip = async (device, provider) => {
   const zip = new JSZip();
-  zip.file('config.json', getConfigFileContent(device));
+  zip.file('config.json', getConfigFileContent(device, provider));
   zip.file('package.json', await getFileContent('/static/template/package.json'));
   zip.file('README.md', await getFileContent('/static/template/README.md'));
   zip.file('keyStorage.js', await getFileContent('/static/template/keyStorage.js'));
