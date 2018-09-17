@@ -48,6 +48,7 @@ module.exports = {
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
   curlSrc: resolveApp('node_modules/curl.lib.js'),
+  mamClientLib: resolveApp('node_modules/mam.client.js/lib'),
   yarnLockFile: resolveApp('yarn.lock'),
   testsSetup: resolveApp('src/setupTests.js'),
   appNodeModules: resolveApp('node_modules'),
