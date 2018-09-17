@@ -148,7 +148,7 @@
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/converter/-/converter-1.0.0-beta.5.tgz#295c9736d32172955fe5cc607258913d8d0571ca"
 
-"@iota/core@^1.0.0-beta.3":
+"@iota/core@^1.0.0-beta.5":
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/core/-/core-1.0.0-beta.5.tgz#cb681fe939eb9ce1f90e7db274f9c89ea73bd0d7"
   dependencies:

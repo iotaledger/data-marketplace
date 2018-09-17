@@ -10,7 +10,9 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@iota/core": "^1.0.0-beta.3",
+    "@iota/core": "^1.0.0-beta.5",
+    "@iota/http-client": "^1.0.0-beta.5",
+    "@iota/transaction-converter": "^1.0.0-beta.5",
     "axios": "^0.18.0",
     "cors": "^2.8.4",
     "firebase-admin": "^6.0.0",
