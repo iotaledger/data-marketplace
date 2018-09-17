@@ -10,14 +10,13 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@iota/bundle-validator": "^1.0.0-beta.5",
     "@iota/core": "^1.0.0-beta.5",
-    "@iota/http-client": "^1.0.0-beta.5",
     "@iota/transaction-converter": "^1.0.0-beta.5",
     "axios": "^0.18.0",
     "cors": "^2.8.4",
     "firebase-admin": "^6.0.0",
     "firebase-functions": "^2.0.5",
-    "iota.lib.js": "^0.4.7",
     "mailgun-js": "^0.20.0"
   },
   "devDependencies": {
