@@ -10,3 +10,5 @@
 /src/config*.json
 
 *.log
+
+webpack-build-log.json

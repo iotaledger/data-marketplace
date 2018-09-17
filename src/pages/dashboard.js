@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash-es/isEmpty';
 import styled from 'styled-components';
 import firebase from 'firebase/app';
 import { loadUser, logout } from '../store/user/actions';
