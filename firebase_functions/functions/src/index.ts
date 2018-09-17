@@ -290,7 +290,7 @@ exports.setupUser = functions.auth.user().onCreate(user => {
         const numberOfDevices = (await getNumberOfDevices()) || 5;
 
         await setUser(user.uid, { apiKey, numberOfDevices });
-        await setApiKey(apiKey, user.uid);
+        await setApiKey(apiKey, user.uid, user.email);
 
         console.log('setupUser resolved for UID', user.uid);
         resolve();
@@ -343,15 +343,20 @@ exports.toggleWhitelist = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     // Check Fields
     const packet = req.body;
-    if (!packet || !packet.sensorId || !packet.isInactive) {
+    if (!packet || !packet.sensorId || !packet.isInactive || !packet.apiKey || !packet.uid) {
       console.log('toggleWhitelist failed. Packet: ', packet);
       return res.status(400).json({ error: 'Ensure all fields are included' });
     }
 
     try {
-      // Toggle whitelist
-      await toggleWhitelistDevice(packet.sensorId, packet.isInactive);
-      return res.json({ success: true });
+      const data = await getKey(<String>packet.apiKey);
+      if (data.email && data.email.indexOf('iota.org') !== -1 && packet.uid === data.uid) {
+        // Toggle whitelist
+        console.log('toggleWhitelist success', packet, data);
+        await toggleWhitelistDevice(packet.sensorId, packet.isInactive);
+        return res.json({ success: true });
+      }
+      return res.status(403).json({ error: 'Access denied' });
     } catch (e) {
       console.log('toggleWhitelist failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
