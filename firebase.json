@@ -11,6 +11,24 @@
             "value": "*"
           }
         ]
+      },
+      {
+        "source" : "**/*.@(jpg|jpeg|gif|png|svg)",
+        "headers" : [
+          {
+            "key" : "Cache-Control",
+            "value" : "max-age=2592000"
+          }
+        ]
+      },
+      {
+        "source" : "**/*.@(eot|otf|ttf|ttc|woff|font.css)",
+        "headers" : [
+          {
+            "key" : "Cache-Control",
+            "value" : "max-age=2592000"
+          }
+        ]
       }
     ],
     "ignore": [

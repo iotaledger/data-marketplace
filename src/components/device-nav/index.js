@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { isEmpty } from 'lodash';
+import isEmpty from 'lodash-es/isEmpty';
 import { Link } from 'react-router-dom';
 
 export default props => (
