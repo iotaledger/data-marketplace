@@ -72,9 +72,9 @@ const findTx = (hashes, provider, iotaApiVersion) => {
 
 const transferFunds = async (seed, address, value, provider) => {
   try {
-    const provider = http.createHttpClient({ provider });
-    const prepareTransfers = iotaCore.createPrepareTransfers(provider);
-    const sendTrytes = iotaCore.createSendTrytes(provider);
+    const iotaProvider = http.createHttpClient({ provider });
+    const prepareTransfers = iotaCore.createPrepareTransfers(iotaProvider);
+    const sendTrytes = iotaCore.createSendTrytes(iotaProvider);
 
     const promise = new Promise((resolve, reject) => {
       // Depth or how far to go for tip selection entry point
@@ -107,18 +107,18 @@ const transferFunds = async (seed, address, value, provider) => {
 
 const fundWallet = async (seed, address, value, provider) => {
   try {
-    const iota = new IOTA({ provider });
-    const promise = new Promise((resolve, reject) => {
-      const transfers = [{ address: iota.utils.addChecksum(address), value }];
+    const iotaProvider = http.createHttpClient({ provider });
+    const prepareTransfers = iotaCore.createPrepareTransfers(iotaProvider);
 
-      iota.api.prepareTransfers(seed, transfers, {}, (error, transactions) => {
-        if (error) {
+    const promise = new Promise((resolve, reject) => {
+      const transfers = [{ address, value }];
+
+      prepareTransfers(seed, transfers)
+        .then(trytes => resolve(trytes))
+        .catch(error => {
           console.error('fundWallet error', error);
           reject(error);
-        } else {
-          resolve(transactions);
-        }
-      });
+        });
     });
     return promise;
   } catch (error) {
