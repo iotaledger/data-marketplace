@@ -1,9 +1,6 @@
 import * as functions from 'firebase-functions';
 const cors = require('cors')({ origin: true });
-const iota = require('iota.lib.js');
-const { provider } = require('../config.json');
-
-const IOTA = new iota({ provider: `${provider}:443` });
+const IOTA = require('iota.lib.js');
 
 const {
   getKey,
@@ -249,7 +246,7 @@ exports.queryStream = functions.https.onRequest((req, res) => {
   });
 });
 
-// GIve access once a stream is purchased
+// Give access once a stream is purchased
 // Add bundle validation.
 exports.purchaseStream = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
@@ -261,10 +258,12 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
     }
 
     try {
+      const { iotaApiVersion, provider } = await getSettings();
+      const iota = new IOTA({ provider: `${provider}:443` });
       // Find TX on network and parse
-      const data = await findTx(packet.hashes, IOTA);
+      const data = await findTx(packet.hashes, provider, iotaApiVersion);
       // Make sure TX is valid
-      if (!IOTA.utils.validateSignatures(data, data.find(tx => tx.value < -1).address)) {
+      if (!iota.utils.validateSignatures(data, data.find(tx => tx.value < -1).address)) {
         console.log('purchaseStream failed. Transaction is invalid for: ', data);
         throw Error('Transaction is Invalid');
       }
@@ -280,10 +279,8 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
 });
 
 // // Setup User with an API Key
-exports.setupUser = functions.auth.user().onCreate(event => {
+exports.setupUser = functions.auth.user().onCreate(user => {
   return new Promise(async (resolve, reject) => {
-    const user = event.data; // The Firebase user.
-
     if (!user.email) {
       reject();
     } else {
@@ -436,7 +433,8 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const wallet = await initWallet();
+      const { provider } = await getSettings();
+      const wallet = await initWallet(provider);
       return res.json({ success: await setWallet(packet.userId, wallet) });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);
@@ -480,20 +478,20 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
 });
 
 // Query Devices
-exports.listDevicesWithBadAddress = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
-    try {
-      const reg = /^.+?\D$/gm; // all strings that ends in NOT 9
-      const devices = await getDevices();
-      devices.map(({ sensorId, address, owner }) => {
-        if (reg.test(address)) {
-          console.log(address, sensorId, owner);
-        }
-      });
-      return res.json({ data: 'ok' });
-    } catch (e) {
-      console.log('getDevices failed. Error: ', e.message);
-      return res.status(403).json({ error: e.message });
-    }
-  });
-});
+// exports.listDevicesWithBadAddress = functions.https.onRequest((req, res) => {
+//   cors(req, res, async () => {
+//     try {
+//       const reg = /^.+?\D$/gm; // all strings that ends in NOT 9
+//       const devices = await getDevices();
+//       devices.map(({ sensorId, address, owner }) => {
+//         if (reg.test(address)) {
+//           console.log(address, sensorId, owner);
+//         }
+//       });
+//       return res.json({ data: 'ok' });
+//     } catch (e) {
+//       console.log('getDevices failed. Error: ', e.message);
+//       return res.status(403).json({ error: e.message });
+//     }
+//   });
+// });

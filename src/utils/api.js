@@ -1,4 +1,4 @@
-import { api, domainName } from '../config.json';
+import { domain } from '../config.json';
 
 // TODO: check version '1.5.0';
 const apiVersion = 1;
@@ -20,5 +20,5 @@ export const fetchData = async (endpoint, data = {}) => {
 };
 
 export default async (endpoint, data = {}) => {
-  return await fetchData(`https://${api}.${domainName}/${endpoint}`, data);
+  return await fetchData(`${domain}/${endpoint}`, data);
 };

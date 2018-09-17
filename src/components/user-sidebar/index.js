@@ -66,9 +66,9 @@ class UserSidebar extends React.Component {
             <Alert {...this.state}>{this.state.alertMessage}</Alert>
 
             <DetailRow>
-              {settings ? (
+              {settings && settings.documentation ? (
                 <a
-                  href={`https://${settings.domainName}`}
+                  href={settings.documentation}
                   target="_blank"
                   rel="noopener noreferrer"
                 >

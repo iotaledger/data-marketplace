@@ -6,6 +6,9 @@ service cloud.firestore {
   	match /keys {
    		allow read, write: if false;
   	}
+    match /settings {
+      allow read, write: if false;
+    }
   	match /devices/{documents=**} {
       // Allow reading of devices
       allow read;
