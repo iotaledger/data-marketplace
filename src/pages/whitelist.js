@@ -1,15 +1,34 @@
 import React from 'react';
 import styled from 'styled-components';
 import firebase from 'firebase/app';
+import { connect } from 'react-redux';
 import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom';
 import { allDevices } from '../utils/firebase';
 import api from '../utils/api';
 
-export default class extends React.Component {
+const CardModule = (device, toggle) => (
+  <Card inactive={device.inactive} key={`device-${device.sensorId}`}>
+    <Row>
+      <Field>{device.sensorId}</Field>
+      <Field small>{device.type}</Field>
+    </Row>
+    <Row>
+      <Field>
+        {device.location && `Location: ${device.location.city}, ${device.location.country}`}
+      </Field>
+    </Row>
+    <Link to={`/sensor/${device.sensorId}`} target="_blank">
+      <Links>View Device</Links>
+    </Link>
+    <Links onClick={() => toggle(device)}>{device.inactive ? 'Activate' : 'Deactivate'}</Links>
+  </Card>
+);
+
+class Whitelist extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { devices: [], filtered: [], search: '', forceRedirect: false };
+    this.state = { devices: [], filtered: [], search: '', forceRedirect: false, user: {} };
 
     this.change = this.change.bind(this);
     this.checkUser = this.checkUser.bind(this);
@@ -23,10 +42,10 @@ export default class extends React.Component {
 
   checkUser() {
     firebase.auth().onAuthStateChanged(async user => {
-      if (user && user.email) {
+      if (user && !user.isAnonymous && user.email) {
         // User is signed in.
         const devices = await allDevices(user.email, 'whitelist');
-        this.setState({ devices, filtered: devices });
+        this.setState({ devices, filtered: devices, user });
       } else {
         this.setState(() => ({
           forceRedirect: true
@@ -56,16 +75,20 @@ export default class extends React.Component {
 
   async toggle(device) {
     try {
+      const { devices, search, user } = this.state;
+      const { userData } = this.props;
       device.inactive = !device.inactive;
       await api('toggleWhitelist', {
+        uid: user.uid,
+        apiKey: userData.apiKey,
         sensorId: device.sensorId,
         isInactive: device.inactive.toString(),
       });
 
       this.setState({
-        devices: this.state.devices.map(dev => (dev.sensorId === device.sensorId ? device : dev)),
+        devices: devices.map(dev => (dev.sensorId === device.sensorId ? device : dev)),
       });
-      this.search(this.state.search);
+      this.search(search);
     } catch (e) {
       alert(e.message);
     }
@@ -101,23 +124,11 @@ export default class extends React.Component {
   }
 }
 
-const CardModule = (device, toggle) => (
-  <Card inactive={device.inactive} key={`device-${device.sensorId}`}>
-    <Row>
-      <Field>{device.sensorId}</Field>
-      <Field small>{device.type}</Field>
-    </Row>
-    <Row>
-      <Field>
-        {device.location && `Location: ${device.location.city}, ${device.location.country}`}
-      </Field>
-    </Row>
-    <Link to={`/sensor/${device.sensorId}`} target="_blank">
-      <Links>View Device</Links>
-    </Link>
-    <Links onClick={() => toggle(device)}>{device.inactive ? 'Activate' : 'Deactivate'}</Links>
-  </Card>
-);
+const mapStateToProps = state => ({
+  userData: state.user,
+});
+
+export default connect(mapStateToProps)(Whitelist);
 
 const Links = styled.div`
   width: 100%;
