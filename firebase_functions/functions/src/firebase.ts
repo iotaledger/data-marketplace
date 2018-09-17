@@ -178,13 +178,14 @@ exports.setDevice = async (deviceId: string, sk: string, address: string, seed: 
   return true;
 };
 
-exports.setApiKey = async (apiKey: string, uid: any) => {
+exports.setApiKey = async (apiKey: string, uid: string, email: string) => {
   // Set API key in separate table
   await admin
     .firestore()
     .collection('keys')
     .doc(apiKey)
     .set({
+      email,
       uid,
     });
   return true;
@@ -217,12 +218,6 @@ exports.setPurchase = async (userId: string, deviceId: string) => {
 
 exports.deleteDevice = async (device: any) => {
   // Remove Device
-  await admin
-    .firestore()
-    .collection('keys')
-    .doc(device)
-    .delete();
-
   await admin
     .firestore()
     .collection('deviceList')
