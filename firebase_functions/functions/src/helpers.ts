@@ -5,8 +5,18 @@ const { asTransactionObject } = require('@iota/transaction-converter');
 const {
   getSettings,
   updateWalletAddressKeyIndex,
+  updateUserWalletAddressKeyIndex,
   getIotaWallet,
+  getUserWallet,
 } = require('./firebase');
+
+const checkRecaptcha = async (captcha, emailSettings) => {
+  const response = await axios({
+    method: 'post',
+    url: `https://www.google.com/recaptcha/api/siteverify?secret=${emailSettings.googleSecretKey}&response=${captcha}`,
+  });
+  return response ? response.data : null;
+};
 
 const generateSeed = (length = 81) => {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
@@ -71,18 +81,17 @@ const findTx = (hashes, provider, iotaApiVersion) => {
   });
 };
 
-const transferFunds = async receiveAddress => {
+const transferFunds = async (receiveAddress, address, keyIndex, seed, value, updateFn, userId = null) => {
   try {
     const { provider } = await getSettings();
     const { getBalances } = composeAPI({ provider });
     const prepareTransfers = createPrepareTransfers();
-    const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
     const { balances } = await getBalances([ address ], 100);
     const balance = balances && balances.length > 0 ? balances[0] : null;
     const security = 2;
 
     const promise = new Promise((resolve, reject) => {
-      const transfers = [{ address: receiveAddress, value: defaultBalance }];
+      const transfers = [{ address: receiveAddress, value }];
       const remainderAddress = generateAddress(seed, keyIndex + 1);
       const options = {
         inputs: [{
@@ -93,46 +102,73 @@ const transferFunds = async receiveAddress => {
         }],
         security,
         remainderAddress
-      }
+      };
 
       prepareTransfers(seed, transfers, options)
         .then(async trytes => {
-          await updateWalletAddressKeyIndex(remainderAddress, keyIndex + 1);
+          await updateFn(remainderAddress, keyIndex + 1, userId);
           resolve(trytes);
         })
         .catch(error => {
-          console.log('transferFunds error', error);
+          console.log('transferFunds prepareTransfers error', error);
           reject(error);
         });
     });
     return promise;
   } catch (error) {
-    console.log('transferFunds error', error);
+    console.log('transferFunds catch', error);
     return error
   }
 }
 
-const faucet = async address => {
-  return await transferFunds(address);
+const faucet = async receiveAddress => {
+  const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
+  return await transferFunds(
+    receiveAddress,
+    address,
+    keyIndex,
+    seed,
+    defaultBalance,
+    updateWalletAddressKeyIndex,
+  );
 };
 
 const initWallet = async () => {
-  const seed = generateSeed();
-  const keyIndex = 0;
-  const address = generateNewAddress(seed, true);
-  const { defaultBalance } = await getIotaWallet();
-  const trytes = await transferFunds(address);
-  return { trytes, wallet: { address, seed, keyIndex, balance: defaultBalance }};
+  const receiveSeed = generateSeed();
+  const receiveKeyIndex = 0;
+  const receiveAddress = generateNewAddress(receiveSeed, true);
+  const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
+  const trytes = await transferFunds(
+    receiveAddress,
+    address,
+    keyIndex,
+    seed,
+    defaultBalance,
+    updateWalletAddressKeyIndex,
+  );
+  return {
+    trytes,
+    wallet: {
+      address: receiveAddress,
+      seed: receiveSeed,
+      keyIndex: receiveKeyIndex,
+      balance: defaultBalance,
+    }
+  };
 };
 
-const checkRecaptcha = async (captcha, emailSettings) => {
-  const response = await axios({
-    method: 'post',
-    url: `https://www.google.com/recaptcha/api/siteverify?secret=${emailSettings.googleSecretKey}&response=${captcha}`,
-  });
-  return response ? response.data : null;
+const purchaseData = async (userId, receiveAddress, value) => {
+  const { address, keyIndex, seed } = await getUserWallet(userId);
+  return await transferFunds(
+    receiveAddress,
+    address,
+    keyIndex || 0,
+    seed,
+    value,
+    updateUserWalletAddressKeyIndex,
+    userId,
+  );
 };
-
 
 module.exports = {
   generateUUID,
@@ -142,5 +178,6 @@ module.exports = {
   findTx,
   initWallet,
   faucet,
+  purchaseData,
   checkRecaptcha,
 }

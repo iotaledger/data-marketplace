@@ -330,7 +330,7 @@ exports.getSettings = async () => {
   throw Error(`The getSettings setting doesn't exist.`);
 };
 
-exports.getWallet = async (uid: string) => {
+exports.getUserWallet = async (uid: string) => {
   // Get User's wallet
   const doc = await admin
     .firestore()
@@ -342,7 +342,7 @@ exports.getWallet = async (uid: string) => {
     const data = doc.data();
     return data.wallet || null;
   }
-  console.log('getWallet failed. ', uid, doc);
+  console.log('getUserWallet failed. ', uid, doc);
   throw Error(`The wallet doesn't exist.`);
 };
 
@@ -365,7 +365,7 @@ exports.updateBalance = async (uid: string, balance: any) => {
   return true;
 };
 
-exports.updateUserWalletAddressKeyIndex = async (uid: string, address: string, keyIndex: number) => {
+exports.updateUserWalletAddressKeyIndex = async (address: string, keyIndex: number, uid: string) => {
   await admin
     .firestore()
     .collection('users')
