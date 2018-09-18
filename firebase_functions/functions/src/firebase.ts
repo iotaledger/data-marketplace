@@ -3,6 +3,9 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp(functions.config().firebase);
 
+const firestore = admin.firestore();
+firestore.settings({ timestampsInSnapshots: true });
+
 exports.getKey = async (key: string) => {
   // Get API key
   const doc = await admin
@@ -327,7 +330,7 @@ exports.getSettings = async () => {
   throw Error(`The getSettings setting doesn't exist.`);
 };
 
-exports.getWallet = async (uid: string) => {
+exports.getUserWallet = async (uid: string) => {
   // Get User's wallet
   const doc = await admin
     .firestore()
@@ -339,7 +342,7 @@ exports.getWallet = async (uid: string) => {
     const data = doc.data();
     return data.wallet || null;
   }
-  console.log('getWallet failed. ', uid, doc);
+  console.log('getUserWallet failed. ', uid, doc);
   throw Error(`The wallet doesn't exist.`);
 };
 
@@ -362,7 +365,16 @@ exports.updateBalance = async (uid: string, balance: any) => {
   return true;
 };
 
-exports.getWalletSeed = async () => {
+exports.updateUserWalletAddressKeyIndex = async (address: string, keyIndex: number, uid: string) => {
+  await admin
+    .firestore()
+    .collection('users')
+    .doc(uid)
+    .set({ wallet: { address, keyIndex } }, { merge: true });
+  return true;
+};
+
+exports.getIotaWallet = async () => {
   const doc = await admin
     .firestore()
     .collection('settings')
@@ -370,36 +382,20 @@ exports.getWalletSeed = async () => {
     .get();
   if (doc.exists) {
     const data = doc.data();
-    if (data.wallet && data.wallet.seed) {
-      return data.wallet.seed;
+    if (data.wallet) {
+      return data.wallet;
     }
+    console.log('getIotaWallet failed. Setting does not exist', data.wallet);
   }
-  console.log('getWalletSeed failed. Setting does not exist', doc);
-  throw Error(`The getWalletSeed setting doesn't exist.`);
+  throw Error(`The getIotaWallet setting doesn't exist.`);
 };
 
-exports.getDefaultBalance = async () => {
-  const doc = await admin
-    .firestore()
-    .collection('settings')
-    .doc('settings')
-    .get();
-  if (doc.exists) {
-    const data = doc.data();
-    if (data.wallet && data.wallet.defaultBalance) {
-      return data.wallet.defaultBalance;
-    }
-  }
-  console.log('getDefaultBalance failed. Setting does not exist', doc);
-  throw Error(`The getDefaultBalance setting doesn't exist.`);
-};
-
-exports.updateWalletAddress = async (address: string) => {
+exports.updateWalletAddressKeyIndex = async (address: string, keyIndex: number) => {
   await admin
     .firestore()
     .collection('settings')
     .doc('settings')
-    .set({ wallet: { address } }, { merge: true });
+    .set({ wallet: { address, keyIndex } }, { merge: true });
   return true;
 };
 

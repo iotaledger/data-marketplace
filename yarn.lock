@@ -112,6 +112,102 @@
   version "0.2.8"
   resolved "https://registry.yarnpkg.com/@firebase/webchannel-wrapper/-/webchannel-wrapper-0.2.8.tgz#38a936b60b898a1ad0f3719543ff1a1031f60f8b"
 
+"@iota/bundle-validator@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/bundle-validator/-/bundle-validator-1.0.0-beta.5.tgz#6f61404e84cee5870b97f40305773c38737d13e7"
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.5"
+    "@iota/kerl" "^1.0.0-beta.5"
+    "@iota/signing" "^1.0.0-beta.5"
+    "@iota/transaction" "^1.0.0-beta.5"
+    "@iota/transaction-converter" "^1.0.0-beta.5"
+
+"@iota/bundle@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/bundle/-/bundle-1.0.0-beta.5.tgz#44d77b77e3a7b04afac322afda63b653519bf570"
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.5"
+    "@iota/kerl" "^1.0.0-beta.5"
+    "@iota/pad" "^1.0.0-beta.5"
+    "@iota/signing" "^1.0.0-beta.5"
+
+"@iota/checksum@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/checksum/-/checksum-1.0.0-beta.5.tgz#dc8ff5cc42ca368e35f9cc758b411cbffc74fab6"
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.5"
+    "@iota/kerl" "^1.0.0-beta.5"
+
+"@iota/converter@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/converter/-/converter-1.0.0-beta.5.tgz#295c9736d32172955fe5cc607258913d8d0571ca"
+
+"@iota/core@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/core/-/core-1.0.0-beta.5.tgz#cb681fe939eb9ce1f90e7db274f9c89ea73bd0d7"
+  dependencies:
+    "@iota/bundle" "^1.0.0-beta.5"
+    "@iota/bundle-validator" "^1.0.0-beta.5"
+    "@iota/checksum" "^1.0.0-beta.5"
+    "@iota/converter" "^1.0.0-beta.5"
+    "@iota/curl" "^1.0.0-beta.5"
+    "@iota/http-client" "^1.0.0-beta.5"
+    "@iota/kerl" "^1.0.0-beta.5"
+    "@iota/pad" "^1.0.0-beta.5"
+    "@iota/signing" "^1.0.0-beta.5"
+    "@iota/transaction" "^1.0.0-beta.5"
+    "@iota/transaction-converter" "^1.0.0-beta.5"
+    "@types/bluebird" "^3.5.20"
+    bluebird "^3.5.1"
+
+"@iota/curl@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/curl/-/curl-1.0.0-beta.5.tgz#e2fd7bb116b92866b7ed11d9f9559ba07138c4d6"
+
+"@iota/http-client@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/http-client/-/http-client-1.0.0-beta.5.tgz#6449d47930b3f39c518700c2b3c2aed1e40679c3"
+  dependencies:
+    "@types/bluebird" "^3.5.20"
+    "@types/isomorphic-fetch" "^0.0.34"
+    bluebird "^3.5.1"
+    isomorphic-fetch "^2.2.1"
+
+"@iota/kerl@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/kerl/-/kerl-1.0.0-beta.5.tgz#65029006ed1e5d58a3ecbd170eb325102ba24aaf"
+  dependencies:
+    "@types/crypto-js" "^3.1.38"
+    crypto-js "^3.1.9-1"
+
+"@iota/pad@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/pad/-/pad-1.0.0-beta.5.tgz#07f91092d1973b668241250598e1748af5eed5ad"
+
+"@iota/signing@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/signing/-/signing-1.0.0-beta.5.tgz#67a15b824edc2b2005421ea3f32c7f52a5b43ffa"
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.5"
+    "@iota/kerl" "^1.0.0-beta.5"
+    "@iota/pad" "^1.0.0-beta.5"
+
+"@iota/transaction-converter@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/transaction-converter/-/transaction-converter-1.0.0-beta.5.tgz#de564ba022d0da872a82d8cde5b9aff62991e4b7"
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.5"
+    "@iota/curl" "^1.0.0-beta.5"
+    "@iota/pad" "^1.0.0-beta.5"
+    "@iota/transaction" "^1.0.0-beta.5"
+
+"@iota/transaction@^1.0.0-beta.5":
+  version "1.0.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@iota/transaction/-/transaction-1.0.0-beta.5.tgz#6093b5405f3d5e72ae3d0ea86f429e0c3be3ccc3"
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.5"
+    "@iota/curl" "^1.0.0-beta.5"
+
 "@mapbox/geojson-area@0.2.2":
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/@mapbox/geojson-area/-/geojson-area-0.2.2.tgz#18d7814aa36bf23fbbcc379f8e26a22927debf10"
@@ -151,6 +247,18 @@
 "@mapbox/whoots-js@^3.0.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
+
+"@types/bluebird@^3.5.20":
+  version "3.5.24"
+  resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.24.tgz#11f76812531c14f793b8ecbf1de96f672905de8a"
+
+"@types/crypto-js@^3.1.38":
+  version "3.1.43"
+  resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-3.1.43.tgz#b859347d6289ba13e347c335a4c9efa63337a748"
+
+"@types/isomorphic-fetch@^0.0.34":
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/@types/isomorphic-fetch/-/isomorphic-fetch-0.0.34.tgz#3c3483e606c041378438e951464f00e4e60706d6"
 
 JSONStream@^1.0.3:
   version "1.3.4"
@@ -766,14 +874,6 @@ babel-loader@7.1.2:
     loader-utils "^1.0.2"
     mkdirp "^0.5.1"
 
-babel-loader@^7.1.2:
-  version "7.1.5"
-  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-7.1.5.tgz#e3ee0cd7394aa557e013b02d3e492bfd07aa6d68"
-  dependencies:
-    find-cache-dir "^1.0.0"
-    loader-utils "^1.0.2"
-    mkdirp "^0.5.1"
-
 babel-messages@^6.23.0:
   version "6.23.0"
   resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-6.23.0.tgz#f3cdf4703858035b2a2951c6ec5edf6c62f2630e"
@@ -1142,7 +1242,7 @@ babel-preset-env@1.6.1:
     invariant "^2.2.2"
     semver "^5.3.0"
 
-babel-preset-env@^1.6.0, babel-preset-env@^1.6.1:
+babel-preset-env@^1.6.1:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/babel-preset-env/-/babel-preset-env-1.7.0.tgz#dea79fa4ebeb883cd35dab07e260c1c9c04df77a"
   dependencies:
@@ -1998,10 +2098,10 @@ component-emitter@^1.2.1:
   resolved "https://registry.yarnpkg.com/component-emitter/-/component-emitter-1.2.1.tgz#137918d6d78283f7df7a6b7c5a63e140e69425e6"
 
 compressible@~2.0.14:
-  version "2.0.14"
-  resolved "https://registry.yarnpkg.com/compressible/-/compressible-2.0.14.tgz#326c5f507fbb055f54116782b969a81b67a29da7"
+  version "2.0.15"
+  resolved "https://registry.yarnpkg.com/compressible/-/compressible-2.0.15.tgz#857a9ab0a7e5a07d8d837ed43fe2defff64fe212"
   dependencies:
-    mime-db ">= 1.34.0 < 2"
+    mime-db ">= 1.36.0 < 2"
 
 compression@^1.5.2:
   version "1.7.3"
@@ -2317,16 +2417,6 @@ cssom@0.3.x, "cssom@>= 0.3.2 < 0.4.0":
   resolved "https://registry.yarnpkg.com/cssstyle/-/cssstyle-0.2.37.tgz#541097234cb2513c83ceed3acddc27ff27987d54"
   dependencies:
     cssom "0.3.x"
-
-curl.lib.js@iotaledger/curl.lib.js:
-  version "1.0.22"
-  resolved "https://codeload.github.com/iotaledger/curl.lib.js/tar.gz/2da1de36123d89b0c7dcababe24f72828bc5f794"
-  dependencies:
-    babel-core "^6.26.0"
-    babel-loader "^7.1.2"
-    babel-preset-env "^1.6.0"
-    iota.crypto.js "github:iotaledger/iota.crypto.js"
-    loader-utils "^1.1.0"
 
 currently-unhandled@^0.4.1:
   version "0.4.1"
@@ -4262,7 +4352,7 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
-"iota.crypto.js@github:iotaledger/iota.crypto.js", iota.crypto.js@iotaledger/iota.crypto.js:
+iota.crypto.js@iotaledger/iota.crypto.js:
   version "0.4.2"
   resolved "https://codeload.github.com/iotaledger/iota.crypto.js/tar.gz/05c5b4485ad8232fd5b9145e02fe988a035a7704"
   dependencies:
@@ -4576,7 +4666,7 @@ isobject@^3.0.0, isobject@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/isobject/-/isobject-3.0.1.tgz#4e431e92b11a9731636aa1f9c8d1ccbcfdab78df"
 
-isomorphic-fetch@2.2.1, isomorphic-fetch@^2.1.1:
+isomorphic-fetch@2.2.1, isomorphic-fetch@^2.1.1, isomorphic-fetch@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/isomorphic-fetch/-/isomorphic-fetch-2.2.1.tgz#611ae1acf14f5e81f729507472819fe9733558a9"
   dependencies:
@@ -5462,7 +5552,7 @@ miller-rabin@^4.0.0:
     bn.js "^4.0.0"
     brorand "^1.0.1"
 
-"mime-db@>= 1.34.0 < 2", mime-db@~1.36.0:
+"mime-db@>= 1.36.0 < 2", mime-db@~1.36.0:
   version "1.36.0"
   resolved "https://registry.yarnpkg.com/mime-db/-/mime-db-1.36.0.tgz#5020478db3c7fe93aad7bbcc4dcf869c43363397"
 

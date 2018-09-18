@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 const cors = require('cors')({ origin: true });
-const IOTA = require('iota.lib.js');
+const { validateBundleSignatures } = require('@iota/bundle-validator');
 
 const {
   getKey,
@@ -12,7 +12,7 @@ const {
   getUserDevices,
   getNumberOfDevices,
   getUser,
-  getWallet,
+  getUserWallet,
   getSettings,
   setUser,
   setDevice,
@@ -24,15 +24,20 @@ const {
   deleteDevice,
   toggleWhitelistDevice,
   updateBalance,
+  updateUserWalletAddressKeyIndex,
+  getEmailSettings,
 } = require('./firebase');
 const { sendEmail } = require('./email');
 const {
   generateUUID,
   generateSeed,
-  generateAddress,
+  generateNewAddress,
   sanatiseObject,
   findTx,
-  initWallet
+  faucet,
+  initWallet,
+  checkRecaptcha,
+  purchaseData,
 } = require('./helpers');
 
 // Take in data from device
@@ -79,7 +84,7 @@ exports.newDevice = functions.https.onRequest((req, res) => {
       const invalid = sanatiseObject(packet.device);
       const secretKey = generateSeed(15);
       const seed = generateSeed();
-      const address = generateAddress(seed);
+      const address = generateNewAddress(seed);
       if (invalid) throw Error(invalid);
 
       const key = await getKey(<String>packet.apiKey);
@@ -259,12 +264,12 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
 
     try {
       const { iotaApiVersion, provider } = await getSettings();
-      const iota = new IOTA({ provider: `${provider}:443` });
       // Find TX on network and parse
-      const data = await findTx(packet.hashes, provider, iotaApiVersion);
+      const bundle = await findTx(packet.hashes, provider, iotaApiVersion);
+
       // Make sure TX is valid
-      if (!iota.utils.validateSignatures(data, data.find(tx => tx.value < -1).address)) {
-        console.log('purchaseStream failed. Transaction is invalid for: ', data);
+      if (!validateBundleSignatures(bundle)) {
+        console.log('purchaseStream failed. Transaction is invalid for: ', bundle);
         throw Error('Transaction is Invalid');
       }
 
@@ -438,9 +443,9 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const { provider } = await getSettings();
-      const wallet = await initWallet(provider);
-      return res.json({ success: await setWallet(packet.userId, wallet) });
+      const result = await initWallet();
+      await setWallet(packet.userId, result.wallet)
+      return res.json({ trytes: result.trytes });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -458,7 +463,7 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const wallet = await getWallet(packet.userId);
+      const wallet = await getUserWallet(packet.userId);
       const device = await getDevice(packet.deviceId);
       if (!device) {
         throw Error(`Device doesn't exist`);
@@ -477,6 +482,52 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
       return res.json({ error: 'Wallet not set' });
     } catch (e) {
       console.log('updateBalance failed. Error: ', e.message, packet);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.faucet = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.address || !packet.captcha) {
+      console.log('faucet failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      const emailSettings = await getEmailSettings();
+      // Check Recaptcha
+      const recaptcha = await checkRecaptcha(packet.captcha, emailSettings);
+      if (!recaptcha || !recaptcha.success) {
+        console.log('faucet failed. Recaptcha is incorrect. ', recaptcha['error-codes']);
+        return res.status(403).json({ error: recaptcha['error-codes'] });
+      }
+
+      const trytes = await faucet(packet.address);
+      return res.json({ trytes });
+    } catch (e) {
+      console.log('faucet failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.purchaseData = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.address || !packet.userId || !packet.value) {
+      console.log('purchaseData failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      const trytes = await purchaseData(packet.userId, packet.address, packet.value);
+      return res.json({ trytes });
+    } catch (e) {
+      console.log('purchaseData failed. Error: ', e, packet);
       return res.status(403).json({ error: e.message });
     }
   });

@@ -33,6 +33,8 @@
   "private": true,
   "dependencies": {
     "@firebase/app-types": "^0.3.1",
+    "@iota/converter": "^1.0.0-beta.5",
+    "@iota/core": "^1.0.0-beta.5",
     "autoprefixer": "7.1.6",
     "babel-core": "6.26.0",
     "babel-engine-plugin": "^0.2.1",
@@ -45,7 +47,6 @@
     "case-sensitive-paths-webpack-plugin": "2.1.1",
     "chalk": "1.1.3",
     "css-loader": "0.28.7",
-    "curl.lib.js": "iotaledger/curl.lib.js",
     "date-fns": "^1.29.0",
     "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
