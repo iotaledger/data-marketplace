@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import curl from 'curl.lib.js';
 import Recaptcha from 'react-recaptcha';
+import { composeAPI } from '@iota/core';
 import { connect } from 'react-redux';
 import api from '../utils/api';
+import { PoWAndSendTrytes } from '../utils/iota';
 import Loading from '../components/loading';
-import { getIota } from '../utils/iota';
 
 class Faucet extends React.Component {
   constructor(props) {
@@ -48,45 +48,11 @@ class Faucet extends React.Component {
     this.setState({ loading: true }, async () => {
       const result = await api('faucet', { captcha, address });
       if (result && result.trytes) {
-        await this.fundWallet(result.trytes);
+        await PoWAndSendTrytes(result.trytes, this.props.settings.provider);
       }
       this.setState({ success: true, loading: false });
     });
   }
-
-  async fundWallet(trytes) {
-    const iota = getIota(this.props.settings.provider);
-    try {
-      curl.init();
-      curl.overrideAttachToTangle(iota);
-    } catch (error) {
-      console.error('Curl override failed', error);
-    }
-
-    try {
-      return new Promise((resolve, reject) => {
-        // Depth or how far to go for tip selection entry point
-        const depth = 5
-
-        // Difficulty of Proof-of-Work required to attach transaction to tangle.
-        // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
-        const minWeightMagnitude = 9
-
-        iota.api.sendTrytes(trytes, depth, minWeightMagnitude, {}, async (error, transactions) => {
-          if (error !== null) {
-            console.log('fundWallet error 1', error);
-            reject(error);
-          } else {
-            const newWalletAddress = transactions[transactions.length - 1].address;
-            await api('newWalletAddress', { address: newWalletAddress });
-            resolve();
-          }
-        });
-      });
-    } catch (error) {
-      console.log('fundWallet error 2', error);
-    }
-  };
 
   render() {
     const { address, success, error, captcha, loading } = this.state;

@@ -2,7 +2,11 @@ import * as crypto from 'crypto';
 const axios = require('axios');
 const { composeAPI, createPrepareTransfers, generateAddress } = require('@iota/core');
 const { asTransactionObject } = require('@iota/transaction-converter');
-const { getSettings, getWalletSeed, getDefaultBalance, updateWalletAddress } = require('./firebase');
+const {
+  getSettings,
+  updateWalletAddressKeyIndex,
+  getIotaWallet,
+} = require('./firebase');
 
 const generateSeed = (length = 81) => {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
@@ -67,75 +71,58 @@ const findTx = (hashes, provider, iotaApiVersion) => {
   });
 };
 
-const transferFunds = async (seed, address, value, provider) => {
+const transferFunds = async receiveAddress => {
   try {
-    const { sendTrytes } = composeAPI({ provider });
+    const { provider } = await getSettings();
+    const { getBalances } = composeAPI({ provider });
     const prepareTransfers = createPrepareTransfers();
+    const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
+    const { balances } = await getBalances([ address ], 100);
+    const balance = balances && balances.length > 0 ? balances[0] : null;
+    const security = 2;
 
     const promise = new Promise((resolve, reject) => {
-      // Depth or how far to go for tip selection entry point
-      const depth = 3;
+      const transfers = [{ address: receiveAddress, value: defaultBalance }];
+      const remainderAddress = generateAddress(seed, keyIndex + 1);
+      const options = {
+        inputs: [{
+          address,
+          keyIndex,
+          security,
+          balance
+        }],
+        security,
+        remainderAddress
+      }
 
-      // Difficulty of Proof-of-Work required to attach transaction to tangle.
-      // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
-      const minWeightMagnitude = 9;
-
-      const transfers = [{ address, value }];
-
-      prepareTransfers(seed, transfers)
-        .then(trytes => sendTrytes(trytes, depth, minWeightMagnitude))
-        .then(transactions => {
-          const newWalletAddress = transactions[transactions.length - 1].address;
-          updateWalletAddress(newWalletAddress);
-          resolve(transactions);
+      prepareTransfers(seed, transfers, options)
+        .then(async trytes => {
+          await updateWalletAddressKeyIndex(remainderAddress, keyIndex + 1);
+          resolve(trytes);
         })
         .catch(error => {
-          console.error('transferFunds error', error);
-          reject(error);
-        })
-    });
-    return promise;
-  } catch (error) {
-    console.error('transferFunds error', error);
-    return error
-  }
-}
-
-const fundWallet = async (seed, address, value) => {
-  try {
-    const prepareTransfers = createPrepareTransfers();
-
-    const promise = new Promise((resolve, reject) => {
-      const transfers = [{ address, value }];
-
-      prepareTransfers(seed, transfers)
-        .then(trytes => resolve(trytes))
-        .catch(error => {
-          console.error('fundWallet error', error);
+          console.log('transferFunds error', error);
           reject(error);
         });
     });
     return promise;
   } catch (error) {
-    console.error('fundWallet error', error);
+    console.log('transferFunds error', error);
     return error
   }
 }
 
 const faucet = async address => {
-  const iotaWalletSeed = await getWalletSeed();
-  const balance = await getDefaultBalance();
-  return await fundWallet(iotaWalletSeed, address, balance);
+  return await transferFunds(address);
 };
 
 const initWallet = async () => {
   const seed = generateSeed();
+  const keyIndex = 0;
   const address = generateNewAddress(seed, true);
-  const iotaWalletSeed = await getWalletSeed();
-  const balance = await getDefaultBalance();
-  const { provider } = await getSettings();
-  const response = await transferFunds(iotaWalletSeed, address, balance, provider);
-  return { address, balance, seed };
+  const { defaultBalance } = await getIotaWallet();
+  const trytes = await transferFunds(address);
+  return { trytes, wallet: { address, seed, keyIndex, balance: defaultBalance }};
 };
 
 const checkRecaptcha = async (captcha, emailSettings) => {
@@ -153,7 +140,6 @@ module.exports = {
   generateSeed,
   sanatiseObject,
   findTx,
-  transferFunds,
   initWallet,
   faucet,
   checkRecaptcha,

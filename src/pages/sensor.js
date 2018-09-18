@@ -1,12 +1,14 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import IOTA from 'iota.lib.js';
+import { trytesToAscii } from '@iota/converter';
 import styled from 'styled-components';
 import Mam from 'mam.client.lib/mam.client.min.js';
 import isEmpty from 'lodash-es/isEmpty';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
-import { getIota, getData, purchaseData, getBalance } from '../utils/iota';
+import { getData, purchaseData, getBalance, PoWAndSendTrytes } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -130,7 +132,8 @@ class Sensor extends React.Component {
       }
 
       const { sensor, settings: { provider } } = this.props;
-      const mamState = Mam.init(getIota(provider));
+      const iota = new IOTA({ provider });
+      const mamState = Mam.init(iota);
       mamState.channel.security = sensor.security || 2;
 
       const packets = data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
@@ -158,8 +161,7 @@ class Sensor extends React.Component {
   }
 
   saveData(data, i) {
-    const iota = getIota(this.props.settings.provider);
-    const input = iota.utils.fromTrytes(data);
+    const input = trytesToAscii(data);
     try {
       const packet = JSON.parse(input);
       const packets = [...this.state.packets, packet];
@@ -191,7 +193,10 @@ class Sensor extends React.Component {
   async fund() {
     const { userId } = this.state;
     this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
-      await api('setWallet', { userId });
+      const result = await api('setWallet', { userId });
+      if (result && result.trytes) {
+        await PoWAndSendTrytes(result.trytes, this.props.settings.provider);
+      }
       this.fetchWallet(userId);
     });
   }
