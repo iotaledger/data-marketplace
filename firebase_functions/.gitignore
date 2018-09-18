@@ -1,7 +1,7 @@
 # Logs
 logs
 *.log
-.firebaserc0
+.firebaserc
 
 # Compiled binary addons
 build/Release

@@ -6,6 +6,7 @@ import { Redirect } from 'react-router'
 import { Link } from 'react-router-dom';
 import { allDevices } from '../utils/firebase';
 import api from '../utils/api';
+import { loadUser } from '../store/user/actions';
 
 const CardModule = (device, toggle) => (
   <Card inactive={device.inactive} key={`device-${device.sensorId}`}>
@@ -45,6 +46,7 @@ class Whitelist extends React.Component {
       if (user && !user.isAnonymous && user.email) {
         // User is signed in.
         const devices = await allDevices(user.email, 'whitelist');
+        await this.props.loadUser(user.uid);
         this.setState({ devices, filtered: devices, user });
       } else {
         this.setState(() => ({
@@ -128,7 +130,11 @@ const mapStateToProps = state => ({
   userData: state.user,
 });
 
-export default connect(mapStateToProps)(Whitelist);
+const mapDispatchToProps = dispatch => ({
+  loadUser: userId => dispatch(loadUser(userId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Whitelist);
 
 const Links = styled.div`
   width: 100%;

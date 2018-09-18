@@ -4,6 +4,7 @@
 # build artifacts
 /build
 .firebase
+.firebaserc
 
 .DS_Store
 
