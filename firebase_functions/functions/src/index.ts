@@ -12,7 +12,7 @@ const {
   getUserDevices,
   getNumberOfDevices,
   getUser,
-  getWallet,
+  getUserWallet,
   getSettings,
   setUser,
   setDevice,
@@ -37,6 +37,7 @@ const {
   faucet,
   initWallet,
   checkRecaptcha,
+  purchaseData,
 } = require('./helpers');
 
 // Take in data from device
@@ -462,7 +463,7 @@ exports.updateBalance = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const wallet = await getWallet(packet.userId);
+      const wallet = await getUserWallet(packet.userId);
       const device = await getDevice(packet.deviceId);
       if (!device) {
         throw Error(`Device doesn't exist`);
@@ -508,6 +509,25 @@ exports.faucet = functions.https.onRequest((req, res) => {
       return res.json({ trytes });
     } catch (e) {
       console.log('faucet failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.purchaseData = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    // Check Fields
+    const packet = req.body;
+    if (!packet || !packet.address || !packet.userId || !packet.value) {
+      console.log('purchaseData failed. Packet: ', packet);
+      return res.status(400).json({ error: 'Malformed Request' });
+    }
+
+    try {
+      const trytes = await purchaseData(packet.userId, packet.address, packet.value);
+      return res.json({ trytes });
+    } catch (e) {
+      console.log('purchaseData failed. Error: ', e, packet);
       return res.status(403).json({ error: e.message });
     }
   });

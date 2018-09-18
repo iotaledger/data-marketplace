@@ -8,7 +8,7 @@ import isEmpty from 'lodash-es/isEmpty';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
-import { getData, purchaseData, getBalance, PoWAndSendTrytes } from '../utils/iota';
+import { getData, getBalance, PoWAndSendTrytes } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -245,7 +245,16 @@ class Sensor extends React.Component {
         // Try purchase
         let purchaseResp;
         try {
-          purchaseResp = await purchaseData(wallet.seed, sensor.address, Number(sensor.price), provider);
+          const purchaseDataPacket = {
+            userId,
+            address: sensor.address,
+            value: Number(sensor.price),
+          };
+
+          const purchaseDataResult = await api('purchaseData', purchaseDataPacket);
+          if (purchaseDataResult && purchaseDataResult.trytes) {
+            purchaseResp = await PoWAndSendTrytes(purchaseDataResult.trytes, provider);
+          }
         } catch (error) {
           console.error('purchase error', error);
           return this.throw({
@@ -265,7 +274,7 @@ class Sensor extends React.Component {
               userId,
               deviceId,
               full: true,
-              hashes: purchaseResp.map(bundle => bundle.hash),
+              hashes: purchaseResp && purchaseResp.map(bundle => bundle.hash),
             };
 
             const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
