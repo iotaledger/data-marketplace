@@ -24,7 +24,7 @@ const {
   deleteDevice,
   toggleWhitelistDevice,
   updateBalance,
-  updateWalletAddress,
+  updateUserWalletAddressKeyIndex,
   getEmailSettings,
 } = require('./firebase');
 const { sendEmail } = require('./email');
@@ -442,8 +442,9 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const wallet = await initWallet();
-      return res.json({ success: await setWallet(packet.userId, wallet) });
+      const result = await initWallet();
+      await setWallet(packet.userId, result.wallet)
+      return res.json({ trytes: result.trytes });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -507,24 +508,6 @@ exports.faucet = functions.https.onRequest((req, res) => {
       return res.json({ trytes });
     } catch (e) {
       console.log('faucet failed. Error: ', e.message);
-      return res.status(403).json({ error: e.message });
-    }
-  });
-});
-
-exports.newWalletAddress = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
-    // Check Fields
-    const packet = req.body;
-    if (!packet || !packet.address) {
-      console.log('newWalletAddress failed. Packet: ', packet);
-      return res.status(400).json({ error: 'Malformed Request' });
-    }
-
-    try {
-      return res.json({ success: await updateWalletAddress(packet.address) });
-    } catch (e) {
-      console.log('newWalletAddress failed. Error: ', e.message, packet);
       return res.status(403).json({ error: e.message });
     }
   });
