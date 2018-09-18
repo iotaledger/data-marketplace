@@ -87,8 +87,12 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
     const { getBalances } = composeAPI({ provider });
     const prepareTransfers = createPrepareTransfers();
     const { balances } = await getBalances([ address ], 100);
-    const balance = balances && balances.length > 0 ? balances[0] : null;
     const security = 2;
+    const balance = balances && balances.length > 0 ? balances[0] : 0;
+    if (balance === 0) {
+      console.log('transferFunds. Insufficient balance', address, balances);
+      return null;
+    }
 
     const promise = new Promise((resolve, reject) => {
       const transfers = [{ address: receiveAddress, value }];
