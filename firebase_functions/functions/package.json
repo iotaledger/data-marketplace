@@ -9,6 +9,19 @@
     "logs": "firebase functions:log"
   },
   "main": "lib/index.js",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Lewis Freiberg, Alexey Sobolev (IOTA Foundation)",
+    "website": "https://iota.org"
+  },
+  "contributors": [
+    {
+      "name": "Alexey Sobolev"
+    },
+    {
+      "name": "Lewis Freiberg"
+    }
+  ],
   "dependencies": {
     "@iota/bundle-validator": "^1.0.0-beta.5",
     "@iota/core": "^1.0.0-beta.5",
