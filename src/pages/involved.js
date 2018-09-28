@@ -284,6 +284,7 @@ const Container = styled.div`
   @media (max-width: 430px) {
     background-size: 584px 450px;
     margin-bottom: 20px;
+    margin-top: 30px;
   }
 `;
 
@@ -299,7 +300,7 @@ const TitleWrapper = styled.div`
 const Info = styled.div`
   width: 40%;
   max-width: 600px;
-  padding: 87px 0 40px 100px;
+  padding: 87px 0 80px 100px;
   @media (max-width: 1120px) {
     max-width: 420px;
     padding: 30px 0 40px;
