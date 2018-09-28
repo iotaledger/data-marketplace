@@ -158,10 +158,8 @@ export default class extends React.Component {
           //   <Image src="/static/illustrations/hackathon.png" alt="IOTA process illustration" />
           // </ImgContainer>
           // <Content content={content5} />
-        }
-        <Cards items={examples} />
-        <Carousel items={examples} />
-        {
+          // <Cards items={examples} />
+          // <Carousel items={examples} />
           // <Content content={content6} />
         }
         <ScrollToTop onClick={this.onScrollToTop} />
