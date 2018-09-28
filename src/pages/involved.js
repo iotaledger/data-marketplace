@@ -71,9 +71,11 @@ const Header = ({ onAnchorClick }) => {
           onClick={() => onAnchorClick('joint-development')}>
           <SubLink>{'Joint Use Case Development'.toUpperCase()}</SubLink>
         </Link>
-        <Link to={'/involved/#cooperation'} onClick={() => onAnchorClick('cooperation')}>
-          <SubLink>{'Virtual Hackathon Cooperation'.toUpperCase()}</SubLink>
-        </Link>
+        {
+        // <Link to={'/involved/#cooperation'} onClick={() => onAnchorClick('cooperation')}>
+        //   <SubLink>{'Virtual Hackathon Cooperation'.toUpperCase()}</SubLink>
+        // </Link>
+        }
       </Info>
     </Container>
   );
@@ -146,18 +148,22 @@ export default class extends React.Component {
           </ContentInnerWrapper>
         </ContentOuterWrapper>
 
-        <Heading
-          title="Call for Cooperation: Data Marketplace virtual hackathon"
-          id="cooperation"
-          anchor={anchor}
-        />
-        <ImgContainer>
-          <Image src="/static/illustrations/hackathon.png" alt="IOTA process illustration" />
-        </ImgContainer>
-        <Content content={content5} />
+        {
+          // <Heading
+          //   title="Call for Cooperation: Data Marketplace virtual hackathon"
+          //   id="cooperation"
+          //   anchor={anchor}
+          // />
+          // <ImgContainer>
+          //   <Image src="/static/illustrations/hackathon.png" alt="IOTA process illustration" />
+          // </ImgContainer>
+          // <Content content={content5} />
+        }
         <Cards items={examples} />
         <Carousel items={examples} />
-        <Content content={content6} />
+        {
+          // <Content content={content6} />
+        }
         <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
