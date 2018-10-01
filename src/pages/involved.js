@@ -71,9 +71,11 @@ const Header = ({ onAnchorClick }) => {
           onClick={() => onAnchorClick('joint-development')}>
           <SubLink>{'Joint Use Case Development'.toUpperCase()}</SubLink>
         </Link>
-        <Link to={'/involved/#cooperation'} onClick={() => onAnchorClick('cooperation')}>
-          <SubLink>{'Virtual Hackathon Cooperation'.toUpperCase()}</SubLink>
-        </Link>
+        {
+        // <Link to={'/involved/#cooperation'} onClick={() => onAnchorClick('cooperation')}>
+        //   <SubLink>{'Virtual Hackathon Cooperation'.toUpperCase()}</SubLink>
+        // </Link>
+        }
       </Info>
     </Container>
   );
@@ -146,18 +148,20 @@ export default class extends React.Component {
           </ContentInnerWrapper>
         </ContentOuterWrapper>
 
-        <Heading
-          title="Call for Cooperation: Data Marketplace virtual hackathon"
-          id="cooperation"
-          anchor={anchor}
-        />
-        <ImgContainer>
-          <Image src="/static/illustrations/hackathon.png" alt="IOTA process illustration" />
-        </ImgContainer>
-        <Content content={content5} />
-        <Cards items={examples} />
-        <Carousel items={examples} />
-        <Content content={content6} />
+        {
+          // <Heading
+          //   title="Call for Cooperation: Data Marketplace virtual hackathon"
+          //   id="cooperation"
+          //   anchor={anchor}
+          // />
+          // <ImgContainer>
+          //   <Image src="/static/illustrations/hackathon.png" alt="IOTA process illustration" />
+          // </ImgContainer>
+          // <Content content={content5} />
+          // <Cards items={examples} />
+          // <Carousel items={examples} />
+          // <Content content={content6} />
+        }
         <ScrollToTop onClick={this.onScrollToTop} />
         <Footer />
       </Main>
@@ -280,6 +284,7 @@ const Container = styled.div`
   @media (max-width: 430px) {
     background-size: 584px 450px;
     margin-bottom: 20px;
+    margin-top: 30px;
   }
 `;
 
@@ -295,7 +300,7 @@ const TitleWrapper = styled.div`
 const Info = styled.div`
   width: 40%;
   max-width: 600px;
-  padding: 87px 0 40px 100px;
+  padding: 87px 0 80px 100px;
   @media (max-width: 1120px) {
     max-width: 420px;
     padding: 30px 0 40px;
