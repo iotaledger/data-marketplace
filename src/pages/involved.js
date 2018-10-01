@@ -36,7 +36,7 @@ const content4 = {
 //
 // const content6 = {
 //   text: `Please submit your interest at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a> preferably by 1st Oct.`,
-// };
+// }; 
 
 const characteristics = [
   'Ambition to explore and develop new business models with the backing of management',
