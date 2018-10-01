@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Recaptcha from 'react-recaptcha';
-import { composeAPI } from '@iota/core';
 import { connect } from 'react-redux';
 import api from '../utils/api';
 import { PoWAndSendTrytes } from '../utils/iota';
