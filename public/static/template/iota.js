@@ -1,12 +1,11 @@
 const crypto = require('crypto');
 const Mam = require('mam.client.js');
-const IOTA = require('iota.lib.js');
+const { asciiToTrytes } = require('@iota/converter');
 const { storeKey } = require('./keyStorage');
 const { provider } = require('./config.json');
-const iota = new IOTA({ provider });
 
 // Initialise MAM State
-let mamState = Mam.init(iota);
+let mamState = Mam.init(provider);
 
 // Random Key Generator
 const generateRandomKey = length => {
@@ -27,7 +26,7 @@ exports.publish = async payload => {
   mamState = Mam.changeMode(mamState, 'restricted', mamKey);
 
   // Create Trytes
-  const trytes = iota.utils.toTrytes(JSON.stringify(packet));
+  const trytes = asciiToTrytes(JSON.stringify(packet));
 
   // Get MAM payload
   const message = Mam.create(mamState, trytes);
