@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import BurgerMenu from '../components//header/burger';
 import MiniHeader from '../components/header/mini-header';
-import Cards from '../components/feature-section/feature-cards';
-import Carousel from '../components/carousel';
+// import Cards from '../components/feature-section/feature-cards';
+// import Carousel from '../components/carousel';
 import Content from '../components/content';
 import Form from '../components/form';
 import Heading from '../components/content/heading';
@@ -29,14 +29,14 @@ const content4 = {
   text: `Please send us an email at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a>`,
 };
 
-const content5 = {
-  text: `The Foundation aims at launching in Q3/4 2018 a global virtual initiative to catalyse co-creation and bring developers and organisations to develop and showcase together their capabilities and creativity. New solutions across industries and geographies will be developed as hybrid, addons or use case proof of concept on top of an <a href="https://github.com/iotaledger/data-marketplace">opensource</a> version of the Data Marketplace.
-<br /><br />We are currently gathering interest from our ecosystem and potential partners willing to help shape this unique initiative. Examples include:`,
-};
-
-const content6 = {
-  text: `Please submit your interest at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a> preferably by 1st Oct.`,
-};
+// const content5 = {
+//   text: `The Foundation aims at launching in Q3/4 2018 a global virtual initiative to catalyse co-creation and bring developers and organisations to develop and showcase together their capabilities and creativity. New solutions across industries and geographies will be developed as hybrid, addons or use case proof of concept on top of an <a href="https://github.com/iotaledger/data-marketplace">opensource</a> version of the Data Marketplace.
+// <br /><br />We are currently gathering interest from our ecosystem and potential partners willing to help shape this unique initiative. Examples include:`,
+// };
+//
+// const content6 = {
+//   text: `Please submit your interest at <a href="mailto:datamarketplace@iota.org">datamarketplace@iota.org</a> preferably by 1st Oct.`,
+// }; 
 
 const characteristics = [
   'Ambition to explore and develop new business models with the backing of management',
@@ -46,13 +46,13 @@ const characteristics = [
   'Embraces open innovation principles. Openness to publish/showcase publicly',
 ];
 
-const examples = [
-  '“We are a Blockchain Innovation Cluster and would like to train prospective participants with IOTA before the launch of the challenge.”',
-  '“My organisation is a leading player in our region and would like to host a physical hub so that participants meet face to face during the event”',
-  '“Can my organisation provide sponsorship for a theme / Problem to be solved?”',
-  '“Can we incentivize participants to use our IoT and connected devices as part of their solutions?”',
-  '“We would like to provide exposure to the event via our Media or events”',
-];
+// const examples = [
+//   '“We are a Blockchain Innovation Cluster and would like to train prospective participants with IOTA before the launch of the challenge.”',
+//   '“My organisation is a leading player in our region and would like to host a physical hub so that participants meet face to face during the event”',
+//   '“Can my organisation provide sponsorship for a theme / Problem to be solved?”',
+//   '“Can we incentivize participants to use our IoT and connected devices as part of their solutions?”',
+//   '“We would like to provide exposure to the event via our Media or events”',
+// ];
 
 const Header = ({ onAnchorClick }) => {
   return (
