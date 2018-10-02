@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import IOTA from 'iota.lib.js';
 import { trytesToAscii } from '@iota/converter';
 import styled from 'styled-components';
 import Mam from 'mam.client.lib/mam.client.min.js';
@@ -132,8 +131,7 @@ class Sensor extends React.Component {
       }
 
       const { sensor, settings: { provider } } = this.props;
-      const iota = new IOTA({ provider });
-      const mamState = Mam.init(iota);
+      const mamState = Mam.init(provider);
       mamState.channel.security = sensor.security || 2;
 
       const packets = data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
