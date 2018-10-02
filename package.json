@@ -64,7 +64,6 @@
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
     "in-view": "^0.6.1",
-    "iota.lib.js": "^0.4.7",
     "jest": "20.0.4",
     "jszip": "^3.1.5",
     "lodash-es": "^4.17.11",
