@@ -28,9 +28,6 @@ export default ({ onAnchorClick }) => (
         <Link to={'/#participants'} onClick={() => onAnchorClick('participants')}>
           <SubLink>{'Participants'.toUpperCase()}</SubLink>
         </Link>
-        <Link to={'/#contact'} onClick={() => onAnchorClick('contact')}>
-          <SubLink>{'Get involved'.toUpperCase()}</SubLink>
-        </Link>
       </Info>
       <Graphics>
         <Graphic1
