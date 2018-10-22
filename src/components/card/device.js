@@ -45,6 +45,11 @@ const Device = props => {
         <RowDesc>Sensor streams:</RowDesc>
         <Data>{device.dataTypes && device.dataTypes.length}</Data>
       </RowHalf>
+      <RowHalf>
+        <RowIcon src="/static/icons/icon-key.svg" alt="" />
+        <RowDesc>Device secret key:</RowDesc>
+        <Data>{device.sk}</Data>
+      </RowHalf>
     </Card>
   );
 };
