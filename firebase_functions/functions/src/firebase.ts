@@ -391,6 +391,7 @@ exports.getIotaWallet = async () => {
 };
 
 exports.updateWalletAddressKeyIndex = async (address: string, keyIndex: number) => {
+  console.log('updateWalletAddressKeyIndex', address, keyIndex);
   await admin
     .firestore()
     .collection('settings')

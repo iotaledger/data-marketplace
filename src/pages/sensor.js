@@ -7,7 +7,7 @@ import isEmpty from 'lodash-es/isEmpty';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
-import { getData, getBalance, PoWAndSendTrytes } from '../utils/iota';
+import { getData, getBalance } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -191,10 +191,7 @@ class Sensor extends React.Component {
   async fund() {
     const { userId } = this.state;
     this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
-      const result = await api('setWallet', { userId });
-      if (result && result.trytes) {
-        await PoWAndSendTrytes(result.trytes, this.props.settings.provider);
-      }
+      await api('setWallet', { userId });
       this.fetchWallet(userId);
     });
   }
@@ -205,7 +202,6 @@ class Sensor extends React.Component {
       loadUser,
       user,
       sensor,
-      settings: { provider },
       match: {
         params: { deviceId },
       },
@@ -250,8 +246,8 @@ class Sensor extends React.Component {
           };
 
           const purchaseDataResult = await api('purchaseData', purchaseDataPacket);
-          if (purchaseDataResult && purchaseDataResult.trytes) {
-            purchaseResp = await PoWAndSendTrytes(purchaseDataResult.trytes, provider);
+          if (purchaseDataResult && purchaseDataResult.transactions) {
+            purchaseResp = purchaseDataResult.transactions;
           }
         } catch (error) {
           console.error('purchase error', error);

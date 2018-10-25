@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Recaptcha from 'react-recaptcha';
 import { connect } from 'react-redux';
 import api from '../utils/api';
-import { PoWAndSendTrytes } from '../utils/iota';
 import Loading from '../components/loading';
 
 class Faucet extends React.Component {
@@ -45,10 +44,7 @@ class Faucet extends React.Component {
     }
 
     this.setState({ loading: true }, async () => {
-      const result = await api('faucet', { captcha, address });
-      if (result && result.trytes) {
-        await PoWAndSendTrytes(result.trytes, this.props.settings.provider);
-      }
+      await api('faucet', { captcha, address });
       this.setState({ success: true, loading: false });
     });
   }
