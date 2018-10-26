@@ -443,7 +443,7 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const result = await initWallet();
+      const result = await initWallet(packet.userId);
       await setWallet(packet.userId, result.wallet)
       return res.json({ transactions: result.transactions });
     } catch (e) {
