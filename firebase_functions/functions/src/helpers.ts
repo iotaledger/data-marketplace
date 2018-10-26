@@ -98,7 +98,7 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
     const minWeightMagnitude = 9
 
     if (balance === 0) {
-      console.log('transferFunds. Insufficient balance', address, balances);
+      console.log('transferFunds. Insufficient balance', address, balances, userId);
       return null;
     }
 
