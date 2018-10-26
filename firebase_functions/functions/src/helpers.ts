@@ -152,7 +152,7 @@ const faucet = async receiveAddress => {
   );
 };
 
-const initWallet = async () => {
+const initWallet = async (userId = null) => {
   const receiveSeed = generateSeed();
   const receiveKeyIndex = 0;
   const receiveAddress = generateNewAddress(receiveSeed, true);
@@ -164,6 +164,7 @@ const initWallet = async () => {
     seed,
     defaultBalance,
     updateWalletAddressKeyIndex,
+    userId
   );
   return {
     transactions,
