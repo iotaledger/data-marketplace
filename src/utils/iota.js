@@ -1,4 +1,3 @@
-import { composeAPI } from '@iota/core';
 import api, { fetchData } from './api';
 
 export const getData = async (userId, deviceId) => {

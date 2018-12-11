@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { trytesToAscii } from '@iota/converter';
+import { createHttpClient } from '@iota/http-client'
 import styled from 'styled-components';
-import Mam from 'mam.client.lib/mam.client.min.js';
+import { createContext, Reader, Mode } from 'mam.client.js/lib/mam';
 import isEmpty from 'lodash-es/isEmpty';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
@@ -28,6 +29,7 @@ class Sensor extends React.Component {
       },
       error: false,
       fetching: false,
+      client: createHttpClient({ provider: props.settings.provider })
     };
 
     this.fetch = this.fetch.bind(this);
@@ -130,28 +132,27 @@ class Sensor extends React.Component {
         });
       }
 
-      const { sensor, settings: { provider } } = this.props;
-      const mamState = Mam.init(provider);
-      mamState.channel.security = sensor.security || 2;
-
       const packets = data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
-        const result = await Mam.fetchSingle(
-          root,
-          sidekey !== '' ? 'restricted' : null,
-          sidekey !== '' ? sidekey : null,
-          sensor.hash === 'curlp27' ? 27 : undefined
-        );
-
-        if (result && result.payload) {
-          this.saveData(result.payload, i);
-        } else {
+        console.log(111, this.state.client);
+        try {
+          let ctx = await createContext();
+          console.log(222, ctx);
+          let reader = new Reader(ctx, this.state.client, Mode.Old, root, sidekey);
+          console.log(333, reader);
+          const message = await reader.next();
+          console.log(444, message);
+          if (message && message.value && message.value[0]) {
+            console.log(555, message.value[0]);
+            this.saveData(message.value[0].message.payload, i);
+          }
+        } catch (e) {
+          console.error("fetchItem:", "\n", e);
           this.throw({
             body: 'Unable to read the packets of data from the device.',
             heading: 'Device Misconfigured',
           });
         }
       });
-      return packets;
     } catch (error) {
       console.error('fetchMam error', error);
       this.setState({ dataEnd: true });
