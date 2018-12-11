@@ -128,6 +128,17 @@
     "@iota/transaction" "^1.0.0-beta.5"
     "@iota/transaction-converter" "^1.0.0-beta.5"
 
+"@iota/bundle-validator@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/bundle-validator/-/bundle-validator-1.0.0-beta.7.tgz#d3d41de38c147255a11eca6955d378139ae1a363"
+  integrity sha512-HlB0x/ypfMqNl/7ATqxSv8wGuf8oWov+M2lgWlBHKifr5Y8+j5ltoibHL9E1Eos9F1zqQxHfy3LjZ/AR4nNQDA==
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.7"
+    "@iota/kerl" "^1.0.0-beta.7"
+    "@iota/signing" "^1.0.0-beta.7"
+    "@iota/transaction" "^1.0.0-beta.7"
+    "@iota/transaction-converter" "^1.0.0-beta.7"
+
 "@iota/bundle@^1.0.0-beta.5":
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/bundle/-/bundle-1.0.0-beta.5.tgz#44d77b77e3a7b04afac322afda63b653519bf570"
@@ -137,6 +148,16 @@
     "@iota/pad" "^1.0.0-beta.5"
     "@iota/signing" "^1.0.0-beta.5"
 
+"@iota/bundle@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/bundle/-/bundle-1.0.0-beta.7.tgz#8e4705fa96e8c6ea4b97db0f767a0cd7ef63e68f"
+  integrity sha512-ZL1TkufdNX20Y/odlql3T+aaWK9P7hcR2d/SUKBU5gQAUD0VrC+P2kaNF+eLTxNVosA7aeSLBcA7I1zOpnD82Q==
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.7"
+    "@iota/kerl" "^1.0.0-beta.7"
+    "@iota/pad" "^1.0.0-beta.7"
+    "@iota/signing" "^1.0.0-beta.7"
+
 "@iota/checksum@^1.0.0-beta.5":
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/checksum/-/checksum-1.0.0-beta.5.tgz#dc8ff5cc42ca368e35f9cc758b411cbffc74fab6"
@@ -144,9 +165,22 @@
     "@iota/converter" "^1.0.0-beta.5"
     "@iota/kerl" "^1.0.0-beta.5"
 
+"@iota/checksum@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/checksum/-/checksum-1.0.0-beta.7.tgz#1b4148a2900b62c418fb9bfbe0b279622849e283"
+  integrity sha512-hHD6maraCj8QD/w0gPI75vPZ30/sk5S5DE0vW8hSbWqJc6+QATxkvUtqzIgd/e+gWqk7AX4WjErmedjvNl8wiQ==
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.7"
+    "@iota/kerl" "^1.0.0-beta.7"
+
 "@iota/converter@^1.0.0-beta.5":
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/converter/-/converter-1.0.0-beta.5.tgz#295c9736d32172955fe5cc607258913d8d0571ca"
+
+"@iota/converter@^1.0.0-beta.6", "@iota/converter@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/converter/-/converter-1.0.0-beta.7.tgz#102224163fb2ce22f94be078efbac2d979b59e35"
+  integrity sha512-SYRoRi1VQ94C3/IAURftkaAbVSbfz3hnBt95hH7f3ybW4BffECZ04mgX6uuC1LwT0BwpmLSxfGy6Veih6YPIxQ==
 
 "@iota/core@^1.0.0-beta.5":
   version "1.0.0-beta.5"
@@ -166,9 +200,33 @@
     "@types/bluebird" "^3.5.20"
     bluebird "^3.5.1"
 
+"@iota/core@^1.0.0-beta.6":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/core/-/core-1.0.0-beta.7.tgz#b52d0cb84f10ffefffd1a6fb1e4804fc55f59de0"
+  integrity sha512-Hr7SJOrtPp5KSjRkyP1EjuS1mL7//Ef7T0MP1q118XxE70v383CzNdGRXiUEOY6SjdWkgZRIvNaQKzd92V8nfA==
+  dependencies:
+    "@iota/bundle" "^1.0.0-beta.7"
+    "@iota/bundle-validator" "^1.0.0-beta.7"
+    "@iota/checksum" "^1.0.0-beta.7"
+    "@iota/converter" "^1.0.0-beta.7"
+    "@iota/curl" "^1.0.0-beta.7"
+    "@iota/http-client" "^1.0.0-beta.7"
+    "@iota/kerl" "^1.0.0-beta.7"
+    "@iota/pad" "^1.0.0-beta.7"
+    "@iota/signing" "^1.0.0-beta.7"
+    "@iota/transaction" "^1.0.0-beta.7"
+    "@iota/transaction-converter" "^1.0.0-beta.7"
+    "@types/bluebird" "^3.5.24"
+    bluebird "^3.5.1"
+
 "@iota/curl@^1.0.0-beta.5":
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/curl/-/curl-1.0.0-beta.5.tgz#e2fd7bb116b92866b7ed11d9f9559ba07138c4d6"
+
+"@iota/curl@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/curl/-/curl-1.0.0-beta.7.tgz#771bc42407e04df36bc37de0f887c24fd22b9d32"
+  integrity sha512-5PmaJDhv5BMXafhs42ofvqGOXRrZ7BWnkctzMbbOTXVEVICiBPUUTcuxkhVNUWL6BdxAvrgGxqY1XpbID8LBvg==
 
 "@iota/http-client@^1.0.0-beta.5":
   version "1.0.0-beta.5"
@@ -179,9 +237,26 @@
     bluebird "^3.5.1"
     isomorphic-fetch "^2.2.1"
 
+"@iota/http-client@^1.0.0-beta.6", "@iota/http-client@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/http-client/-/http-client-1.0.0-beta.7.tgz#95c6468377aef4e68cc558f6af4a3f855516b078"
+  integrity sha512-41yME7FwxmmC1aAt6sOAvqky46mfQxmMPDYOKXyiZNg5qf5N4avZQmZ2JfeFY/tu+fZRe3KIwuyyt1sjyDaFpw==
+  dependencies:
+    "@types/bluebird" "^3.5.24"
+    bluebird "^3.5.1"
+    cross-fetch "^2.2.2"
+
 "@iota/kerl@^1.0.0-beta.5":
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/kerl/-/kerl-1.0.0-beta.5.tgz#65029006ed1e5d58a3ecbd170eb325102ba24aaf"
+  dependencies:
+    "@types/crypto-js" "^3.1.38"
+    crypto-js "^3.1.9-1"
+
+"@iota/kerl@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/kerl/-/kerl-1.0.0-beta.7.tgz#cf45bc7ee5b55143bc1cdc3c11e3b8d1bc5272db"
+  integrity sha512-19RQFpM/jIjDoy/D3usPgCRku1Oeo0CVwkTfHQaNUnQ9KFzCV2ZSYVGFRGirZeMjcSPFbap27VqeKYUeW70SkQ==
   dependencies:
     "@types/crypto-js" "^3.1.38"
     crypto-js "^3.1.9-1"
@@ -190,6 +265,11 @@
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/pad/-/pad-1.0.0-beta.5.tgz#07f91092d1973b668241250598e1748af5eed5ad"
 
+"@iota/pad@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/pad/-/pad-1.0.0-beta.7.tgz#145c81863fa958f8236d4b4429d7e47c5cf19af1"
+  integrity sha512-u/DiY/5OgOlXd8qQ6jJisgZ1VTQMEk1B6ij4bALIH8BSCvzam6WF2CSO4spogTJ06P7A+3+Ljn083Lrd/tyhFA==
+
 "@iota/signing@^1.0.0-beta.5":
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/signing/-/signing-1.0.0-beta.5.tgz#67a15b824edc2b2005421ea3f32c7f52a5b43ffa"
@@ -197,6 +277,15 @@
     "@iota/converter" "^1.0.0-beta.5"
     "@iota/kerl" "^1.0.0-beta.5"
     "@iota/pad" "^1.0.0-beta.5"
+
+"@iota/signing@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/signing/-/signing-1.0.0-beta.7.tgz#e638ef4adf91b02fee9ccc227d7c205861f6f605"
+  integrity sha512-mWJCIfKQD6gOIT4CXe7wuTOnmRt3Te8wk1cEpqPkDlZESXP04XJc8aq8gkPdGnK31zaO/+98o0LYBa8tNU9gxA==
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.7"
+    "@iota/kerl" "^1.0.0-beta.7"
+    "@iota/pad" "^1.0.0-beta.7"
 
 "@iota/transaction-converter@^1.0.0-beta.5":
   version "1.0.0-beta.5"
@@ -207,12 +296,29 @@
     "@iota/pad" "^1.0.0-beta.5"
     "@iota/transaction" "^1.0.0-beta.5"
 
+"@iota/transaction-converter@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/transaction-converter/-/transaction-converter-1.0.0-beta.7.tgz#719e6a3f1f5c25c13af9d5bbbf464033807f3624"
+  integrity sha512-6bP9rHkyFAjAMI5s9hLtPXepH2rIo5MhM3SQjq3q7VrTgcUrKzTLbcX8aBmxVKhJKhKO4zFNls8syQDAuQckkA==
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.7"
+    "@iota/pad" "^1.0.0-beta.7"
+    "@iota/transaction" "^1.0.0-beta.7"
+
 "@iota/transaction@^1.0.0-beta.5":
   version "1.0.0-beta.5"
   resolved "https://registry.yarnpkg.com/@iota/transaction/-/transaction-1.0.0-beta.5.tgz#6093b5405f3d5e72ae3d0ea86f429e0c3be3ccc3"
   dependencies:
     "@iota/converter" "^1.0.0-beta.5"
     "@iota/curl" "^1.0.0-beta.5"
+
+"@iota/transaction@^1.0.0-beta.7":
+  version "1.0.0-beta.7"
+  resolved "https://registry.yarnpkg.com/@iota/transaction/-/transaction-1.0.0-beta.7.tgz#0ee9943f2852b976320847aaa62bd0aeb6d452f8"
+  integrity sha512-IsYCC7diAp6hQIGGSKRHjSRh8FVv0wIvGqXpIStMMHDyCzMdEsHJtYVhdcVkn8URjUP/qPYMRxcKL0UwWjcsbA==
+  dependencies:
+    "@iota/converter" "^1.0.0-beta.7"
+    "@iota/curl" "^1.0.0-beta.7"
 
 "@mapbox/geojson-area@0.2.2":
   version "0.2.2"
@@ -254,9 +360,10 @@
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@mapbox/whoots-js/-/whoots-js-3.1.0.tgz#497c67a1cef50d1a2459ba60f315e448d2ad87fe"
 
-"@types/bluebird@^3.5.20":
+"@types/bluebird@^3.5.20", "@types/bluebird@^3.5.24":
   version "3.5.24"
   resolved "https://registry.yarnpkg.com/@types/bluebird/-/bluebird-3.5.24.tgz#11f76812531c14f793b8ecbf1de96f672905de8a"
+  integrity sha512-YeQoDpq4Lm8ppSBqAnAeF/xy1cYp/dMTif2JFcvmAbETMRlvKHT2iLcWu+WyYiJO3b3Ivokwo7EQca/xfLVJmg==
 
 "@types/crypto-js@^3.1.38":
   version "3.1.43"
@@ -548,13 +655,6 @@ arrify@^1.0.0, arrify@^1.0.1:
 asap@~2.0.3:
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
-
-ascli@~1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/ascli/-/ascli-1.0.1.tgz#bcfa5974a62f18e81cabaeb49732ab4a88f906bc"
-  dependencies:
-    colour "~0.7.1"
-    optjs "~3.2.2"
 
 asn1.js@^4.0.0:
   version "4.10.1"
@@ -1739,12 +1839,6 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
-bytebuffer@~5:
-  version "5.0.1"
-  resolved "https://registry.yarnpkg.com/bytebuffer/-/bytebuffer-5.0.1.tgz#582eea4b1a873b6d020a48d58df85f0bba6cfddd"
-  dependencies:
-    long "~3"
-
 bytes@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.0.0.tgz#d32815404d689699f85a4ea4fa8755dd13a96048"
@@ -1799,7 +1893,7 @@ camelcase@^1.0.2:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-1.2.1.tgz#9bb5304d2e0b56698b2c758b08a3eaa9daa58a39"
 
-camelcase@^2.0.0, camelcase@^2.0.1:
+camelcase@^2.0.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-2.1.1.tgz#7c1d16d679a1bbe59ca02cacecfb011e201f5a1f"
 
@@ -1988,7 +2082,7 @@ cliui@^2.1.0:
     right-align "^0.1.1"
     wordwrap "0.0.2"
 
-cliui@^3.0.3, cliui@^3.2.0:
+cliui@^3.2.0:
   version "3.2.0"
   resolved "https://registry.yarnpkg.com/cliui/-/cliui-3.2.0.tgz#120601537a916d29940f934da3b48d585a39213d"
   dependencies:
@@ -2069,10 +2163,6 @@ colormin@^1.0.5:
 colors@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/colors/-/colors-1.1.2.tgz#168a4701756b6a7f51a12ce0c97bfa28c084ed63"
-
-colour@~0.7.1:
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/colour/-/colour-0.7.1.tgz#9cb169917ec5d12c0736d3e8685746df1cadf778"
 
 combine-source-map@^0.8.0, combine-source-map@~0.8.0:
   version "0.8.0"
@@ -2274,6 +2364,14 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     ripemd160 "^2.0.0"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
+
+cross-fetch@^2.2.2:
+  version "2.2.3"
+  resolved "https://registry.yarnpkg.com/cross-fetch/-/cross-fetch-2.2.3.tgz#e8a0b3c54598136e037f8650f8e823ccdfac198e"
+  integrity sha512-PrWWNH3yL2NYIb/7WF/5vFG3DCQiXDOVf8k3ijatbrtnwNuhMWLC7YF7uqf53tbTFDzHIUD8oITw4Bxt8ST3Nw==
+  dependencies:
+    node-fetch "2.1.2"
+    whatwg-fetch "2.0.4"
 
 cross-spawn@5.1.0, cross-spawn@^5.0.1, cross-spawn@^5.1.0:
   version "5.1.0"
@@ -3890,15 +3988,6 @@ growly@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/growly/-/growly-1.3.0.tgz#f10748cbe76af964b7c96c93c6bcc28af120c081"
 
-grpc@1.13.1:
-  version "1.13.1"
-  resolved "https://registry.yarnpkg.com/grpc/-/grpc-1.13.1.tgz#9b5c49d4e56309b6e3bd631f8948b7b298d88790"
-  dependencies:
-    lodash "^4.17.5"
-    nan "^2.0.0"
-    node-pre-gyp "^0.10.0"
-    protobufjs "^5.0.3"
-
 gzip-size@3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/gzip-size/-/gzip-size-3.0.0.tgz#546188e9bdc337f673772f81660464b389dce520"
@@ -5315,10 +5404,6 @@ loglevel@^1.4.1:
   version "1.6.1"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.6.1.tgz#e0fc95133b6ef276cdc8887cdaf24aa6f156f8fa"
 
-long@~3:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/long/-/long-3.2.0.tgz#d821b7138ca1cb581c172990ef14db200b5c474b"
-
 longest@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/longest/-/longest-1.0.1.tgz#30a0b2da38f73770e8294a0d22e6625ed77d0097"
@@ -5384,15 +5469,14 @@ makeerror@1.0.x:
     tmpl "1.0.x"
 
 mam.client.js@iotaledger/mam.client.js:
-  version "0.0.4"
-  resolved "https://codeload.github.com/iotaledger/mam.client.js/tar.gz/5ccd1facbdd7c428333e18d54ac9de7fe79698bf"
+  version "0.0.5"
+  resolved "https://codeload.github.com/iotaledger/mam.client.js/tar.gz/2f15a113476ba748e4c2b08a3c5cea3875f491a8"
   dependencies:
     "@iota/converter" "^1.0.0-beta.5"
     "@iota/core" "^1.0.0-beta.5"
     "@iota/curl" "^1.0.0-beta.5"
     babel-polyfill "^6.26.0"
     browserify "^16.1.1"
-    pify "^3.0.0"
 
 map-cache@^0.2.2:
   version "0.2.2"
@@ -5699,7 +5783,7 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
-nan@^2.0.0, nan@^2.10.0, nan@^2.9.2:
+nan@^2.10.0, nan@^2.9.2:
   version "2.11.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.11.1.tgz#90e22bccb8ca57ea4cd37cc83d3819b52eea6766"
 
@@ -5752,6 +5836,11 @@ no-case@^2.2.0:
   resolved "https://registry.yarnpkg.com/no-case/-/no-case-2.3.2.tgz#60b813396be39b3f1288a4c1ed5d1e7d28b464ac"
   dependencies:
     lower-case "^1.1.1"
+
+node-fetch@2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/node-fetch/-/node-fetch-2.1.2.tgz#ab884e8e7e57e38a944753cec706f788d1768bb5"
+  integrity sha1-q4hOjn5X44qUR1POxwb3iNF2i7U=
 
 node-fetch@^1.0.1:
   version "1.7.3"
@@ -6056,10 +6145,6 @@ optionator@^0.8.1, optionator@^0.8.2:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
     wordwrap "~1.0.0"
-
-optjs@~3.2.2:
-  version "3.2.2"
-  resolved "https://registry.yarnpkg.com/optjs/-/optjs-3.2.2.tgz#69a6ce89c442a44403141ad2f9b370bd5bb6f4ee"
 
 original@>=0.0.5:
   version "1.0.2"
@@ -6713,15 +6798,6 @@ prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.7,
   dependencies:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
-
-protobufjs@^5.0.3:
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/protobufjs/-/protobufjs-5.0.3.tgz#e4dfe9fb67c90b2630d15868249bcc4961467a17"
-  dependencies:
-    ascli "~1"
-    bytebuffer "~5"
-    glob "^7.0.5"
-    yargs "^3.10.0"
 
 protocol-buffers-schema@^3.3.1:
   version "3.3.2"
@@ -8939,10 +9015,6 @@ window-size@0.1.0:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.0.tgz#5438cd2ea93b202efa3a19fe8887aee7c94f9c9d"
 
-window-size@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/window-size/-/window-size-0.1.4.tgz#f8e1aa1ee5a53ec5bf151ffa09742a6ad7697876"
-
 with-callback@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/with-callback/-/with-callback-1.0.2.tgz#a09629b9a920028d721404fb435bdcff5c91bc21"
@@ -9016,7 +9088,7 @@ xtend@^4.0.0, xtend@^4.0.1, xtend@~4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/xtend/-/xtend-4.0.1.tgz#a5c6d532be656e23db820efb943a1f04998d63af"
 
-y18n@^3.2.0, y18n@^3.2.1:
+y18n@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-3.2.1.tgz#6d15fba884c08679c0d77e88e7759e811e07fa41"
 
@@ -9045,18 +9117,6 @@ yargs-parser@^7.0.0:
   resolved "https://registry.yarnpkg.com/yargs-parser/-/yargs-parser-7.0.0.tgz#8d0ac42f16ea55debd332caf4c4038b3e3f5dfd9"
   dependencies:
     camelcase "^4.1.0"
-
-yargs@^3.10.0:
-  version "3.32.0"
-  resolved "http://registry.npmjs.org/yargs/-/yargs-3.32.0.tgz#03088e9ebf9e756b69751611d2a5ef591482c995"
-  dependencies:
-    camelcase "^2.0.1"
-    cliui "^3.0.3"
-    decamelize "^1.1.1"
-    os-locale "^1.4.0"
-    string-width "^1.0.1"
-    window-size "^0.1.4"
-    y18n "^3.2.0"
 
 yargs@^6.6.0:
   version "6.6.0"

@@ -33,8 +33,9 @@
   "private": true,
   "dependencies": {
     "@firebase/app-types": "^0.3.1",
-    "@iota/converter": "^1.0.0-beta.5",
-    "@iota/core": "^1.0.0-beta.5",
+    "@iota/converter": "^1.0.0-beta.6",
+    "@iota/core": "^1.0.0-beta.6",
+    "@iota/http-client": "^1.0.0-beta.6",
     "autoprefixer": "7.1.6",
     "babel-core": "6.26.0",
     "babel-engine-plugin": "^0.2.1",
