@@ -29,7 +29,6 @@ class Sensor extends React.Component {
       },
       error: false,
       fetching: false,
-      client: createHttpClient({ provider: props.settings.provider })
     };
 
     this.fetch = this.fetch.bind(this);
@@ -123,7 +122,7 @@ class Sensor extends React.Component {
     this.fetchMam(data);
   }
 
-  fetchMam(data) {
+  async fetchMam(data) {
     try {
       if (!data[0]) {
         this.throw({
@@ -132,21 +131,17 @@ class Sensor extends React.Component {
         });
       }
 
-      const packets = data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
-        console.log(111, this.state.client);
+      const ctx = await createContext();
+      const client = createHttpClient({ provider: this.props.settings.provider });
+      data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
         try {
-          let ctx = await createContext();
-          console.log(222, ctx);
-          let reader = new Reader(ctx, this.state.client, Mode.Old, root, sidekey);
-          console.log(333, reader);
+          const reader = new Reader(ctx, client, Mode.Old, root, sidekey);
           const message = await reader.next();
-          console.log(444, message);
-          if (message && message.value && message.value[0]) {
-            console.log(555, message.value[0]);
-            this.saveData(message.value[0].message.payload, i);
+          if (message && message.value && message.value[0] && message.value[0].message) {
+            this.saveData(JSON.parse(trytesToAscii(message.value[0].message.payload)), i);
           }
-        } catch (e) {
-          console.error("fetchItem:", "\n", e);
+        } catch (error) {
+          console.error('fetchMam error 1', error);
           this.throw({
             body: 'Unable to read the packets of data from the device.',
             heading: 'Device Misconfigured',
@@ -154,25 +149,19 @@ class Sensor extends React.Component {
         }
       });
     } catch (error) {
-      console.error('fetchMam error', error);
+      console.error('fetchMam error 2', error);
       this.setState({ dataEnd: true });
     }
   }
 
-  saveData(data, i) {
-    const input = trytesToAscii(data);
-    try {
-      const packet = JSON.parse(input);
-      const packets = [...this.state.packets, packet];
-      this.setState({
-        packets,
-        purchase: true,
-        fetching: false,
-        index: i,
-      });
-    } catch (error) {
-      console.error('saveData error', error, input);
-    }
+  saveData(packet, i) {
+    const packets = [...this.state.packets, packet];
+    this.setState({
+      packets,
+      purchase: true,
+      fetching: false,
+      index: i,
+    });
   }
 
   async fetchWallet(userId) {
