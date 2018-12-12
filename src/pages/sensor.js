@@ -43,12 +43,7 @@ class Sensor extends React.Component {
 
   async componentDidMount() {
     const userId = (await userAuth()).uid;
-    const {
-      match: {
-        params: { deviceId },
-      },
-      settings: { provider }
-    } = this.props;
+    const { match: { params: { deviceId } }, settings: { provider } } = this.props;
 
     // Init Wallet
     this.fetchWallet(userId);
@@ -69,6 +64,9 @@ class Sensor extends React.Component {
       });
     }
 
+    this.ctx = await createContext();
+    this.client = createHttpClient({ provider });
+
     // Organise data for layout
     const layout = [];
     device.dataTypes.forEach((item, i) => {
@@ -78,28 +76,17 @@ class Sensor extends React.Component {
       layout[Math.floor(i / 2)].push(item);
     });
 
-    this.setState({
-      layout,
-      userId,
-    });
+    this.setState({ layout, userId });
     // MAM
     this.fetch(userId);
   }
 
   throw(error, button) {
-    this.setState({
-      loading: false,
-      error,
-      button,
-    });
+    this.setState({ loading: false, error, button });
   }
 
   async fetch(userId) {
-    const {
-      match: {
-        params: { deviceId },
-      },
-    } = this.props;
+    const { match: { params: { deviceId } } } = this.props;
 
     let data = await getData(userId, deviceId);
     if (typeof data === 'string') {
@@ -117,7 +104,6 @@ class Sensor extends React.Component {
         heading: `Stream Read Failure`,
       });
     }
-    console.log(data.length + ' Packets found.');
     this.setState({ mamData: data, streamLength: data.length });
     this.fetchMam(data);
   }
@@ -131,11 +117,9 @@ class Sensor extends React.Component {
         });
       }
 
-      const ctx = await createContext();
-      const client = createHttpClient({ provider: this.props.settings.provider });
       data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
         try {
-          const reader = new Reader(ctx, client, Mode.Old, root, sidekey);
+          const reader = new Reader(this.ctx, this.client, Mode.Old, root, sidekey);
           const message = await reader.next();
           if (message && message.value && message.value[0] && message.value[0].message) {
             this.saveData(JSON.parse(trytesToAscii(message.value[0].message.payload)), i);
@@ -188,14 +172,7 @@ class Sensor extends React.Component {
 
   async purchase() {
     const { userId } = this.state;
-    const {
-      loadUser,
-      user,
-      sensor,
-      match: {
-        params: { deviceId },
-      },
-    } = this.props;
+    const { loadUser, user, sensor, match: { params: { deviceId } } } = this.props;
 
     if (!user) {
       await loadUser(userId);
