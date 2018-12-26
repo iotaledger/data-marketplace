@@ -1,8 +1,8 @@
 import api, { fetchData } from './api';
 
-export const getData = async (userId, deviceId) => {
+export const getData = async (userId, deviceId, time) => {
   try {
-    const result = await getPackets(userId, deviceId);
+    const result = await getPackets(userId, deviceId, time);
     if (result.purchase && !result.purchase.full) {
       const packets = await getPacketsPartial(result.purchase);
       return packets;
@@ -17,9 +17,9 @@ export const getData = async (userId, deviceId) => {
   }
 };
 
-const getPackets = (userId, deviceId) => {
+const getPackets = (userId, deviceId, time) => {
   return new Promise(async (resolve, reject) => {
-    const packets = await api('queryStream', { userId, deviceId });
+    const packets = await api('queryStream', { userId, deviceId, time });
     if (packets) {
       resolve(packets);
     } else {

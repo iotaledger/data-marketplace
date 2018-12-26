@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { trytesToAscii } from '@iota/converter';
-import { createHttpClient } from '@iota/http-client'
+import { createHttpClient } from '@iota/http-client';
 import styled from 'styled-components';
 import { createContext, Reader, Mode } from 'mam.client.js/lib/mam';
 import isEmpty from 'lodash-es/isEmpty';
@@ -22,7 +22,7 @@ class Sensor extends React.Component {
       packets: [],
       purchase: false,
       button: true,
-      index: 0,
+      lastFetchedTimestamp: null,
       loading: {
         heading: 'Loading Device',
         body: 'Fetching device information and your purchase history.',
@@ -78,33 +78,25 @@ class Sensor extends React.Component {
 
     this.setState({ layout, userId });
     // MAM
-    this.fetch(userId);
+    this.fetch();
   }
 
   throw(error, button) {
     this.setState({ loading: false, error, button });
   }
 
-  async fetch(userId) {
+  async fetch() {
     const { match: { params: { deviceId } } } = this.props;
+    const { lastFetchedTimestamp, userId } = this.state;
 
-    let data = await getData(userId, deviceId);
-    if (typeof data === 'string') {
-      if (data === 'No data to return') {
-        return this.setState({ loading: false, purchase: true });
-      }
-      return this.setState({ loading: false });
-    }
-
-    if (data && data[0].time) {
-      data = data.sort((a, b) => b.time - a.time);
-    } else {
+    const data = await getData(userId, deviceId, lastFetchedTimestamp);
+    if (!data.length || !data[0].time) {
       return this.throw({
-        body: 'Device data does not exist or is in an unrecognisable format.',
-        heading: `Stream Read Failure`,
+        body: 'No data found',
+        heading: 'Stream Read Failure',
       });
     }
-    this.setState({ mamData: data, streamLength: data.length });
+    this.setState({ purchase: true, streamLength: this.state.packets.length + data.length, loading: false });
     this.fetchMam(data);
   }
 
@@ -117,12 +109,12 @@ class Sensor extends React.Component {
         });
       }
 
-      data.splice(this.state.index, 10).map(async ({ root, sidekey }, i) => {
+      data.map(async ({ root, sidekey, time }) => {
         try {
           const reader = new Reader(this.ctx, this.client, Mode.Old, root, sidekey);
           const message = await reader.next();
           if (message && message.value && message.value[0] && message.value[0].message) {
-            this.saveData(JSON.parse(trytesToAscii(message.value[0].message.payload)), i);
+            this.saveData(JSON.parse(trytesToAscii(message.value[0].message.payload)), time);
           }
         } catch (error) {
           console.error('fetchMam error 1', error);
@@ -138,13 +130,13 @@ class Sensor extends React.Component {
     }
   }
 
-  saveData(packet, i) {
+  saveData(packet, time) {
     const packets = [...this.state.packets, packet];
     this.setState({
       packets,
       purchase: true,
       fetching: false,
-      index: i,
+      lastFetchedTimestamp: time,
     });
   }
 
@@ -273,7 +265,7 @@ class Sensor extends React.Component {
   loadMore() {
     if (this.state.packets[0] && !this.state.fetching) {
       this.setState({ fetching: true }, () => {
-        this.fetchMam(this.state.mamData);
+        this.fetch();
       });
     }
   }
