@@ -14,14 +14,13 @@ export default props => (
           ))}
       {props.streamLength && (
         <Fetcher>
-          {props.packets.length !== props.streamLength ? (
-            <span>
-              Fetching packet {props.packets.length} of {props.streamLength}...
-              <Inview func={props.func} />
-            </span>
-          ) : (
-            <div>End of data reached</div>
-          )}
+          <span>
+            {
+              props.packets.length !== props.streamLength &&
+              <p>Fetching packet {props.packets.length} of {props.streamLength}</p>
+            }
+            <Inview func={props.func} />
+          </span>
           <Block />
         </Fetcher>
       )}

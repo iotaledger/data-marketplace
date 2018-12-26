@@ -46,16 +46,21 @@ exports.getPurchase = async (uid: string, device: string) => {
   return null;
 };
 
-exports.getData = async (device: string) => {
+exports.getData = async (device: string, time) => {
   // Get data
   const querySnapshot = await admin
     .firestore()
     .collection('devices')
     .doc(device)
     .collection('data')
+    .where('time', '<', time || Date.now())
+    .orderBy('time', 'desc')
+    .limit(20)
     .get();
+
   // Check there is data
-  if (querySnapshot.size === 0) throw Error('No data to return');
+  if (querySnapshot.size === 0) return [];
+
   // Return data
   return querySnapshot.docs.map(doc => {
     if (doc.exists) {
@@ -313,7 +318,7 @@ exports.getSettings = async () => {
       mapboxStyles,
       provider,
       recaptchaSiteKey,
-      tangleExplorer
+      tangleExplorer,
     } = doc.data();
     return {
       defaultPrice,
@@ -323,7 +328,7 @@ exports.getSettings = async () => {
       mapboxStyles,
       provider,
       recaptchaSiteKey,
-      tangleExplorer
+      tangleExplorer,
     };
   }
   console.log('getSettings failed. Setting does not exist', doc);
