@@ -5,6 +5,7 @@ import { createHttpClient } from '@iota/http-client';
 import styled from 'styled-components';
 import { createContext, Reader, Mode } from 'mam.client.js/lib/mam';
 import isEmpty from 'lodash-es/isEmpty';
+import get from 'lodash-es/get';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
@@ -116,10 +117,12 @@ class Sensor extends React.Component {
 
       data.map(async ({ root, sidekey, time = null }) => {
         try {
-          const reader = new Reader(this.ctx, this.client, Mode.Old, root, sidekey);
+          const mode = sidekey ? Mode.Old : Mode.Public;
+          const reader = new Reader(this.ctx, this.client, mode, root, sidekey || '9'.repeat(81));
           const message = await reader.next();
-          if (message && message.value && message.value[0] && message.value[0].message) {
-            this.saveData(JSON.parse(trytesToAscii(message.value[0].message.payload)), time);
+          const payload = get(message, 'value[0].message.payload');
+          if (payload) {
+            this.saveData(JSON.parse(trytesToAscii(payload)), time);
           }
         } catch (error) {
           console.error('fetchMam error 1', error);
