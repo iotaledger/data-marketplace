@@ -96,18 +96,52 @@ exports.getDevices = async () => {
     .collection('devices')
     .get();
 
-  // Return data
-  return querySnapshot.docs.map(doc => {
-    if (doc.exists) {
-      const result = doc.data();
-      result.createTime = doc.createTime;
-      delete result.sk;
-      return result;
-    } else {
-      console.log('getDevices failed.', doc);
-      return null;
-    }
+  const promises = [];
+  const results = [];
+
+  querySnapshot.docs.forEach(doc => {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        if (doc.exists) {
+          const result = doc.data();
+          result.createTime = doc.createTime;
+          delete result.sk;
+
+          // Get data
+          admin
+            .firestore()
+            .collection('devices')
+            .doc(result.sensorId)
+            .collection('data')
+            .limit(2)
+            .get()
+            .then(deviceData => {
+              if (deviceData.size !== 0) {
+                result.hasData = true;
+              };
+              results.push(result);
+              resolve(result);
+            })
+            .catch(error => {
+              reject(error);
+            });
+        } else {
+          console.log('getDevices failed.', doc);
+          return null;
+        }
+      } catch (error) {
+        return reject(error);
+      }
+    });
+    promises.push(promise);
   });
+
+  // Return data
+  return await Promise.all(promises)
+    .then(() => results)
+    .catch(error => {
+      console.log('getDevices error', error);
+    });
 };
 
 exports.getUserDevices = async (user: string) => {

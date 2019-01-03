@@ -41,6 +41,7 @@ export const userAuth = async () => {
 export const allDevices = (email = null, page = null) => {
   return new Promise(async (resolve, reject) => {
     const devices = await api('getDevices', { email, page });
-    resolve(devices);
+    const devicesWithData = devices.filter(device => device.hasData);
+    resolve(devicesWithData);
   });
 };
