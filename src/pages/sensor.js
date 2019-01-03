@@ -95,7 +95,7 @@ class Sensor extends React.Component {
       return this.setState({ loading: false, purchase: false });
     }
 
-    if (!data.length || !data[0].time) {
+    if (!data.length || !data[0]) {
       return this.throw({
         body: 'No data found',
         heading: 'Stream Read Failure',
@@ -114,7 +114,7 @@ class Sensor extends React.Component {
         });
       }
 
-      data.map(async ({ root, sidekey, time }) => {
+      data.map(async ({ root, sidekey, time = null }) => {
         try {
           const reader = new Reader(this.ctx, this.client, Mode.Old, root, sidekey);
           const message = await reader.next();
