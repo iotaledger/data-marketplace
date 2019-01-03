@@ -90,6 +90,11 @@ class Sensor extends React.Component {
     const { lastFetchedTimestamp, userId } = this.state;
 
     const data = await getData(userId, deviceId, lastFetchedTimestamp);
+
+    if (typeof data === 'string' && data === 'Please purchase the stream') {
+      return this.setState({ loading: false, purchase: false });
+    }
+
     if (!data.length || !data[0].time) {
       return this.throw({
         body: 'No data found',
