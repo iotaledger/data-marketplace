@@ -48,7 +48,7 @@ exports.getPurchase = async (uid: string, device: string) => {
 
 exports.getData = async (device: string, time) => {
   // Get data
-  const querySnapshot = await admin
+  let querySnapshot = await admin
     .firestore()
     .collection('devices')
     .doc(device)
@@ -59,7 +59,18 @@ exports.getData = async (device: string, time) => {
     .get();
 
   // Check there is data
-  if (querySnapshot.size === 0) return [];
+  if (querySnapshot.size === 0) {
+    // Check legacy data format without timestamp
+    querySnapshot = await admin
+      .firestore()
+      .collection('devices')
+      .doc(device)
+      .collection('data')
+      .limit(200)
+      .get();
+
+    if (querySnapshot.size === 0) return [];
+  }
 
   // Return data
   return querySnapshot.docs.map(doc => {
