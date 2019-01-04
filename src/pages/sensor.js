@@ -115,6 +115,8 @@ class Sensor extends React.Component {
         });
       }
 
+      let fetchErrorCounter = 0;
+      let emptyDataCounter = 0;
       data.map(async ({ root, sidekey, time = null }) => {
         try {
           const mode = sidekey ? Mode.Old : Mode.Public;
@@ -123,9 +125,22 @@ class Sensor extends React.Component {
           const payload = get(message, 'value[0].message.payload');
           if (payload) {
             this.saveData(JSON.parse(trytesToAscii(payload)), time);
+          } else {
+            emptyDataCounter++;
+            if (emptyDataCounter > data.length * 0.5) {
+              this.throw({
+                body: 'Sensor data is missing or too old.',
+                heading: 'No data',
+              }, true);
+            }
           }
         } catch (error) {
-          console.error('fetchMam error 1', error);
+          fetchErrorCounter++;
+          console.error('fetchMam error 1', fetchErrorCounter, data.length, error);
+          if (fetchErrorCounter > data.length * 0.8) {
+            window.location.reload(true);
+          }
+
           this.throw({
             body: 'Unable to read the packets of data from the device.',
             heading: 'Device Misconfigured',
@@ -191,7 +206,7 @@ class Sensor extends React.Component {
     }
     if (Number(wallet.balance) < Number(sensor.price))
       return this.throw({
-        body: 'You have run out of IOTA. Click below to refill you wallet with IOTA.',
+        body: 'You have run out of IOTA',
         heading: 'Not enough Balance',
       });
 
@@ -292,7 +307,7 @@ class Sensor extends React.Component {
           device={sensor}
           button={button}
           purchase={this.purchase}
-          show={!purchase}
+          show={!purchase || !isEmpty(error)}
           loading={loading}
           error={error}
         />
