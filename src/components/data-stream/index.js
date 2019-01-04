@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import SensorCard from '../sensor-card';
 import Inview from '../inview';
-import Loading from '../loading';
 
 export default props => (
   <InfoCol>
@@ -13,14 +12,13 @@ export default props => (
           .map((packet, i) => (
             <SensorCard index={i} key={i} layout={props.layout} packet={packet} />
           ))}
-      {props.streamLength && (
+      {props.streamLength && props.packets.length > 0 && (
         <Fetcher>
           <span>
             {
               props.packets.length !== props.streamLength && (
                 <React.Fragment>
                   <p>Fetching packet {props.packets.length} of {props.streamLength}</p>
-                  <Loading />
                 </React.Fragment>
               )
             }
