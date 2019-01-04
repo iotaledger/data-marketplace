@@ -84,7 +84,7 @@ const findTx = (hashes, provider, iotaApiVersion) => {
 const transferFunds = async (receiveAddress, address, keyIndex, seed, value, updateFn, userId = null) => {
   try {
     const { provider } = await getSettings();
-    const { getBalances, sendTrytes } = composeAPI({ provider });
+    const { getBalances, sendTrytes, getLatestInclusion } = composeAPI({ provider });
     const prepareTransfers = createPrepareTransfers();
     const { balances } = await getBalances([ address ], 100);
     const security = 2;
@@ -121,6 +121,15 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
           sendTrytes(trytes, depth, minWeightMagnitude)
             .then(async transactions => {
               await updateFn(remainderAddress, keyIndex + 1, userId);
+              const hashes = transactions.map(transaction => transaction.hash);
+
+              let retries = 0;
+              while (retries++ < 20) {
+                const statuses = await getLatestInclusion(hashes)
+                if (statuses.filter(status => status).length === 4) break;
+                await new Promise(resolved => setTimeout(resolved, 10000));
+              }
+
               resolve(transactions)
             })
             .catch(error => {
