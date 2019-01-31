@@ -7,9 +7,6 @@ import config from '../config.json';
 
 export const initializeFirebaseApp = () => {
   firebase.initializeApp(config);
-  const firestore = firebase.firestore();
-  const settings = { timestampsInSnapshots: true };
-  firestore.settings(settings);
 };
 
 export const userAuth = async () => {
