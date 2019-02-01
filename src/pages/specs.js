@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import BurgerMenu from '../components//header/burger';
@@ -44,7 +45,7 @@ const content2 = {
 <br />These streams can be read back by anyone who has access to the Ledger, and anyone who has the encryption key. These message streams are signed so you are also able to attest to the authenticity of the data.
 <br />Current MAM is written in RUST with bindings for Javascript and Java.
 <br /><br />In the Data Marketplace implementation, each data packet is encrypted with it's own randomly generated encryption key. All keys are securely stored in our cloud backend system (powered and secured by Google for this first version).
-<br /><br />In IOTA, a user or sensor can publish a message at any time. They only need to conduct a small amount of <a href="https://docs.iota.org/introduction/tangle/proof-of-work">“Proof-of-Work”</a>* to allow the data to propagate through the network.
+<br /><br />In IOTA, a user or sensor can publish a message at any time. They only need to conduct a small amount of <a href="https://docs.iota.org/docs/the-tangle/0.1/concepts/proof-of-work">“Proof-of-Work”</a>* to allow the data to propagate through the network.
 <br /><br /><strong>* Proof of Work (PoW)</strong> - An algorithm which prevents Denial of Service and spam attacks on a network. a computationally hard puzzle to solve, but easy to verify. IOTA uses a <a href="https://en.wikipedia.org/wiki/Hashcash">Hashcash</a> based puzzle.
 <br /><br />Since these messages are part of the distributed ledger, they both contribute to the security of the network by increasing total hashing power and benefit from the data integrity properties of the network as other transactions continue to indirectly reference them.
 <br /><br />Read more about the MAM <a href="https://blog.iota.org/introducing-masked-authenticated-messaging-e55c1822d50e">here</a>.`,
@@ -59,7 +60,7 @@ const content3 = {
 <br /><br /><strong>Important note for data stream purchasers:</strong> please note that these are not real IOTAs. The current balance can’t currently be topped up or transferred to another wallet address. The only valid operation is purchasing of the sensor data.
 <br /><br /><strong>Important note for sensor owners:</strong> please note that received tokens are not real IOTAs. The collected balance can’t currently be withdrawn or transferred to another wallet address.
 <br /><br />Beyond the current PoC, commercial data marketplaces will integrate with customers’ existing wallets, where real IOTA tokens will be transferred from data buyers to sensor owners.
-<br /><br />After the buyers clicks on the “Purchase access” button, the sensor is added to the list of your purchased data streams. In the background the <a href="https://docs.iota.org/introduction/tangle/proof-of-work">“Proof-of-Work”</a> is run to ensure the data integrity in the Tangle. This operation can take up to 60 seconds depending on the buyers computer and should not be interrupted by page reload.`,
+<br /><br />After the buyers clicks on the “Purchase access” button, the sensor is added to the list of your purchased data streams. In the background the <a href="https://docs.iota.org/docs/the-tangle/0.1/concepts/proof-of-work">“Proof-of-Work”</a> is run to ensure the data integrity in the Tangle. This operation can take up to 60 seconds depending on the buyers computer and should not be interrupted by page reload.`,
 };
 
 const content4 = {
@@ -75,7 +76,7 @@ const content5 = {
   id: 'streaming',
   title: 'Data Streaming',
   img: '/static/icons/proof_of_concept/icon-5.svg',
-  text: `New data packets can be added with a recommended minimum time interval of 5-10 min. More frequent additions are possible, but you need to keep in mind that <a href="https://docs.iota.org/introduction/tangle/proof-of-work">“Proof-of-Work”</a> functionality might require to run up to 60 seconds for every new packet.
+  text: `New data packets can be added with a recommended minimum time interval of 5-10 min. More frequent additions are possible, but you need to keep in mind that <a href="https://docs.iota.org/docs/the-tangle/0.1/concepts/proof-of-work">“Proof-of-Work”</a> functionality might require to run up to 60 seconds for every new packet.
 <br /><br />A Publish Script, provided with every onboarded sensor, contains preconfigured examples on how to send sensor data packages from a static file, database, remote server using API. the script can be run in a loop with defined time interval in order to ensure continuous streaming.
 <br /><br />Data readings should be timed between 5 to 10 minutes. More regular readings (every minute) are also possible, but not recommended.`,
 };
@@ -187,6 +188,10 @@ export default class extends React.Component {
     };
 
     this.onAnchorClick = this.onAnchorClick.bind(this);
+  }
+
+  componentDidMount() {
+    ReactGA.pageview('/specs');
   }
 
   onAnchorClick(anchor) {

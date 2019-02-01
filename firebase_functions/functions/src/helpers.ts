@@ -84,13 +84,21 @@ const findTx = (hashes, provider, iotaApiVersion) => {
 const transferFunds = async (receiveAddress, address, keyIndex, seed, value, updateFn, userId = null) => {
   try {
     const { provider } = await getSettings();
-    const { getBalances } = composeAPI({ provider });
+    const { getBalances, sendTrytes, getLatestInclusion } = composeAPI({ provider });
     const prepareTransfers = createPrepareTransfers();
     const { balances } = await getBalances([ address ], 100);
     const security = 2;
     const balance = balances && balances.length > 0 ? balances[0] : 0;
+
+    // Depth or how far to go for tip selection entry point
+    const depth = 5
+
+    // Difficulty of Proof-of-Work required to attach transaction to tangle.
+    // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
+    const minWeightMagnitude = 9
+
     if (balance === 0) {
-      console.log('transferFunds. Insufficient balance', address, balances);
+      console.log('transferFunds. Insufficient balance', address, balances, userId);
       return null;
     }
 
@@ -110,8 +118,24 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
 
       prepareTransfers(seed, transfers, options)
         .then(async trytes => {
-          await updateFn(remainderAddress, keyIndex + 1, userId);
-          resolve(trytes);
+          sendTrytes(trytes, depth, minWeightMagnitude)
+            .then(async transactions => {
+              await updateFn(remainderAddress, keyIndex + 1, userId);
+              const hashes = transactions.map(transaction => transaction.hash);
+
+              let retries = 0;
+              while (retries++ < 20) {
+                const statuses = await getLatestInclusion(hashes)
+                if (statuses.filter(status => status).length === 4) break;
+                await new Promise(resolved => setTimeout(resolved, 10000));
+              }
+
+              resolve(transactions)
+            })
+            .catch(error => {
+              console.log('transferFunds sendTrytes error', error);
+              reject(error);
+            })
         })
         .catch(error => {
           console.log('transferFunds prepareTransfers error', error);
@@ -137,21 +161,22 @@ const faucet = async receiveAddress => {
   );
 };
 
-const initWallet = async () => {
+const initWallet = async (userId = null) => {
   const receiveSeed = generateSeed();
   const receiveKeyIndex = 0;
   const receiveAddress = generateNewAddress(receiveSeed, true);
   const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
-  const trytes = await transferFunds(
+  const transactions = await transferFunds(
     receiveAddress,
     address,
     keyIndex,
     seed,
     defaultBalance,
     updateWalletAddressKeyIndex,
+    userId
   );
   return {
-    trytes,
+    transactions,
     wallet: {
       address: receiveAddress,
       seed: receiveSeed,
@@ -163,7 +188,7 @@ const initWallet = async () => {
 
 const purchaseData = async (userId, receiveAddress, value) => {
   const { address, keyIndex, seed } = await getUserWallet(userId);
-  return await transferFunds(
+  const transactions = await transferFunds(
     receiveAddress,
     address,
     keyIndex || 0,
@@ -172,6 +197,7 @@ const purchaseData = async (userId, receiveAddress, value) => {
     updateUserWalletAddressKeyIndex,
     userId,
   );
+  return transactions;
 };
 
 module.exports = {

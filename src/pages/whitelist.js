@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import firebase from 'firebase/app';
 import { connect } from 'react-redux';
@@ -38,6 +39,7 @@ class Whitelist extends React.Component {
   }
 
   componentDidMount() {
+    ReactGA.pageview('/whitelist');
     this.checkUser();
   }
 

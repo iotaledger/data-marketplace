@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import upperFirst from 'lodash-es/upperFirst';
+import { upperFirst } from 'lodash';
 
 const partners = [
   { src: '42.png', alt: '42' },
@@ -83,50 +83,47 @@ const partners = [
   { src: 'yield.png', alt: 'yield' },
 ];
 
-export default class extends React.Component {
+export default class Partners extends React.Component {
   componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor) {
-      const target = document.querySelector(`#${nextProps.anchor}`);
+    if (nextProps.anchor && nextProps.anchor === 'participants') {
+      const target = document.querySelector('#participants');
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
 
   render() {
     return (
-      <Section id="participants">
-        <Div>
-          <P>Selected Participants</P>
+      <S id="participants">
+        <C>
+          <H>Marketplace Participants</H>
           <Ul>
-            {partners.map(({ alt, src, height = null, width = null }) => (
+            {partners.map(({ alt, src }) => (
               <Li key={alt}>
-                <Img
+                <I
                   src={`/static/logotypes/${src}`}
                   srcSet={`/static/logotypes/${src} 2x`}
                   alt={upperFirst(alt)}
-                  height={height}
-                  width={width}
                 />
               </Li>
             ))}
           </Ul>
-        </Div>
-      </Section>
+        </C>
+      </S>
     );
   }
 }
 
-const Section = styled.section`
+const S = styled.section`
   background-image: linear-gradient(-189deg, #eaf0f4 1%, #f3f8fa 95%);
-  padding: 40px 0 20px;
-  margin: 50px 0 -50px;
-  transform: skewY(2deg);
+  padding: 90px 0 70px;
+  transform: skewY(-2deg);
   @media (max-width: 760px) {
-    padding-bottom: 20px;
+    padding-bottom: 45px;
   }
 `;
 
-const Div = styled.div`
-  transform: skewY(-2deg);
+const C = styled.div`
+  transform: skewY(2deg);
   width: 100%;
   max-width: 1440px;
   padding: 0 15px;
@@ -134,7 +131,7 @@ const Div = styled.div`
   margin-left: auto;
 `;
 
-const P = styled.p`
+const H = styled.p`
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.84px;
@@ -160,6 +157,7 @@ const Ul = styled.ul`
   }
   @media (max-width: 760px) {
     flex-flow: row wrap;
+    max-width: 370px;
     margin: 0 auto;
   }
 `;
@@ -180,8 +178,11 @@ const Li = styled.li`
   }
 `;
 
-const Img = styled.img`
-  max-width: ${props => (props.width ? `${props.width}px` : '200px')};
-  max-height: ${props => (props.height ? `${props.height}px` : '120px')};
+const I = styled.img`
+  max-height: 120px;
+  max-width: 200px;
   padding: 10px 15px;
+  @media (max-width: 760px) {
+    max-width: 150px;
+  }
 `;

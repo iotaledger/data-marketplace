@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 export default props => (
   <Main>
-    <Back to={`/#map`}>
+    <Back to={'/demo'}>
       <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
     </Back>
 

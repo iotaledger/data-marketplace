@@ -4,7 +4,6 @@ import * as admin from 'firebase-admin';
 admin.initializeApp(functions.config().firebase);
 
 const firestore = admin.firestore();
-firestore.settings({ timestampsInSnapshots: true });
 
 exports.getKey = async (key: string) => {
   // Get API key
@@ -46,16 +45,32 @@ exports.getPurchase = async (uid: string, device: string) => {
   return null;
 };
 
-exports.getData = async (device: string) => {
+exports.getData = async (device: string, time) => {
   // Get data
-  const querySnapshot = await admin
+  let querySnapshot = await admin
     .firestore()
     .collection('devices')
     .doc(device)
     .collection('data')
+    .where('time', '<', time || Date.now())
+    .orderBy('time', 'desc')
+    .limit(20)
     .get();
+
   // Check there is data
-  if (querySnapshot.size === 0) throw Error('No data to return');
+  if (querySnapshot.size === 0) {
+    // Check legacy data format without timestamp
+    querySnapshot = await admin
+      .firestore()
+      .collection('devices')
+      .doc(device)
+      .collection('data')
+      .limit(200)
+      .get();
+
+    if (querySnapshot.size === 0) return [];
+  }
+
   // Return data
   return querySnapshot.docs.map(doc => {
     if (doc.exists) {
@@ -91,18 +106,52 @@ exports.getDevices = async () => {
     .collection('devices')
     .get();
 
-  // Return data
-  return querySnapshot.docs.map(doc => {
-    if (doc.exists) {
-      const result = doc.data();
-      result.createTime = doc.createTime;
-      delete result.sk;
-      return result;
-    } else {
-      console.log('getDevices failed.', doc);
-      return null;
-    }
+  const promises = [];
+  const results = [];
+
+  querySnapshot.docs.forEach(doc => {
+    const promise = new Promise((resolve, reject) => {
+      try {
+        if (doc.exists) {
+          const result = doc.data();
+          result.createTime = doc.createTime;
+          delete result.sk;
+
+          // Get data
+          admin
+            .firestore()
+            .collection('devices')
+            .doc(result.sensorId)
+            .collection('data')
+            .limit(2)
+            .get()
+            .then(deviceData => {
+              if (deviceData.size !== 0) {
+                result.hasData = true;
+              };
+              results.push(result);
+              resolve(result);
+            })
+            .catch(error => {
+              reject(error);
+            });
+        } else {
+          console.log('getDevices failed.', doc);
+          return null;
+        }
+      } catch (error) {
+        return reject(error);
+      }
+    });
+    promises.push(promise);
   });
+
+  // Return data
+  return await Promise.all(promises)
+    .then(() => results)
+    .catch(error => {
+      console.log('getDevices error', error);
+    });
 };
 
 exports.getUserDevices = async (user: string) => {
@@ -313,7 +362,7 @@ exports.getSettings = async () => {
       mapboxStyles,
       provider,
       recaptchaSiteKey,
-      tangleExplorer
+      tangleExplorer,
     } = doc.data();
     return {
       defaultPrice,
@@ -323,7 +372,7 @@ exports.getSettings = async () => {
       mapboxStyles,
       provider,
       recaptchaSiteKey,
-      tangleExplorer
+      tangleExplorer,
     };
   }
   console.log('getSettings failed. Setting does not exist', doc);
@@ -390,7 +439,8 @@ exports.getIotaWallet = async () => {
   throw Error(`The getIotaWallet setting doesn't exist.`);
 };
 
-exports.updateWalletAddressKeyIndex = async (address: string, keyIndex: number) => {
+exports.updateWalletAddressKeyIndex = async (address: string, keyIndex: number, userId: string) => {
+  console.log('updateWalletAddressKeyIndex', address, keyIndex, userId);
   await admin
     .firestore()
     .collection('settings')

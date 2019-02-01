@@ -241,7 +241,7 @@ exports.queryStream = functions.https.onRequest((req, res) => {
       const purchase = await getPurchase(<String>packet.userId, <String>packet.deviceId);
       if (purchase) {
         // Return data
-        return res.json({ data: await getData(<String>packet.deviceId), purchase });
+        return res.json({ data: await getData(<String>packet.deviceId, packet.time), purchase });
       }
       return res.status(403).json({ error: 'No packets purchased' });
     } catch (e) {
@@ -443,9 +443,9 @@ exports.setWallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const result = await initWallet();
-      await setWallet(packet.userId, result.wallet)
-      return res.json({ trytes: result.trytes });
+      const result = await initWallet(packet.userId);
+      await setWallet(packet.userId, result.wallet);
+      return res.json({ transactions: result.transactions });
     } catch (e) {
       console.log('setWallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -505,8 +505,8 @@ exports.faucet = functions.https.onRequest((req, res) => {
         return res.status(403).json({ error: recaptcha['error-codes'] });
       }
 
-      const trytes = await faucet(packet.address);
-      return res.json({ trytes });
+      const transactions = await faucet(packet.address);
+      return res.json({ transactions });
     } catch (e) {
       console.log('faucet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -524,8 +524,9 @@ exports.purchaseData = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const trytes = await purchaseData(packet.userId, packet.address, packet.value);
-      return res.json({ trytes });
+      const transactions = await purchaseData(packet.userId, packet.address, packet.value);
+      console.log('purchaseData', packet.userId, transactions);
+      return res.json({ transactions });
     } catch (e) {
       console.log('purchaseData failed. Error: ', e, packet);
       return res.status(403).json({ error: e.message });

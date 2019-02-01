@@ -1,33 +1,8 @@
-import { composeAPI } from '@iota/core';
 import api, { fetchData } from './api';
 
-export const PoWAndSendTrytes = async (trytes, provider) => {
+export const getData = async (userId, deviceId, time) => {
   try {
-    return new Promise((resolve, reject) => {
-      // Depth or how far to go for tip selection entry point
-      const depth = 5
-
-      // Difficulty of Proof-of-Work required to attach transaction to tangle.
-      // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
-      const minWeightMagnitude = 9
-
-      const { sendTrytes } = composeAPI({ provider });
-
-      sendTrytes(trytes, depth, minWeightMagnitude)
-        .then(transactions => resolve(transactions))
-        .catch(error => {
-          console.log('PoWAndSendTrytes error sendTrytes', error);
-          reject(error);
-        })
-    });
-  } catch (error) {
-    console.log('PoWAndSendTrytes error', error);
-  }
-};
-
-export const getData = async (userId, deviceId) => {
-  try {
-    const result = await getPackets(userId, deviceId);
+    const result = await getPackets(userId, deviceId, time);
     if (result.purchase && !result.purchase.full) {
       const packets = await getPacketsPartial(result.purchase);
       return packets;
@@ -42,9 +17,9 @@ export const getData = async (userId, deviceId) => {
   }
 };
 
-const getPackets = (userId, deviceId) => {
+const getPackets = (userId, deviceId, time) => {
   return new Promise(async (resolve, reject) => {
-    const packets = await api('queryStream', { userId, deviceId });
+    const packets = await api('queryStream', { userId, deviceId, time });
     if (packets) {
       resolve(packets);
     } else {
