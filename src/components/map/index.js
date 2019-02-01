@@ -66,8 +66,7 @@ class Map extends React.Component {
     ReactGA.event({
       category: 'Map sensor redirect',
       action: 'Map sensor redirect',
-      label: `Sensor ID ${sensorId}`,
-      value: sensorId
+      label: `Sensor ID ${sensorId}`
     });
   }
 

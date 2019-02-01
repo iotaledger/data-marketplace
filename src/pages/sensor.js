@@ -184,8 +184,7 @@ class Sensor extends React.Component {
     ReactGA.event({
       category: 'Fund wallet',
       action: 'Fund wallet',
-      label: `Sensor ID ${sensor.sensorId}`,
-      value: sensor.sensorId
+      label: `Sensor ID ${sensor.sensorId}`
     });
 
     const { userId } = this.state;
@@ -224,8 +223,7 @@ class Sensor extends React.Component {
     ReactGA.event({
       category: 'Purchase stream',
       action: 'Purchase stream',
-      label: `Sensor ID ${sensor.sensorId}`,
-      value: sensor.sensorId
+      label: `Sensor ID ${sensor.sensorId}`
     });
 
     this.setState(
@@ -289,8 +287,7 @@ class Sensor extends React.Component {
                 ReactGA.event({
                   category: 'Purchase failed',
                   action: 'purchaseStream',
-                  label: `User ID ${userId}, sensor ID ${deviceId}`,
-                  value: deviceId
+                  label: `User ID ${userId}, sensor ID ${deviceId}`
                 });
                 return this.throw({
                   body: message.error,

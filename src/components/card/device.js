@@ -10,8 +10,7 @@ const trackDownload = ({ sensorId }) => {
   ReactGA.event({
     category: 'Download script',
     action: 'Download script',
-    label: `Sensor ID ${sensorId}`,
-    value: sensorId
+    label: `Sensor ID ${sensorId}`
   });
 }
 
