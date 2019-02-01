@@ -1,9 +1,19 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getZip } from '../../utils/zip';
 import Card from './index.js';
+
+const trackDownload = ({ sensorId }) => {
+  ReactGA.event({
+    category: 'Download script',
+    action: 'Download script',
+    label: `Sensor ID ${sensorId}`,
+    value: sensorId
+  });
+}
 
 const Heading = ({ sensorId, type }, func) => (
   <Full>
@@ -20,7 +30,7 @@ const Heading = ({ sensorId, type }, func) => (
 );
 
 const Footer = (device, provider) => (
-  <div onClick={() => getZip(device, provider)}>
+  <div onClick={() => trackDownload(device) || getZip(device, provider)}>
     <FootRow>
       <FooterButton>Download Publish Script</FooterButton>
     </FootRow>

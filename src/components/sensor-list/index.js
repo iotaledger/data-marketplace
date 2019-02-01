@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
@@ -44,6 +45,15 @@ export default class extends React.Component {
     }
   }
 
+  trackRedirect = sensorId => {
+    ReactGA.event({
+      category: 'Map sensor redirect',
+      action: 'Map sensor redirect',
+      label: `Sensor ID ${sensorId}`,
+      value: sensorId
+    });
+  }
+
   render() {
     const { devices, slideIndex } = this.state;
     return (
@@ -59,7 +69,9 @@ export default class extends React.Component {
                 <Card
                   data-component="SensorCard"
                   key={`sensor-${index}`}
-                  to={`/sensor/${item.sensorId}`}>
+                  to={`/sensor/${item.sensorId}`}
+                  onClick={() => this.trackRedirect(item.sensorId)}
+                >
                   <CardHeader>
                     <SensorType>{item.type}</SensorType>
                     <SensorId>

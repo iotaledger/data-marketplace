@@ -81,6 +81,12 @@ class Dashboard extends React.Component {
         const user = result.user;
         this.setState({ user });
         this.getUser();
+        ReactGA.event({
+          category: 'Login',
+          action: 'Login',
+          label: `User UID ${user.uid}`,
+          value: user.uid
+        });
       })
       .catch(error => {
         console.error('auth error', error);
@@ -128,10 +134,22 @@ class Dashboard extends React.Component {
         this.findDevices();
       }
       response(data);
+      ReactGA.event({
+        category: 'New device',
+        action: 'New device',
+        label: `Device ID ${device.sensorId}`,
+        value: device.sensorId
+      });
     });
   };
 
   async deleteDevice(deviceId) {
+    ReactGA.event({
+      category: 'Delete device',
+      action: 'Delete device',
+      label: `Device ID ${deviceId}`,
+      value: deviceId
+    });
     this.setState({ loading: true });
     const { userData } = this.props;
     const data = await api('removeDevice', { apiKey: userData.apiKey, id: deviceId });
