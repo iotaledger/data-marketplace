@@ -180,6 +180,14 @@ class Sensor extends React.Component {
   }
 
   async fund() {
+    const { sensor } = this.props;
+    ReactGA.event({
+      category: 'Fund wallet',
+      action: 'Fund wallet',
+      label: `Sensor ID ${sensor.sensorId}`,
+      value: sensor.sensorId
+    });
+
     const { userId } = this.state;
     this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
       await api('setWallet', { userId });
@@ -206,11 +214,19 @@ class Sensor extends React.Component {
         false
       );
     }
-    if (Number(wallet.balance) < Number(sensor.price))
+    if (Number(wallet.balance) < Number(sensor.price)) {
       return this.throw({
         body: 'You have run out of IOTA',
         heading: 'Not enough Balance',
       });
+    }
+
+    ReactGA.event({
+      category: 'Purchase stream',
+      action: 'Purchase stream',
+      label: `Sensor ID ${sensor.sensorId}`,
+      value: sensor.sensorId
+    });
 
     this.setState(
       {

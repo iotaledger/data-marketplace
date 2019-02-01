@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled, { injectGlobal } from 'styled-components';
 import MapGL, { Popup, NavigationControl } from 'react-map-gl';
 import { Link } from 'react-router-dom';
@@ -61,6 +62,15 @@ class Map extends React.Component {
     });
   }
 
+  trackRedirect = sensorId => {
+    ReactGA.event({
+      category: 'Map sensor redirect',
+      action: 'Map sensor redirect',
+      label: `Sensor ID ${sensorId}`,
+      value: sensorId
+    });
+  }
+
   updateViewport(viewport) {
     this.setState({
       viewport: { ...this.state.viewport, ...viewport },
@@ -81,7 +91,10 @@ class Map extends React.Component {
           latitude={Number(popupInfo.lat)}
           closeOnClick={true}
           onClose={() => this.setState({ popupInfo: null })}>
-          <SensorCard to={`/sensor/${popupInfo.sensorId}`}>
+          <SensorCard
+            to={`/sensor/${popupInfo.sensorId}`}
+            onClick={() => this.trackRedirect(popupInfo.sensorId)}
+          >
             <CardHeader>
               <SensorType>
                 {popupInfo.type}{' '}
