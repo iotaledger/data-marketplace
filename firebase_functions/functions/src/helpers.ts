@@ -188,7 +188,7 @@ const initWallet = async (userId = null) => {
 
 const purchaseData = async (userId, receiveAddress, value) => {
   const { address, keyIndex, seed } = await getUserWallet(userId);
-  return await transferFunds(
+  const transactions = await transferFunds(
     receiveAddress,
     address,
     keyIndex || 0,
@@ -197,6 +197,7 @@ const purchaseData = async (userId, receiveAddress, value) => {
     updateUserWalletAddressKeyIndex,
     userId,
   );
+  return transactions;
 };
 
 module.exports = {
