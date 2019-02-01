@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import { connect } from 'react-redux';
 import { trytesToAscii } from '@iota/converter';
 import { createHttpClient } from '@iota/http-client';
@@ -43,6 +44,7 @@ class Sensor extends React.Component {
   }
 
   async componentDidMount() {
+    ReactGA.pageview('/sensor');
     const userId = (await userAuth()).uid;
     const { match: { params: { deviceId } }, settings: { provider } } = this.props;
 

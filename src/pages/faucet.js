@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import Recaptcha from 'react-recaptcha';
 import { connect } from 'react-redux';
@@ -19,6 +20,10 @@ class Faucet extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.submit = this.submit.bind(this);
     this.verify = this.verify.bind(this);
+  }
+
+  componentDidMount() {
+    ReactGA.pageview('/faucet');
   }
 
   handleInputChange({ target: { name, value } }) {
