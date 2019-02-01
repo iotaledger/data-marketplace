@@ -525,6 +525,7 @@ exports.purchaseData = functions.https.onRequest((req, res) => {
 
     try {
       const transactions = await purchaseData(packet.userId, packet.address, packet.value);
+      console.log('purchaseData', packet.userId, transactions);
       return res.json({ transactions });
     } catch (e) {
       console.log('purchaseData failed. Error: ', e, packet);
