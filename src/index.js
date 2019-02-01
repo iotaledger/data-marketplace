@@ -19,7 +19,7 @@ WebFontLoader.load({
 initializeFirebaseApp();
 const store = configureStore();
 
-ReactGA.initialize('UA-133496479-1', { debug: true });
+ReactGA.initialize('UA-133496479-1');
 ReactGA.set({ anonymizeIp: true });
 
 const renderApp = () => (

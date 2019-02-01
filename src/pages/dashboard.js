@@ -84,8 +84,7 @@ class Dashboard extends React.Component {
         ReactGA.event({
           category: 'Login',
           action: 'Login',
-          label: `User UID ${user.uid}`,
-          value: user.uid
+          label: `User UID ${user.uid}`
         });
       })
       .catch(error => {
@@ -137,8 +136,7 @@ class Dashboard extends React.Component {
       ReactGA.event({
         category: 'New device',
         action: 'New device',
-        label: `Device ID ${device.sensorId}`,
-        value: device.sensorId
+        label: `Device ID ${device.sensorId}`
       });
     });
   };
@@ -147,8 +145,7 @@ class Dashboard extends React.Component {
     ReactGA.event({
       category: 'Delete device',
       action: 'Delete device',
-      label: `Device ID ${deviceId}`,
-      value: deviceId
+      label: `Device ID ${deviceId}`
     });
     this.setState({ loading: true });
     const { userData } = this.props;
