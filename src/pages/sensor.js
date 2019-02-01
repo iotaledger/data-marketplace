@@ -286,6 +286,12 @@ class Sensor extends React.Component {
                   purchase: true,
                 });
               } else {
+                ReactGA.event({
+                  category: 'Purchase failed',
+                  action: 'purchaseStream',
+                  label: `User ID ${userId}, sensor ID ${deviceId}`,
+                  value: deviceId
+                });
                 return this.throw({
                   body: message.error,
                   heading: 'Purchase Failed',
