@@ -34,6 +34,9 @@ class HomePage extends React.Component {
 
   componentDidMount() {
     ReactGA.pageview('/home');
+    const { location } = this.props;
+    const anchor = (location.state && location.state.anchor) || null;
+    this.setState({ anchor });
   }
 
   onAnchorClick(anchor) {
