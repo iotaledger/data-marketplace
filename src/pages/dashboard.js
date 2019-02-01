@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash-es/isEmpty';
 import styled from 'styled-components';
@@ -46,6 +47,7 @@ class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
+    ReactGA.pageview('/dashboard');
     if (this.props.grandfather) this.setState({ grandfather: true });
     // Init Wallet
     this.checkLogin();

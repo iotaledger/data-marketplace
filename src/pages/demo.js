@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import BurgerMenu from '../components//header/burger';
@@ -41,6 +42,7 @@ export default class extends React.Component {
   }
 
   async componentDidMount() {
+    ReactGA.pageview('/demo');
     const devices = await allDevices();
     this.setState({ devices, loading: false });
   }

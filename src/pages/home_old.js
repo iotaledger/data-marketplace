@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import Header from '../components/header/old';
 import Features from '../components/feature-section/old';
@@ -22,6 +23,7 @@ export default class extends React.Component {
   }
 
   async componentDidMount() {
+    ReactGA.pageview('/home_old');
     const devices = await allDevices();
     this.setState({ devices, loading: false });
   };
