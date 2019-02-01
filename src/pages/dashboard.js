@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash-es/isEmpty';
 import styled from 'styled-components';
@@ -46,6 +47,7 @@ class Dashboard extends React.Component {
   }
 
   async componentDidMount() {
+    ReactGA.pageview('/dashboard');
     if (this.props.grandfather) this.setState({ grandfather: true });
     // Init Wallet
     this.checkLogin();
@@ -79,6 +81,11 @@ class Dashboard extends React.Component {
         const user = result.user;
         this.setState({ user });
         this.getUser();
+        ReactGA.event({
+          category: 'Login',
+          action: 'Login',
+          label: `User UID ${user.uid}`
+        });
       })
       .catch(error => {
         console.error('auth error', error);
@@ -126,10 +133,20 @@ class Dashboard extends React.Component {
         this.findDevices();
       }
       response(data);
+      ReactGA.event({
+        category: 'New device',
+        action: 'New device',
+        label: `Device ID ${device.sensorId}`
+      });
     });
   };
 
   async deleteDevice(deviceId) {
+    ReactGA.event({
+      category: 'Delete device',
+      action: 'Delete device',
+      label: `Device ID ${deviceId}`
+    });
     this.setState({ loading: true });
     const { userData } = this.props;
     const data = await api('removeDevice', { apiKey: userData.apiKey, id: deviceId });

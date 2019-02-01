@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import BurgerMenu from '../components//header/burger';
@@ -29,6 +30,13 @@ class HomePage extends React.Component {
     };
 
     this.onAnchorClick = this.onAnchorClick.bind(this);
+  }
+
+  componentDidMount() {
+    ReactGA.pageview('/home');
+    const { location } = this.props;
+    const anchor = (location.state && location.state.anchor) || null;
+    this.setState({ anchor });
   }
 
   onAnchorClick(anchor) {

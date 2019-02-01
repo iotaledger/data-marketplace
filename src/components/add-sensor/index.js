@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import format from 'date-fns/format';
 import Card from '../card';
 import Loading from '../loading';
 
@@ -76,6 +77,8 @@ export default class extends React.Component {
 
     this.setState({ loading: true });
 
+    const timestamp = Date.now();
+
     const device = {
       location: {
         city: this.state.city,
@@ -88,6 +91,8 @@ export default class extends React.Component {
       lon: parseFloat(this.state.deviceLon),
       company: this.state.company,
       price: this.state.devicePrice,
+      date: format(timestamp, 'DD MMMM, YYYY H:mm a '),
+      timestamp,
     };
 
     const createDevive = await this.props.create(device);

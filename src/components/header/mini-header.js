@@ -13,7 +13,7 @@ const links = [
 
 const MiniHeader = props => (
   <Container>
-    <A href="/">
+    <A to={'/'}>
       <img src="/static/logotypes/logo-header.svg" alt="Logo IOTA" />
     </A>
     {links.map(
@@ -74,6 +74,6 @@ const SubLinkActive = SubLink.extend`
   cursor: default;
 `;
 
-const A = styled.a`
+const A = styled(Link)`
   padding-right: 30px;
 `;

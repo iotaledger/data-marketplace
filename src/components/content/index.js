@@ -18,7 +18,13 @@ export default class Content extends React.Component {
       <SECTION id={id || null}>
         {title ? <Heading title={title} img={img} /> : null}
         <DIV>
-          <P dangerouslySetInnerHTML={{ __html: text }} />
+          {
+            typeof text === 'object' ? (
+              <P>{text}</P>
+            ) : (
+              <P dangerouslySetInnerHTML={{ __html: text }} />
+            )
+          }
         </DIV>
       </SECTION>
     );

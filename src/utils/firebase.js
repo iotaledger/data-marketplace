@@ -7,9 +7,6 @@ import config from '../config.json';
 
 export const initializeFirebaseApp = () => {
   firebase.initializeApp(config);
-  const firestore = firebase.firestore();
-  const settings = { timestampsInSnapshots: true };
-  firestore.settings(settings);
 };
 
 export const userAuth = async () => {
@@ -41,6 +38,7 @@ export const userAuth = async () => {
 export const allDevices = (email = null, page = null) => {
   return new Promise(async (resolve, reject) => {
     const devices = await api('getDevices', { email, page });
-    resolve(devices);
+    const devicesWithData = devices.filter(device => device.hasData);
+    resolve(devicesWithData);
   });
 };

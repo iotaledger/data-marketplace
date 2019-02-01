@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import BurgerMenu from '../components//header/burger';
@@ -19,7 +20,9 @@ const content2 = {
 };
 
 const content3 = {
-  text: `The <a href="#/home#participants">Participants</a> to the initiative, 70+ as of july 2018, come from many different sectors including Mobility, Energy, Agriculture, Real Estate, eHealth, Smart Manufacturing, Supply Chain, Financial Services, Semiconductors, IT integrators, Consulting, Universities, Industry clusters.`,
+  text: (<React.Fragment>
+    The <Link to={{ pathname: '/', state: { anchor: 'participants' }}}>Participants</Link> to the initiative, 70+ as of july 2018, come from many different sectors including Mobility, Energy, Agriculture, Real Estate, eHealth, Smart Manufacturing, Supply Chain, Financial Services, Semiconductors, IT integrators, Consulting, Universities, Industry clusters.
+  </React.Fragment>)
 };
 
 const content4 = {
@@ -74,6 +77,10 @@ export default class extends React.Component {
     };
 
     this.onAnchorClick = this.onAnchorClick.bind(this);
+  }
+
+  componentDidMount() {
+    ReactGA.pageview('/business');
   }
 
   onAnchorClick(anchor) {

@@ -12,16 +12,18 @@ export default props => (
           .map((packet, i) => (
             <SensorCard index={i} key={i} layout={props.layout} packet={packet} />
           ))}
-      {props.streamLength && (
+      {props.streamLength && props.packets.length > 0 && (
         <Fetcher>
-          {props.packets.length !== props.streamLength ? (
-            <span>
-              Fetching packet {props.packets.length} of {props.streamLength}...
-              <Inview func={props.func} />
-            </span>
-          ) : (
-            <div>End of data reached</div>
-          )}
+          <span>
+            {
+              props.packets.length !== props.streamLength && (
+                <React.Fragment>
+                  <p>Fetching packet {props.packets.length} of {props.streamLength}</p>
+                </React.Fragment>
+              )
+            }
+            <Inview func={props.func} />
+          </span>
           <Block />
         </Fetcher>
       )}
