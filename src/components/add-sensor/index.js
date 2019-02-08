@@ -312,7 +312,7 @@ const Column = styled.div`
   width: 100%;
 `;
 
-const Small = Column.extend`
+const Small = styled(Column)`
   width: 30%;
   @media (max-width: 760px) {
     width: 100%;

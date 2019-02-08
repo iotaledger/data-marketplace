@@ -50,7 +50,7 @@ const H3 = styled.h3`
   }
 `;
 
-const H3IMG = H3.extend`
+const H3IMG = styled(H3)`
   text-align: left;
   color: #292929;
   margin-bottom: 0;

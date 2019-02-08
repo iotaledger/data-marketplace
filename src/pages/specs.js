@@ -469,7 +469,7 @@ const Shape = styled.img`
   z-index: -10;
 `;
 
-const Shape1 = Shape.extend`
+const Shape1 = styled(Shape)`
   top: 180px;
   right: 61vw;
   width: 20%;
@@ -492,7 +492,7 @@ const Shape1 = Shape.extend`
   }
 `;
 
-const Shape3 = Shape.extend`
+const Shape3 = styled(Shape)`
   z-index: 1;
   top: 200%;
   left: -8vw;
