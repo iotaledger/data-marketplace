@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import styled, { injectGlobal } from 'styled-components';
+import styled from 'styled-components';
 import MapGL, { Popup, NavigationControl } from 'react-map-gl';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import './css';
+import '../../assets/scss/mapbox.scss';
 import Controls from './controls';
 import Markers from './markers';
 
@@ -359,17 +359,4 @@ const SensorId = styled.span`
   color: #fff;
   line-height: 42px;
   position: relative;
-`;
-
-//override
-injectGlobal`
- .mapboxgl-popup-close-button {
-   position: absolute;
-   top: 8px;
-   right: 15px;
-    color: rgba(255, 255, 255, .3);
-    z-index: 99;
-    font-size: 120%;
-    background: transparent;
-  }
 `;

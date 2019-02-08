@@ -1,6 +1,6 @@
-import { experimental } from 'react-map-gl';
+import { MapController } from 'react-map-gl';
 
-export default class MyMapControls extends experimental.MapControls {
+export default class MyMapControls extends MapController {
   constructor() {
     super();
     // subscribe to additional events
