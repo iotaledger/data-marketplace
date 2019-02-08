@@ -148,7 +148,7 @@ class Map extends React.Component {
         </Header>
         <MapGL
           scrollZoom={false}
-          mapControls={mapControls}
+          controller={mapControls}
           maxZoom={11.5}
           {...viewport}
           height={mapHeight}
@@ -165,12 +165,12 @@ class Map extends React.Component {
 
         <HeaderBg
           src="/static/shapes/shape-main-1.svg"
-          class="shape-accent-1 mobile-hidden"
+          className="shape-accent-1 mobile-hidden"
           alt="Shape accent"
         />
         <HeaderBgMobile
           src="/static/shapes/shape-main-1-mobile.svg"
-          class="shape-accent-1 desktop-hidden shape-mobile"
+          className="shape-accent-1 desktop-hidden shape-mobile"
           alt="Shape accent"
         />
       </Main>
