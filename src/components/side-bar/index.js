@@ -5,7 +5,7 @@ import isEmpty from 'lodash-es/isEmpty';
 import { reducer } from '../../utils/helpers';
 import Loading from '../loading';
 
-const SideBar = ({ device, settings, fetching, dataEnd, packets, streamLength }) => (
+const SideBar = ({ device, settings, isLoading }) => (
   <Sidebar>
     <Details>
       <Label>Sensor details:</Label>
@@ -43,7 +43,7 @@ const SideBar = ({ device, settings, fetching, dataEnd, packets, streamLength })
       </div>
     </Details>
     <Fetcher>
-      {fetching && packets[0] && !dataEnd && packets.length !== streamLength ? <Loading /> : null}
+      {isLoading ? <Loading /> : null}
     </Fetcher>
   </Sidebar>
 );

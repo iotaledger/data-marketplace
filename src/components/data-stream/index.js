@@ -3,26 +3,26 @@ import styled from 'styled-components';
 import SensorCard from '../sensor-card';
 import Inview from '../inview';
 
-export default props => (
+export default ({ packets, streamLength, layout, func }) => (
   <InfoCol>
     <CardWrapper>
-      {props.packets &&
-        props.packets
+      {packets &&
+        packets
           .sort((a, b) => b.time - a.time)
           .map((packet, i) => (
-            <SensorCard index={i} key={i} layout={props.layout} packet={packet} />
+            <SensorCard index={i} key={i} layout={layout} packet={packet} />
           ))}
-      {props.streamLength && props.packets.length > 0 && (
+      {streamLength && packets.length > 0 && (
         <Fetcher>
           <span>
             {
-              props.packets.length !== props.streamLength && (
+              packets.length !== streamLength && (
                 <React.Fragment>
-                  <p>Fetching packet {props.packets.length} of {props.streamLength}</p>
+                  <p>Fetching packet {packets.length} of {streamLength}</p>
                 </React.Fragment>
               )
             }
-            <Inview func={props.func} />
+            <Inview func={func} />
           </span>
           <Block />
         </Fetcher>
