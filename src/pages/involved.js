@@ -404,7 +404,7 @@ const Shape = styled.img`
   z-index: -10;
 `;
 
-const Shape1 = Shape.extend`
+const Shape1 = styled(Shape)`
   transform: skew(-65deg, 66deg);
   top: 254px;
   right: 71vw;
@@ -419,7 +419,7 @@ const Shape1 = Shape.extend`
   }
 `;
 
-const Shape2 = Shape.extend`
+const Shape2 = styled(Shape)`
   transform: skew(-14deg, 195deg);
   top: 130px;
   left: 29vw;

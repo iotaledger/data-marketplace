@@ -177,7 +177,7 @@ const Field = styled.p`
   font-size: ${props => (props.small ? `80%` : `100%`)};
 `;
 
-const Heading = Row.extend`
+const Heading = styled(Row)`
   position: fixed;
   top: 0;
   width: 100vw;

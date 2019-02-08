@@ -285,7 +285,7 @@ const Shape = styled.img`
   z-index: -10;
 `;
 
-const Shape1 = Shape.extend`
+const Shape1 = styled(Shape)`
   transform: skew(73deg, -67deg);
   top: 311px;
   right: 71vw;

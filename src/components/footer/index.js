@@ -91,7 +91,7 @@ const A = styled.a`
   }
 `;
 
-const AIMG = A.extend`
+const AIMG = styled(A)`
   margin: 0;
   text-align: center;
   @media (max-width: 650px) {

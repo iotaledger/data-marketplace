@@ -171,7 +171,7 @@ const Alert = styled.span`
   transition: all 0.5s ease;
 `;
 
-const CopyBox = DetailValue.extend`
+const CopyBox = styled(DetailValue)`
   cursor: pointer;
   transition: all 0.3s ease;
   &:hover {

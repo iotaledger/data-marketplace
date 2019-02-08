@@ -294,7 +294,7 @@ const Graphic = styled.img`
   z-index: 50;
 `;
 
-const Graphic1 = Graphic.extend`
+const Graphic1 = styled(Graphic)`
   top: 30px;
   left: 75%;
   animation: 5s ${float(3)} ease infinite 0s;
@@ -307,7 +307,7 @@ const Graphic1 = Graphic.extend`
   }
 `;
 
-const Graphic2 = Graphic.extend`
+const Graphic2 = styled(Graphic)`
   animation: 5s ${float(2)} ease infinite 0s;
 
   @media (max-width: 1120px) {
@@ -333,7 +333,7 @@ const Graphic2 = Graphic.extend`
   }
 `;
 
-const Graphic3 = Graphic.extend`
+const Graphic3 = styled(Graphic)`
   top: 20px;
   left: 115px;
   animation: 5s ${float(1)} ease ${Math.random() * 5 + 's'} infinite 0s;
@@ -360,17 +360,17 @@ const Shape = styled.img`
   transform: skewY(4deg);
 `;
 
-const Shape1 = Shape.extend`
+const Shape1 = styled(Shape)`
   bottom: -70px;
   right: 86vw;
 `;
 
-const Shape2 = Shape.extend`
+const Shape2 = styled(Shape)`
   top: 50px;
   left: 36vw;
 `;
 
-const Shape3 = Shape.extend`
+const Shape3 = styled(Shape)`
   top: -165px;
   left: 56vw;
   @media (max-width: 1120px) {
