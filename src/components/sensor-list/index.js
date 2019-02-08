@@ -135,7 +135,7 @@ export default class extends React.Component {
             </Arrow>
           </Button>
         </Nav>
-        <Shape src="/static/shapes/shape-main-2.svg" class="shape-accent-2" alt="Shape svg" />
+        <Shape src="/static/shapes/shape-main-2.svg" className="shape-accent-2" alt="Shape svg" />
       </Section>
     );
   }
