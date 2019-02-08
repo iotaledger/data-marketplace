@@ -1,6 +1,13 @@
-import { injectGlobal } from 'styled-components';
+.mapboxgl-popup-close-button {
+    position: absolute;
+    top: 8px;
+    right: 15px;
+    color: rgba(255, 255, 255, .3);
+    z-index: 99;
+    font-size: 120%;
+    background: transparent;
+}
 
-injectGlobal`
 .mapboxgl-map {
     font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
     overflow: hidden;
@@ -327,4 +334,3 @@ a.mapboxgl-ctrl-logo {
         display:none;
     }
 }
-`;
