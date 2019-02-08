@@ -315,14 +315,28 @@ class Sensor extends React.Component {
   }
 
   render() {
-    const { purchase, loading, error, button } = this.state;
+    const { desc, purchase, loading, error, button, fetching, packets, dataEnd, streamLength, layout, walletLoading } = this.state;
     const { sensor, user } = this.props;
     return (
       <Main>
-        <SensorNav {...this.state} device={sensor} wallet={user.wallet || {}} fund={this.fund} />
+        <SensorNav 
+          device={sensor} 
+          wallet={user.wallet || {}} 
+          fund={this.fund}
+          walletLoading={walletLoading}
+          desc={desc}
+        />
         <Data>
-          <Sidebar {...this.state} device={sensor} />
-          <DataStream {...this.state} func={this.loadMore} />
+          <Sidebar
+            device={sensor} 
+            isLoading={fetching && packets[0] && !dataEnd && packets.length !== streamLength}
+          />
+          <DataStream
+            packets={packets}
+            streamLength={streamLength}
+            layout={layout}
+            func={this.loadMore}
+          />
         </Data>
         <Modal
           device={sensor}

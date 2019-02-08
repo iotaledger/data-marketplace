@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Wallet from '../wallet';
 
-export default props => (
+export default ({ device, ...walletProps }) => (
   <Main>
     <Back to={'/demo'}>
       <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
@@ -11,12 +11,12 @@ export default props => (
 
     <Header>
       <Block>
-        <Desc>{props.device && props.device.type ? props.device.type : 'Loading Device'}</Desc>
-        <DeviceID>{props.device && props.device.sensorId}</DeviceID>
+        <Desc>{device && device.type ? device.type : 'Loading Device'}</Desc>
+        <DeviceID>{device && device.sensorId}</DeviceID>
       </Block>
     </Header>
     <RightHeader>
-      <Wallet {...props} />
+      <Wallet {...walletProps} />
     </RightHeader>
   </Main>
 );
