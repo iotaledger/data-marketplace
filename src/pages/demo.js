@@ -8,6 +8,7 @@ import SensorList from '../components/sensor-list';
 import Footer from '../components/footer';
 import Map from '../components/map';
 import ScrollToTop from '../components/scroll-to-top';
+import Loading from '../components/loading';
 import { allDevices } from '../utils/firebase';
 
 const Header = ({ onAnchorClick }) => {
@@ -62,9 +63,19 @@ export default class extends React.Component {
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
-        <Map {...this.state} />
-        <SensorList {...this.state} />
-        <ScrollToTop onClick={this.onScrollToTop} />
+        {
+          this.state.loading ? (
+            <LoadingBox>
+              <Loading color="#009fff" size="130" />
+            </LoadingBox>
+          ) : (
+            <React.Fragment>
+              <Map {...this.state} />
+              <SensorList {...this.state} />
+              <ScrollToTop onClick={this.onScrollToTop} />
+            </React.Fragment>
+          )
+        }
         <Footer />
       </Main>
     );
@@ -107,6 +118,15 @@ const Container = styled.div`
     background-image: none;
     padding-top: 0;
   }
+`;
+
+const LoadingBox = styled.div`
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 `;
 
 const Info = styled.div`
