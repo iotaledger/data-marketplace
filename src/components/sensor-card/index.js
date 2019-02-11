@@ -1,46 +1,42 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import format from 'date-fns/format'
+import { SensorContext } from '../../pages/sensor';
 
-export default class extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
+export default ({ packet }) => {
+  const { layout } = useContext(SensorContext);
+  const [visible, toggleVisible] = useState(false);
 
-  componentDidMount() {
-    setTimeout(() => this.setState({ visible: true }), 300);
-  };
+  useEffect(() => {
+    setTimeout(() => toggleVisible(true), 300);
+  }, []);
 
-  render() {
-    const { layout, packet } = this.props;
-    return (
-      <SensorCard visible={this.state.visible}>
-        <CardHeader>
-          <HeaderRow>
-            <HeaderAccent>{format(packet.time, 'dddd')}</HeaderAccent>{' '}
-            {format(packet.time, 'DD MMMM, YYYY H:mm a ')}
-          </HeaderRow>
-        </CardHeader>
-        {layout.map((row, i) => (
-          <Row key={`sensor-${i}`}>
-            {row.map((item, i) => (
-              <RowHalf key={`item-${i}`}>
-                <RowDesc>{item && item.name}:</RowDesc>
-                <RowValue>
-                  {(packet &&
-                    packet.data[item.id] !== typeof 'object' &&
-                    (packet.data[item.id] || packet.data[item.id.toLowerCase()])) ||
-                    JSON.stringify(packet.data, null, 2)}
-                  <RowUnit>{item && item.unit}</RowUnit>
-                </RowValue>
-              </RowHalf>
-            ))}
-          </Row>
-        ))}
-      </SensorCard>
-    );
-  }
+  return (
+    <SensorCard visible={visible}>
+      <CardHeader>
+        <HeaderRow>
+          <HeaderAccent>{format(packet.time, 'dddd')}</HeaderAccent>{' '}
+          {format(packet.time, 'DD MMMM, YYYY H:mm a ')}
+        </HeaderRow>
+      </CardHeader>
+      {layout.map((row, i) => (
+        <Row key={`sensor-${i}`}>
+          {row.map((item, i) => (
+            <RowHalf key={`item-${i}`}>
+              <RowDesc>{item && item.name}:</RowDesc>
+              <RowValue>
+                {(packet &&
+                  packet.data[item.id] !== typeof 'object' &&
+                  (packet.data[item.id] || packet.data[item.id.toLowerCase()])) ||
+                  JSON.stringify(packet.data, null, 2)}
+                <RowUnit>{item && item.unit}</RowUnit>
+              </RowValue>
+            </RowHalf>
+          ))}
+        </Row>
+      ))}
+    </SensorCard>
+  );
 }
 
 const SensorCard = styled.div`

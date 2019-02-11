@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactGA from 'react-ga';
 import { connect } from 'react-redux';
-import { trytesToAscii } from '@iota/converter';
 import { createHttpClient } from '@iota/http-client';
 import styled from 'styled-components';
-import { createContext, Reader, Mode } from 'mam.client.js/lib/mam';
+import { createContext } from 'mam.client.js/lib/mam';
 import isEmpty from 'lodash-es/isEmpty';
-import get from 'lodash-es/get';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
@@ -15,7 +13,10 @@ import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
+import Fetcher from '../components/fetcher';
 import api from '../utils/api';
+
+export const SensorContext = React.createContext({});
 
 class Sensor extends React.Component {
   constructor(props) {
@@ -34,11 +35,12 @@ class Sensor extends React.Component {
     };
 
     this.fetch = this.fetch.bind(this);
-    this.fetchMam = this.fetchMam.bind(this);
     this.fetchWallet = this.fetchWallet.bind(this);
     this.fund = this.fund.bind(this);
     this.loadMore = this.loadMore.bind(this);
     this.purchase = this.purchase.bind(this);
+    this.purchaseData = this.purchaseData.bind(this);
+    this.purchaseStream = this.purchaseStream.bind(this);
     this.saveData = this.saveData.bind(this);
     this.throw = this.throw.bind(this);
   }
@@ -104,55 +106,7 @@ class Sensor extends React.Component {
         heading: 'Stream Read Failure',
       });
     }
-    this.setState({ purchase: true, streamLength: this.state.packets.length + data.length, loading: false });
-    this.fetchMam(data);
-  }
-
-  async fetchMam(data) {
-    try {
-      if (!data[0]) {
-        this.throw({
-          body: 'Fail',
-          heading: 'Fail',
-        });
-      }
-
-      let fetchErrorCounter = 0;
-      let emptyDataCounter = 0;
-      data.map(async ({ root, sidekey, time = null }) => {
-        try {
-          const mode = sidekey ? Mode.Old : Mode.Public;
-          const reader = new Reader(this.ctx, this.client, mode, root, sidekey || '9'.repeat(81));
-          const message = await reader.next();
-          const payload = get(message, 'value[0].message.payload');
-          if (payload) {
-            this.saveData(JSON.parse(trytesToAscii(payload)), time);
-          } else {
-            emptyDataCounter++;
-            if (emptyDataCounter > data.length * 0.5) {
-              this.throw({
-                body: 'Sensor data is missing or too old.',
-                heading: 'No data',
-              }, true);
-            }
-          }
-        } catch (error) {
-          fetchErrorCounter++;
-          console.error('fetchMam error 1', fetchErrorCounter, data.length, error);
-          if (fetchErrorCounter > data.length * 0.8) {
-            window.location.reload(true);
-          }
-
-          this.throw({
-            body: 'Unable to read the packets of data from the device.',
-            heading: 'Device Misconfigured',
-          });
-        }
-      });
-    } catch (error) {
-      console.error('fetchMam error 2', error);
-      this.setState({ dataEnd: true });
-    }
+    this.setState({ data, purchase: true, streamLength: this.state.packets.length + data.length, loading: false });
   }
 
   saveData(packet, time) {
@@ -196,7 +150,7 @@ class Sensor extends React.Component {
 
   async purchase() {
     const { userId } = this.state;
-    const { loadUser, user, sensor, match: { params: { deviceId } } } = this.props;
+    const { loadUser, user, sensor } = this.props;
 
     if (!user) {
       await loadUser(userId);
@@ -205,13 +159,10 @@ class Sensor extends React.Component {
     // Make sure we have wallet
     const wallet = user.wallet;
     if (!wallet || isEmpty(wallet) || wallet.error) {
-      return this.throw(
-        {
-          body: 'Setup wallet by clicking the top right, to get a prefunded IOTA wallet.',
-          heading: 'Wallet does not exist',
-        },
-        false
-      );
+      return this.throw({
+        body: 'Setup wallet by clicking the top right, to get a prefunded IOTA wallet.',
+        heading: 'Wallet does not exist',
+      }, false);
     }
     if (Number(wallet.balance) < Number(sensor.price)) {
       return this.throw({
@@ -234,26 +185,25 @@ class Sensor extends React.Component {
         },
       },
       async () => {
-        // Try purchase
-        let purchaseResp;
-        try {
-          const purchaseDataPacket = {
-            userId,
-            address: sensor.address,
-            value: Number(sensor.price),
-          };
+        await this.purchaseData();
+      }
+    );
+  }
 
-          const purchaseDataResult = await api('purchaseData', purchaseDataPacket);
-          if (purchaseDataResult && purchaseDataResult.transactions) {
-            purchaseResp = purchaseDataResult.transactions;
-          }
-        } catch (error) {
-          console.error('purchase error', error);
-          return this.throw({
-            body: error.message,
-            heading: 'Purchase Failed',
-          });
-        }
+  async purchaseData() {
+    const { userId } = this.state;
+    const { sensor } = this.props;
+
+    // Try purchase
+    try {
+      const purchaseDataPacket = {
+        userId,
+        address: sensor.address,
+        value: Number(sensor.price),
+      };
+
+      const purchaseDataResult = await api('purchaseData', purchaseDataPacket);
+      if (purchaseDataResult && purchaseDataResult.transactions) {
         this.setState(
           {
             loading: {
@@ -262,48 +212,60 @@ class Sensor extends React.Component {
             },
           },
           async () => {
-            const packet = {
-              userId,
-              deviceId,
-              full: true,
-              hashes: purchaseResp && purchaseResp.map(bundle => bundle.hash),
-            };
-
-            const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
-            await loadUser(userId);
-
-            if (balanceUpdateResponse.success) {
-              const message = await api('purchaseStream', packet);
-              // Check Success
-              if (message.success) {
-                // Start Fetching data
-                this.fetch(userId);
-                // Update wallet balance
-                return this.setState({
-                  loading: true,
-                  purchase: true,
-                });
-              } else {
-                ReactGA.event({
-                  category: 'Purchase failed',
-                  action: 'purchaseStream',
-                  label: `User ID ${userId}, sensor ID ${deviceId}`
-                });
-                return this.throw({
-                  body: message.error,
-                  heading: 'Purchase Failed',
-                });
-              }
-            } else {
-              return this.throw({
-                body: balanceUpdateResponse.error,
-                heading: 'Purchase Failed',
-              });
-            }
+            await this.purchaseStream(purchaseDataResult.transactions);
           }
         );
       }
-    );
+    } catch (error) {
+      console.error('purchase error', error);
+      return this.throw({
+        body: error.message,
+        heading: 'Purchase Failed',
+      });
+    }
+  }
+
+  async purchaseStream(purchaseData) {
+    const { userId } = this.state;
+    const { loadUser, match: { params: { deviceId } } } = this.props;
+    const packet = {
+      userId,
+      deviceId,
+      full: true,
+      hashes: purchaseData && purchaseData.map(bundle => bundle.hash),
+    };
+
+    const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
+    await loadUser(userId);
+
+    if (balanceUpdateResponse.success) {
+      const message = await api('purchaseStream', packet);
+      // Check Success
+      if (message.success) {
+        // Start Fetching data
+        this.fetch(userId);
+        // Update wallet balance
+        return this.setState({
+          loading: true,
+          purchase: true,
+        });
+      } else {
+        ReactGA.event({
+          category: 'Purchase failed',
+          action: 'purchaseStream',
+          label: `User ID ${userId}, sensor ID ${deviceId}`
+        });
+        return this.throw({
+          body: message.error,
+          heading: 'Purchase Failed',
+        });
+      }
+    } else {
+      return this.throw({
+        body: balanceUpdateResponse.error,
+        heading: 'Purchase Failed',
+      });
+    }
   }
 
   loadMore() {
@@ -315,28 +277,18 @@ class Sensor extends React.Component {
   }
 
   render() {
-    const { desc, purchase, loading, error, button, fetching, packets, dataEnd, streamLength, layout, walletLoading } = this.state;
-    const { sensor, user } = this.props;
+    const { data, desc, purchase, loading, error, button, fetching, packets, dataEnd, streamLength, layout, walletLoading } = this.state;
+    const { sensor } = this.props;
     return (
       <Main>
-        <SensorNav 
-          device={sensor} 
-          wallet={user.wallet || {}} 
-          fund={this.fund}
-          walletLoading={walletLoading}
-          desc={desc}
-        />
+        <SensorContext.Provider value={{ fund: this.fund, walletLoading, desc }}>
+          <SensorNav />
+        </SensorContext.Provider>
         <Data>
-          <Sidebar
-            device={sensor} 
-            isLoading={fetching && packets[0] && !dataEnd && packets.length !== streamLength}
-          />
-          <DataStream
-            packets={packets}
-            streamLength={streamLength}
-            layout={layout}
-            func={this.loadMore}
-          />
+          <Sidebar isLoading={fetching && packets[0] && !dataEnd && packets.length !== streamLength} />
+          <SensorContext.Provider value={{ func: this.loadMore, layout }}>
+            <DataStream packets={packets} streamLength={streamLength} />
+          </SensorContext.Provider>
         </Data>
         <Modal
           device={sensor}
@@ -346,6 +298,9 @@ class Sensor extends React.Component {
           loading={loading}
           error={error}
         />
+        <SensorContext.Provider value={{ throwError: this.throw, ctx: this.ctx, client: this.client, dataEnd: () => this.setState({ dataEnd: true }) }}>
+          <Fetcher data={data} saveData={this.saveData} />
+        </SensorContext.Provider>
       </Main>
     );
   }

@@ -5,40 +5,40 @@ import isEmpty from 'lodash-es/isEmpty';
 import { reducer } from '../../utils/helpers';
 import Loading from '../loading';
 
-const SideBar = ({ device, settings, isLoading }) => (
+const SideBar = ({ sensor, settings, isLoading }) => (
   <Sidebar>
     <Details>
       <Label>Sensor details:</Label>
       <div>
         {!isEmpty(settings) ? (
           <a
-            href={`${settings.tangleExplorer}/${device.address}`}
+            href={`${settings.tangleExplorer}/${sensor.address}`}
             target="_blank"
             rel="noopener noreferrer"
           >
             <DetailRow>
               <DetailKey>Device Balance:</DetailKey>
-              <DetailValue>{device.balance ? reducer(device.balance) : '--'}</DetailValue>
+              <DetailValue>{sensor.balance ? reducer(sensor.balance) : '--'}</DetailValue>
             </DetailRow>
           </a>
         ) : (
           <DetailRow>
             <DetailKey>Device Balance:</DetailKey>
-            <DetailValue>{device.balance ? reducer(device.balance) : '--'}</DetailValue>
+            <DetailValue>{sensor.balance ? reducer(sensor.balance) : '--'}</DetailValue>
           </DetailRow>
         )}
         <DetailRow>
           <DetailKey>Location:</DetailKey>
           <DetailValue>
             {' '}
-            {device.location && device.location.city && device.location.country
-              ? `${device.location.city}, ${device.location.country}`
+            {sensor.location && sensor.location.city && sensor.location.country
+              ? `${sensor.location.city}, ${sensor.location.country}`
               : '--'}
           </DetailValue>
         </DetailRow>
         <DetailRow>
           <DetailKey>Owner:</DetailKey>
-          <DetailValue>{device.company ? device.company : '--'}</DetailValue>
+          <DetailValue>{sensor.company ? sensor.company : '--'}</DetailValue>
         </DetailRow>
       </div>
     </Details>
@@ -50,6 +50,7 @@ const SideBar = ({ device, settings, isLoading }) => (
 
 const mapStateToProps = state => ({
   settings: state.settings,
+  sensor: state.sensor,
 });
 
 export default connect(mapStateToProps)(SideBar);
