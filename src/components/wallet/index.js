@@ -1,28 +1,30 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Loading from '../loading';
+import { SensorContext } from '../../pages/sensor';
 
-const Wallet = ({ desc, fund, walletLoading, wallet }) => (
-  <Block>
-    <Desc>{desc}</Desc>
-    {walletLoading ? (
-      <div style={{ margin: '8px 0 0 ' }}>
-        <Loading size="26" color="#0d3497" />
-      </div>
-    ) : wallet.balance ? (
-      <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
-    ) : (
-      <Button onClick={fund}>Fund Wallet</Button>
-    )}
-  </Block>
-);
+const Wallet = ({ wallet }) => {
+  const { fund, walletLoading = true, desc = 'Loading wallet' } = useContext(SensorContext);
+  return (
+    <Block>
+      <Desc>{desc}</Desc>
+      {walletLoading ? (
+        <div style={{ margin: '8px 0 0 ' }}>
+          <Loading size="26" color="#0d3497" />
+        </div>
+      ) : wallet.balance ? (
+        <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
+      ) : (
+        <Button onClick={fund}>Fund Wallet</Button>
+      )}
+    </Block>
+  )
+}
 
-Wallet.defaultProps = {
-  desc: 'Loading wallet',
-  walletLoading: true,
-};
+const mapStateToProps = state => ({ wallet: (state.user && state.user.wallet) || {} });
+export default connect(mapStateToProps)(Wallet);
 
-export default Wallet;
 
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;

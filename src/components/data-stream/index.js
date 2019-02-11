@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import SensorCard from '../sensor-card';
 import Inview from '../inview';
 
-export default ({ packets, streamLength, layout, func }) => (
+export default ({ packets, streamLength }) => (
   <InfoCol>
     <CardWrapper>
       {packets &&
         packets
           .sort((a, b) => b.time - a.time)
           .map((packet, i) => (
-            <SensorCard index={i} key={i} layout={layout} packet={packet} />
+            <SensorCard index={i} key={i} packet={packet} />
           ))}
       {streamLength && packets.length > 0 && (
         <Fetcher>
@@ -22,7 +22,7 @@ export default ({ packets, streamLength, layout, func }) => (
                 </React.Fragment>
               )
             }
-            <Inview func={func} />
+            <Inview />
           </span>
           <Block />
         </Fetcher>

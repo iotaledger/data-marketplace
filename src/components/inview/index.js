@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import InView from 'in-view';
+import { SensorContext } from '../../pages/sensor';
 
-export default class extends React.Component {
-  componentDidMount() {
-    InView('.inview').on('enter', el => this.props.func());
-  }
+export default ({ children }) => {
+  const { func } = useContext(SensorContext);
 
-  render() {
-    return <div className={'inview'}>{this.props.children}</div>;
-  }
+  useEffect(() => {
+    InView('.inview').on('enter', el => func());
+  }, []);
+
+  return <div className={'inview'}>{children}</div>;
 }

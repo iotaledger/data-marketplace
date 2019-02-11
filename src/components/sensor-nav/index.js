@@ -1,9 +1,10 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Wallet from '../wallet';
 
-export default ({ device, ...walletProps }) => (
+const SensorNav = ({ sensor }) => (
   <Main>
     <Back to={'/demo'}>
       <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
@@ -11,15 +12,18 @@ export default ({ device, ...walletProps }) => (
 
     <Header>
       <Block>
-        <Desc>{device && device.type ? device.type : 'Loading Device'}</Desc>
-        <DeviceID>{device && device.sensorId}</DeviceID>
+        <Desc>{sensor && sensor.type ? sensor.type : 'Loading Device'}</Desc>
+        <DeviceID>{sensor && sensor.sensorId}</DeviceID>
       </Block>
     </Header>
     <RightHeader>
-      <Wallet {...walletProps} />
+      <Wallet />
     </RightHeader>
   </Main>
 );
+
+const mapStateToProps = state => ({ sensor: state.sensor });
+export default connect(mapStateToProps)(SensorNav);
 
 const Main = styled.nav`
   display: flex;
