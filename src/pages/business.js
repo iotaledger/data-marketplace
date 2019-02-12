@@ -8,6 +8,7 @@ import Content from '../components/content';
 import Initiatives from '../components/feature-section/initiatives';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
+import Cookie from '../components/cookie';
 
 const content1 = {
   text: `IOTA is a not-for-profit Foundation developing the Tangle, a new opensource permissionless Distributed Ledger Technology fit for the IoT / M2M economy. As such, IOTA seeks to enable a large spectrum of innovation across multiple industries and geographies in order to catalyse the adoption of the IOTA Tangle as the Backbone for the Internet of (every)Things.`,
@@ -96,6 +97,7 @@ export default class extends React.Component {
     const { anchor } = this.state;
     return (
       <Main id="main">
+        <Cookie />
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />

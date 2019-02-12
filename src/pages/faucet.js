@@ -5,6 +5,7 @@ import Recaptcha from 'react-recaptcha';
 import { connect } from 'react-redux';
 import api from '../utils/api';
 import Loading from '../components/loading';
+import Cookie from '../components/cookie';
 
 class Faucet extends React.Component {
   constructor(props) {
@@ -60,34 +61,37 @@ class Faucet extends React.Component {
     if (!settings.recaptchaSiteKey) return <div />;
 
     return (
-      <FormWrapper>
-        {!success ? (
-          <Form onSubmit={this.submit}>
-            {error && <Error>{error}</Error>}
-            <InputFormWrapper>
-              <Input
-                type="text"
-                placeholder="Address *"
-                value={address}
-                name="address"
-                onChange={this.handleInputChange}
-              />
-            </InputFormWrapper>
-            <ControllWrapper>
-              <RecaptchaContainer>
-                <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
-              </RecaptchaContainer>
-              {captcha && !loading && <Button type={'submit'}>Submit</Button>}
-              {loading && <Error>Sending</Error>}
-              {loading && <Loading color="#009fff"/>}
-            </ControllWrapper>
-          </Form>
-        ) : (
-          <Div>
-            <Error>Your request has been sent!</Error>
-          </Div>
-        )}
-      </FormWrapper>
+      <React.Fragment>
+        <Cookie />
+        <FormWrapper>
+          {!success ? (
+            <Form onSubmit={this.submit}>
+              {error && <Error>{error}</Error>}
+              <InputFormWrapper>
+                <Input
+                  type="text"
+                  placeholder="Address *"
+                  value={address}
+                  name="address"
+                  onChange={this.handleInputChange}
+                />
+              </InputFormWrapper>
+              <ControllWrapper>
+                <RecaptchaContainer>
+                  <Recaptcha sitekey={settings.recaptchaSiteKey} verifyCallback={this.verify} />
+                </RecaptchaContainer>
+                {captcha && !loading && <Button type={'submit'}>Submit</Button>}
+                {loading && <Error>Sending</Error>}
+                {loading && <Loading color="#009fff"/>}
+              </ControllWrapper>
+            </Form>
+          ) : (
+            <Div>
+              <Error>Your request has been sent!</Error>
+            </Div>
+          )}
+        </FormWrapper>
+      </React.Fragment>
     );
   }
 }
@@ -129,7 +133,7 @@ const FormWrapper = styled.section`
   padding: 3em 2em;
   text-align: center;
   margin: auto;
-  margin-top: 50px;
+  margin-top: 150px;
 
   @media (max-width: 768px) {
     width: 100%;

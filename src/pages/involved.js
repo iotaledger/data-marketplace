@@ -13,6 +13,7 @@ import List from '../components/content/list';
 import WhyJoin from '../components/feature-section/why-join';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
+import Cookie from '../components/cookie';
 
 const content1 = {
   text: `IOTA is now streamlining open access to the demo and will continue signing up organisations to grow the co-creation ecosystem.`,
@@ -109,6 +110,7 @@ export default class extends React.Component {
     const { anchor } = this.state;
     return (
       <Main id="main">
+        <Cookie />
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />

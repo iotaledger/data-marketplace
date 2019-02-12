@@ -9,6 +9,7 @@ import Footer from '../components/footer';
 import Map from '../components/map';
 import ScrollToTop from '../components/scroll-to-top';
 import Loading from '../components/loading';
+import Cookie from '../components/cookie';
 import { allDevices } from '../utils/firebase';
 
 const Header = ({ onAnchorClick }) => {
@@ -60,6 +61,7 @@ export default class extends React.Component {
   render() {
     return (
       <Main id="main">
+        <Cookie />
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
