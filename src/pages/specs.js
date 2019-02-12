@@ -9,6 +9,7 @@ import List from '../components/content/list';
 import Sensors from '../components/example-sensors';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
+import Cookie from '../components/cookie';
 
 const contentIntroduction1 = {
   text: `In this PoC, sensor owners onboard a new sensor and use a script provided by IOTA to submit sensor data to the Tangle. All data packets are securely stored and each packet is additionally encrypted with strong randomly generated password.
@@ -207,6 +208,7 @@ export default class extends React.Component {
     const { anchor } = this.state;
     return (
       <Main id="main">
+        <Cookie />
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />

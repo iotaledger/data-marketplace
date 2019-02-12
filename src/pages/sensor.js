@@ -14,6 +14,7 @@ import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
 import Fetcher from '../components/fetcher';
+import Cookie from '../components/cookie';
 import api from '../utils/api';
 
 export const SensorContext = React.createContext({});
@@ -281,6 +282,7 @@ class Sensor extends React.Component {
     const { sensor } = this.props;
     return (
       <Main>
+        <Cookie />
         <SensorContext.Provider value={{ fund: this.fund, walletLoading, desc }}>
           <SensorNav />
         </SensorContext.Provider>

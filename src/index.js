@@ -7,7 +7,6 @@ import './assets/scss/index.scss';
 import Router from './Router';
 import configureStore from './store/configure';
 import { initializeFirebaseApp } from './utils/firebase';
-// import { trackingID } from './config.json';
 import * as serviceWorker from './serviceWorker';
 
 WebFontLoader.load({

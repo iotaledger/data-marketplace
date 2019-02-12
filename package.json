@@ -45,6 +45,7 @@
     "react": "^16.8.1",
     "react-burger-menu": "^2.6.3",
     "react-clipboard.js": "^2.0.2",
+    "react-cookie": "^3.0.8",
     "react-dom": "^16.8.1",
     "react-ga": "^2.5.7",
     "react-map-gl": "^4.0.10",

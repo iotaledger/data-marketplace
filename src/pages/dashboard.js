@@ -11,6 +11,7 @@ import LoginModal from '../components/login-modal';
 import GrandModal from '../components/modal/grandfather';
 import Sidebar from '../components/user-sidebar';
 import DeviceList from '../components/device-list';
+import Cookie from '../components/cookie';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -217,6 +218,7 @@ class Dashboard extends React.Component {
     const { userData } = this.props;
     return (
       <Main>
+        <Cookie />
         <DeviceNav {...this.state} logout={this.logout} />
         <Data>
           <Sidebar {...this.state} userData={userData} toggleGrand={this.toggleGrand} />
