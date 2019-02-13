@@ -14,13 +14,13 @@ exports.storeKey = async (sidekey, root, time) => {
   try {
     // Initiate Fetch Call
     const resp = await fetch(endpoint, {
-      method: 'post',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id: sensorId, packet, sk: secretKey }),
     });
-    return resp.json();
+    return await resp.json();
   } catch (error) {
     console.log('storeKey error', error);
     return error;
