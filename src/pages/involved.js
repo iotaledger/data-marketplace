@@ -184,12 +184,12 @@ const Main = styled.div`
 
 const ContentOuterWrapper = styled.div`
   background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
-  transform: skewY(4deg);
-  margin: 40px 0 60px;
+  transform: skewY(2deg);
+  margin: 40px 0 0;
 `;
 
 const ContentInnerWrapper = styled.div`
-  transform: skewY(-4deg);
+  transform: skewY(-2deg);
   display: flex;
   flex-direction: column;
   padding: 40px 0;
