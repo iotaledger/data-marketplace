@@ -93,7 +93,6 @@ const DisclaimerButton = styled.button`
     line-height: 37px;
     height: 40px;
     font-size: 15px;
-    width: 140px;
   }
 `;
 
