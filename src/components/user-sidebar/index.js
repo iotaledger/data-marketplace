@@ -1,5 +1,4 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Clipboard from 'react-clipboard.js';
 
@@ -17,7 +16,7 @@ class UserSidebar extends React.Component {
   };
 
   render() {
-    const { settings, devices, user, userData, grandfather, toggleGrand } = this.props;
+    const { devices, user, userData, grandfather, toggleGrand } = this.props;
     return (
       <Sidebar>
         <Details>
@@ -66,15 +65,13 @@ class UserSidebar extends React.Component {
             <Alert {...this.state}>{this.state.alertMessage}</Alert>
 
             <DetailRow>
-              {settings && settings.documentation ? (
-                <a
-                  href={settings.documentation}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <DetailKey>View the API documentation</DetailKey>
-                </a>
-              ) : null}
+              <a
+                href={'/static/docs/index.html'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <DetailKey>View the API documentation</DetailKey>
+              </a>
             </DetailRow>
           </Details>
         )}
@@ -88,11 +85,7 @@ class UserSidebar extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  settings: state.settings,
-});
-
-export default connect(mapStateToProps)(UserSidebar);
+export default UserSidebar;
 
 const Sidebar = styled.aside`
   background: rgba(240, 240, 240, 1);
