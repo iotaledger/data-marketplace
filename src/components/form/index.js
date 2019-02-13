@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import ReactGA from 'react-ga';
 import Recaptcha from 'react-recaptcha';
 import { connect } from 'react-redux';
 import api from '../../utils/api';
@@ -145,6 +146,11 @@ class Form extends React.Component {
 
       await api('sendEmail', packet);
       this.setState({ success: true });
+      ReactGA.event({
+        category: 'Send Email',
+        action: 'Send Email',
+        label: `Name ${name}, email: ${email}`
+      });
     });
   }
 
