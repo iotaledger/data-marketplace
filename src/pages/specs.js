@@ -117,7 +117,7 @@ const content10 = {
 const content11 = {
   id: 'opensource',
   title: 'Opensource Code',
-  text: `As of August 2018, the code developed during the initiative is opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in <a href="https://discord.gg/BFPFD33">Discord</a> is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
+  text: `As of February 2019, the code developed during the initiative will be opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in <a href="https://discord.gg/BFPFD33">Discord</a> is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
 };
 
 const limitations = [

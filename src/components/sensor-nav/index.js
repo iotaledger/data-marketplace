@@ -6,7 +6,7 @@ import Wallet from '../wallet';
 
 const SensorNav = ({ sensor }) => (
   <Main>
-    <Back to={'/demo'}>
+    <Back to={'/'}>
       <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
     </Back>
 
