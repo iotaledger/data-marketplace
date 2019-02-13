@@ -8,7 +8,7 @@ const Fetcher = ({ data, saveData }) => {
   const { throwError, ctx, client, dataEnd } = useContext(SensorContext);
 
   useEffect(() => {
-    (async () => {
+    (async data => {
       try {      
         let fetchErrorCounter = 0;
         let emptyDataCounter = 0;
@@ -25,8 +25,8 @@ const Fetcher = ({ data, saveData }) => {
               emptyDataCounter++;
               if (emptyDataCounter > data.length * 0.5) {
                 throwError({
-                  body: 'Sensor data is missing or too old.',
-                  heading: 'No data',
+                  body: 'Sensor data can not be fully retrieved.',
+                  heading: 'Data reading error',
                 }, true);
               }
             }
@@ -42,7 +42,7 @@ const Fetcher = ({ data, saveData }) => {
         console.error('fetchMam error 2', error);
         dataEnd(true);
       }
-    })();
+    })(data);
   }, [data]);
 
   return null;
