@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import SensorCard from '../sensor-card';
 import Inview from '../inview';
+import Loading from '../loading';
 
 export default ({ packets, streamLength }) => (
   <InfoCol>
@@ -26,6 +27,9 @@ export default ({ packets, streamLength }) => (
           </span>
           <Block />
         </Fetcher>
+      )}
+      {streamLength > 0 && packets.length === 0 && (
+        <Loading color="#e2e2e2" size="80" />
       )}
     </CardWrapper>
   </InfoCol>

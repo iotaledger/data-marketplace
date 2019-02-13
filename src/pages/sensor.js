@@ -23,6 +23,7 @@ class Sensor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      firebaseData: [],
       packets: [],
       purchase: false,
       button: true,
@@ -93,7 +94,7 @@ class Sensor extends React.Component {
 
   async fetch() {
     const { match: { params: { deviceId } } } = this.props;
-    const { lastFetchedTimestamp, userId } = this.state;
+    const { lastFetchedTimestamp, userId, firebaseData } = this.state;
 
     const data = await getData(userId, deviceId, lastFetchedTimestamp);
 
@@ -101,22 +102,23 @@ class Sensor extends React.Component {
       return this.setState({ loading: false, purchase: false });
     }
 
-    if (!data.length || !data[0]) {
+    if (!firebaseData.length && (!data.length || !data[0])) {
       return this.throw({
         body: 'No data found',
         heading: 'Stream Read Failure',
       });
     }
-    this.setState({ data, purchase: true, streamLength: this.state.packets.length + data.length, loading: false });
+    this.setState({ firebaseData: data, purchase: true, streamLength: this.state.packets.length + data.length, loading: false });
   }
 
   saveData(packet, time) {
     const packets = [...this.state.packets, packet];
+    const lastFetchedTimestamp = !this.state.lastFetchedTimestamp || time < this.state.lastFetchedTimestamp ? time : this.state.lastFetchedTimestamp;
     this.setState({
+      lastFetchedTimestamp,
       packets,
       purchase: true,
-      fetching: false,
-      lastFetchedTimestamp: time,
+      fetching: false
     });
   }
 
@@ -278,7 +280,7 @@ class Sensor extends React.Component {
   }
 
   render() {
-    const { data, desc, purchase, loading, error, button, fetching, packets, dataEnd, streamLength, layout, walletLoading } = this.state;
+    const { firebaseData, desc, purchase, loading, error, button, fetching, packets, dataEnd, streamLength, layout, walletLoading } = this.state;
     const { sensor } = this.props;
     return (
       <Main>
@@ -301,7 +303,7 @@ class Sensor extends React.Component {
           error={error}
         />
         <SensorContext.Provider value={{ throwError: this.throw, ctx: this.ctx, client: this.client, dataEnd: () => this.setState({ dataEnd: true }) }}>
-          <Fetcher data={data} saveData={this.saveData} />
+          <Fetcher data={firebaseData} saveData={this.saveData} />
         </SensorContext.Provider>
       </Main>
     );
