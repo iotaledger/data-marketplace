@@ -8,7 +8,7 @@ import isEmpty from 'lodash-es/isEmpty';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
-import { getData, getBalance } from '../utils/iota';
+import { getData } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal/purchase';
 import Sidebar from '../components/side-bar';
@@ -37,8 +37,6 @@ class Sensor extends React.Component {
     };
 
     this.fetch = this.fetch.bind(this);
-    this.fetchWallet = this.fetchWallet.bind(this);
-    this.fund = this.fund.bind(this);
     this.loadMore = this.loadMore.bind(this);
     this.purchase = this.purchase.bind(this);
     this.purchaseData = this.purchaseData.bind(this);
@@ -50,21 +48,11 @@ class Sensor extends React.Component {
   async componentDidMount() {
     ReactGA.pageview('/sensor');
     const userId = (await userAuth()).uid;
-    const { match: { params: { deviceId } }, settings: { provider } } = this.props;
+    const { loadSensor, sensor, match: { params: { deviceId } }, settings: { provider } } = this.props;
 
-    // Init Wallet
-    this.fetchWallet(userId);
+    await loadSensor(deviceId);
 
-    await this.props.loadSensor(deviceId);
-
-    // Get data
-    const device = this.props.sensor;
-
-    if (device.address) {
-      device.balance = await getBalance(device.address, provider);
-    }
-
-    if (typeof device === 'string') {
+    if (typeof sensor === 'string') {
       return this.throw({
         body: `The device you are looking for doesn't exist, check the device ID and try again`,
         heading: `Device doesn't exist`,
@@ -74,17 +62,7 @@ class Sensor extends React.Component {
     this.ctx = await createContext();
     this.client = createHttpClient({ provider });
 
-    // Organise data for layout
-    const layout = [];
-    device.dataTypes.forEach((item, i) => {
-      if (!layout[Math.floor(i / 2)]) {
-        layout[Math.floor(i / 2)] = [];
-      }
-      layout[Math.floor(i / 2)].push(item);
-    });
-
-    this.setState({ layout, userId });
-    // MAM
+    this.setState({ userId });
     this.fetch();
   }
 
@@ -119,35 +97,6 @@ class Sensor extends React.Component {
       packets,
       purchase: true,
       fetching: false
-    });
-  }
-
-  async fetchWallet(userId) {
-    await this.props.loadUser(userId);
-    const wallet = this.props.user.wallet;
-    if (isEmpty(wallet) || !wallet.balance) {
-      this.setState({ desc: 'Wallet not funded', walletLoading: false });
-    } else {
-      this.setState({
-        desc: 'IOTA wallet balance:',
-        walletLoading: false,
-        error: false,
-      });
-    }
-  }
-
-  async fund() {
-    const { sensor } = this.props;
-    ReactGA.event({
-      category: 'Fund wallet',
-      action: 'Fund wallet',
-      label: `Sensor ID ${sensor.sensorId}`
-    });
-
-    const { userId } = this.state;
-    this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
-      await api('setWallet', { userId });
-      this.fetchWallet(userId);
     });
   }
 
@@ -279,18 +228,20 @@ class Sensor extends React.Component {
     }
   }
 
+  resetErrorState = () => this.setState({ error: false });
+
   render() {
-    const { firebaseData, desc, purchase, loading, error, button, fetching, packets, dataEnd, streamLength, layout, walletLoading } = this.state;
+    const { userId, firebaseData, purchase, loading, error, button, fetching, packets, dataEnd, streamLength } = this.state;
     const { sensor } = this.props;
     return (
       <Main>
         <Cookie />
-        <SensorContext.Provider value={{ fund: this.fund, walletLoading, desc }}>
+        <SensorContext.Provider value={{ userId, resetErrorState: this.resetErrorState }}>
           <SensorNav />
         </SensorContext.Provider>
         <Data>
           <Sidebar isLoading={fetching && packets[0] && !dataEnd && packets.length !== streamLength} />
-          <SensorContext.Provider value={{ func: this.loadMore, layout }}>
+          <SensorContext.Provider value={{ func: this.loadMore }}>
             <DataStream packets={packets} streamLength={streamLength} />
           </SensorContext.Provider>
         </Data>
