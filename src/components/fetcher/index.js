@@ -1,15 +1,35 @@
-import { useContext, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { trytesToAscii } from '@iota/converter';
 import { Reader, Mode } from 'mam.client.js/lib/mam';
 import get from 'lodash-es/get';
-import { SensorContext } from '../../pages/sensor';
+import { getData } from '../../utils/iota';
 
-const Fetcher = ({ data, saveData }) => {
-  const { throwError, ctx, client, dataEnd } = useContext(SensorContext);
+const Fetcher = ({
+  ctx, client, packets, lastFetchedTimestamp, deviceId, userId,
+  setNotification, setPurchase, setStreamLength, setFetching, setDataEnd, saveData
+}) => {
+  const [fetchedData, setFetchedData] = useState(packets);
 
   useEffect(() => {
-    (async data => {
-      try {      
+    (async () => {
+      try {     
+        const data = await getData(userId, deviceId, lastFetchedTimestamp);
+    
+        if (typeof data === 'string' && data === 'Please purchase the stream') {
+          setPurchase(false);
+          setFetching(false);
+          return setNotification('purchase');
+        }
+
+        if (!fetchedData && (!data.length || !data[0])) {
+          setFetching(false);
+          return setNotification('streamReadFailure');
+        }
+
+        setFetchedData(!!data.length);
+        setPurchase(true);
+        setStreamLength(packets + data.length);
+
         let fetchErrorCounter = 0;
         let emptyDataCounter = 0;
   
@@ -24,10 +44,7 @@ const Fetcher = ({ data, saveData }) => {
             } else {
               emptyDataCounter++;
               if (emptyDataCounter > data.length * 0.5) {
-                throwError({
-                  body: 'Sensor data can not be fully retrieved.',
-                  heading: 'Data reading error',
-                }, true);
+                setNotification('dataReadingFailure');
               }
             }
           } catch (error) {
@@ -40,10 +57,10 @@ const Fetcher = ({ data, saveData }) => {
         });
       } catch (error) {
         console.error('fetchMam error 2', error);
-        dataEnd(true);
+        setDataEnd(true);
       }
-    })(data);
-  }, [data]);
+    })();
+  }, [packets]);
 
   return null;
 }
