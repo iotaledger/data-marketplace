@@ -13,14 +13,10 @@ const Wallet = ({ loadUser, sensor, wallet }) => {
   const [desc, setDesc] = useState('Loading wallet');
   const [walletLoading, setWalletLoading] = useState(false);
 
-  useEffect(() => {
-    // Init Wallet
-    fetchWallet();
-  }, [userId, wallet && wallet.balance]);
+  useEffect(() => { fetchWallet() }, [wallet && wallet.balance]);
+  useEffect(() => { loadUser(userId) }, [userId]);
 
   async function fetchWallet() {
-    await loadUser(userId);
-    
     if (isEmpty(wallet) || !wallet.balance) {
       setDesc('Wallet not funded');
       setWalletLoading(false);
@@ -43,7 +39,7 @@ const Wallet = ({ loadUser, sensor, wallet }) => {
     setWalletLoading(true);
 
     await api('setWallet', { userId });
-    fetchWallet();
+    await loadUser(userId);
   }
 
   return (

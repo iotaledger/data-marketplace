@@ -1,20 +1,20 @@
 import React from 'react';
 import ReactGA from 'react-ga';
+import styled from 'styled-components';
+import isEmpty from 'lodash-es/isEmpty';
 import { connect } from 'react-redux';
 import { createHttpClient } from '@iota/http-client';
-import styled from 'styled-components';
 import { createContext } from 'mam.client.js/lib/mam';
-import isEmpty from 'lodash-es/isEmpty';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
+import { getBundleHashes, purchaseStream, updateBalance } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal';
 import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
 import Fetcher from '../components/fetcher';
 import Cookie from '../components/cookie';
-import api from '../utils/api';
 
 export const SensorContext = React.createContext({});
 
@@ -32,7 +32,6 @@ class Sensor extends React.Component {
 
     this.loadMore = this.loadMore.bind(this);
     this.purchase = this.purchase.bind(this);
-    this.purchaseData = this.purchaseData.bind(this);
     this.purchaseStream = this.purchaseStream.bind(this);
     this.saveData = this.saveData.bind(this);
   }
@@ -40,17 +39,16 @@ class Sensor extends React.Component {
   async componentDidMount() {
     ReactGA.pageview('/sensor');
     const userId = (await userAuth()).uid;
-    const { loadSensor, sensor, match: { params: { deviceId } }, settings: { provider } } = this.props;
+    const { match: { params: { deviceId } }, settings: { provider } } = this.props;
 
-    await loadSensor(deviceId);
+    await this.props.loadSensor(deviceId);
 
-    if (typeof sensor === 'string') {
+    if (typeof this.props.sensor === 'string') {
       return this.setNotification('noDevice');
     }
 
     this.ctx = await createContext();
     this.client = createHttpClient({ provider });
-
     this.setState({ userId, fetching: true });
   }
 
@@ -61,10 +59,11 @@ class Sensor extends React.Component {
   }
 
   async purchase() {
-    const { loadUser, user, sensor } = this.props;
+    const { loadUser, user, sensor,  match: { params: { deviceId } } } = this.props;
+    const { userId } = this.state;
 
     if (!user) {
-      await loadUser(this.state.userId);
+      await loadUser(userId);
     }
 
     // Make sure we have wallet
@@ -76,66 +75,38 @@ class Sensor extends React.Component {
       return this.setNotification('noBalance');
     }
 
-    this.setNotification('purchasing');
-    await this.purchaseData();
-
     ReactGA.event({
       category: 'Purchase stream',
       action: 'Purchase stream',
       label: `Sensor ID ${sensor.sensorId}`
     });
-  }
 
-  async purchaseData() {
-    const { sensor } = this.props;
+    this.setNotification('purchasing');
+    const bundleHashes = await getBundleHashes(sensor, userId, this.setNotification);
 
-    // Try purchase
-    try {
-      const purchaseDataPacket = {
-        userId: this.state.userId,
-        address: sensor.address,
-        value: Number(sensor.price),
-      };
-
-      const purchaseDataResult = await api('purchaseData', purchaseDataPacket);
-      if (purchaseDataResult && purchaseDataResult.transactions) {
-        this.setNotification('fetching');
-        await this.purchaseStream(purchaseDataResult.transactions);
-      }
-    } catch (error) {
-      console.error('purchase error', error);
-      return this.setNotification('purchaseFailed', error.message);
-    }
-  }
-
-  async purchaseStream(purchaseData) {
-    const { userId } = this.state;
-    const { loadUser, match: { params: { deviceId } } } = this.props;
-
-    // Update wallet balance
-    const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
+    const balanceUpdateResponse = await updateBalance(userId, deviceId);
     await loadUser(userId);
 
     if (balanceUpdateResponse.success) {
-      const hashes = purchaseData && purchaseData.map(bundle => bundle.hash);
-      const packet = { userId, deviceId, hashes };
-      const message = await api('purchaseStream', packet);
-
-      if (message.success) {
-        return this.setState({
-          purchase: true,
-          fetching: true // Start Fetching data
-        });
-      } else {
-        ReactGA.event({
-          category: 'Purchase failed',
-          action: 'purchaseStream',
-          label: `User ID ${userId}, sensor ID ${deviceId}`
-        });
-        return this.setNotification('purchaseFailed', message.error);
-      }
+      this.purchaseStream(bundleHashes, userId, deviceId);
     } else {
-      return this.setNotification('purchaseFailed', balanceUpdateResponse.error); 
+      this.setNotification('purchaseFailed', balanceUpdateResponse.error); 
+    }
+  }
+
+  async purchaseStream(bundleHashes, userId, deviceId) {
+    const purchaseStreamResponse = await purchaseStream(bundleHashes, userId, deviceId);
+
+    if (purchaseStreamResponse.success) {
+      // Start Fetching data
+      this.setState({ purchase: true, fetching: true });
+    } else {
+      ReactGA.event({
+        category: 'Purchase failed',
+        action: 'purchaseStream',
+        label: `User ID ${userId}, sensor ID ${deviceId}`
+      });
+      this.setNotification('purchaseFailed', purchaseStreamResponse.error);
     }
   }
 
@@ -214,10 +185,8 @@ const mapDispatchToProps = dispatch => ({
   loadUser: userId => dispatch(loadUser(userId)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Sensor);
+export default connect(mapStateToProps, mapDispatchToProps)(Sensor);
+
 
 const Main = styled.main`
   width: 100vw;

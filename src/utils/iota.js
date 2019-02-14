@@ -1,5 +1,39 @@
 import api, { fetchData } from './api';
 
+export const getBundleHashes = async(sensor, userId, setNotification) => {
+  // Try purchase
+  try {
+    const packet = {
+      userId,
+      address: sensor.address,
+      value: Number(sensor.price),
+    };
+
+    const bundleHashesResult = await api('purchaseData', packet);
+    if (bundleHashesResult && bundleHashesResult.transactions) {
+      setNotification('fetching');
+      return bundleHashesResult.transactions;
+    }
+    return null;
+  } catch (error) {
+    console.error('getBundleHashes error', error);
+    setNotification('purchaseFailed', error.message);
+  }
+}
+
+export const updateBalance = async (userId, deviceId) => {
+  // Update wallet balance
+  const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
+  return balanceUpdateResponse;
+}
+
+export const purchaseStream = async(bundleHashes, userId, deviceId) => {
+  const hashes = bundleHashes && bundleHashes.map(bundle => bundle.hash);
+  const packet = { userId, deviceId, hashes };
+  const purchaseStreamResponse = await api('purchaseStream', packet);
+  return purchaseStreamResponse;
+}
+
 export const getData = async (userId, deviceId, time) => {
   try {
     const result = await getPackets(userId, deviceId, time);
