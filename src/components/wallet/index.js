@@ -9,7 +9,7 @@ import { SensorContext } from '../../pages/sensor';
 import api from '../../utils/api';
 
 const Wallet = ({ loadUser, sensor, wallet }) => {
-  const { userId, resetErrorState } = useContext(SensorContext);
+  const { userId, setErrorState, setNotification } = useContext(SensorContext);
   const [desc, setDesc] = useState('Loading wallet');
   const [walletLoading, setWalletLoading] = useState(false);
 
@@ -27,7 +27,8 @@ const Wallet = ({ loadUser, sensor, wallet }) => {
     } else {
       setDesc('IOTA wallet balance:');
       setWalletLoading(false);
-      resetErrorState();
+      setErrorState(false);
+      setNotification('purchase');
     }
   }
 
