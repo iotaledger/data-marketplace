@@ -1,25 +1,35 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import format from 'date-fns/format'
-import { SensorContext } from '../../pages/sensor';
 
-export default ({ packet }) => {
-  const { layout } = useContext(SensorContext);
+const SensorCard = ({ packet, sensor }) => {
   const [visible, toggleVisible] = useState(false);
+  const [layoutArray, setLayoutArray] = useState([]);
 
   useEffect(() => {
     setTimeout(() => toggleVisible(true), 300);
-  }, []);
+
+    // Organise data for layout
+    const layout = [];
+    sensor.dataTypes.forEach((item, i) => {
+      if (!layout[Math.floor(i / 2)]) {
+        layout[Math.floor(i / 2)] = [];
+      }
+      layout[Math.floor(i / 2)].push(item);
+    });
+    setLayoutArray(layout);
+  }, [sensor && sensor.sensorId]);
 
   return (
-    <SensorCard visible={visible}>
+    <SensorCardWrapper visible={visible}>
       <CardHeader>
         <HeaderRow>
           <HeaderAccent>{format(packet.time, 'dddd')}</HeaderAccent>{' '}
           {format(packet.time, 'DD MMMM, YYYY H:mm a ')}
         </HeaderRow>
       </CardHeader>
-      {layout.map((row, i) => (
+      {layoutArray.map((row, i) => (
         <Row key={`sensor-${i}`}>
           {row.map((item, i) => (
             <RowHalf key={`item-${i}`}>
@@ -35,11 +45,17 @@ export default ({ packet }) => {
           ))}
         </Row>
       ))}
-    </SensorCard>
+    </SensorCardWrapper>
   );
 }
 
-const SensorCard = styled.div`
+const mapStateToProps = state => ({
+  sensor: state.sensor,
+});
+
+export default connect(mapStateToProps)(SensorCard);
+
+const SensorCardWrapper = styled.div`
   position: relative;
   width: 360px;
   padding-top: 20px;

@@ -1,52 +1,65 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash-es/isEmpty';
 import { reducer } from '../../utils/helpers';
+import { getBalance } from '../../utils/iota';
 import Loading from '../loading';
 
-const SideBar = ({ sensor, settings, isLoading }) => (
-  <Sidebar>
-    <Details>
-      <Label>Sensor details:</Label>
-      <div>
-        {!isEmpty(settings) ? (
-          <a
-            href={`${settings.tangleExplorer}/${sensor.address}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+const SideBar = ({ sensor, settings, isLoading }) => {
+  const [balance, setBalance] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      if (sensor.address) {
+        setBalance(await getBalance(sensor.address, settings.provider));
+      }
+    })();
+  }, [!isEmpty(sensor) && sensor.address]);
+
+  return (
+    <Sidebar>
+      <Details>
+        <Label>Sensor details:</Label>
+        <div>
+          {!isEmpty(settings) ? (
+            <a
+              href={`${settings.tangleExplorer}/${sensor.address}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <DetailRow>
+                <DetailKey>Device Balance:</DetailKey>
+                <DetailValue>{balance ? reducer(balance) : '--'}</DetailValue>
+              </DetailRow>
+            </a>
+          ) : (
             <DetailRow>
               <DetailKey>Device Balance:</DetailKey>
-              <DetailValue>{sensor.balance ? reducer(sensor.balance) : '--'}</DetailValue>
+              <DetailValue>{balance ? reducer(balance) : '--'}</DetailValue>
             </DetailRow>
-          </a>
-        ) : (
+          )}
           <DetailRow>
-            <DetailKey>Device Balance:</DetailKey>
-            <DetailValue>{sensor.balance ? reducer(sensor.balance) : '--'}</DetailValue>
+            <DetailKey>Location:</DetailKey>
+            <DetailValue>
+              {' '}
+              {sensor.location && sensor.location.city && sensor.location.country
+                ? `${sensor.location.city}, ${sensor.location.country}`
+                : '--'}
+            </DetailValue>
           </DetailRow>
-        )}
-        <DetailRow>
-          <DetailKey>Location:</DetailKey>
-          <DetailValue>
-            {' '}
-            {sensor.location && sensor.location.city && sensor.location.country
-              ? `${sensor.location.city}, ${sensor.location.country}`
-              : '--'}
-          </DetailValue>
-        </DetailRow>
-        <DetailRow>
-          <DetailKey>Owner:</DetailKey>
-          <DetailValue>{sensor.company ? sensor.company : '--'}</DetailValue>
-        </DetailRow>
-      </div>
-    </Details>
-    <Fetcher>
-      {isLoading ? <Loading /> : null}
-    </Fetcher>
-  </Sidebar>
-);
+          <DetailRow>
+            <DetailKey>Owner:</DetailKey>
+            <DetailValue>{sensor.company ? sensor.company : '--'}</DetailValue>
+          </DetailRow>
+        </div>
+      </Details>
+      <Fetcher>
+        {isLoading ? <Loading /> : null}
+      </Fetcher>
+    </Sidebar>
+  );
+}
 
 const mapStateToProps = state => ({
   settings: state.settings,

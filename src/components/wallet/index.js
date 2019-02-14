@@ -1,11 +1,50 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import ReactGA from 'react-ga';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import isEmpty from 'lodash-es/isEmpty';
 import Loading from '../loading';
+import { loadUser } from '../../store/user/actions';
 import { SensorContext } from '../../pages/sensor';
+import api from '../../utils/api';
 
-const Wallet = ({ wallet }) => {
-  const { fund, walletLoading = true, desc = 'Loading wallet' } = useContext(SensorContext);
+const Wallet = ({ loadUser, sensor, wallet }) => {
+  const { userId, resetErrorState } = useContext(SensorContext);
+  const [desc, setDesc] = useState('Loading wallet');
+  const [walletLoading, setWalletLoading] = useState(false);
+
+  useEffect(() => {
+    // Init Wallet
+    fetchWallet();
+  }, [userId, wallet && wallet.balance]);
+
+  async function fetchWallet() {
+    await loadUser(userId);
+    
+    if (isEmpty(wallet) || !wallet.balance) {
+      setDesc('Wallet not funded');
+      setWalletLoading(false);
+    } else {
+      setDesc('IOTA wallet balance:');
+      setWalletLoading(false);
+      resetErrorState();
+    }
+  }
+
+  async function fund() {
+    ReactGA.event({
+      category: 'Fund wallet',
+      action: 'Fund wallet',
+      label: `Sensor ID ${sensor.sensorId}`
+    });
+
+    setDesc('Funding wallet');
+    setWalletLoading(true);
+
+    await api('setWallet', { userId });
+    fetchWallet();
+  }
+
   return (
     <Block>
       <Desc>{desc}</Desc>
@@ -22,8 +61,16 @@ const Wallet = ({ wallet }) => {
   )
 }
 
-const mapStateToProps = state => ({ wallet: (state.user && state.user.wallet) || {} });
-export default connect(mapStateToProps)(Wallet);
+const mapStateToProps = state => ({
+  sensor: state.sensor,
+  wallet: (state.user && state.user.wallet) || {}
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadUser: userId => dispatch(loadUser(userId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
 
 
 const Desc = styled.span`
