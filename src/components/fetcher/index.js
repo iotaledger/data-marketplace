@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { trytesToAscii } from '@iota/converter';
 import { Reader, Mode } from 'mam.client.js/lib/mam';
 import get from 'lodash-es/get';
+import ReactGA from 'react-ga';
 import { getData } from '../../utils/iota';
 
 const Fetcher = ({
@@ -22,6 +23,12 @@ const Fetcher = ({
         }
 
         if (!fetchedData && (!data.length || !data[0])) {
+          ReactGA.event({
+            category: 'Stream read failure',
+            action: 'Stream read failure',
+            label: `Sensor ID ${deviceId}, user ID ${userId}, lastFetchedTimestamp: ${lastFetchedTimestamp}`
+          });
+
           setFetching(false);
           return setNotification('streamReadFailure');
         }
@@ -44,6 +51,12 @@ const Fetcher = ({
             } else {
               emptyDataCounter++;
               if (emptyDataCounter > data.length * 0.5) {
+                ReactGA.event({
+                  category: 'Stream read failure',
+                  action: 'Stream read failure',
+                  label: `Sensor ID ${deviceId}, user ID ${userId}, lastFetchedTimestamp: ${lastFetchedTimestamp}`
+                });
+
                 setNotification('dataReadingFailure');
               }
             }
@@ -51,6 +64,11 @@ const Fetcher = ({
             fetchErrorCounter++;
             console.error('fetchMam error 1', fetchErrorCounter, data.length, error);
             if (fetchErrorCounter > data.length * 0.8) {
+              ReactGA.event({
+                category: 'MAM fetch failure 1',
+                action: 'MAM fetch failure 1 + reload',
+                label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+              });
               window.location.reload(true);
             }
           }
@@ -58,6 +76,11 @@ const Fetcher = ({
       } catch (error) {
         console.error('fetchMam error 2', error);
         setDataEnd(true);
+        ReactGA.event({
+          category: 'MAM fetch failure 2',
+          action: 'MAM fetch failure 2',
+          label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+        });
       }
     })();
   }, [packets]);
