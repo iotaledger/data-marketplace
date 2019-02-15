@@ -120,7 +120,7 @@ class Dashboard extends React.Component {
     // Deactivate the Device
     device.inactive = true;
 
-    return new Promise(async (response, reject) => {
+    return new Promise(async (resolve) => {
       const packet = {
         apiKey: userData.apiKey,
         id: device.sensorId,
@@ -133,7 +133,7 @@ class Dashboard extends React.Component {
       if (data.success) {
         this.findDevices();
       }
-      response(data);
+      resolve(data);
       ReactGA.event({
         category: 'New device',
         action: 'New device',
