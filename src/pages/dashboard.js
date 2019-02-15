@@ -8,7 +8,6 @@ import { loadUser, logout } from '../store/user/actions';
 import api from '../utils/api';
 import DeviceNav from '../components/device-nav';
 import LoginModal from '../components/login-modal';
-import GrandModal from '../components/modal/grandfather';
 import Sidebar from '../components/user-sidebar';
 import DeviceList from '../components/device-list';
 import Cookie from '../components/cookie';
@@ -21,7 +20,6 @@ class Dashboard extends React.Component {
       packets: [],
       user: {},
       button: true,
-      grandModal: false,
       index: 0,
       loading: {
         heading: 'Loading User',
@@ -38,18 +36,11 @@ class Dashboard extends React.Component {
     this.createDevice = this.createDevice.bind(this);
     this.deleteDevice = this.deleteDevice.bind(this);
     this.logout = this.logout.bind(this);
-    this.grandfather = this.grandfather.bind(this);
-    this.toggleGrand = this.toggleGrand.bind(this);
     this.throw = this.throw.bind(this);
-  }
-
-  static async getInitialProps({ query }) {
-    return { grandfather: query.grandfather !== undefined };
   }
 
   async componentDidMount() {
     ReactGA.pageview('/dashboard');
-    if (this.props.grandfather) this.setState({ grandfather: true });
     // Init Wallet
     this.checkLogin();
   }
@@ -179,49 +170,15 @@ class Dashboard extends React.Component {
       });
   };
 
-  // Show grandfather modal
-  toggleGrand() {
-    this.setState({ grandModal: true });
-  };
-
-  grandfather(id, sk) {
-    this.setState(
-      {
-        loading: {
-          heading: 'Sending Request',
-          body: 'Adding device to you account.',
-        },
-      },
-      async () => {
-        const packet = {
-          owner: this.state.user.uid,
-          sk,
-          id,
-        };
-
-        // Call server
-        const data = await api('grandfather', packet);
-
-        if (data.error) {
-          /// Add error
-          this.throw({ heading: 'Error', body: data.error }, true);
-        } else {
-          console.log('Dashboard grandfather', data);
-          window.location.reload(true);
-        }
-      }
-    );
-  };
-
   render() {
-    const { devices, user, loading, error, button, grandModal } = this.state;
+    const { devices, user, loading, error, button } = this.state;
     const { userData } = this.props;
     return (
       <Main>
         <Cookie />
         <DeviceNav {...this.state} logout={this.logout} />
         <Data>
-          <Sidebar {...this.state} userData={userData} toggleGrand={this.toggleGrand} />
+          <Sidebar {...this.state} userData={userData} />
           <DeviceList
             devices={devices}
             maxDevices={userData.numberOfDevices}
@@ -233,13 +190,6 @@ class Dashboard extends React.Component {
           button={button}
           auth={this.auth}
           show={isEmpty(user)}
-          loading={loading}
-          error={error}
-        />
-        <GrandModal
-          button={button}
-          grandfather={this.grandfather}
-          show={grandModal && !isEmpty(user)}
           loading={loading}
           error={error}
         />

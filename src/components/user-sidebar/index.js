@@ -16,7 +16,7 @@ class UserSidebar extends React.Component {
   };
 
   render() {
-    const { devices, user, userData, grandfather, toggleGrand } = this.props;
+    const { devices, user, userData } = this.props;
     return (
       <Sidebar>
         <Details>
@@ -73,11 +73,6 @@ class UserSidebar extends React.Component {
                 <DetailKey>View the API documentation</DetailKey>
               </a>
             </DetailRow>
-          </Details>
-        )}
-        {grandfather && (
-          <Details>
-            <Grandfather onClick={toggleGrand}>Grandfather Old Device</Grandfather>
           </Details>
         )}
       </Sidebar>
@@ -172,14 +167,3 @@ const CopyBox = styled(DetailValue)`
   }
 `;
 
-const Grandfather = styled.button`
-  color: ${props => (props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`)};
-  padding: 5px 15px;
-  margin-right: -15px;
-  font-size: 90%;
-  background: transparent;
-  &:first-of-type {
-    margin-left: -15px;
-    margin-right: 0;
-  }
-`;
