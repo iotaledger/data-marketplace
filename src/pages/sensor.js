@@ -82,32 +82,39 @@ class Sensor extends React.Component {
     });
 
     this.setNotification('purchasing');
-    const bundleHashes = await getBundleHashes(sensor, userId, this.setNotification);
+    getBundleHashes(sensor, userId)
+      .then(bundleHashes => {
+        this.setNotification('fetching');
 
-    const balanceUpdateResponse = await updateBalance(userId, deviceId);
-    await loadUser(userId);
-
-    if (balanceUpdateResponse.success) {
-      this.purchaseStream(bundleHashes, userId, deviceId);
-    } else {
-      this.setNotification('purchaseFailed', balanceUpdateResponse.error); 
-    }
+        updateBalance(userId, deviceId)
+          .then(async () => {
+            await loadUser(userId);
+            await this.purchaseStream(bundleHashes, userId, deviceId);
+          })
+          .catch(error => {
+            this.setNotification('purchaseFailed', error);
+          });
+      })
+      .catch(error => {
+        this.setNotification('purchaseFailed', error.message);
+        console.log('getBundleHashes', error);
+      });
   }
 
-  async purchaseStream(bundleHashes, userId, deviceId) {
-    const purchaseStreamResponse = await purchaseStream(bundleHashes, userId, deviceId);
-
-    if (purchaseStreamResponse.success) {
-      // Start Fetching data
-      this.setState({ purchase: true, fetching: true });
-    } else {
-      ReactGA.event({
-        category: 'Purchase failed',
-        action: 'purchaseStream',
-        label: `User ID ${userId}, sensor ID ${deviceId}`
+  purchaseStream(bundleHashes, userId, deviceId) {
+    purchaseStream(bundleHashes, userId, deviceId)
+      .then(() => {
+        // Start Fetching data
+        this.setState({ purchase: true, fetching: true });
+      })
+      .catch(error => {
+        ReactGA.event({
+          category: 'Purchase failed',
+          action: 'purchaseStream',
+          label: `User ID ${userId}, sensor ID ${deviceId}`
+        });
+        this.setNotification('purchaseFailed', error);
       });
-      this.setNotification('purchaseFailed', purchaseStreamResponse.error);
-    }
   }
 
   saveData(packet, time) {
