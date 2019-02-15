@@ -44,6 +44,11 @@ class Sensor extends React.Component {
     await this.props.loadSensor(deviceId);
 
     if (typeof this.props.sensor === 'string') {
+      ReactGA.event({
+        category: 'Purchase failure, No device',
+        action: 'Purchase failure, No device',
+        label: `Sensor ID ${deviceId}`
+      });
       return this.setNotification('noDevice');
     }
 
@@ -72,13 +77,18 @@ class Sensor extends React.Component {
       return this.setNotification('noWallet');
     }
     if (Number(wallet.balance) < Number(sensor.price)) {
+      ReactGA.event({
+        category: 'Purchase failure, No balance',
+        action: 'Purchase failure, No balance',
+        label: `User ID ${userId}`
+      });
       return this.setNotification('noBalance');
     }
 
     ReactGA.event({
       category: 'Purchase stream',
       action: 'Purchase stream',
-      label: `Sensor ID ${sensor.sensorId}`
+      label: `Sensor ID ${deviceId}`
     });
 
     this.setNotification('purchasing');
@@ -92,10 +102,20 @@ class Sensor extends React.Component {
             await this.purchaseStream(bundleHashes, userId, deviceId);
           })
           .catch(error => {
+            ReactGA.event({
+              category: 'Purchase failure, update balance',
+              action: 'Purchase failure, update balance',
+              label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+            });
             this.setNotification('purchaseFailed', error);
           });
       })
       .catch(error => {
+        ReactGA.event({
+          category: 'Purchase failure, get bundle hashes',
+          action: 'Purchase failure, get bundle hashes',
+          label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+        });
         this.setNotification('purchaseFailed', error.message);
         console.log('getBundleHashes', error);
       });
@@ -109,9 +129,9 @@ class Sensor extends React.Component {
       })
       .catch(error => {
         ReactGA.event({
-          category: 'Purchase failed',
-          action: 'purchaseStream',
-          label: `User ID ${userId}, sensor ID ${deviceId}`
+          category: 'Purchase failure, purchase stream',
+          action: 'Purchase failure, purchase stream',
+          label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
         });
         this.setNotification('purchaseFailed', error);
       });
