@@ -26,11 +26,11 @@ const Fetcher = ({
           ReactGA.event({
             category: 'Stream read failure',
             action: 'Stream read failure',
-            label: `Sensor ID ${deviceId}, user ID ${userId}, lastFetchedTimestamp: ${lastFetchedTimestamp}`
+            label: `Sensor ID ${deviceId}`
           });
 
           setFetching(false);
-          return setNotification('streamReadFailure');
+          return setNotification('streamReadFailure', deviceId);
         }
 
         setFetchedData(!!data.length);
@@ -52,12 +52,12 @@ const Fetcher = ({
               emptyDataCounter++;
               if (emptyDataCounter > data.length * 0.5) {
                 ReactGA.event({
-                  category: 'Stream read failure',
-                  action: 'Stream read failure',
-                  label: `Sensor ID ${deviceId}, user ID ${userId}, lastFetchedTimestamp: ${lastFetchedTimestamp}`
+                  category: 'Data read failure',
+                  action: 'Data read failure',
+                  label: `Sensor ID ${deviceId}`
                 });
 
-                setNotification('dataReadingFailure');
+                setNotification('dataReadingFailure', deviceId);
               }
             }
           } catch (error) {
@@ -67,7 +67,7 @@ const Fetcher = ({
               ReactGA.event({
                 category: 'MAM fetch failure 1',
                 action: 'MAM fetch failure 1 + reload',
-                label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+                label: `Sensor ID ${deviceId}, error: ${error}`
               });
               window.location.reload(true);
             }
@@ -79,7 +79,7 @@ const Fetcher = ({
         ReactGA.event({
           category: 'MAM fetch failure 2',
           action: 'MAM fetch failure 2',
-          label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+          label: `Sensor ID ${deviceId}, error: ${error}`
         });
       }
     })();
