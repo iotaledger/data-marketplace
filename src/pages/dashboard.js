@@ -17,16 +17,8 @@ class Dashboard extends React.Component {
     super(props);
     this.state = {
       devices: [],
-      packets: [],
       user: {},
-      button: true,
-      index: 0,
-      loading: {
-        heading: 'Loading User',
-        body: 'Fetching your devices and account statistcs',
-      },
-      error: false,
-      fetching: false,
+      loading: false,
     };
 
     this.checkLogin = this.checkLogin.bind(this);
@@ -36,7 +28,6 @@ class Dashboard extends React.Component {
     this.createDevice = this.createDevice.bind(this);
     this.deleteDevice = this.deleteDevice.bind(this);
     this.logout = this.logout.bind(this);
-    this.throw = this.throw.bind(this);
   }
 
   async componentDidMount() {
@@ -96,14 +87,6 @@ class Dashboard extends React.Component {
     return this.setState({ devices, loading: false });
   };
 
-  throw(error, button) {
-    this.setState({
-      loading: false,
-      error,
-      button,
-    });
-  };
-
   createDevice(device) {
     const { userData } = this.props;
     // Assign to user
@@ -143,13 +126,12 @@ class Dashboard extends React.Component {
     const { userData } = this.props;
     const data = await api('removeDevice', { apiKey: userData.apiKey, id: deviceId });
     if (data.success) {
-      return this.setState({
+      this.setState({
         loading: false,
         devices: [...this.state.devices.filter(device => device.sensorId !== deviceId)],
       });
     } else {
-      alert('Could not Delete Device');
-      return this.setState({
+      this.setState({
         loading: false,
       });
     }
@@ -162,7 +144,6 @@ class Dashboard extends React.Component {
       .signOut()
       .then(() => {
         // Sign-out successful.
-        console.log('Logged Out');
         this.setState({ user: {}, devices: [] });
       })
       .catch(error => {
@@ -171,14 +152,15 @@ class Dashboard extends React.Component {
   };
 
   render() {
-    const { devices, user, loading, error, button } = this.state;
+    const { devices, user, loading } = this.state;
     const { userData } = this.props;
+
     return (
       <Main>
         <Cookie />
-        <DeviceNav {...this.state} logout={this.logout} />
+        <DeviceNav user={user} logout={this.logout} />
         <Data>
-          <Sidebar {...this.state} userData={userData} />
+          <Sidebar devices={devices} user={user} userData={userData} />
           <DeviceList
             devices={devices}
             maxDevices={userData.numberOfDevices}
@@ -187,11 +169,9 @@ class Dashboard extends React.Component {
           />
         </Data>
         <LoginModal
-          button={button}
           auth={this.auth}
           show={isEmpty(user)}
           loading={loading}
-          error={error}
         />
       </Main>
     );

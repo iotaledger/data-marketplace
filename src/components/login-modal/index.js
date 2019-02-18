@@ -1,39 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import Loading from '../loading';
 
-export default props => (
-  <Modal className="access-modal-wrapper" show={props.show}>
-    {!props.loading ? (
-      <AccessBox>
-        {!props.error ? (
+export default ({ auth, loading, show }) => (
+  <Modal className="access-modal-wrapper" show={show}>
+    {
+      !loading ? (
+        <AccessBox>
           <Internal>
             <Heading>Login with OAuth</Heading>
             <Info>Click one of the login buttons below to generate an account.</Info>
-            <SignupButton onClick={props.auth} src={`/static/icons/btn_google.png`} />
+            <SignupButton onClick={auth} src={`/static/icons/btn_google.png`} />
           </Internal>
-        ) : (
-          <Internal>
-            <Heading>{props.error.heading}</Heading>
-            <Info>{props.error.body}</Info>
-            {props.button && (
-              <Link to={'/'}>
-                <Button type="button" className="btn btn-accent txt-bold modal-trigger">
-                  Go back
-                </Button>
-              </Link>
-            )}
-          </Internal>
-        )}
-      </AccessBox>
-    ) : (
-      <AccessBox className="access-modal">
-        <Heading>{props.loading.heading || '--'} </Heading>
-        <Info>{props.loading.body || '--'}</Info>
-        <Loading />
-      </AccessBox>
-    )}
+        </AccessBox>
+      ) : (
+        <AccessBox className="access-modal">
+          <Heading>{loading.heading || '--'} </Heading>
+          <Info>{loading.body || '--'}</Info>
+          <Loading />
+        </AccessBox>
+      )
+    }
   </Modal>
 );
 
@@ -81,25 +68,6 @@ const Info = styled.p`
   color: #fff;
   text-align: center;
   margin-bottom: auto;
-`;
-
-const Button = styled.button`
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  font: 15px 'Nunito Sans', sans-serif;
-  letter-spacing: 0.47px;
-  padding: 20px 38px;
-  border-radius: 100px;
-  text-transform: uppercase;
-  color: #fff;
-  font-size: 12px;
-  letter-spacing: 0.38px;
-  padding: 12px 21px;
-  margin: 30px 0 0;
-  box-shadow: 0 10px 20px 0 #0a2056;
-  font-weight: 700;
-  background-color: #009fff;
 `;
 
 const Internal = styled.div`

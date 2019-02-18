@@ -5,18 +5,20 @@ import Clipboard from 'react-clipboard.js';
 class UserSidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { alert: false, alertMessage: '' };
+    this.state = { message: '' };
     this.alert = this.alert.bind(this);
   }
 
   alert(text) {
-    this.setState({ alert: text, alertMessage: text }, () =>
-      setTimeout(() => this.setState({ alert: false, alertMessage: text }), 1500)
+    this.setState({ message: text }, () =>
+      setTimeout(() => this.setState({ message: '' }), 1500)
     );
   };
 
   render() {
     const { devices, user, userData } = this.props;
+    const { message } = this.state;
+
     return (
       <Sidebar>
         <Details>
@@ -29,9 +31,11 @@ class UserSidebar extends React.Component {
             <DetailRow>
               <DetailKey>Total Data Streams:</DetailKey>
               <DetailValue>
-                {devices[0]
-                  ? devices.map(device => device.dataTypes.length).reduce((a, b) => a + b)
-                  : '--'}
+                {
+                  devices[0]
+                    ? devices.map(device => device.dataTypes.length).reduce((a, b) => a + b)
+                    : '--'
+                }
               </DetailValue>
             </DetailRow>
             <DetailRow>
@@ -49,7 +53,9 @@ class UserSidebar extends React.Component {
                 data-clipboard-text={userData.apiKey}
                 onSuccess={() => this.alert('Successfully Copied')}
               >
-                <CopyBox>{userData.apiKey ? `${userData.apiKey.substr(0, 20)}...` : '--'}</CopyBox>
+                <CopyBox>
+                  {userData.apiKey ? `${userData.apiKey.substr(0, 20)}...` : '--'}
+                </CopyBox>
               </Clipboard>
             </DetailRow>
             <DetailRow>
@@ -62,7 +68,7 @@ class UserSidebar extends React.Component {
                 <CopyBox>{user.uid && `${user.uid.substr(0, 18)}...`}</CopyBox>
               </Clipboard>
             </DetailRow>
-            <Alert {...this.state}>{this.state.alertMessage}</Alert>
+            <Alert message={message}>{message}</Alert>
 
             <DetailRow>
               <a
@@ -155,7 +161,7 @@ const Alert = styled.span`
   font-size: 16px;
   line-height: 32px;
   color: #595959ff;
-  opacity: ${props => (props.alert ? 1 : 0)};
+  opacity: ${props => (props.message ? 1 : 0)};
   transition: all 0.5s ease;
 `;
 
