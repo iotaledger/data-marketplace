@@ -8,6 +8,7 @@ import { createContext } from 'mam.client.js/lib/mam';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
+import { getSensorStreamJSON } from '../utils/helpers';
 import { getBundleHashes, purchaseStream, updateBalance } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal';
@@ -30,6 +31,7 @@ class Sensor extends React.Component {
       purchase: false,
     };
 
+    this.downloadSensorStreamJSON = this.downloadSensorStreamJSON.bind(this);
     this.loadMore = this.loadMore.bind(this);
     this.purchase = this.purchase.bind(this);
     this.purchaseStream = this.purchaseStream.bind(this);
@@ -55,6 +57,11 @@ class Sensor extends React.Component {
     this.ctx = await createContext();
     this.client = createHttpClient({ provider });
     this.setState({ userId, fetching: true });
+  }
+
+  async downloadSensorStreamJSON() {
+    const { match: { params: { deviceId } } } = this.props;
+    getSensorStreamJSON(deviceId, this.state.packets);
   }
 
   loadMore() {
@@ -156,7 +163,7 @@ class Sensor extends React.Component {
   setDataEnd = flag => this.setState({ dataEnd: flag });
 
   render() {
-    const { userId, error, fetching, packets, streamLength } = this.state;
+    const { userId, error, fetching, packets, streamLength, purchase } = this.state;
     const { match: { params: { deviceId } } } = this.props;
 
     return (
@@ -166,7 +173,11 @@ class Sensor extends React.Component {
           <SensorNav />
         </SensorContext.Provider>
         <Data>
-          <Sidebar isLoading={fetching && packets[0] && !this.state.dataEnd && packets.length !== streamLength} />
+          <Sidebar
+            downloadSensorStreamJSON={this.downloadSensorStreamJSON}
+            isLoading={fetching && packets[0] && !this.state.dataEnd && packets.length !== streamLength}
+            purchase={purchase && packets.length > 0}
+          />
           <SensorContext.Provider value={{ func: this.loadMore }}>
             <DataStream packets={packets} streamLength={streamLength} />
           </SensorContext.Provider>
