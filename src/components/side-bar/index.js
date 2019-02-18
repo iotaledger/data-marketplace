@@ -6,7 +6,7 @@ import { reducer } from '../../utils/helpers';
 import { getBalance } from '../../utils/iota';
 import Loading from '../loading';
 
-const SideBar = ({ sensor, settings, isLoading }) => {
+const SideBar = ({ sensor, settings, isLoading, downloadSensorStreamJSON, purchase }) => {
   const [balance, setBalance] = useState(null);
 
   useEffect(() => {
@@ -54,6 +54,16 @@ const SideBar = ({ sensor, settings, isLoading }) => {
           </DetailRow>
         </div>
       </Details>
+      {
+        purchase ? (
+          <Details>
+            <Label>Download sensor stream</Label>
+            <DetailRow>
+              <Button onClick={downloadSensorStreamJSON}>Download</Button>
+            </DetailRow>
+          </Details>
+        ) : null
+      }
       <Fetcher>
         {isLoading ? <Loading /> : null}
       </Fetcher>
@@ -146,4 +156,25 @@ const DetailValue = styled.p`
   font-size: 16px;
   line-height: 32px;
   color: #fff;
+`;
+
+const Button = styled.button`
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font: 15px 'Nunito Sans', sans-serif;
+  letter-spacing: 0.47px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.38px;
+  padding: 9px 10px;
+  margin: 8px 0 0;
+  box-shadow: 0 2px 10px 0 rgba(10, 32, 86, 0.3);
+  font-weight: 700;
+  background-color: #009fff;
+  @media (max-width: 760px) {
+    margin: 3px 0;
+  }
 `;
