@@ -6951,8 +6951,8 @@ makeerror@1.0.x:
     tmpl "1.0.x"
 
 mam.client.js@iotaledger/mam.client.js:
-  version "0.1.0"
-  resolved "https://codeload.github.com/iotaledger/mam.client.js/tar.gz/71d7f8697d2204c8464baf9f5066b1c41f995ddf"
+  version "0.1.1"
+  resolved "https://codeload.github.com/iotaledger/mam.client.js/tar.gz/9422ecdb7e4e8cd2e6f8aba2d73a11c13346071d"
   dependencies:
     "@iota/converter" "^1.0.0-beta.5"
     "@iota/core" "^1.0.0-beta.5"
