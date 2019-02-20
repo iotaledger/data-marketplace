@@ -1,4 +1,4 @@
-[](# Data Marketplace
+# Data Marketplace
 
 The Proof of Concept Data Marketplace built using MAM and IOTA Tangle.
 
@@ -46,4 +46,3 @@ npm run install-all
 ```javascript
 npm run deploy PROJECT_NAME
 ```
-)
