@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { HashRouter, Switch, Route } from 'react-router-dom';
 import { CookiesProvider } from 'react-cookie';
-import HomePage from './pages/home_old';
+import HomePage from './pages/home';
 import DemoPage from './pages/demo';
 import TechSpecsPage from './pages/specs';
 import BusinessPage from './pages/business';
