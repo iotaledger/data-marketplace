@@ -152,35 +152,6 @@ exports.removeDevice = functions.https.onRequest((req, res) => {
   });
 });
 
-// Take ownership of a device
-exports.grandfather = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
-    // Check Fields
-    const packet = req.body;
-    if (!packet || !packet.id || !packet.owner || !packet.sk) {
-      console.log('grandfather failed. Packet: ', packet);
-      return res.status(400).json({ error: 'Ensure all fields are included' });
-    }
-
-    try {
-      // Get Device's SK
-      const device = await getSk(packet.id);
-      // If SK is true
-      if (device.sk === packet.sk) {
-        // Set owner
-        await setOwner(packet.id, packet.owner);
-        return res.json({ success: true });
-      } else {
-        console.log('grandfather failed. Key is incorrect', device.sk, packet.sk);
-        throw Error('Oh noes, your key is incorrect.');
-      }
-    } catch (e) {
-      console.log('grandfather failed. Error: ', e.message);
-      return res.status(403).json({ error: e.message });
-    }
-  });
-});
-
 // Query Devices
 exports.getDevices = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {

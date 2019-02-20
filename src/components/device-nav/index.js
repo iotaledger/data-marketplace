@@ -3,20 +3,22 @@ import styled from 'styled-components';
 import isEmpty from 'lodash-es/isEmpty';
 import { Link } from 'react-router-dom';
 
-export default props => (
+export default ({ logout, user }) => (
   <Main>
-    <Back to={'/demo'}>
+    <Back to={'/'}>
       <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
     </Back>
 
     <Header>
       <Block>
         <Desc>Owner:</Desc>
-        <DeviceID>{props.user.displayName || '--'}</DeviceID>
+        <DeviceID>{user.displayName || '--'}</DeviceID>
       </Block>
     </Header>
     <RightHeader>
-      {!isEmpty(props.user) && <FooterButton onClick={props.logout}>Log Out</FooterButton>}
+      {
+        !isEmpty(user) && <FooterButton onClick={logout}>Log Out</FooterButton>
+      }
     </RightHeader>
   </Main>
 );

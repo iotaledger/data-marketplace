@@ -8,6 +8,7 @@ import Partners from '../components/partners/old';
 import Benefits from '../components/benefits/old';
 import Footer from '../components/footer/old';
 import Map from '../components/map';
+import Cookie from '../components/cookie';
 import { allDevices } from '../utils/firebase';
 
 export default class extends React.Component {
@@ -35,6 +36,7 @@ export default class extends React.Component {
   render() {
     return (
       <Main>
+        <Cookie />
         <Header onAnchorClick={this.onAnchorClick} />
         <Features />
         <Map {...this.state} />

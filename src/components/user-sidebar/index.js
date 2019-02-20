@@ -1,23 +1,24 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Clipboard from 'react-clipboard.js';
 
 class UserSidebar extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { alert: false, alertMessage: '' };
+    this.state = { message: '' };
     this.alert = this.alert.bind(this);
   }
 
   alert(text) {
-    this.setState({ alert: text, alertMessage: text }, () =>
-      setTimeout(() => this.setState({ alert: false, alertMessage: text }), 1500)
+    this.setState({ message: text }, () =>
+      setTimeout(() => this.setState({ message: '' }), 1500)
     );
   };
 
   render() {
-    const { settings, devices, user, userData, grandfather, toggleGrand } = this.props;
+    const { devices, user, userData } = this.props;
+    const { message } = this.state;
+
     return (
       <Sidebar>
         <Details>
@@ -30,9 +31,11 @@ class UserSidebar extends React.Component {
             <DetailRow>
               <DetailKey>Total Data Streams:</DetailKey>
               <DetailValue>
-                {devices[0]
-                  ? devices.map(device => device.dataTypes.length).reduce((a, b) => a + b)
-                  : '--'}
+                {
+                  devices[0]
+                    ? devices.map(device => device.dataTypes.length).reduce((a, b) => a + b)
+                    : '--'
+                }
               </DetailValue>
             </DetailRow>
             <DetailRow>
@@ -50,7 +53,9 @@ class UserSidebar extends React.Component {
                 data-clipboard-text={userData.apiKey}
                 onSuccess={() => this.alert('Successfully Copied')}
               >
-                <CopyBox>{userData.apiKey ? `${userData.apiKey.substr(0, 20)}...` : '--'}</CopyBox>
+                <CopyBox>
+                  {userData.apiKey ? `${userData.apiKey.substr(0, 20)}...` : '--'}
+                </CopyBox>
               </Clipboard>
             </DetailRow>
             <DetailRow>
@@ -63,24 +68,17 @@ class UserSidebar extends React.Component {
                 <CopyBox>{user.uid && `${user.uid.substr(0, 18)}...`}</CopyBox>
               </Clipboard>
             </DetailRow>
-            <Alert {...this.state}>{this.state.alertMessage}</Alert>
+            <Alert message={message}>{message}</Alert>
 
             <DetailRow>
-              {settings && settings.documentation ? (
-                <a
-                  href={settings.documentation}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <DetailKey>View the API documentation</DetailKey>
-                </a>
-              ) : null}
+              <a
+                href={'/static/docs/index.html'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <DetailKey>View the API documentation</DetailKey>
+              </a>
             </DetailRow>
-          </Details>
-        )}
-        {grandfather && (
-          <Details>
-            <Grandfather onClick={toggleGrand}>Grandfather Old Device</Grandfather>
           </Details>
         )}
       </Sidebar>
@@ -88,11 +86,7 @@ class UserSidebar extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  settings: state.settings,
-});
-
-export default connect(mapStateToProps)(UserSidebar);
+export default UserSidebar;
 
 const Sidebar = styled.aside`
   background: rgba(240, 240, 240, 1);
@@ -167,11 +161,11 @@ const Alert = styled.span`
   font-size: 16px;
   line-height: 32px;
   color: #595959ff;
-  opacity: ${props => (props.alert ? 1 : 0)};
+  opacity: ${props => (props.message ? 1 : 0)};
   transition: all 0.5s ease;
 `;
 
-const CopyBox = DetailValue.extend`
+const CopyBox = styled(DetailValue)`
   cursor: pointer;
   transition: all 0.3s ease;
   &:hover {
@@ -179,14 +173,3 @@ const CopyBox = DetailValue.extend`
   }
 `;
 
-const Grandfather = styled.button`
-  color: ${props => (props.grey ? `rgba(41, 41, 41, 0.4)` : `rgba(41, 41, 41, 0.9)`)};
-  padding: 5px 15px;
-  margin-right: -15px;
-  font-size: 90%;
-  background: transparent;
-  &:first-of-type {
-    margin-left: -15px;
-    margin-right: 0;
-  }
-`;

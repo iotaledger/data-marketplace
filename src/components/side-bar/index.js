@@ -1,55 +1,79 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import isEmpty from 'lodash-es/isEmpty';
 import { reducer } from '../../utils/helpers';
+import { getBalance } from '../../utils/iota';
 import Loading from '../loading';
 
-const SideBar = ({ device, settings, fetching, dataEnd, packets, streamLength }) => (
-  <Sidebar>
-    <Details>
-      <Label>Sensor details:</Label>
-      <div>
-        {!isEmpty(settings) ? (
-          <a
-            href={`${settings.tangleExplorer}/${device.address}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+const SideBar = ({ sensor, settings, isLoading, downloadSensorStreamJSON, purchase }) => {
+  const [balance, setBalance] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      if (sensor.address) {
+        setBalance(await getBalance(sensor.address, settings.provider));
+      }
+    })();
+  }, [!isEmpty(sensor) && sensor.address]);
+
+  return (
+    <Sidebar>
+      <Details>
+        <Label>Sensor details:</Label>
+        <div>
+          {!isEmpty(settings) ? (
+            <a
+              href={`${settings.tangleExplorer}/${sensor.address}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <DetailRow>
+                <DetailKey>Device Balance:</DetailKey>
+                <DetailValue>{balance ? reducer(balance) : '--'}</DetailValue>
+              </DetailRow>
+            </a>
+          ) : (
             <DetailRow>
               <DetailKey>Device Balance:</DetailKey>
-              <DetailValue>{device.balance ? reducer(device.balance) : '--'}</DetailValue>
+              <DetailValue>{balance ? reducer(balance) : '--'}</DetailValue>
             </DetailRow>
-          </a>
-        ) : (
+          )}
           <DetailRow>
-            <DetailKey>Device Balance:</DetailKey>
-            <DetailValue>{device.balance ? reducer(device.balance) : '--'}</DetailValue>
+            <DetailKey>Location:</DetailKey>
+            <DetailValue>
+              {' '}
+              {sensor.location && sensor.location.city && sensor.location.country
+                ? `${sensor.location.city}, ${sensor.location.country}`
+                : '--'}
+            </DetailValue>
           </DetailRow>
-        )}
-        <DetailRow>
-          <DetailKey>Location:</DetailKey>
-          <DetailValue>
-            {' '}
-            {device.location && device.location.city && device.location.country
-              ? `${device.location.city}, ${device.location.country}`
-              : '--'}
-          </DetailValue>
-        </DetailRow>
-        <DetailRow>
-          <DetailKey>Owner:</DetailKey>
-          <DetailValue>{device.company ? device.company : '--'}</DetailValue>
-        </DetailRow>
-      </div>
-    </Details>
-    <Fetcher>
-      {fetching && packets[0] && !dataEnd && packets.length !== streamLength ? <Loading /> : null}
-    </Fetcher>
-  </Sidebar>
-);
+          <DetailRow>
+            <DetailKey>Owner:</DetailKey>
+            <DetailValue>{sensor.company ? sensor.company : '--'}</DetailValue>
+          </DetailRow>
+        </div>
+      </Details>
+      {
+        purchase ? (
+          <Details>
+            <Label>Download sensor stream</Label>
+            <DetailRow>
+              <Button onClick={downloadSensorStreamJSON}>Download</Button>
+            </DetailRow>
+          </Details>
+        ) : null
+      }
+      <Fetcher>
+        {isLoading ? <Loading /> : null}
+      </Fetcher>
+    </Sidebar>
+  );
+}
 
 const mapStateToProps = state => ({
   settings: state.settings,
+  sensor: state.sensor,
 });
 
 export default connect(mapStateToProps)(SideBar);
@@ -132,4 +156,25 @@ const DetailValue = styled.p`
   font-size: 16px;
   line-height: 32px;
   color: #fff;
+`;
+
+const Button = styled.button`
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font: 15px 'Nunito Sans', sans-serif;
+  letter-spacing: 0.47px;
+  border-radius: 100px;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 12px;
+  letter-spacing: 0.38px;
+  padding: 9px 10px;
+  margin: 8px 0 0;
+  box-shadow: 0 2px 10px 0 rgba(10, 32, 86, 0.3);
+  font-weight: 700;
+  background-color: #009fff;
+  @media (max-width: 760px) {
+    margin: 3px 0;
+  }
 `;

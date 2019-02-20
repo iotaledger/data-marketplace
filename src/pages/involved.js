@@ -13,6 +13,7 @@ import List from '../components/content/list';
 import WhyJoin from '../components/feature-section/why-join';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
+import Cookie from '../components/cookie';
 
 const content1 = {
   text: `IOTA is now streamlining open access to the demo and will continue signing up organisations to grow the co-creation ecosystem.`,
@@ -109,6 +110,7 @@ export default class extends React.Component {
     const { anchor } = this.state;
     return (
       <Main id="main">
+        <Cookie />
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
@@ -182,12 +184,12 @@ const Main = styled.div`
 
 const ContentOuterWrapper = styled.div`
   background-image: linear-gradient(to bottom, #f1f6f9, #eaf0f4);
-  transform: skewY(4deg);
-  margin: 40px 0 60px;
+  transform: skewY(2deg);
+  margin: 40px 0 0;
 `;
 
 const ContentInnerWrapper = styled.div`
-  transform: skewY(-4deg);
+  transform: skewY(-2deg);
   display: flex;
   flex-direction: column;
   padding: 40px 0;
@@ -277,6 +279,7 @@ const Container = styled.div`
   margin-right: auto;
   margin-left: auto;
   margin-bottom: 100px;
+  position: relative;
 
   @media (max-width: 660px) {
     background-image: url(/static/shapes/get_involved/shape-header-hero1.svg);
@@ -364,33 +367,35 @@ const Tagline = styled.h2`
   letter-spacing: normal;
   text-align: center;
   position: absolute;
-  top: 245px;
-  left: 35vw;
+  top: 145px;
+  left: 31vw;
+
+  @media (min-width: 1700px) {
+    left: 19vw;
+  }
 
   @media (max-width: 1120px) {
-    top: 224px;
-    left: 26vw;
+    left: 30vw;
   }
 
   @media (max-width: 1050px) {
-    top: 208px;
-    left: 24vw;
+    left: 29vw;
   }
 
-  @media (max-width: 960px) {
+  @media (max-width: 990px) {
     font-size: 30px;
-    left: 26vw;
+    top: 100px;
+    left: 22vw;
   }
 
   @media (max-width: 760px) {
     left: 13vw;
-    top: 200px;
   }
 
   @media (max-width: 660px) {
-    top: 100px;
+    top: -20px;
     text-align: right;
-    right: 5vw;
+    right: 2vw;
     color: #4e5a61;
   }
 `;
@@ -404,14 +409,18 @@ const Shape = styled.img`
   z-index: -10;
 `;
 
-const Shape1 = Shape.extend`
+const Shape1 = styled(Shape)`
   transform: skew(-65deg, 66deg);
-  top: 254px;
-  right: 71vw;
+  top: 154px;
+  left: 18vw;
   width: 7%;
-  @media (max-width: 1120px) {
-    top: 254px;
-    right: 78vw;
+
+  @media (min-width: 1700px) {
+    left: 10vw;
+  }
+
+  @media (max-width: 900px) {
+    left: 10vw;
   }
 
   @media (max-width: 760px) {
@@ -419,15 +428,19 @@ const Shape1 = Shape.extend`
   }
 `;
 
-const Shape2 = Shape.extend`
+const Shape2 = styled(Shape)`
   transform: skew(-14deg, 195deg);
-  top: 130px;
-  left: 29vw;
+  top: 30px;
+  left: 25vw;
   width: 33%;
   max-width: 540px;
-  @media (max-width: 1120px) {
-    top: 130px;
-    left: 20vw;
+
+  @media (min-width: 1700px) {
+    left: 15vw;
+  }
+
+  @media (max-width: 990px) {
+    left: 15vw;
   }
 
   @media (max-width: 760px) {

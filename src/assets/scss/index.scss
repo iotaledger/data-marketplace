@@ -107,6 +107,10 @@ body {
   font-family: 'Nunito Sans', sans-serif;
   font-weight: 400;
   color: #000;
+
+  &.cookie-bar-top-bar {
+    margin-top: 70px;
+  }
 }
 button {
   border: none;

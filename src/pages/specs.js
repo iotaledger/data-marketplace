@@ -9,6 +9,7 @@ import List from '../components/content/list';
 import Sensors from '../components/example-sensors';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
+import Cookie from '../components/cookie';
 
 const contentIntroduction1 = {
   text: `In this PoC, sensor owners onboard a new sensor and use a script provided by IOTA to submit sensor data to the Tangle. All data packets are securely stored and each packet is additionally encrypted with strong randomly generated password.
@@ -116,7 +117,7 @@ const content10 = {
 const content11 = {
   id: 'opensource',
   title: 'Opensource Code',
-  text: `As of August 2018, the code developed during the initiative is opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in <a href="https://discord.gg/BFPFD33">Discord</a> is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
+  text: `As of February 2019, the code developed during the initiative will be opensourced <a href="https://github.com/iotaledger/data-marketplace">here</a> in order to allow the innovation community to build further solutions. A dedicated chat channel in <a href="https://discord.gg/BFPFD33">Discord</a> is made available <a href="https://discordapp.com/channels/397872799483428865/400989166114177034">here</a> to developers.`,
 };
 
 const limitations = [
@@ -207,6 +208,7 @@ export default class extends React.Component {
     const { anchor } = this.state;
     return (
       <Main id="main">
+        <Cookie />
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
@@ -469,7 +471,7 @@ const Shape = styled.img`
   z-index: -10;
 `;
 
-const Shape1 = Shape.extend`
+const Shape1 = styled(Shape)`
   top: 180px;
   right: 61vw;
   width: 20%;
@@ -492,7 +494,7 @@ const Shape1 = Shape.extend`
   }
 `;
 
-const Shape3 = Shape.extend`
+const Shape3 = styled(Shape)`
   z-index: 1;
   top: 200%;
   left: -8vw;

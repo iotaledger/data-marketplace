@@ -1,5 +1,54 @@
 import api, { fetchData } from './api';
 
+export const getBundleHashes = (sensor, userId) => {
+  return new Promise(async (resolve, reject) => {
+    // Try purchase
+    try {
+      const packet = {
+        userId,
+        address: sensor.address,
+        value: Number(sensor.price),
+      };
+
+      const bundleHashesResult = await api('purchaseData', packet);
+      if (bundleHashesResult && bundleHashesResult.transactions) {
+        resolve(bundleHashesResult.transactions);
+      }
+      reject();
+    } catch (error) {
+      console.error('getBundleHashes error', error);
+      reject(error);
+    }
+  });
+}
+
+export const updateBalance = (userId, deviceId) => {
+  return new Promise(async (resolve, reject) => {
+    // Update wallet balance
+    const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
+    
+    if (balanceUpdateResponse && balanceUpdateResponse.success) {
+      resolve();
+    } else {
+      reject(balanceUpdateResponse && balanceUpdateResponse.error);
+    }
+  });
+}
+
+export const purchaseStream = (bundleHashes, userId, deviceId) => {
+  return new Promise(async (resolve, reject) => {
+    const hashes = bundleHashes && bundleHashes.map(bundle => bundle.hash);
+    const packet = { userId, deviceId, hashes };
+    const purchaseStreamResponse = await api('purchaseStream', packet);
+    
+    if (purchaseStreamResponse && purchaseStreamResponse.success) {
+      resolve();
+    } else {
+      reject(purchaseStreamResponse && purchaseStreamResponse.error);
+    }
+  });
+}
+
 export const getData = async (userId, deviceId, time) => {
   try {
     const result = await getPackets(userId, deviceId, time);
@@ -29,7 +78,7 @@ const getPackets = (userId, deviceId, time) => {
 };
 
 const getPacketsPartial = data => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     const packets = [];
     data.packets.map(ref =>
       ref.get().then(item => {

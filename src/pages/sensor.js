@@ -1,46 +1,41 @@
 import React from 'react';
 import ReactGA from 'react-ga';
-import { connect } from 'react-redux';
-import { trytesToAscii } from '@iota/converter';
-import { createHttpClient } from '@iota/http-client';
 import styled from 'styled-components';
-import { createContext, Reader, Mode } from 'mam.client.js/lib/mam';
 import isEmpty from 'lodash-es/isEmpty';
-import get from 'lodash-es/get';
+import { connect } from 'react-redux';
+import { createHttpClient } from '@iota/http-client';
+import { createContext } from 'mam.client.js/lib/mam';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
-import { getData, getBalance } from '../utils/iota';
+import { getSensorStreamJSON } from '../utils/helpers';
+import { getBundleHashes, purchaseStream, updateBalance } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
-import Modal from '../components/modal/purchase';
+import Modal from '../components/modal';
 import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
-import api from '../utils/api';
+import Fetcher from '../components/fetcher';
+import Cookie from '../components/cookie';
+
+export const SensorContext = React.createContext({});
 
 class Sensor extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       packets: [],
-      purchase: false,
-      button: true,
       lastFetchedTimestamp: null,
-      loading: {
-        heading: 'Loading Device',
-        body: 'Fetching device information and your purchase history.',
-      },
+      notification: 'loading',
       error: false,
       fetching: false,
+      purchase: false,
     };
 
-    this.fetch = this.fetch.bind(this);
-    this.fetchMam = this.fetchMam.bind(this);
-    this.fetchWallet = this.fetchWallet.bind(this);
-    this.fund = this.fund.bind(this);
+    this.downloadSensorStreamJSON = this.downloadSensorStreamJSON.bind(this);
     this.loadMore = this.loadMore.bind(this);
     this.purchase = this.purchase.bind(this);
+    this.purchaseStream = this.purchaseStream.bind(this);
     this.saveData = this.saveData.bind(this);
-    this.throw = this.throw.bind(this);
   }
 
   async componentDidMount() {
@@ -48,155 +43,36 @@ class Sensor extends React.Component {
     const userId = (await userAuth()).uid;
     const { match: { params: { deviceId } }, settings: { provider } } = this.props;
 
-    // Init Wallet
-    this.fetchWallet(userId);
-
     await this.props.loadSensor(deviceId);
 
-    // Get data
-    const device = this.props.sensor;
-
-    if (device.address) {
-      device.balance = await getBalance(device.address, provider);
-    }
-
-    if (typeof device === 'string') {
-      return this.throw({
-        body: `The device you are looking for doesn't exist, check the device ID and try again`,
-        heading: `Device doesn't exist`,
+    if (typeof this.props.sensor === 'string') {
+      ReactGA.event({
+        category: 'Purchase failure, No device',
+        action: 'Purchase failure, No device',
+        label: `Sensor ID ${deviceId}`
       });
+      return this.setNotification('noDevice');
     }
 
     this.ctx = await createContext();
     this.client = createHttpClient({ provider });
-
-    // Organise data for layout
-    const layout = [];
-    device.dataTypes.forEach((item, i) => {
-      if (!layout[Math.floor(i / 2)]) {
-        layout[Math.floor(i / 2)] = [];
-      }
-      layout[Math.floor(i / 2)].push(item);
-    });
-
-    this.setState({ layout, userId });
-    // MAM
-    this.fetch();
+    this.setState({ userId, fetching: true });
   }
 
-  throw(error, button) {
-    this.setState({ loading: false, error, button });
-  }
-
-  async fetch() {
+  async downloadSensorStreamJSON() {
     const { match: { params: { deviceId } } } = this.props;
-    const { lastFetchedTimestamp, userId } = this.state;
-
-    const data = await getData(userId, deviceId, lastFetchedTimestamp);
-
-    if (typeof data === 'string' && data === 'Please purchase the stream') {
-      return this.setState({ loading: false, purchase: false });
-    }
-
-    if (!data.length || !data[0]) {
-      return this.throw({
-        body: 'No data found',
-        heading: 'Stream Read Failure',
-      });
-    }
-    this.setState({ purchase: true, streamLength: this.state.packets.length + data.length, loading: false });
-    this.fetchMam(data);
+    getSensorStreamJSON(deviceId, this.state.packets);
   }
 
-  async fetchMam(data) {
-    try {
-      if (!data[0]) {
-        this.throw({
-          body: 'Fail',
-          heading: 'Fail',
-        });
-      }
-
-      let fetchErrorCounter = 0;
-      let emptyDataCounter = 0;
-      data.map(async ({ root, sidekey, time = null }) => {
-        try {
-          const mode = sidekey ? Mode.Old : Mode.Public;
-          const reader = new Reader(this.ctx, this.client, mode, root, sidekey || '9'.repeat(81));
-          const message = await reader.next();
-          const payload = get(message, 'value[0].message.payload');
-          if (payload) {
-            this.saveData(JSON.parse(trytesToAscii(payload)), time);
-          } else {
-            emptyDataCounter++;
-            if (emptyDataCounter > data.length * 0.5) {
-              this.throw({
-                body: 'Sensor data is missing or too old.',
-                heading: 'No data',
-              }, true);
-            }
-          }
-        } catch (error) {
-          fetchErrorCounter++;
-          console.error('fetchMam error 1', fetchErrorCounter, data.length, error);
-          if (fetchErrorCounter > data.length * 0.8) {
-            window.location.reload(true);
-          }
-
-          this.throw({
-            body: 'Unable to read the packets of data from the device.',
-            heading: 'Device Misconfigured',
-          });
-        }
-      });
-    } catch (error) {
-      console.error('fetchMam error 2', error);
-      this.setState({ dataEnd: true });
+  loadMore() {
+    if (this.state.packets[0] && !this.state.fetching) {
+      this.setFetching(true);
     }
-  }
-
-  saveData(packet, time) {
-    const packets = [...this.state.packets, packet];
-    this.setState({
-      packets,
-      purchase: true,
-      fetching: false,
-      lastFetchedTimestamp: time,
-    });
-  }
-
-  async fetchWallet(userId) {
-    await this.props.loadUser(userId);
-    const wallet = this.props.user.wallet;
-    if (isEmpty(wallet) || !wallet.balance) {
-      this.setState({ desc: 'Wallet not funded', walletLoading: false });
-    } else {
-      this.setState({
-        desc: 'IOTA wallet balance:',
-        walletLoading: false,
-        error: false,
-      });
-    }
-  }
-
-  async fund() {
-    const { sensor } = this.props;
-    ReactGA.event({
-      category: 'Fund wallet',
-      action: 'Fund wallet',
-      label: `Sensor ID ${sensor.sensorId}`
-    });
-
-    const { userId } = this.state;
-    this.setState({ desc: 'Funding wallet', walletLoading: true }, async () => {
-      await api('setWallet', { userId });
-      this.fetchWallet(userId);
-    });
   }
 
   async purchase() {
+    const { loadUser, user, sensor,  match: { params: { deviceId } } } = this.props;
     const { userId } = this.state;
-    const { loadUser, user, sensor, match: { params: { deviceId } } } = this.props;
 
     if (!user) {
       await loadUser(userId);
@@ -205,133 +81,132 @@ class Sensor extends React.Component {
     // Make sure we have wallet
     const wallet = user.wallet;
     if (!wallet || isEmpty(wallet) || wallet.error) {
-      return this.throw(
-        {
-          body: 'Setup wallet by clicking the top right, to get a prefunded IOTA wallet.',
-          heading: 'Wallet does not exist',
-        },
-        false
-      );
+      return this.setNotification('noWallet');
     }
     if (Number(wallet.balance) < Number(sensor.price)) {
-      return this.throw({
-        body: 'You have run out of IOTA',
-        heading: 'Not enough Balance',
+      ReactGA.event({
+        category: 'Purchase failure, No balance',
+        action: 'Purchase failure, No balance',
+        label: `User ID ${userId}`
       });
+      return this.setNotification('noBalance');
     }
 
     ReactGA.event({
       category: 'Purchase stream',
       action: 'Purchase stream',
-      label: `Sensor ID ${sensor.sensorId}`
+      label: `Sensor ID ${deviceId}`
     });
 
-    this.setState(
-      {
-        loading: {
-          heading: 'Purchasing Stream',
-          body: 'You are doing Proof of Work to attach this purchase to the network.',
-        },
-      },
-      async () => {
-        // Try purchase
-        let purchaseResp;
-        try {
-          const purchaseDataPacket = {
-            userId,
-            address: sensor.address,
-            value: Number(sensor.price),
-          };
+    this.setNotification('purchasing');
+    getBundleHashes(sensor, userId)
+      .then(bundleHashes => {
+        this.setNotification('fetching');
 
-          const purchaseDataResult = await api('purchaseData', purchaseDataPacket);
-          if (purchaseDataResult && purchaseDataResult.transactions) {
-            purchaseResp = purchaseDataResult.transactions;
-          }
-        } catch (error) {
-          console.error('purchase error', error);
-          return this.throw({
-            body: error.message,
-            heading: 'Purchase Failed',
-          });
-        }
-        this.setState(
-          {
-            loading: {
-              heading: 'Success!',
-              body: 'Your purchase was successful. Fetching MAM stream and decoding data.',
-            },
-          },
-          async () => {
-            const packet = {
-              userId,
-              deviceId,
-              full: true,
-              hashes: purchaseResp && purchaseResp.map(bundle => bundle.hash),
-            };
-
-            const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
+        updateBalance(userId, deviceId)
+          .then(async () => {
             await loadUser(userId);
-
-            if (balanceUpdateResponse.success) {
-              const message = await api('purchaseStream', packet);
-              // Check Success
-              if (message.success) {
-                // Start Fetching data
-                this.fetch(userId);
-                // Update wallet balance
-                return this.setState({
-                  loading: true,
-                  purchase: true,
-                });
-              } else {
-                ReactGA.event({
-                  category: 'Purchase failed',
-                  action: 'purchaseStream',
-                  label: `User ID ${userId}, sensor ID ${deviceId}`
-                });
-                return this.throw({
-                  body: message.error,
-                  heading: 'Purchase Failed',
-                });
-              }
-            } else {
-              return this.throw({
-                body: balanceUpdateResponse.error,
-                heading: 'Purchase Failed',
-              });
-            }
-          }
-        );
-      }
-    );
-  }
-
-  loadMore() {
-    if (this.state.packets[0] && !this.state.fetching) {
-      this.setState({ fetching: true }, () => {
-        this.fetch();
+            await this.purchaseStream(bundleHashes, userId, deviceId);
+          })
+          .catch(error => {
+            ReactGA.event({
+              category: 'Purchase failure, update balance',
+              action: 'Purchase failure, update balance',
+              label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+            });
+            this.setNotification('purchaseFailed', error);
+          });
+      })
+      .catch(error => {
+        ReactGA.event({
+          category: 'Purchase failure, get bundle hashes',
+          action: 'Purchase failure, get bundle hashes',
+          label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+        });
+        this.setNotification('purchaseFailed', error.message);
+        console.log('getBundleHashes', error);
       });
-    }
   }
+
+  purchaseStream(bundleHashes, userId, deviceId) {
+    purchaseStream(bundleHashes, userId, deviceId)
+      .then(() => {
+        // Start Fetching data
+        this.setState({ purchase: true, fetching: true });
+      })
+      .catch(error => {
+        ReactGA.event({
+          category: 'Purchase failure, purchase stream',
+          action: 'Purchase failure, purchase stream',
+          label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
+        });
+        this.setNotification('purchaseFailed', error);
+      });
+  }
+
+  saveData(packet, time) {
+    const packets = [...this.state.packets, packet];
+    const lastFetchedTimestamp = !this.state.lastFetchedTimestamp || time < this.state.lastFetchedTimestamp ? time : this.state.lastFetchedTimestamp;
+    this.setState({
+      lastFetchedTimestamp,
+      packets,
+      purchase: true,
+      fetching: false
+    });
+  }
+
+  setNotification = (notification, error) => this.setState({ notification, error });
+  setFetching = flag => this.setState({ fetching: flag });
+  setPurchase = flag => this.setState({ purchase: flag });
+  setErrorState = flag => this.setState({ error: flag });
+  setStreamLength = value => this.setState({ streamLength: value });
+  setDataEnd = flag => this.setState({ dataEnd: flag });
 
   render() {
-    const { purchase, loading, error, button } = this.state;
-    const { sensor, user } = this.props;
+    const { userId, error, fetching, packets, streamLength, purchase } = this.state;
+    const { match: { params: { deviceId } } } = this.props;
+
     return (
       <Main>
-        <SensorNav {...this.state} device={sensor} wallet={user.wallet || {}} fund={this.fund} />
+        <Cookie />
+        <SensorContext.Provider value={{ userId, setErrorState: this.setErrorState, setNotification: this.setNotification }}>
+          <SensorNav />
+        </SensorContext.Provider>
         <Data>
-          <Sidebar {...this.state} device={sensor} />
-          <DataStream {...this.state} func={this.loadMore} />
+          <Sidebar
+            downloadSensorStreamJSON={this.downloadSensorStreamJSON}
+            isLoading={fetching && packets[0] && !this.state.dataEnd && packets.length !== streamLength}
+            purchase={purchase && packets.length > 0}
+          />
+          <SensorContext.Provider value={{ func: this.loadMore }}>
+            <DataStream packets={packets} streamLength={streamLength} />
+          </SensorContext.Provider>
         </Data>
         <Modal
-          device={sensor}
-          button={button}
-          purchase={this.purchase}
-          show={!purchase || !isEmpty(error)}
-          loading={loading}
+          purchasePrice={this.props.sensor.price}
+          callback={this.purchase}
+          show={!this.state.purchase || !isEmpty(error)}
+          notification={this.state.notification}
           error={error}
         />
+        {
+          fetching && (
+            <Fetcher
+              setNotification={this.setNotification}
+              setPurchase={this.setPurchase}
+              setStreamLength={this.setStreamLength}
+              setFetching={this.setFetching}
+              setDataEnd={this.setDataEnd} 
+              saveData={this.saveData} 
+              lastFetchedTimestamp={this.state.lastFetchedTimestamp}
+              deviceId={deviceId}
+              userId={userId} 
+              packets={packets.length}
+              ctx={this.ctx}
+              client={this.client}
+            />
+          )
+        }
       </Main>
     );
   }
@@ -348,10 +223,8 @@ const mapDispatchToProps = dispatch => ({
   loadUser: userId => dispatch(loadUser(userId)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Sensor);
+export default connect(mapStateToProps, mapDispatchToProps)(Sensor);
+
 
 const Main = styled.main`
   width: 100vw;

@@ -60,7 +60,7 @@ const SubLink = styled.p`
   }
 `;
 
-const SubLinkActive = SubLink.extend`
+const SubLinkActive = styled(SubLink)`
   opacity: 1;
   cursor: default;
 `;

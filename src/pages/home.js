@@ -9,6 +9,7 @@ import Content from '../components/content';
 import Partners from '../components/partners';
 import Footer from '../components/footer';
 import ScrollToTop from '../components/scroll-to-top';
+import Cookie from '../components/cookie';
 
 const content1 = {
   id: 'about',
@@ -52,6 +53,7 @@ class HomePage extends React.Component {
     const { anchor } = this.state;
     return (
       <Main id="main">
+        <Cookie />
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />

@@ -1,28 +1,74 @@
-import React from 'react';
+import React, { useContext, useState, useEffect } from 'react';
+import ReactGA from 'react-ga';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import isEmpty from 'lodash-es/isEmpty';
 import Loading from '../loading';
+import { loadUser } from '../../store/user/actions';
+import { SensorContext } from '../../pages/sensor';
+import api from '../../utils/api';
 
-const Wallet = ({ desc, fund, walletLoading, wallet }) => (
-  <Block>
-    <Desc>{desc}</Desc>
-    {walletLoading ? (
-      <div style={{ margin: '8px 0 0 ' }}>
-        <Loading size="26" color="#0d3497" />
-      </div>
-    ) : wallet.balance ? (
-      <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
-    ) : (
-      <Button onClick={fund}>Fund Wallet</Button>
-    )}
-  </Block>
-);
+const Wallet = ({ loadUser, sensor, wallet }) => {
+  const { userId, setErrorState, setNotification } = useContext(SensorContext);
+  const [desc, setDesc] = useState('Loading wallet');
+  const [walletLoading, setWalletLoading] = useState(false);
 
-Wallet.defaultProps = {
-  desc: 'Loading wallet',
-  walletLoading: true,
-};
+  useEffect(() => { fetchWallet() }, [wallet && wallet.balance]);
+  useEffect(() => { loadUser(userId) }, [userId]);
 
-export default Wallet;
+  async function fetchWallet() {
+    if (isEmpty(wallet) || !wallet.balance) {
+      setDesc('Wallet not funded');
+      setWalletLoading(false);
+    } else {
+      setDesc('IOTA wallet balance:');
+      setWalletLoading(false);
+      setErrorState(false);
+      setNotification('purchase');
+    }
+  }
+
+  async function fund() {
+    ReactGA.event({
+      category: 'Fund wallet',
+      action: 'Fund wallet',
+      label: `Sensor ID ${sensor.sensorId}`
+    });
+
+    setDesc('Funding wallet');
+    setWalletLoading(true);
+
+    await api('setWallet', { userId });
+    await loadUser(userId);
+  }
+
+  return (
+    <Block>
+      <Desc>{desc}</Desc>
+      {walletLoading ? (
+        <div style={{ margin: '8px 0 0 ' }}>
+          <Loading size="26" color="#0d3497" />
+        </div>
+      ) : wallet.balance ? (
+        <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
+      ) : (
+        <Button onClick={fund}>Fund Wallet</Button>
+      )}
+    </Block>
+  )
+}
+
+const mapStateToProps = state => ({
+  sensor: state.sensor,
+  wallet: (state.user && state.user.wallet) || {}
+});
+
+const mapDispatchToProps = dispatch => ({
+  loadUser: userId => dispatch(loadUser(userId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
+
 
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
