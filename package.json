@@ -1,0 +1,91 @@
+{
+  "name": "data-marketplace",
+  "version": "2.5.5",
+  "description": "IOTA Data Marketplace",
+  "contributors": [
+    {
+      "name": "Alexey Sobolev"
+    },
+    {
+      "name": "Lewis Freiberg"
+    }
+  ],
+  "author": {
+    "name": "Alexey Sobolev, Lewis Freiberg (IOTA Foundation)",
+    "website": "https://iota.org"
+  },
+  "keywords": [
+    "iota",
+    "tangle",
+    "mam",
+    "data marketplace",
+    "sensor",
+    "API"
+  ],
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/iotaledger/data-marketplace/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iotaledger/data-marketplace.git"
+  },
+  "private": true,
+  "dependencies": {
+    "@iota/converter": "^1.0.0-beta.8",
+    "@iota/core": "^1.0.0-beta.8",
+    "@iota/http-client": "^1.0.0-beta.8",
+    "date-fns": "^1.30.1",
+    "file-saver": "^2.0.0",
+    "firebase": "^5.8.2",
+    "in-view": "^0.6.1",
+    "jszip": "^3.1.5",
+    "lodash-es": "^4.17.11",
+    "mam.client.js": "iotaledger/mam.client.js",
+    "react": "^16.8.1",
+    "react-burger-menu": "^2.6.3",
+    "react-clipboard.js": "^2.0.2",
+    "react-cookie": "^3.0.8",
+    "react-dom": "^16.8.1",
+    "react-ga": "^2.5.7",
+    "react-map-gl": "^4.0.10",
+    "react-recaptcha": "^2.3.10",
+    "react-redux": "^6.0.0",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-slick": "^0.23.2",
+    "redux": "^4.0.1",
+    "redux-logger": "^3.0.6",
+    "redux-pack": "^0.1.5",
+    "slick-carousel": "^1.8.1",
+    "styled-components": "4.1.3",
+    "webfontloader": "^1.6.28"
+  },
+  "devDependencies": {
+    "@firebase/app-types": "^0.3.3",
+    "node-sass": "^4.11.0",
+    "react-scripts": "2.1.3",
+    "webpack-bundle-analyzer": "^3.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "export GENERATE_SOURCEMAP=false && react-scripts build",
+    "test": "react-scripts test",
+    "install-all": "npm i && cd firebase_functions/functions && npm i && cd ../..",
+    "deploy-all": "f(){ npm run build && firebase deploy --project $1 && cd firebase_functions/functions && npm run build && cd .. && firebase deploy --project $1 && cd .. ;};f",
+    "deploy": "npm run deploy-all",
+    "analyze": "NODE_ENV=production webpack -p --config config/webpack.config.prod.js --json --progress --profile > webpack-build-log.json && webpack-bundle-analyzer webpack-build-log.json dist/app",
+    "image": "webpack-bundle-analyzer webpack-build-log.json dist/app"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "engines": {
+    "node": ">=6.0"
+  },
+  "browserslist": [
+    "> 2%",
+    "last 2 versions",
+    "edge >= 16"
+  ]
+}
