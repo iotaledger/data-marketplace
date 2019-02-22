@@ -19,14 +19,10 @@ export const purchaseStream = (userId, deviceId) => {
 export const getData = async (userId, deviceId, time) => {
   try {
     const result = await getPackets(userId, deviceId, time);
-    if (result.purchase && !result.purchase.full) {
-      const packets = await getPacketsPartial(result.purchase);
-      return packets;
-    } else if (result.error) {
-      return result.error;
-    } else {
-      return result.data;
+    if (result.error) {
+      console.error('getData error', result.error);
     }
+    return result;
   } catch (error) {
     console.error('getData error', error);
     return null;
@@ -41,27 +37,6 @@ const getPackets = (userId, deviceId, time) => {
     } else {
       reject('No packets purchased');
     }
-  });
-};
-
-const getPacketsPartial = data => {
-  return new Promise((resolve) => {
-    const packets = [];
-    data.packets.map(ref =>
-      ref.get().then(item => {
-        if (item.exists) {
-          packets.push(item.data());
-          if (packets.length === data.packets.length) {
-            resolve(packets);
-          }
-        } else {
-          packets.push([]);
-          if (packets.length === data.packets.length) {
-            resolve(packets);
-          }
-        }
-      })
-    );
   });
 };
 

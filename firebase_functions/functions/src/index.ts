@@ -96,7 +96,6 @@ exports.newDevice = functions.https.onRequest((req, res) => {
       if (userDevices.length < user.numberOfDevices) {
         const device = await getDevice(<String>packet.id);
         if (device && device.owner !== key.uid) {
-          throw Error(`Device with ID ${packet.id} already exists. Please specify new unique ID`);
           return res.json({ error: `Device with ID ${packet.id} already exists. Please specify new unique ID` });
         }
 
@@ -105,7 +104,7 @@ exports.newDevice = functions.https.onRequest((req, res) => {
         });
       } else {
         console.log('newDevice failed. You have too many devices', userDevices.length);
-        throw Error('You have too many devices. Please delete one to clear space');
+        return res.json({ error: 'You have too many devices. Please delete one to clear space' });
       }
     } catch (e) {
       console.log('newDevice failed. Error: ', e.message);
@@ -233,7 +232,7 @@ exports.stream = functions.https.onRequest((req, res) => {
         return res.json({ success: false });
       }
       // Return data
-      return res.json({ data: await getData(<String>params.deviceId, params.time), purchase });
+      return res.json(await getData(<String>params.deviceId, params.time));
     } catch (e) {
       console.log('stream failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
