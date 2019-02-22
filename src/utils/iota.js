@@ -1,50 +1,17 @@
-import api, { fetchData } from './api';
+import api from './api';
 
-export const getBundleHashes = (sensor, userId) => {
+export const purchaseStream = (userId, deviceId) => {
   return new Promise(async (resolve, reject) => {
     // Try purchase
     try {
-      const packet = {
-        userId,
-        address: sensor.address,
-        value: Number(sensor.price),
-      };
-
-      const bundleHashesResult = await api('purchaseData', packet);
-      if (bundleHashesResult && bundleHashesResult.transactions) {
-        resolve(bundleHashesResult.transactions);
+      const purchaseStreamResponse = await api.post('purchaseStream', { userId, deviceId });
+      if (purchaseStreamResponse && purchaseStreamResponse.success) {
+        resolve();
       }
-      reject();
+      reject(purchaseStreamResponse && purchaseStreamResponse.error);
     } catch (error) {
       console.error('getBundleHashes error', error);
       reject(error);
-    }
-  });
-}
-
-export const updateBalance = (userId, deviceId) => {
-  return new Promise(async (resolve, reject) => {
-    // Update wallet balance
-    const balanceUpdateResponse = await api('updateBalance', { userId, deviceId });
-    
-    if (balanceUpdateResponse && balanceUpdateResponse.success) {
-      resolve();
-    } else {
-      reject(balanceUpdateResponse && balanceUpdateResponse.error);
-    }
-  });
-}
-
-export const purchaseStream = (bundleHashes, userId, deviceId) => {
-  return new Promise(async (resolve, reject) => {
-    const hashes = bundleHashes && bundleHashes.map(bundle => bundle.hash);
-    const packet = { userId, deviceId, hashes };
-    const purchaseStreamResponse = await api('purchaseStream', packet);
-    
-    if (purchaseStreamResponse && purchaseStreamResponse.success) {
-      resolve();
-    } else {
-      reject(purchaseStreamResponse && purchaseStreamResponse.error);
     }
   });
 }
@@ -68,7 +35,7 @@ export const getData = async (userId, deviceId, time) => {
 
 const getPackets = (userId, deviceId, time) => {
   return new Promise(async (resolve, reject) => {
-    const packets = await api('queryStream', { userId, deviceId, time });
+    const packets = await api.get('stream', { userId, deviceId, time });
     if (packets) {
       resolve(packets);
     } else {
@@ -106,7 +73,7 @@ export const getBalance = async (address, provider) => {
       threshold: 100,
     };
 
-    const result = await fetchData(provider, packet);
+    const result = await api.requestBalance(provider, packet);
     if (result && result.balances && result.balances.length > 0) {
       return result.balances[0];
     }

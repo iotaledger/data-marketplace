@@ -115,25 +115,25 @@ exports.newDevice = functions.https.onRequest((req, res) => {
 });
 
 // Allow device deletion
-exports.removeDevice = functions.https.onRequest((req, res) => {
+exports.delete = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     const packet = req.body;
     // Add device key into the list
-    if (!packet || !packet.id || !packet.apiKey) {
+    if (!packet || !packet.deviceId || !packet.apiKey) {
       console.log('removeDevice failed. Packet: ', packet);
       return res.status(400).json({ error: 'Ensure all fields are included' });
     }
 
     try {
-      const { apiKey, id } = packet;
+      const { apiKey, deviceId } = packet;
       const key = await getKey(<String>apiKey);
-      const device = await getDevice(<String>id);
+      const device = await getDevice(<String>deviceId);
       if (!device) {
         throw Error(`Device doesn't exist`);
       }
       if (device.owner === key.uid) {
         return res.json({
-          success: await deleteDevice(<String>id),
+          success: await deleteDevice(<String>deviceId),
         });
       } else {
         console.log(
@@ -153,36 +153,55 @@ exports.removeDevice = functions.https.onRequest((req, res) => {
 });
 
 // Query Devices
-exports.getDevices = functions.https.onRequest((req, res) => {
+exports.devices = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     try {
-      const packet = req.body;
-      if (packet && packet.page === 'whitelist') {
-        if (packet.email.indexOf('iota.org') !== -1) {
-          return res.json(await getDevices());
+      const params = req.query;
+      if (params && params.userId && params.apiKey) {
+        const { uid } = await getKey(<String>params.apiKey);
+        if (params.userId === uid) {
+          const userDevices = await getUserDevices(params.userId);
+          const promises = await userDevices.map(async device => {
+            const promise = await new Promise(async (resolve, reject) => {
+              try {
+                const keyObj = await getSk(device.sensorId);
+                if (keyObj.sk) {
+                  return resolve(keyObj.sk);
+                }
+                return reject({ error: 'Error' });
+              } catch (error) {
+                return reject({ error });
+              }
+            });
+    
+            return { ...device, sk: promise };
+          });
+    
+          const devices = await Promise.all(promises);
+          return res.json(devices);         
         }
-        return res.status(403).json({ error: 'Not authorized' });
+        return res.status(403).json({ error: 'Access denied' });
       }
       return res.json(await getDevices());
     } catch (e) {
-      console.log('getDevices failed. Error: ', e.message);
+      console.log('devices failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
 });
 
 // Query Device
-exports.getDevice = functions.https.onRequest((req, res) => {
+exports.device = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
-    const packet = req.body;
+    const params = req.query;
     // Add device key into the list
-    if (!packet || !packet.deviceId) {
-      console.log('getDevice failed. Packet: ', packet);
+    if (!params || !params.deviceId) {
+      console.log('device failed. Packet: ', params);
       return res.status(400).json({ error: 'Ensure all fields are included' });
     }
 
     try {
-      const device = await getDevice(packet.deviceId);
+      const device = await getDevice(params.deviceId);
       if (!device) {
         throw Error(`Device doesn't exist`);
       }
@@ -192,63 +211,31 @@ exports.getDevice = functions.https.onRequest((req, res) => {
       }
       return res.json(device);
     } catch (e) {
-      console.log('getDevice failed. Error: ', e.message);
+      console.log('device failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
 });
 
 // Query Stream
-exports.queryStream = functions.https.onRequest((req, res) => {
+exports.stream = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
-    const packet = req.body;
-    if (!packet || !packet.deviceId || !packet.userId) {
-      console.log('queryStream failed. Packet: ', packet);
+    const params = req.query;
+    if (!params || !params.deviceId || !params.userId) {
+      console.log('stream failed. Params: ', params);
       return res.status(400).json({ error: 'Ensure all fields are included' });
     }
 
     try {
       // Make sure purchase exists
-      const purchase = await getPurchase(<String>packet.userId, <String>packet.deviceId);
-      if (purchase) {
-        // Return data
-        return res.json({ data: await getData(<String>packet.deviceId, packet.time), purchase });
+      const purchase = await getPurchase(<String>params.userId, <String>params.deviceId);
+      if (!purchase) {
+        return res.json({ success: false });
       }
-      return res.status(403).json({ error: 'No packets purchased' });
+      // Return data
+      return res.json({ data: await getData(<String>params.deviceId, params.time), purchase });
     } catch (e) {
-      console.log('queryStream failed. Error: ', e.message);
-      return res.status(403).json({ error: e.message });
-    }
-  });
-});
-
-// Give access once a stream is purchased
-// Add bundle validation.
-exports.purchaseStream = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
-    const packet = req.body;
-    // Add device key into the list
-    if (!packet || !packet.userId || !packet.deviceId || !packet.hashes) {
-      console.log('purchaseStream failed. Packet: ', packet);
-      return res.status(400).json({ error: 'Ensure all fields are included' });
-    }
-
-    try {
-      const { iotaApiVersion, provider } = await getSettings();
-      // Find TX on network and parse
-      const bundle = await findTx(packet.hashes, provider, iotaApiVersion);
-
-      // Make sure TX is valid
-      if (!validateBundleSignatures(bundle)) {
-        console.log('purchaseStream failed. Transaction is invalid for: ', bundle);
-        throw Error('Transaction is Invalid');
-      }
-
-      return res.json({
-        success: await setPurchase(packet.userId, packet.deviceId),
-      });
-    } catch (e) {
-      console.log('purchaseStream failed. Error: ', e.message);
+      console.log('stream failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
@@ -274,42 +261,6 @@ exports.setupUser = functions.auth.user().onCreate(user => {
         console.log('setupUser rejected with ', e.message);
         reject(e.message);
       }
-    }
-  });
-});
-
-// Get devices by user
-exports.getDevicesByUser = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
-    const packet = req.body;
-    if (!packet || !packet.uid) {
-      console.log('getDevicesByUser failed. Packet: ', packet);
-      return res.status(400).json({ error: 'Ensure all fields are included' });
-    }
-
-    try {
-      const userDevices = await getUserDevices(packet.uid);
-      const promises = await userDevices.map(async device => {
-        const promise = await new Promise(async (resolve, reject) => {
-          try {
-            const keyObj = await getSk(device.sensorId);
-            if (keyObj.sk) {
-              return resolve(keyObj.sk);
-            }
-            return reject({ error: 'Error' });
-          } catch (error) {
-            return reject({ error });
-          }
-        });
-
-        return { ...device, sk: promise };
-      });
-
-      const devices = await Promise.all(promises);
-      return res.json(devices);
-    } catch (e) {
-      console.log('getDevicesByUser failed. Error: ', e.message);
-      return res.status(403).json({ error: e.message });
     }
   });
 });
@@ -340,24 +291,27 @@ exports.toggleWhitelist = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.getUser = functions.https.onRequest((req, res) => {
+exports.user = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     // Check Fields
-    const packet = req.body;
-    if (!packet || !packet.userId) {
-      console.log('getUser failed. Packet: ', packet);
+    const params = req.query;
+    if (!params || !params.userId) {
+      console.log('Get user failed. Params: ', params);
       return res.status(400).json({ error: 'Ensure all fields are included' });
     }
 
     try {
       // Retrieve user
-      const user = await getUser(packet.userId);
+      const user = await getUser(params.userId);
+      if (!user) {
+        return res.json(null);
+      }
       if (!user.numberOfDevices) {
         user.numberOfDevices = await getNumberOfDevices();
       }
       return res.json({ ...user });
     } catch (e) {
-      console.log('getUser failed. Error: ', e.message);
+      console.log('user failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
@@ -404,55 +358,21 @@ exports.settings = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.setWallet = functions.https.onRequest((req, res) => {
+exports.wallet = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     // Check Fields
     const packet = req.body;
     if (!packet || !packet.userId) {
-      console.log('setWallet failed. Packet: ', packet);
+      console.log('wallet failed. Packet: ', packet);
       return res.status(400).json({ error: 'Malformed Request' });
     }
 
     try {
       const result = await initWallet(packet.userId);
       await setWallet(packet.userId, result.wallet);
-      return res.json({ transactions: result.transactions });
+      return res.json({ success: result.transactions.length > 0 });
     } catch (e) {
-      console.log('setWallet failed. Error: ', e.message);
-      return res.status(403).json({ error: e.message });
-    }
-  });
-});
-
-exports.updateBalance = functions.https.onRequest((req, res) => {
-  cors(req, res, async () => {
-    // Check Fields
-    const packet = req.body;
-    if (!packet || !packet.userId || !packet.deviceId) {
-      console.log('updateBalance failed. Packet: ', packet);
-      return res.status(400).json({ error: 'Malformed Request' });
-    }
-
-    try {
-      const wallet = await getUserWallet(packet.userId);
-      const device = await getDevice(packet.deviceId);
-      if (!device) {
-        throw Error(`Device doesn't exist`);
-      }
-      const settings = await getSettings();
-      if (wallet && wallet.balance && device) {
-        const price = (device && device.price) || settings.defaultPrice;
-        const newBalance = Number(wallet.balance) - Number(price);
-        if (newBalance >= 0) {
-          return res.json({ success: await updateBalance(packet.userId, newBalance) });
-        }
-        console.log('updateBalance failed. Not enough funds', packet);
-        return res.json({ error: 'Not enough funds or your new wallet avaiting confirmation. Please try again in 5 min.' });
-      }
-      console.log('updateBalance failed. Wallet not set', packet);
-      return res.json({ error: 'Wallet not set' });
-    } catch (e) {
-      console.log('updateBalance failed. Error: ', e.message, packet);
+      console.log('wallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
@@ -485,41 +405,57 @@ exports.faucet = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.purchaseData = functions.https.onRequest((req, res) => {
+exports.purchaseStream = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     // Check Fields
     const packet = req.body;
-    if (!packet || !packet.address || !packet.userId || !packet.value) {
-      console.log('purchaseData failed. Packet: ', packet);
+    if (!packet || !packet.userId || !packet.deviceId) {
+      console.log('purchaseStream failed. Packet: ', packet);
       return res.status(400).json({ error: 'Malformed Request' });
     }
 
     try {
-      const transactions = await purchaseData(packet.userId, packet.address, packet.value);
-      console.log('purchaseData', packet.userId, transactions);
-      return res.json({ transactions });
+      const device = await getDevice(packet.deviceId);
+      const wallet = await getUserWallet(packet.userId);
+      const { iotaApiVersion, provider, defaultPrice } = await getSettings();
+
+      if (!device) {
+        return res.json({ error: `Device doesn't exist` });
+      }
+
+      let newWalletBalance;
+      if (wallet && wallet.balance && device) {
+        const price = (device && device.price) || defaultPrice;
+        newWalletBalance = Number(wallet.balance) - Number(price);
+        if (newWalletBalance < 0) {
+          console.log('purchaseStream failed. Not enough funds', packet);
+          return res.json({ error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.' });  
+        }
+      } else {
+        console.log('purchaseStream failed. Wallet not set', packet);
+        return res.json({ error: 'Wallet not set' });
+      }
+
+      const transactions = await purchaseData(packet.userId, device.address, Number(device.price));
+      console.log('purchaseStream', packet.userId, transactions);
+
+      const hashes = transactions && transactions.map(transaction => transaction.hash);
+
+      // Find TX on network and parse
+      const bundle = await findTx(hashes, provider, iotaApiVersion);
+
+      // Make sure TX is valid
+      if (!validateBundleSignatures(bundle)) {
+        console.log('purchaseStream failed. Transaction is invalid for: ', bundle);
+        res.status(403).json({ error: 'Transaction is Invalid' });
+      }
+
+      await setPurchase(packet.userId, packet.deviceId);
+      await updateBalance(packet.userId, newWalletBalance);
+      return res.json({ success: true });
     } catch (e) {
       console.log('purchaseData failed. Error: ', e, packet);
       return res.status(403).json({ error: e.message });
     }
   });
 });
-
-// Query Devices
-// exports.listDevicesWithBadAddress = functions.https.onRequest((req, res) => {
-//   cors(req, res, async () => {
-//     try {
-//       const reg = /^.+?\D$/gm; // all strings that ends in NOT 9
-//       const devices = await getDevices();
-//       devices.map(({ sensorId, address, owner }) => {
-//         if (reg.test(address)) {
-//           console.log(address, sensorId, owner);
-//         }
-//       });
-//       return res.json({ data: 'ok' });
-//     } catch (e) {
-//       console.log('getDevices failed. Error: ', e.message);
-//       return res.status(403).json({ error: e.message });
-//     }
-//   });
-// });

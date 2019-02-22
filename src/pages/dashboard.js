@@ -11,6 +11,7 @@ import LoginModal from '../components/login-modal';
 import Sidebar from '../components/user-sidebar';
 import DeviceList from '../components/device-list';
 import Cookie from '../components/cookie';
+import Loading from '../components/loading';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -76,14 +77,13 @@ class Dashboard extends React.Component {
   };
 
   async getUser() {
-    this.findDevices();
     await this.props.loadUser(this.state.user.uid);
-    this.setState({ loading: false });
+    await this.findDevices();
   };
 
   async findDevices() {
     this.setState({ loading: true });
-    const devices = await api('getDevicesByUser', { uid: this.state.user.uid });
+    const devices = await api.get('devices', { userId: this.state.user.uid, apiKey: this.props.userData.apiKey });
     return this.setState({ devices, loading: false });
   };
 
@@ -102,7 +102,7 @@ class Dashboard extends React.Component {
       };
 
       // Call server
-      const data = await api('newDevice', packet);
+      const data = await api.put('newDevice', packet);
       // Check success
       if (data.success) {
         this.findDevices();
@@ -124,7 +124,7 @@ class Dashboard extends React.Component {
     });
     this.setState({ loading: true });
     const { userData } = this.props;
-    const data = await api('removeDevice', { apiKey: userData.apiKey, id: deviceId });
+    const data = await api.delete('delete', { apiKey: userData.apiKey, deviceId });
     if (data.success) {
       this.setState({
         loading: false,
@@ -161,12 +161,20 @@ class Dashboard extends React.Component {
         <DeviceNav user={user} logout={this.logout} />
         <Data>
           <Sidebar devices={devices} user={user} userData={userData} />
-          <DeviceList
-            devices={devices}
-            maxDevices={userData.numberOfDevices}
-            create={this.createDevice}
-            delete={this.deleteDevice}
-          />
+          {
+            loading ? (
+              <LoadingBox>
+                <Loading />
+              </LoadingBox>
+            ) : (
+              <DeviceList
+                devices={devices}
+                maxDevices={userData.numberOfDevices}
+                create={this.createDevice}
+                delete={this.deleteDevice}
+              />
+            )
+          }
         </Data>
         <LoginModal
           auth={this.auth}
@@ -205,4 +213,8 @@ const Data = styled.section`
   @media (max-width: 760px) {
     flex-direction: column;
   }
+`;
+
+const LoadingBox = styled.div`
+  margin: auto;
 `;

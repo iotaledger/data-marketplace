@@ -50,7 +50,7 @@ class Faucet extends React.Component {
     }
 
     this.setState({ loading: true }, async () => {
-      await api('faucet', { captcha, address });
+      await api.post('faucet', { captcha, address });
       this.setState({ success: true, loading: false });
     });
   }

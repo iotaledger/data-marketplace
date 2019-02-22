@@ -77,8 +77,6 @@ export default class extends React.Component {
 
     this.setState({ loading: true });
 
-    const timestamp = Date.now();
-
     const device = {
       location: {
         city: this.state.city,
@@ -90,9 +88,8 @@ export default class extends React.Component {
       lat: parseFloat(this.state.deviceLat),
       lon: parseFloat(this.state.deviceLon),
       company: this.state.company,
-      price: this.state.devicePrice,
-      date: format(timestamp, 'DD MMMM, YYYY H:mm a '),
-      timestamp,
+      price: Number(this.state.devicePrice),
+      date: format(Date.now(), 'DD MMMM, YYYY H:mm a ')
     };
 
     const createDevive = await this.props.create(device);

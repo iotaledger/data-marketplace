@@ -47,8 +47,8 @@ class Whitelist extends React.Component {
     firebase.auth().onAuthStateChanged(async user => {
       if (user && !user.isAnonymous && user.email) {
         // User is signed in.
-        const devices = await allDevices(user.email, 'whitelist');
         await this.props.loadUser(user.uid);
+        const devices = await allDevices();
         this.setState({ devices, filtered: devices, user });
       } else {
         this.setState(() => ({
@@ -82,7 +82,7 @@ class Whitelist extends React.Component {
       const { devices, search, user } = this.state;
       const { userData } = this.props;
       device.inactive = !device.inactive;
-      await api('toggleWhitelist', {
+      await api.post('toggleWhitelist', {
         uid: user.uid,
         apiKey: userData.apiKey,
         sensorId: device.sensorId,
