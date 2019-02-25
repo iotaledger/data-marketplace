@@ -35,9 +35,9 @@ export const userAuth = async () => {
   });
 };
 
-export const allDevices = (email = null, page = null) => {
+export const allDevices = () => {
   return new Promise(async (resolve, reject) => {
-    const devices = await api('getDevices', { email, page });
+    const devices = await api.get('devices');
     const devicesWithData = devices.filter(device => device.hasData);
     resolve(devicesWithData);
   });

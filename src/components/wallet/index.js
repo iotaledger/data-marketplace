@@ -38,7 +38,7 @@ const Wallet = ({ loadUser, sensor, wallet }) => {
     setDesc('Funding wallet');
     setWalletLoading(true);
 
-    await api('setWallet', { userId });
+    await api.post('wallet', { userId });
     await loadUser(userId);
   }
 

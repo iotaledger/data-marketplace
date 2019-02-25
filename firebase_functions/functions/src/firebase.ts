@@ -41,18 +41,18 @@ exports.getPurchase = async (uid: string, device: string) => {
   // Check user's profile for purchase
   if (doc.exists) return doc.data();
   console.log('getPurchase failed.', uid, device, doc);
-  throw Error('Please purchase the stream');
-  return null;
+  return false;
 };
 
-exports.getData = async (device: string, time) => {
+exports.getData = async (device: string, timestamp?: number) => {
+  const time = timestamp ? Number(timestamp) : Date.now();
   // Get data
   const querySnapshot = await admin
     .firestore()
     .collection('devices')
     .doc(device)
     .collection('data')
-    .where('time', '<', (time || Date.now()))
+    .where('time', '<', time)
     .orderBy('time', 'desc')
     .limit(20)
     .get();
@@ -315,7 +315,7 @@ exports.getUser = async (userId: string) => {
   }
 
   console.log('getUser failed.', userId, doc);
-  throw Error(`User doesn't exist`);
+  return null;
 };
 
 exports.getNumberOfDevices = async () => {

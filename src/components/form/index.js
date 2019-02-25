@@ -144,7 +144,7 @@ class Form extends React.Component {
         comments,
       };
 
-      await api('sendEmail', packet);
+      await api.post('sendEmail', packet);
       this.setState({ success: true });
       ReactGA.event({
         category: 'Send Email',

@@ -1,3 +1,4 @@
+import { stringify } from 'query-string';
 import { domain } from '../config.json';
 
 // TODO: check version '1.5.0';
@@ -8,17 +9,38 @@ const headers = {
   'X-IOTA-API-Version': apiVersion,
 };
 
-export const fetchData = async (endpoint, data = {}) => {
+const parseSettings = ({ method, data } = {}) => ({
+  headers,
+  method,
+  body: data ? JSON.stringify(data) : undefined,
+});
+
+const parseEndpoint = (endpoint, params) => {
+  const querystring = params ? `?${stringify(params)}` : '';
+  return `${endpoint}${querystring}`;
+};
+
+const request = async (endpoint, { params, ...settings } = {}) => {
   if (!endpoint) return null;
-  const response = await fetch(endpoint, {
-    headers,
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+  const response = await fetch(parseEndpoint(endpoint, params), parseSettings(settings));
   const result = await response.json();
   return result;
 };
 
-export default async (endpoint, data = {}) => {
-  return await fetchData(`${domain}/${endpoint}`, data);
+export default {
+  get: async (endpoint, params) => {
+    return await request(`${domain}/${endpoint}`, { method: 'get', params });
+  },
+  post: async (endpoint, data = {}) => {
+    return await request(`${domain}/${endpoint}`, { method: 'post', data });
+  },
+  put: async (endpoint, data = {}) => {
+    return await request(`${domain}/${endpoint}`, { method: 'put', data });
+  },
+  delete: async (endpoint, data = {}) => {
+    return await request(`${domain}/${endpoint}`, { method: 'delete', data });
+  },
+  requestBalance: async (endpoint, data = {}) => {
+    return await request(endpoint, { method: 'post', data });
+  }
 };

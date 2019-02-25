@@ -9,7 +9,7 @@ import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
 import { getSensorStreamJSON } from '../utils/helpers';
-import { getBundleHashes, purchaseStream, updateBalance } from '../utils/iota';
+import { purchaseStream } from '../utils/iota';
 import SensorNav from '../components/sensor-nav';
 import Modal from '../components/modal';
 import Sidebar from '../components/side-bar';
@@ -34,7 +34,6 @@ class Sensor extends React.Component {
     this.downloadSensorStreamJSON = this.downloadSensorStreamJSON.bind(this);
     this.loadMore = this.loadMore.bind(this);
     this.purchase = this.purchase.bind(this);
-    this.purchaseStream = this.purchaseStream.bind(this);
     this.saveData = this.saveData.bind(this);
   }
 
@@ -99,38 +98,9 @@ class Sensor extends React.Component {
     });
 
     this.setNotification('purchasing');
-    getBundleHashes(sensor, userId)
-      .then(bundleHashes => {
-        this.setNotification('fetching');
-
-        updateBalance(userId, deviceId)
-          .then(async () => {
-            await loadUser(userId);
-            await this.purchaseStream(bundleHashes, userId, deviceId);
-          })
-          .catch(error => {
-            ReactGA.event({
-              category: 'Purchase failure, update balance',
-              action: 'Purchase failure, update balance',
-              label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
-            });
-            this.setNotification('purchaseFailed', error);
-          });
-      })
-      .catch(error => {
-        ReactGA.event({
-          category: 'Purchase failure, get bundle hashes',
-          action: 'Purchase failure, get bundle hashes',
-          label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
-        });
-        this.setNotification('purchaseFailed', error.message);
-        console.log('getBundleHashes', error);
-      });
-  }
-
-  purchaseStream(bundleHashes, userId, deviceId) {
-    purchaseStream(bundleHashes, userId, deviceId)
-      .then(() => {
+    purchaseStream(userId, deviceId)
+      .then(async () => {
+        await loadUser(userId);
         // Start Fetching data
         this.setState({ purchase: true, fetching: true });
       })

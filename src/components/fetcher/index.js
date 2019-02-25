@@ -16,7 +16,7 @@ const Fetcher = ({
       try {     
         const data = await getData(userId, deviceId, lastFetchedTimestamp);
     
-        if (typeof data === 'string' && data === 'Please purchase the stream') {
+        if (data.success === false) {
           setPurchase(false);
           setFetching(false);
           return setNotification('purchase');
