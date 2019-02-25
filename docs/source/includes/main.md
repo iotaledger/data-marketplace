@@ -32,23 +32,19 @@ You will also need your `id` in order to attribute purchases to your self.
 
 # Consuming data
 
-## Get All Devices 
+## Get All Devices
 
 ```javascript
 const fetch = require('node-fetch');
 
 const sendRequest = async () => {
-  const response = await fetch('https://api.marketplace.tangle.works/getDevices',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    });
+  const response = await fetch('https://api.marketplace.tangle.works/devices');
   const json = await response.json();
 
   console.log(json);
 }
 
-sendRequest()
+sendRequest();
 ```
 
 
@@ -90,7 +86,7 @@ This endpoint retrieves all devices.
 
 ### HTTP Request
 
-`POST https://api.marketplace.tangle.works/getDevices`
+`GET https://api.marketplace.tangle.works/devices`
 
 
 ## Create and Fund Wallet
@@ -99,7 +95,7 @@ This endpoint retrieves all devices.
 const fetch = require('node-fetch');
 
 const sendRequest = async () => {
-  const response = await fetch('https://api.marketplace.tangle.works/setWallet',
+  const response = await fetch('https://api.marketplace.tangle.works/wallet',
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -111,7 +107,7 @@ const sendRequest = async () => {
   console.log(json);
 }
 
-sendRequest()
+sendRequest();
 ```
 
 
@@ -120,80 +116,7 @@ sendRequest()
 
 ```json
 {
-   "transactions":[
-      {
-         "hash":"IIVBQPCACXEVRGEMXH9XBTPYFFDCZSXPVCKBGLVICEHJNFTNVVCO9UAYUIIENLLEOVKGEWIABTKFHN999",
-         "signatureMessageFragment":"...",
-         "address":"IKBQMFJEJGJYAYMWGUKNREZCLKXMQTQNDXLTQXJATUMWOWDVKRVSLSM9TOYNDJMANM9NCELYCFFDGMMMD",
-         "value":1000000,
-         "obsoleteTag":"KI9999999999999999999999999",
-         "timestamp":1550057627,
-         "currentIndex":0,
-         "lastIndex":3,
-         "bundle":"99LQGEZTBAHJIDPQCSQIGQVHCPOIJSVAKPKOECSERYCXHUGQYFGLIH9XVTOHFHXGVAKUZWZTIXEHFZOVD",
-         "trunkTransaction":"MUBMFUWGVRFWNY9RXJMECLRWXZTBIXMOQMNQIV9CLCPX9JWUAAKGKOBQOPIXMSVUCRUYYZDSCZXDXL999",
-         "branchTransaction":"YOZJLBKKFFJJRJCLKMIAJ9VRZCRIRFBIQJUAYUGCF9EBF9GICLCNJFWGLDJJGMOHNTGXKOXJZLWWPX999",
-         "tag":"KI9999999999999999999999999",
-         "attachmentTimestamp":1550057650576,
-         "attachmentTimestampLowerBound":0,
-         "attachmentTimestampUpperBound":3812798742493,
-         "nonce":"QVIWKVBMHAJYBTLTUD9ZRQWFZYQ"
-      },
-      {
-         "hash":"MUBMFUWGVRFWNY9RXJMECLRWXZTBIXMOQMNQIV9CLCPX9JWUAAKGKOBQOPIXMSVUCRUYYZDSCZXDXL999",
-         "signatureMessageFragment":"...",
-         "address":"AJGVUHMYZUDQPUJFTNXH99JLTWMGVFETQLZCECNOVLXTFCCDKA9WOOWWX9XKGDTXUTSABAQIYBWFDNCHC",
-         "value":-8927121620,
-         "obsoleteTag":"999999999999999999999999999",
-         "timestamp":1550057627,
-         "currentIndex":1,
-         "lastIndex":3,
-         "bundle":"99LQGEZTBAHJIDPQCSQIGQVHCPOIJSVAKPKOECSERYCXHUGQYFGLIH9XVTOHFHXGVAKUZWZTIXEHFZOVD",
-         "trunkTransaction":"RAZWKTVJFJVTDQCWEHYOJ9BVIRRTGNZMBSHO9PDYUTZCGAGUDOULEPWVUQBQZYILEMBEWVUYTCQXY9999",
-         "branchTransaction":"YOZJLBKKFFJJRJCLKMIAJ9VRZCRIRFBIQJUAYUGCF9EBF9GICLCNJFWGLDJJGMOHNTGXKOXJZLWWPX999",
-         "tag":"999999999999999999999999999",
-         "attachmentTimestamp":1550057650557,
-         "attachmentTimestampLowerBound":0,
-         "attachmentTimestampUpperBound":3812798742493,
-         "nonce":"VY9YKGNDEZCRDJKPNZMRWNWYEMR"
-      },
-      {
-         "hash":"RAZWKTVJFJVTDQCWEHYOJ9BVIRRTGNZMBSHO9PDYUTZCGAGUDOULEPWVUQBQZYILEMBEWVUYTCQXY9999",
-         "signatureMessageFragment":"...",
-         "address":"AJGVUHMYZUDQPUJFTNXH99JLTWMGVFETQLZCECNOVLXTFCCDKA9WOOWWX9XKGDTXUTSABAQIYBWFDNCHC",
-         "value":0,
-         "obsoleteTag":"999999999999999999999999999",
-         "timestamp":1550057627,
-         "currentIndex":2,
-         "lastIndex":3,
-         "bundle":"99LQGEZTBAHJIDPQCSQIGQVHCPOIJSVAKPKOECSERYCXHUGQYFGLIH9XVTOHFHXGVAKUZWZTIXEHFZOVD",
-         "trunkTransaction":"BYURIACJOEZVSLWALKBSZODA9UYHLWDDVIYHK9XYZQLEASSNGJXIOEVUYWLMZUMOHZDRAHPVQTRKHY999",
-         "branchTransaction":"YOZJLBKKFFJJRJCLKMIAJ9VRZCRIRFBIQJUAYUGCF9EBF9GICLCNJFWGLDJJGMOHNTGXKOXJZLWWPX999",
-         "tag":"999999999999999999999999999",
-         "attachmentTimestamp":1550057650530,
-         "attachmentTimestampLowerBound":0,
-         "attachmentTimestampUpperBound":3812798742493,
-         "nonce":"WWBXWARXTLVXZCMN9QHWGBWUCAU"
-      },
-      {
-         "hash":"BYURIACJOEZVSLWALKBSZODA9UYHLWDDVIYHK9XYZQLEASSNGJXIOEVUYWLMZUMOHZDRAHPVQTRKHY999",
-         "signatureMessageFragment":"...",
-         "address":"C9IAQENJJGJLGKMTOZOATVDGOHBAQZ9ULFEETQZJYJEETLKBMFCHAMOYGHQVVZNOB9EMWIVMFV9AXYZJB",
-         "value":8926121620,
-         "obsoleteTag":"999999999999999999999999999",
-         "timestamp":1550057627,
-         "currentIndex":3,
-         "lastIndex":3,
-         "bundle":"99LQGEZTBAHJIDPQCSQIGQVHCPOIJSVAKPKOECSERYCXHUGQYFGLIH9XVTOHFHXGVAKUZWZTIXEHFZOVD",
-         "trunkTransaction":"YOZJLBKKFFJJRJCLKMIAJ9VRZCRIRFBIQJUAYUGCF9EBF9GICLCNJFWGLDJJGMOHNTGXKOXJZLWWPX999",
-         "branchTransaction":"FOWZIZYGMUEIKGKDCKUESRYHLAMXHRCKSRATQEWNIEXYHPQQPWQYCFBZHFJMAEFLG9LKWIMTXEHXNS999",
-         "tag":"999999999999999999999999999",
-         "attachmentTimestamp":1550057650510,
-         "attachmentTimestampLowerBound":0,
-         "attachmentTimestampUpperBound":3812798742493,
-         "nonce":"FDPCXKGTW9XQTBTRZLEFDWPGVAM"
-      }
-   ]
+    "success" : true
 }
 ```
 
@@ -201,7 +124,7 @@ This endpoint creates a new wallet and funds it with free IOTA tokens. Please no
 
 ### HTTP Request
 
-`POST https://api.marketplace.tangle.works/setWallet`
+`POST https://api.marketplace.tangle.works/wallet`
 
 ### Query Parameters
 
@@ -216,19 +139,12 @@ This endpoint creates a new wallet and funds it with free IOTA tokens. Please no
 const fetch = require('node-fetch');
 
 const sendRequest = async () => {
-  const response = await fetch('https://api.marketplace.tangle.works/getUser',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId: 'xlXMajjxTleDwmeIEG9SHddlCM02',
-      })
-    });
+  const response = await fetch('https://api.marketplace.tangle.works/user?userId=xlXMajjxTleDwIEG9SHddlCM02');
   const json = await response.json();
   console.log(json);
 }
 
-sendRequest()
+sendRequest();
 ```
 
 
@@ -242,8 +158,7 @@ sendRequest()
       "balance":1000000,
       "address":"IKBQMFJEJGJYAYMWGUKNREZCLKXMQTQNDXLTQXJATUMWOWDVKRVSLSM9TOYNDJMANM9NCELYCFFDGMMMDOXVS9YURD",
       "keyIndex":0
-   },
-   "numberOfDevices":5
+   }
 }
 ```
 
@@ -251,7 +166,7 @@ This endpoint returns data of a given user
 
 ### HTTP Request
 
-`POST https://api.marketplace.tangle.works/getUser`
+`GET https://api.marketplace.tangle.works/user`
 
 ### Query Parameters
 
@@ -260,192 +175,70 @@ This endpoint returns data of a given user
 | userId     | true     | Your user ID                             |
 
 
-## Query Stream 
+## Query Stream
 
 ```javascript
-const fetch = require('node-fetch')
+const fetch = require('node-fetch');
 
-let response = fetch(
-    'https://api.marketplace.tangle.works/queryStream', 
-  	{
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId: 'xlXMajjxTleDwmeIEG9SHddlCM02', // Your User ID
-        deviceId: "testing-data", // Device ID
-        time: null // to fetch data within specified time period
-      })
-    }
-)
+const sendRequest = async () => {
+  const response = await fetch('https://api.marketplace.tangle.works/stream?deviceId=star-wars-test&userId=xlXMajjxTleDwmeIEG9SHddlCM02&time=null');
+  const json = await response.json();
+  console.log(json);
+}
+
+sendRequest();
 ```
 
 > If the device stream was not purchased, the above command returns JSON structured like this:
 
 ```json
 {
-  { "error": "Please purchase the stream" }
+    "success": false
 }
 ```
 
 > If the device stream was already purchased, the above command returns JSON structured like this:
 
 ```json
-{
-   "data":[
-      {
-         "time":1550057296806,
-         "root":"XXNHWURJOQIYSTAQVBDBVQILNCJQQORZEIWGSSWDXMWQANZWCQLXIEOGICPP9DXVR9KGSZ9MJEGEHFUIX",
-         "sidekey":"GZ9FKCYWQTBKYSNNM9SZNLLLCMRCCXZPHBIFIXUNCBYSWTLGZUSNAYRXTWXGXTNHKKSWFXSN9LMP9AOVK"
-      },
-      {
-         "time":1550053854946,
-         "root":"LNYSJXWON9OXFSXSVBK9XGJZRLFQVDKGYBOKVJQYOD9CRSVMOXMDAEDPXBNTKMMQJGQKSYSQDM9TXGPU9",
-         "sidekey":"MGZHCGKQIINYSGYPWPKPXJTQOAETGDXJWLPKKARZIHUFDYQOFVYVOUMZC99YEMPBNCXSEDPYLLUFD9ZFR"
-      },
-      { ... }
-   ],
-   "purchase":{
-      "time":1550060980713,
-      "full":true
-   }
-}
+[
+    {
+       "time":1550057296806,
+       "root":"XXNHWURJOQIYSTAQVBDBVQILNCJQQORZEIWGSSWDXMWQANZWCQLXIEOGICPP9DXVR9KGSZ9MJEGEHFUIX",
+       "sidekey":"GZ9FKCYWQTBKYSNNM9SZNLLLCMRCCXZPHBIFIXUNCBYSWTLGZUSNAYRXTWXGXTNHKKSWFXSN9LMP9AOVK"
+    },
+    {
+       "time":1550053854946,
+       "root":"LNYSJXWON9OXFSXSVBK9XGJZRLFQVDKGYBOKVJQYOD9CRSVMOXMDAEDPXBNTKMMQJGQKSYSQDM9TXGPU9",
+       "sidekey":"MGZHCGKQIINYSGYPWPKPXJTQOAETGDXJWLPKKARZIHUFDYQOFVYVOUMZC99YEMPBNCXSEDPYLLUFD9ZFR"
+    },
+    { ... }
+]
 ```
 
 This endpoint queries a purchased stream.
 
+This request returns an array of JSON objects, which contain information like MAM stream root and encryption key. This information is used to retrieve data from IOTA Tangle.
+
+The data is retrieved in chunks. To retrieve the next chunk of data, determine the earliest (smallest) value of the time attribute from the response, and send this value as time parameter with the next request
+
+`https://api.marketplace.tangle.works/stream?deviceId=star-wars-test&userId=xlXMajjxTleDwmeIEG9SHddlCM02&time=1550053854946`
+
+
 ### HTTP Request
 
-`POST https://api.marketplace.tangle.works/queryStream`
+`GET https://api.marketplace.tangle.works/stream`
 
 ### Query Parameters
 
 | Parameters | Required | Description                              |
 | ---------- | -------- | ---------------------------------------- |
-| userId     | true     | Your user ID                            |
+| userId     | true     | Your user ID                             |
 | deviceId   | true     | The ID of the device's stream you'd like access to. |
-
-
-## Purchase Data 
-
-```javascript
-const fetch = require('node-fetch');
-
-const sendRequest = async () => {
-  const response = await fetch('https://api.marketplace.tangle.works/purchaseData',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId: 'xlXMajjxTleDwmeIEG9SHddlCM02',
-        address: 'YTGYEHBMEYPLIROTWBTLVZPOLJLXHNF9RXUPBGHSWGISAVIVEX9EHBMDVYYI9UEZ9UQJBCMXFGXNUKIWW',
-        value: 100,
-      })
-    });
-  const json = await response.json();
-  console.log(json);
-}
-
-sendRequest()
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-   "transactions":[
-      {
-         "hash":"GIKCTXLVJNGQUCFAMRJNZLYBUMPVPU99RGLVZBMVBGTMU9FLEEW9CXJJO99QWOJBJLCPUNUVVZRURS999",
-         "signatureMessageFragment":"...",
-         "address":"YTGYEHBMEYPLIROTWBTLVZPOLJLXHNF9RXUPBGHSWGISAVIVEX9EHBMDVYYI9UEZ9UQJBCMXFGXNUKIWW",
-         "value":100,
-         "obsoleteTag":"WK9999999999999999999999999",
-         "timestamp":1550058555,
-         "currentIndex":0,
-         "lastIndex":3,
-         "bundle":"XAHEUVEDKOJBHSGTKOKCBBFH9WBHQOHEZJLIFWWDRCDHFTZJKQDFOIMKWBWX9YKCEKQ9BHRK9YRGCRUHX",
-         "trunkTransaction":"KOFITPUXPFWRBCWK9EOUSZOHWDITJAJZZXCFQPPQPRQVNXTMFGZGYTRWWGLUNKDVGODAFQRBBKITEX999",
-         "branchTransaction":"HKIFU9EAFLKTDWXJBJQSIHOAXPGPZAOJJBSQWEHQCDCQZPFVGXVS9ETTLUPUSIZETFTBT9EXXOZAAH999",
-         "tag":"WK9999999999999999999999999",
-         "attachmentTimestamp":1550058577417,
-         "attachmentTimestampLowerBound":0,
-         "attachmentTimestampUpperBound":3812798742493,
-         "nonce":"MXKKKQEAFGUDGMZYHDJ9BPSWHYY"
-      },
-      {
-         "hash":"KOFITPUXPFWRBCWK9EOUSZOHWDITJAJZZXCFQPPQPRQVNXTMFGZGYTRWWGLUNKDVGODAFQRBBKITEX999",
-         "signatureMessageFragment":"...",
-         "address":"IKBQMFJEJGJYAYMWGUKNREZCLKXMQTQNDXLTQXJATUMWOWDVKRVSLSM9TOYNDJMANM9NCELYCFFDGMMMD",
-         "value":-1000000,
-         "obsoleteTag":"999999999999999999999999999",
-         "timestamp":1550058555,
-         "currentIndex":1,
-         "lastIndex":3,
-         "bundle":"XAHEUVEDKOJBHSGTKOKCBBFH9WBHQOHEZJLIFWWDRCDHFTZJKQDFOIMKWBWX9YKCEKQ9BHRK9YRGCRUHX",
-         "trunkTransaction":"HWGKYSQF9HOYAJHRPTVJOMKAWUEMU9JNTT9YEDAGIAAGCXFYGFCWMWGNQUNJTCBBDIMJASWSPIZSAK999",
-         "branchTransaction":"HKIFU9EAFLKTDWXJBJQSIHOAXPGPZAOJJBSQWEHQCDCQZPFVGXVS9ETTLUPUSIZETFTBT9EXXOZAAH999",
-         "tag":"999999999999999999999999999",
-         "attachmentTimestamp":1550058577361,
-         "attachmentTimestampLowerBound":0,
-         "attachmentTimestampUpperBound":3812798742493,
-         "nonce":"IBRIKFQRPC9BEYYYANJFT9HCPBQ"
-      },
-      {
-         "hash":"HWGKYSQF9HOYAJHRPTVJOMKAWUEMU9JNTT9YEDAGIAAGCXFYGFCWMWGNQUNJTCBBDIMJASWSPIZSAK999",
-         "signatureMessageFragment":"...",
-         "address":"IKBQMFJEJGJYAYMWGUKNREZCLKXMQTQNDXLTQXJATUMWOWDVKRVSLSM9TOYNDJMANM9NCELYCFFDGMMMD",
-         "value":0,
-         "obsoleteTag":"999999999999999999999999999",
-         "timestamp":1550058555,
-         "currentIndex":2,
-         "lastIndex":3,
-         "bundle":"XAHEUVEDKOJBHSGTKOKCBBFH9WBHQOHEZJLIFWWDRCDHFTZJKQDFOIMKWBWX9YKCEKQ9BHRK9YRGCRUHX",
-         "trunkTransaction":"IGOVPJMBVMPXFJGFFMYCKGGJJETGIOEKHKRCMFFAFOUFBZFUUUBLMREPJA9DIU9UHQBVGEVTRWVRGN999",
-         "branchTransaction":"HKIFU9EAFLKTDWXJBJQSIHOAXPGPZAOJJBSQWEHQCDCQZPFVGXVS9ETTLUPUSIZETFTBT9EXXOZAAH999",
-         "tag":"999999999999999999999999999",
-         "attachmentTimestamp":1550058577334,
-         "attachmentTimestampLowerBound":0,
-         "attachmentTimestampUpperBound":3812798742493,
-         "nonce":"VXFYTBMAN9FBCHXDNIG9SNLUEGS"
-      },
-      {
-         "hash":"IGOVPJMBVMPXFJGFFMYCKGGJJETGIOEKHKRCMFFAFOUFBZFUUUBLMREPJA9DIU9UHQBVGEVTRWVRGN999",
-         "signatureMessageFragment":"...",
-         "address":"ZDAWFMULZDXDAIQO9DM9APKOKTMVKBTZQUFSLXNDERFHJPFHLIXGPVYWECMJTFNQPCOWLAJCIOQE9XVVX",
-         "value":999900,
-         "obsoleteTag":"999999999999999999999999999",
-         "timestamp":1550058555,
-         "currentIndex":3,
-         "lastIndex":3,
-         "bundle":"XAHEUVEDKOJBHSGTKOKCBBFH9WBHQOHEZJLIFWWDRCDHFTZJKQDFOIMKWBWX9YKCEKQ9BHRK9YRGCRUHX",
-         "trunkTransaction":"HKIFU9EAFLKTDWXJBJQSIHOAXPGPZAOJJBSQWEHQCDCQZPFVGXVS9ETTLUPUSIZETFTBT9EXXOZAAH999",
-         "branchTransaction":"HKIFU9EAFLKTDWXJBJQSIHOAXPGPZAOJJBSQWEHQCDCQZPFVGXVS9ETTLUPUSIZETFTBT9EXXOZAAH999",
-         "tag":"999999999999999999999999999",
-         "attachmentTimestamp":1550058577308,
-         "attachmentTimestampLowerBound":0,
-         "attachmentTimestampUpperBound":3812798742493,
-         "nonce":"QPFRKLKTTRKWZHZGMVC9RMKYNVZ"
-      }
-   ]
-}
-```
-
-This endpoint purchases access for a user.
-
-### HTTP Request
-
-`POST https://api.marketplace.tangle.works/purchaseData`
-
-### Query Parameters
-
-| Parameters | Required | Description                              |
-| ---------- | -------- | ---------------------------------------- |
-| userId         | true     | Your user ID                             |
-| address     | true     | Device wallet address, where purchase amount will be transferred |
-| value     | true     | Purchase amount in IOTA tokens |
+| time       | false    | Timestamp of the first data package. Default is `null` |
 
 
 
-## Purchase Stream 
+## Purchase Stream
 
 ```javascript
 const fetch = require('node-fetch');
@@ -457,20 +250,14 @@ const sendRequest = async () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         userId: '76D1ppAqXNOYPDCsEm9tAj5rPhG3',
-        deviceId: 'star-wars',
-        hashes: [
- 		"YVDZUSERDHDGWWWUJLBUHJRZCZIDNEPTKIYAOCREQG9MQMNIQRR9CDZXCQZUBI9KYGPZ9FBRKCNFEX999",
-         "DFJQKKGOFSOAGVL9BILDYHFEUQDRIEEISOXIYKMVZONAVMUKJSJXGKITBOYEUSFWZIQEQJJZIOB9MN999",
-         "SZJTYS9JCQGGHWFFDCUGGZZYQQGGJJZCLFZKHTOORQECKNAPDINJUGKRDWDWDKQYYUKOZDJRXGBANT999",
-         "JULBXP9OJEKHHBEQFKHYBNEEDQMKCBJVBLYXMONU9NHCBSJD9HFELAXORB9MDIVKQXS99HGTXQFYIM999"
-        ]
+        deviceId: 'star-wars'
       })
     });
   const json = await response.json();
   console.log(json);
 }
 
-sendRequest()
+sendRequest();
 ```
 
 > The above command returns JSON structured like this:
@@ -491,58 +278,13 @@ This endpoint purchases access for a user.
 
 | Parameters | Required | Description                              |
 | ---------- | -------- | ---------------------------------------- |
-| id         | true     | Your user ID                             |
+| userId     | true     | Your user ID                             |
 | device     | true     | The ID of the device's stream you'd like access to. |
-| hashes     | true     | The `Array` of hashes from your attached purchase with the **correct** amount to the device's address. Hashes array is a response of the `purchaseData` call (`purchaseDataResult.transactions`) |
-
-
-## Update Balance
-
-```javascript
-const fetch = require('node-fetch');
-
-const sendRequest = async () => {
-  const response = await fetch('https://api.marketplace.tangle.works/updateBalance',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        userId: '76D1ppAqXNOYPDCsEm9tAj5rPhG3',
-        deviceId: 'star-wars'
-      })
-    });
-  const json = await response.json();
-  console.log(json);
-}
-
-sendRequest()
-```
-
-> The above command returns JSON structured like this:
-
-```json
-{
-    "success" : true
-}
-```
-
-This endpoint updates balance of the users' wallet.
-
-### HTTP Request
-
-`POST https://api.marketplace.tangle.works/updateBalance`
-
-### Query Parameters
-
-| Parameters | Required | Description                              |
-| ---------- | -------- | ---------------------------------------- |
-| userId         | true     | Your user ID                             |
-| deviceId     | true     | The ID of the device's stream you'd like access to. |
 
 
 # Managing Devices
 
-## Create New Device 
+## Create New Device
 
 ```javascript
 const fetch = require('node-fetch');
@@ -562,7 +304,6 @@ const sendRequest = async () => {
           company: 'Galactic Empire Inc.',
           price: '100',
           date: '14 February, 2019 11:16 am',
-          timestamp: 1550053001462,
           inactive: true,
           dataTypes: [
             { id: 'name', name: 'Vehicle Name', unit: 'name' },
@@ -583,7 +324,7 @@ const sendRequest = async () => {
   console.log(json);
 }
 
-sendRequest()
+sendRequest();
 ```
 
 > The above command returns JSON structured like this:
@@ -700,19 +441,13 @@ This endpoint publishes new MAM event for a given device.
 const fetch = require('node-fetch');
 
 const sendRequest = async () => {
-  const response = await fetch('https://api.marketplace.tangle.works/getDevicesByUser',
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        uid: '76D1ppAqXNOYPDCsEm9tAj5rPhG3'
-      })
-    });
+  const response = await fetch('https://api.marketplace.tangle.works/devices?userId=xlXMajjxTleDwIEG9SHddlCM02&apiKey=1111-gfgfdfg-46467-dsbhsjs-jgu');
   const json = await response.json();
+
   console.log(json);
 }
 
-sendRequest()
+sendRequest();
 ```
 
 > The above command returns JSON structured like this:
@@ -767,35 +502,36 @@ This endpoint returns all devices created by given used.
 
 ### HTTP Request
 
-`POST https://api.marketplace.tangle.works/getDevicesByUser`
+`GET https://api.marketplace.tangle.works/devices`
 
 ### Query Parameters
 
 | Parameters | Required | Description                              |
 | ---------- | -------- | ---------------------------------------- |
-| uid         | true     | Your user ID                             |
+| userId     | true     | Your user ID                             |
+| apiKey     | true     | Your API key                             |
 
 
-## Remove Device 
+## Remove Device
 
 ```javascript
 const fetch = require('node-fetch');
 
 const sendRequest = async () => {
-  const response = await fetch('https://api.marketplace.tangle.works/removeDevice',
+  const response = await fetch('https://api.marketplace.tangle.works/delete',
     {
-      method: 'POST',
+      method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         apiKey: 'aaaaaaa-0b7a-4e44-7777-ef661777b9d2',
-        id: 'star-wars-test',
+        deviceId: 'star-wars-test',
       })
     });
   const json = await response.json();
   console.log(json);
 }
 
-sendRequest()
+sendRequest();
 ```
 
 > The above command returns JSON structured like this:
@@ -810,11 +546,11 @@ This endpoint removes a device from the database.
 
 ### HTTP Request
 
-`POST https://api.marketplace.tangle.works/removeDevice`
+`DELETE https://api.marketplace.tangle.works/delete`
 
 ### Query Parameters
 
 | Parameters | Required | Description                                         |
 | ---------- | -------- | --------------------------------------------------- |
 | apiKey     | true     | Your API key                                        |
-| id         | true     | The ID of the device's stream you'd like access to. |
+| deviceId   | true     | The ID of the device's stream you'd like access to. |
