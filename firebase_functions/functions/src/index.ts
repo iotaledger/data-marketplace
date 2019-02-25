@@ -417,25 +417,30 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
       const device = await getDevice(packet.deviceId);
       const wallet = await getUserWallet(packet.userId);
       const { iotaApiVersion, provider, defaultPrice } = await getSettings();
-
-      if (!device) {
+      let price = defaultPrice;
+      if (device) {
+        if (device.price) {
+          price = Number(device.price);
+        } else if (device.value) {
+          price = Number(device.value);
+        }
+      } else {
         return res.json({ error: `Device doesn't exist` });
       }
 
       let newWalletBalance;
-      if (wallet && wallet.balance && device) {
-        const price = (device && device.price) || defaultPrice;
+      if (wallet && wallet.balance) {
         newWalletBalance = Number(wallet.balance) - Number(price);
         if (newWalletBalance < 0) {
           console.log('purchaseStream failed. Not enough funds', packet);
-          return res.json({ error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.' });  
+          return res.json({ error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.' });
         }
       } else {
         console.log('purchaseStream failed. Wallet not set', packet);
         return res.json({ error: 'Wallet not set' });
       }
 
-      const transactions = await purchaseData(packet.userId, device.address, Number(device.price));
+      const transactions = await purchaseData(packet.userId, device.address, price);
       console.log('purchaseStream', packet.userId, transactions);
 
       const hashes = transactions && transactions.map(transaction => transaction.hash);
