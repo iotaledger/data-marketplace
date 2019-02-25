@@ -13,7 +13,7 @@ exports.getKey = async (key: string) => {
     .doc(key)
     .get();
   if (doc.exists) return doc.data();
-  console.log('getKey failed. API key is incorrect. ', key, doc);
+  console.error('getKey failed. API key is incorrect. ', key, doc);
   throw Error('Your API key is incorrect.');
 };
 
@@ -25,7 +25,7 @@ exports.getSk = async (deviceId: string) => {
     .doc(deviceId)
     .get();
   if (doc.exists) return doc.data();
-  console.log('getSk failed. device does not exist', deviceId, doc);
+  console.error('getSk failed. device does not exist', deviceId, doc);
   throw Error(`The device doesn't exist.`);
 };
 
@@ -40,7 +40,7 @@ exports.getPurchase = async (uid: string, device: string) => {
     .get();
   // Check user's profile for purchase
   if (doc.exists) return doc.data();
-  console.log('getPurchase failed.', uid, device, doc);
+  console.log('Device not purchased', uid, device);
   return false;
 };
 
@@ -314,7 +314,7 @@ exports.getUser = async (userId: string) => {
     return doc.data();
   }
 
-  console.log('getUser failed.', userId, doc);
+  console.log('User not in DB:', userId);
   return null;
 };
 
@@ -363,7 +363,7 @@ exports.getSettings = async () => {
       tangleExplorer,
     };
   }
-  console.log('getSettings failed. Setting does not exist', doc);
+  console.error('getSettings failed. Setting does not exist', doc);
   throw Error(`The getSettings setting doesn't exist.`);
 };
 
@@ -379,7 +379,7 @@ exports.getUserWallet = async (uid: string) => {
     const data = doc.data();
     return data.wallet || null;
   }
-  console.log('getUserWallet failed. ', uid, doc);
+  console.log('getUserWallet failed. ', uid);
   throw Error(`The wallet doesn't exist.`);
 };
 
@@ -422,7 +422,7 @@ exports.getIotaWallet = async () => {
     if (data.wallet) {
       return data.wallet;
     }
-    console.log('getIotaWallet failed. Setting does not exist', data.wallet);
+    console.error('getIotaWallet failed. Setting does not exist', data.wallet);
   }
   throw Error(`The getIotaWallet setting doesn't exist.`);
 };
@@ -447,6 +447,6 @@ exports.getEmailSettings = async () => {
     const data = doc.data();
     return data.email || null;
   }
-  console.log('getEmailSettings failed. Setting does not exist', doc);
+  console.error('getEmailSettings failed. Setting does not exist', doc);
   throw Error(`The getEmailSettings setting doesn't exist.`);
 };

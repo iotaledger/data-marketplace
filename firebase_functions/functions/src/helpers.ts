@@ -74,7 +74,7 @@ const findTx = (hashes, provider, iotaApiVersion) => {
         resolve(txBundle);
       })
       .catch(error => {
-        console.log(`findTx failed. Couldn't find your transaction`);
+        console.error(`findTx failed. Couldn't find your transaction`);
         throw Error(`Couldn't find your transaction!`);
         reject();
       });
@@ -98,7 +98,7 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
     const minWeightMagnitude = 9
 
     if (balance === 0) {
-      console.log('transferFunds. Insufficient balance', address, balances, userId);
+      console.error('transferFunds. Insufficient balance', address, balances, userId);
       return null;
     }
 
@@ -133,18 +133,18 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
               resolve(transactions)
             })
             .catch(error => {
-              console.log('transferFunds sendTrytes error', error);
+              console.error('transferFunds sendTrytes error', error);
               reject(error);
             })
         })
         .catch(error => {
-          console.log('transferFunds prepareTransfers error', error);
+          console.error('transferFunds prepareTransfers error', error);
           reject(error);
         });
     });
     return promise;
   } catch (error) {
-    console.log('transferFunds catch', error);
+    console.error('transferFunds catch', error);
     return error
   }
 }
