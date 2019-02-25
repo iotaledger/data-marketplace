@@ -40,7 +40,7 @@ exports.getPurchase = async (uid: string, device: string) => {
     .get();
   // Check user's profile for purchase
   if (doc.exists) return doc.data();
-  console.log('getPurchase failed.', uid, device, doc);
+  console.log('Device not purchased', uid, device);
   return false;
 };
 
@@ -314,7 +314,7 @@ exports.getUser = async (userId: string) => {
     return doc.data();
   }
 
-  console.log('getUser failed.', userId, doc);
+  console.log('User not in DB:', userId);
   return null;
 };
 
