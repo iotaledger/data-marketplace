@@ -11,10 +11,6 @@ const sensors = [
     link: 'https://xdk.bosch-connectivity.com',
   },
   {
-    text: 'Samsung Artik',
-    link: 'https://www.artik.io/modules/artik-0-family/',
-  },
-  {
     text: 'Thingy:52',
     link: 'http://www.nordicsemi.com/eng/Products/Nordic-Thingy-52',
   },
@@ -134,8 +130,8 @@ const Sensors = styled.div`
 const SensorsListWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start;
-  width: 110%;
+  justify-content: flex-end;
+  width: 80%;
   margin-top: 60px;
 
   @media (max-width: 710px) {

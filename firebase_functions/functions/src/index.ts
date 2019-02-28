@@ -441,22 +441,25 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
       }
 
       const transactions = await purchaseData(packet.userId, device.address, price);
-      console.log('purchaseStream', packet.userId, transactions);
+      console.log('purchaseStream', packet.userId, packet.deviceId, transactions);
 
-      const hashes = transactions && transactions.map(transaction => transaction.hash);
+      if (transactions) {
+        const hashes = transactions && transactions.map(transaction => transaction.hash);
 
-      // Find TX on network and parse
-      const bundle = await findTx(hashes, provider, iotaApiVersion);
+        // Find TX on network and parse
+        const bundle = await findTx(hashes, provider, iotaApiVersion);
 
-      // Make sure TX is valid
-      if (!validateBundleSignatures(bundle)) {
-        console.error('purchaseStream failed. Transaction is invalid for: ', bundle);
-        res.status(403).json({ error: 'Transaction is Invalid' });
+        // Make sure TX is valid
+        if (!validateBundleSignatures(bundle)) {
+          console.error('purchaseStream failed. Transaction is invalid for: ', bundle);
+          res.status(403).json({ error: 'Transaction is Invalid' });
+        }
+
+        await setPurchase(packet.userId, packet.deviceId);
+        await updateBalance(packet.userId, newWalletBalance);
+        return res.json({ success: true });
       }
-
-      await setPurchase(packet.userId, packet.deviceId);
-      await updateBalance(packet.userId, newWalletBalance);
-      return res.json({ success: true });
+      return res.json({ error: 'Purchase failed. Insufficient balance of out of sync' });
     } catch (e) {
       console.error('purchaseData failed. Error: ', e, packet);
       return res.status(403).json({ error: e.message });

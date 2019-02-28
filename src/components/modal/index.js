@@ -5,7 +5,7 @@ import Loading from '../loading';
 
 export default ({ notification, show, error = null, purchasePrice = null, callback = null }) => {
   const backButton = (
-    <Link to={'/'}>
+    <Link to={'/demo'}>
       <Button type="button" className="btn btn-accent txt-bold modal-trigger">
         Go back
       </Button>

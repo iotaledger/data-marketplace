@@ -13,7 +13,7 @@ export default ({ onAnchorClick }) => (
         </Heading>
         <Tagline>Never has getting access to diverse, fine-granular data been this easy!</Tagline>
         <a
-          href="https://blog.iota.org/iota-data-marketplace-cb6be463ac7f"
+          href="https://blog.iota.org/part-1-iota-data-marketplace-update-5f6a8ce96d05"
           target="_blank"
           rel="noopener noreferrer">
           <Button type="button">About the Marketplace</Button>

@@ -13,11 +13,6 @@ const sensors = [
     link: 'https://xdk.bosch-connectivity.com',
   },
   {
-    alt: 'Samsung Artik',
-    logo: '/static/icons/proof_of_concept/logos/artik.png',
-    link: 'https://www.artik.io/modules/artik-0-family/',
-  },
-  {
     alt: 'Nordic Semiconductor Thingy:52',
     logo: '/static/icons/proof_of_concept/logos/nordic.png',
     link: 'http://www.nordicsemi.com/eng/Products/Nordic-Thingy-52',
