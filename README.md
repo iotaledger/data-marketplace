@@ -11,10 +11,11 @@ Before you can run this application, you will need to install `Node.js` on your 
 The data-marketplace uses [Firebase](https://firebase.google.com/) as storage solution. 
 You need an active Firebase project to use the data-marketplace. Please create one.
 
-### Add config.json in src/
+### change config.json.example
 
-There is an example config.json file in the src directory. Create a config.json file with the same structure.
-You can get the information in the Firebase getting started guide for your project.
+There is a json example in the src directory. Rename the config.json.example to config.json. 
+Replace all values with the values from your Firebase project.
+You can get get the information by the Firebase getting started guide in your project.
 
 ### Enable Google Authentication
 
