@@ -2,7 +2,7 @@
 
 The Proof of Concept Data Marketplace built using MAM and IOTA Tangle.
 
-Please read the series of technical blog posts to learn how to create new sensors, publish sensor data, and deploy an own instance of the Data Marketplace application.
+Please read the series of technical blog posts to learn how to create new sensors, publish sensor data, and deploy your own instance of the Data Marketplace application.
 
 * [Sensor Onboarding](https://blog.iota.org/iota-data-marketplace-tech-intro-d54b29774f1a-d54b29774f1a)
 
