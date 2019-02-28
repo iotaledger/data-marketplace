@@ -9,7 +9,7 @@ Before you can run this application, you will need to install `Node.js` on your 
 ### Create a Firebase Account
 
 The data-marketplace uses [Firebase](https://firebase.google.com/) as storage solution. 
-You need an active Firebase project to use the data-marketplace. Please create one.
+You need an active Firebase project to use the data-marketplace.
 
 ### change config.json.example
 
