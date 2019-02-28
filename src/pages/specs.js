@@ -134,7 +134,6 @@ const workInProgress = [
   'Migration over to Mainnet, real wallets and payments',
   'Modifying the data stream price, dynamic pricing',
   'Modifying of the sensor data fields',
-  'Updated API documentation page',
   'Latest data updates from device, visible prior to purchase',
   'External data storage of data (interchangeable cloud providers)',
   'Visualisation / graph tools',

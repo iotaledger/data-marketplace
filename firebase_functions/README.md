@@ -48,7 +48,23 @@ firebase login
 firebase deploy --project PROJECT_NAME
 ```
 
-#### Handling function timeouts
+### Handling function timeouts
 Default timeout can be changed here https://console.cloud.google.com/functions/list
 After you select your function and then press "Edit" it is located under the "More" drop-down at the bottom of the page. The current max is 540 seconds.
 Read more https://firebase.google.com/docs/functions/manage-functions#set_timeout_and_memory_allocation
+
+
+### CORS
+
+See https://cloud.google.com/storage/docs/configuring-cors
+You can also use the `gsutil cors` command to get the CORS configuration of a bucket:
+
+```
+gsutil cors get gs://marketplacev2.appspot.com
+```
+
+Use the `gsutil cors` command to configure CORS on a bucket:
+
+```
+gsutil cors set cors-config.json gs://marketplacev2.appspot.com
+```

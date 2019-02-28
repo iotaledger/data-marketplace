@@ -311,7 +311,15 @@ exports.getUser = async (userId: string) => {
 
   // Check and return user
   if (doc.exists) {
-    return doc.data();
+    const result = doc.data();
+    delete result.seed;
+
+    if (result.wallet) {
+      delete result.wallet.seed;
+      delete result.wallet.address;
+      delete result.wallet.keyIndex;
+    }
+    return result;
   }
 
   console.log('User not in DB:', userId);

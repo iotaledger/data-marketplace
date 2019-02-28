@@ -85,11 +85,12 @@ class Map extends React.Component {
           anchor="bottom-left"
           offsetTop={-5}
           offsetLeft={5}
-          closeButton={false}
+          closeButton={true}
           longitude={Number(popupInfo.lon)}
           latitude={Number(popupInfo.lat)}
-          closeOnClick={true}
-          onClose={() => this.setState({ popupInfo: null })}>
+          closeOnClick={false}
+          onClose={() => this.setState({ popupInfo: null })}
+        >
           <SensorCard
             to={`/sensor/${popupInfo.sensorId}`}
             onClick={() => this.trackRedirect(popupInfo.sensorId)}

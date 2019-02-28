@@ -1,0 +1,11 @@
+[
+    {
+      "origin": [
+        "http://localhost:3000",
+        "https://data.iota.org"
+      ],
+      "responseHeader": ["Content-Type"],
+      "method": ["OPTIONS", "GET", "POST", "PUT", "DELETE"],
+      "maxAgeSeconds": 6000
+    }
+]

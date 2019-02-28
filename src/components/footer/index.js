@@ -7,35 +7,35 @@ export default props => (
       <ContentInnerWrapper>
         <LinksOuterWrapper>
           <LinksInnerWrapper>
-            <A order={1} href="https://www.iota.org/">
-              www.iota.org
+            <A order={1} href="https://iota.org/">
+              iota.org
             </A>
             <A order={2} href="https://blog.iota.org/">
               blog.iota.org
             </A>
-            <AIMG order={3} href="https://www.iota.org/">
+            <AIMG order={3} href="https://iota.org/">
               <IMG
                 src="/static/logotypes/logo-footer.png"
                 srcSet="/static/logotypes/logo-footer@2x.png 2x"
                 alt="IOTA logotype"
               />
             </AIMG>
-            <A order={4} href="http://ecosystem.iota.org/">
+            <A order={4} href="https://ecosystem.iota.org/">
               ecosystem.iota.org
             </A>
-            <A order={5} href="http://docs.iota.org/">
+            <A order={5} href="https://docs.iota.org/">
               docs.iota.org
             </A>
           </LinksInnerWrapper>
           <Nav>
-            <Copy>© 2018 IOTA Foundation. All rights reserved.</Copy>
+            <Copy>© 2018-2019 IOTA Foundation. All rights reserved.</Copy>
           </Nav>
         </LinksOuterWrapper>
         <Wrapper>
           <P>
-            Disclaimer: This experimental IOTA Data Marketplace runs on the IOTA testnet.
+            Disclaimer: This experimental IOTA Data Marketplace runs on the IOTA devnet.
             Participants can choose to make their data available for free to other marketplace
-            participants or to offer it for fictional "sales" in IOTA testnet tokens. No real world
+            participants or to offer it for fictional "sales" in IOTA devnet tokens. No real world
             payments or other real world financial consequences will result from this experiment.
             All data being contributed to this proof of concept is either non-sensitive data of
             which the participants are the authorized owners and/or is publicly available data which
