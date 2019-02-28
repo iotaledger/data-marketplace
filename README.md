@@ -16,6 +16,10 @@ You need an active Firebase project to use the data-marketplace. Please create o
 There is an example config.json file in the src directory. Create a config.json file with the same structure.
 You can get the information in the Firebase getting started guide for your project.
 
+### Enable Google Authentication
+
+You need to enable Google Authentication in your Firebase project.
+
 ### To run for Development.
 
 ```javascript
