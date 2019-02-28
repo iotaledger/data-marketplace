@@ -6,6 +6,16 @@ The Proof of Concept Data Marketplace built using MAM and IOTA Tangle.
 
 Before you can run this application, you will need to install `Node.js` on your machine. Once you've installed `Node.js`, you can use `npm` to run commands listed below.
 
+### Create a Firebase Account
+
+The data-marketplace uses [Firebase](https://firebase.google.com/) as storage solution. 
+You need an active Firebase project to use the data-marketplace. Please create one.
+
+### Add config.json in src/
+
+There is an example config.json file in the src directory. Create a config.json file with the same structure.
+You can get the information in the Firebase getting started guide for your project.
+
 ### To run for Development.
 
 ```javascript
