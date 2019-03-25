@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from 'react-slick';
+// import Slider from 'react-slick';
 import styled from 'styled-components';
 
 export default class extends React.Component {
@@ -13,13 +13,13 @@ export default class extends React.Component {
     };
     return (
       <Container>
-        <Slider {...settings}>
+        {/* <Slider {...settings}>
           {this.props.items.map(item => (
             <Item key={item}>
               <P>{item}</P>
             </Item>
           ))}
-        </Slider>
+        </Slider> */}
       </Container>
     );
   }
