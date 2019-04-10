@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { trytesToAscii } from '@iota/converter';
-import { Reader, Mode } from 'mam.client.js/lib/mam';
+import { Reader, Mode } from '@iota/mam/lib/mam';
 import get from 'lodash-es/get';
 import ReactGA from 'react-ga';
 import { getData } from '../../utils/iota';
@@ -13,9 +13,9 @@ const Fetcher = ({
 
   useEffect(() => {
     (async () => {
-      try {     
+      try {
         const data = await getData(userId, deviceId, lastFetchedTimestamp);
-    
+
         if (data.success === false) {
           setPurchase(false);
           setFetching(false);
@@ -39,7 +39,7 @@ const Fetcher = ({
 
         let fetchErrorCounter = 0;
         let emptyDataCounter = 0;
-  
+
         data && data.map(async ({ root, sidekey, time = null }) => {
           try {
             const mode = sidekey ? Mode.Old : Mode.Public;
@@ -89,4 +89,3 @@ const Fetcher = ({
 }
 
 export default Fetcher;
-

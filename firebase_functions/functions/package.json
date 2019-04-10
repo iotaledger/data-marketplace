@@ -24,7 +24,9 @@
   ],
   "dependencies": {
     "@iota/bundle-validator": "^1.0.0-beta.8",
+    "@iota/converter": "^1.0.0-beta.11",
     "@iota/core": "^1.0.0-beta.8",
+    "@iota/mam": "^0.7.2",
     "@iota/transaction-converter": "^1.0.0-beta.8",
     "axios": "^0.18.0",
     "cors": "^2.8.5",

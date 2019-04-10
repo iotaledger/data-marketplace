@@ -354,7 +354,7 @@ This endpoint creates a new device for a given user.
 ```javascript
 const fetch = require('node-fetch');
 const crypto = require('crypto');
-const Mam = require('mam.client.js');
+const Mam = require('@iota/mam');
 const { asciiToTrytes } = require('@iota/converter');
 
 // Initialise MAM State
