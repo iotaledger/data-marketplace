@@ -165,11 +165,11 @@ exports.devices = functions.https.onRequest((req, res) => {
               try {
                 const keyObj = await getSk(device.sensorId);
                 if (keyObj.sk) {
-                  return resolve(keyObj.sk);
+                  resolve(keyObj.sk);
                 }
-                return reject({ error: 'Error' });
+                reject({ error: 'Error' });
               } catch (error) {
-                return reject({ error });
+                reject({ error });
               }
             });
 
