@@ -296,7 +296,7 @@ sendRequest();</code></pre>
 <span class="hljs-keyword">const</span> sendRequest = <span class="hljs-keyword">async</span> () =&gt; {
   <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'https://api.marketplace.tangle.works/newDevice'</span>,
     {
-      <span class="hljs-attr">method</span>: <span class="hljs-string">'PUT'</span>,
+      <span class="hljs-attr">method</span>: <span class="hljs-string">'POST'</span>,
       <span class="hljs-attr">headers</span>: { <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span> },
       <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify({
         <span class="hljs-attr">apiKey</span>: <span class="hljs-string">'aaaaaaa-0b7a-4e44-7777-ef661777b9d2'</span>,
@@ -336,7 +336,7 @@ sendRequest();</code></pre>
 }</code></pre>
         <p>This endpoint creates a new device for a given user.</p>
         <h3 id="http-request">HTTP Request</h3>
-        <p><code>PUT https://api.marketplace.tangle.works/newDevice</code></p>
+        <p><code>POST https://api.marketplace.tangle.works/newDevice</code></p>
         <h3 id="query-parameters">Query Parameters</h3>
         <table>
           <thead>
@@ -409,7 +409,7 @@ sendRequest();</code></pre>
 <span class="hljs-keyword">const</span> storeKey = <span class="hljs-keyword">async</span> packet =&gt; {
   <span class="hljs-keyword">const</span> response = <span class="hljs-keyword">await</span> fetch(<span class="hljs-string">'https://api.marketplace.tangle.works/newData'</span>,
     {
-      <span class="hljs-attr">method</span>: <span class="hljs-string">'PUT'</span>,
+      <span class="hljs-attr">method</span>: <span class="hljs-string">'POST'</span>,
       <span class="hljs-attr">headers</span>: { <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span> },
       <span class="hljs-attr">body</span>: <span class="hljs-built_in">JSON</span>.stringify({
         <span class="hljs-attr">id</span>: <span class="hljs-string">'star-wars-test'</span>,
@@ -429,7 +429,7 @@ publishData({ <span class="hljs-attr">message</span>: <span class="hljs-string">
 }</code></pre>
         <p>This endpoint publishes new MAM event for a given device.</p>
         <h3 id="http-request">HTTP Request</h3>
-        <p><code>PUT https://api.marketplace.tangle.works/newData</code></p>
+        <p><code>POST https://api.marketplace.tangle.works/newData</code></p>
         <h3 id="query-parameters">Query Parameters</h3>
         <table>
           <thead>

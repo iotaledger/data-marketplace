@@ -292,7 +292,7 @@ const fetch = require('node-fetch');
 const sendRequest = async () => {
   const response = await fetch('https://api.marketplace.tangle.works/newDevice',
     {
-      method: 'PUT',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         apiKey: 'aaaaaaa-0b7a-4e44-7777-ef661777b9d2',
@@ -339,7 +339,7 @@ This endpoint creates a new device for a given user.
 
 ### HTTP Request
 
-`PUT https://api.marketplace.tangle.works/newDevice`
+`POST https://api.marketplace.tangle.works/newDevice`
 
 ### Query Parameters
 
@@ -397,7 +397,7 @@ const publishData = async payload => {
 const storeKey = async packet => {
   const response = await fetch('https://api.marketplace.tangle.works/newData',
     {
-      method: 'PUT',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: 'star-wars-test',
@@ -424,7 +424,7 @@ This endpoint publishes new MAM event for a given device.
 
 ### HTTP Request
 
-`PUT https://api.marketplace.tangle.works/newData`
+`POST https://api.marketplace.tangle.works/newData`
 
 ### Query Parameters
 

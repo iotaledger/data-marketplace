@@ -102,7 +102,7 @@ class Dashboard extends React.Component {
       };
 
       // Call server
-      const data = await api.put('newDevice', packet);
+      const data = await api.post('newDevice', packet);
       // Check success
       if (data.success) {
         this.findDevices();
