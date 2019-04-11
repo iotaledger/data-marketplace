@@ -57,13 +57,24 @@ const SideBar = ({ sensor, settings, isLoading, downloadSensorStreamJSON, purcha
       {
         purchase ? (
           <Details>
-            <Label>Download sensor stream</Label>
+            <DetailValue>Download sensor stream</DetailValue>
             <DetailRow>
               <Button onClick={downloadSensorStreamJSON}>Download</Button>
             </DetailRow>
           </Details>
         ) : null
       }
+      <Details>
+        <DetailRow>
+          <a
+            href={'/static/docs/index.html'}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <DetailValue>View the API documentation</DetailValue>
+          </a>
+        </DetailRow>
+      </Details>
       <Fetcher>
         {isLoading ? <Loading /> : null}
       </Fetcher>

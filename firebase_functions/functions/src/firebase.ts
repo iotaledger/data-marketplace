@@ -81,6 +81,7 @@ exports.getDevice = async (device: string) => {
   if (doc.exists) {
     const result = doc.data();
     delete result.sk;
+    delete result.owner;
     return result;
   }
   console.log('getDevice failed.', device, doc);
@@ -104,6 +105,7 @@ exports.getDevices = async () => {
           const result = doc.data();
           result.createTime = doc.createTime;
           delete result.sk;
+          delete result.owner;
 
           // Get data
           admin
@@ -128,7 +130,7 @@ exports.getDevices = async () => {
           return null;
         }
       } catch (error) {
-        return reject(error);
+        reject(error);
       }
     });
     promises.push(promise);
@@ -156,6 +158,7 @@ exports.getUserDevices = async (user: string) => {
     if (doc.exists) {
       const result = doc.data();
       delete result.sk;
+      delete result.owner;
       return result;
     } else {
       console.log('getUserDevices failed.', user, doc);

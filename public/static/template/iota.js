@@ -1,5 +1,5 @@
 const crypto = require('crypto');
-const Mam = require('mam.client.js');
+const Mam = require('@iota/mam');
 const { asciiToTrytes } = require('@iota/converter');
 const { storeKey } = require('./keyStorage');
 const { provider } = require('./config.json');

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import isEmpty from 'lodash-es/isEmpty';
 import { connect } from 'react-redux';
 import { createHttpClient } from '@iota/http-client';
-import { createContext } from 'mam.client.js/lib/mam';
+import { createContext } from '@iota/mam/lib/mam';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
@@ -166,11 +166,11 @@ class Sensor extends React.Component {
               setPurchase={this.setPurchase}
               setStreamLength={this.setStreamLength}
               setFetching={this.setFetching}
-              setDataEnd={this.setDataEnd} 
-              saveData={this.saveData} 
+              setDataEnd={this.setDataEnd}
+              saveData={this.saveData}
               lastFetchedTimestamp={this.state.lastFetchedTimestamp}
               deviceId={deviceId}
-              userId={userId} 
+              userId={userId}
               packets={packets.length}
               ctx={this.ctx}
               client={this.client}

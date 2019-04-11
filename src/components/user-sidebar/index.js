@@ -69,18 +69,19 @@ class UserSidebar extends React.Component {
               </Clipboard>
             </DetailRow>
             <Alert message={message}>{message}</Alert>
-
-            <DetailRow>
-              <a
-                href={'/static/docs/index.html'}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <DetailKey>View the API documentation</DetailKey>
-              </a>
-            </DetailRow>
           </Details>
         )}
+        <Details>
+          <DetailRow>
+            <a
+              href={'/static/docs/index.html'}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <DetailValue>View the API documentation</DetailValue>
+            </a>
+          </DetailRow>
+        </Details>
       </Sidebar>
     );
   }
