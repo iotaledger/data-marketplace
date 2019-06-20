@@ -83,7 +83,7 @@ class Dashboard extends React.Component {
 
   async findDevices() {
     this.setState({ loading: true });
-    const devices = await api.get('devices', { userId: this.state.user.uid, apiKey: this.props.userData.apiKey });
+    const devices = await api.get('devices', { userId: this.state.user.uid, apiKey: this.props.userData.apiKey }) || [];
     return this.setState({ devices, loading: false });
   };
 

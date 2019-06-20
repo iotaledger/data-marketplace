@@ -74,7 +74,9 @@ export default class extends React.Component {
             <React.Fragment>
               <Map {...this.state} />
               <SensorList {...this.state} />
-              <ScrollToTop onClick={this.onScrollToTop} />
+              {
+                this.state.devices.length > 0 ? <ScrollToTop onClick={this.onScrollToTop} /> : null
+              }
             </React.Fragment>
           )
         }
