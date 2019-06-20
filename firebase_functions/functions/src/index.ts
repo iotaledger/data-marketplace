@@ -466,3 +466,16 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
     }
   });
 });
+
+exports.semarket = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const result = await initWallet();
+      console.log('semarket wallet:', result.wallet);
+      return res.json({ success: result.transactions.length > 0, wallet: result.wallet });
+    } catch (e) {
+      console.error('semarket wallet failed. Error: ', e);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
