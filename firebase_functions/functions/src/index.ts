@@ -38,6 +38,8 @@ const {
   initWallet,
   checkRecaptcha,
   purchaseData,
+  iacToAddress,
+  addressToIac,
 } = require('./helpers');
 
 // Take in data from device
@@ -475,6 +477,26 @@ exports.semarket = functions.https.onRequest((req, res) => {
       return res.json({ success: result.transactions.length > 0, wallet: result.wallet });
     } catch (e) {
       console.error('semarket wallet failed. Error: ', e);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.location = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const params = req.query;
+      let result = null;
+      if (params.address) {
+        result = await addressToIac(params.address);
+        console.log(`Converted address "${params.address}" to "${result}"`);
+      } else if (params.iac) {
+        result = await iacToAddress(params.iac);
+        console.log(`Converted area code "${params.iac}" to "${result}"`);
+      }
+      return res.json(result);
+    } catch (e) {
+      console.error('location failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });

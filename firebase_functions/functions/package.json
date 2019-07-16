@@ -23,6 +23,7 @@
     }
   ],
   "dependencies": {
+    "@iota/area-codes": "^0.1.0",
     "@iota/bundle-validator": "^1.0.0-beta.8",
     "@iota/converter": "^1.0.0-beta.11",
     "@iota/core": "^1.0.0-beta.8",
