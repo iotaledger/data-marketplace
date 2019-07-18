@@ -38,6 +38,7 @@ const {
   initWallet,
   checkRecaptcha,
   purchaseData,
+  gpsToAddress,
   iacToAddress,
   addressToIac,
 } = require('./helpers');
@@ -493,6 +494,10 @@ exports.location = functions.https.onRequest((req, res) => {
       } else if (params.iac) {
         result = await iacToAddress(params.iac);
         console.log(`Converted area code "${params.iac}" to "${result}"`);
+      } else if (params.gps) {
+        const coordinates = params.gps.split(',').map(coord => Number(coord));
+        result = await gpsToAddress(...coordinates);
+        console.log(`Converted GPS coordinates "${params.gps}" to "${result}"`);
       }
       return res.json(result);
     } catch (e) {

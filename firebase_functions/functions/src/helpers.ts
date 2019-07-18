@@ -202,10 +202,9 @@ const purchaseData = async (userId, receiveAddress, value) => {
   return transactions;
 };
 
-const iacToAddress = async iac => {
+const gpsToAddress = async (latitude, longitude) => {
   try {
     const apiKey = await getGoogleMapsApiKey();
-    const { latitude, longitude } = iotaAreaCodes.decode(iac);
     const options = {
       method: 'GET',
       headers: { 'content-type': 'application/json; charset=UTF-8' },
@@ -213,6 +212,16 @@ const iacToAddress = async iac => {
     };
     const result = await axios(options);
     return result.data.results[0].formatted_address;
+  } catch (error) {
+    console.log('iacToAddress error:', error);
+  }
+  return null;
+}
+
+const iacToAddress = async iac => {
+  try {
+    const { latitude, longitude } = iotaAreaCodes.decode(iac);
+    return await gpsToAddress(latitude, longitude);
   } catch (error) {
     console.log('iacToAddress error:', error);
   }
@@ -246,6 +255,7 @@ module.exports = {
   faucet,
   purchaseData,
   checkRecaptcha,
+  gpsToAddress,
   iacToAddress,
   addressToIac
 }

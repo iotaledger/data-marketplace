@@ -46,6 +46,7 @@ firebase login
 
 ```javascript
 firebase deploy --project PROJECT_NAME
+firebase deploy --only functions:function1,functions:function2
 ```
 
 ### Handling function timeouts
