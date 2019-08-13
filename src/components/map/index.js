@@ -38,13 +38,6 @@ class Map extends React.Component {
     this.resize();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor) {
-      const target = document.querySelector(`#${nextProps.anchor}`);
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
   componentWillUnmount() {
     window.removeEventListener('resize', this.resize);
   }

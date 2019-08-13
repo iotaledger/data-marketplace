@@ -16,10 +16,9 @@ export default class extends React.Component {
     this.setState({ devices: this.sort(this.props.devices) });
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.setState({ devices: this.sort(nextProps.devices) });
-    if (nextProps.anchor) {
-      const target = document.querySelector(`#${nextProps.anchor}`);
+  componentDidUpdate() {
+    if (this.props.anchor) {
+      const target = document.querySelector(`#${this.props.anchor}`);
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }

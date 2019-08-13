@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 
 export default class Heading extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor) {
-      const target = document.querySelector(`#${nextProps.anchor}`);
+  componentDidUpdate() {
+    if (this.props.anchor) {
+      const target = document.querySelector(`#${this.props.anchor}`);
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }

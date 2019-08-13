@@ -3,13 +3,6 @@ import styled from 'styled-components';
 import Heading from './heading';
 
 export default class List extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor) {
-      const target = document.querySelector(`#${nextProps.anchor}`);
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
   render() {
     const { id, items, title } = this.props;
     return (

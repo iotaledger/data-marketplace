@@ -25,13 +25,6 @@ const sensors = [
 ];
 
 export default class ExampleSensors extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor) {
-      const target = document.querySelector(`#${nextProps.anchor}`);
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
   render() {
     const {
       content: { id, title, text },

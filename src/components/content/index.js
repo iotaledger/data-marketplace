@@ -3,9 +3,9 @@ import styled from 'styled-components';
 import Heading from './heading';
 
 export default class Content extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor) {
-      const target = document.querySelector(`#${nextProps.anchor}`);
+  componentDidUpdate() {
+    if (this.props.anchor) {
+      const target = document.querySelector(`#${this.props.anchor}`);
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }

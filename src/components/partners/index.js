@@ -84,13 +84,6 @@ const partners = [
 ];
 
 export default class extends React.Component {
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.anchor) {
-      const target = document.querySelector(`#${nextProps.anchor}`);
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  }
-
   render() {
     return (
       <Section id="participants">
