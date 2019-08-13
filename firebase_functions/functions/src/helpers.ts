@@ -228,6 +228,15 @@ const iacToAddress = async iac => {
   return null;
 }
 
+const gpsToIac = async (latitude, longitude) => {
+  try {
+    return iotaAreaCodes.encode(latitude, longitude);
+  } catch (error) {
+    console.error('gpsToIac error:', error);
+  }
+  return null;
+}
+
 const addressToIac = async address => {
   try {
     const apiKey = await getGoogleMapsApiKey();
@@ -255,7 +264,8 @@ module.exports = {
   faucet,
   purchaseData,
   checkRecaptcha,
-  gpsToAddress,
   iacToAddress,
-  addressToIac
+  gpsToAddress,
+  addressToIac,
+  gpsToIac
 }
