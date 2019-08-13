@@ -46,7 +46,8 @@ export default class extends React.Component {
   async componentDidMount() {
     ReactGA.pageview('/demo');
     const devices = await allDevices();
-    this.setState({ devices, loading: false });
+    const activeDevices = devices.filter(device => !device.inactive);
+    this.setState({ devices: activeDevices, loading: false });
   }
 
   onAnchorClick(anchor) {

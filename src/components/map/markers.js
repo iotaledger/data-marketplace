@@ -9,20 +9,21 @@ export default class extends React.Component {
 
     this.sanitiseCoordinates = this.sanitiseCoordinates.bind(this);
     this.sanatiseDevice = this.sanatiseDevice.bind(this);
+    this.updateDevices = this.updateDevices.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (this.state.devices.length > 0) return;
-    const devices =
-      nextProps.devices.length > 0
-        ? [
-            ...nextProps.devices.filter(device => this.sanatiseDevice(device)).map(device => {
-              device.lat = this.sanitiseCoordinates(device.lat);
-              device.lon = this.sanitiseCoordinates(device.lon);
-              return device;
-            }),
-          ]
-        : [];
+  componentDidMount() {
+    this.updateDevices(this.props);
+  }
+
+  updateDevices(props) {
+    const devices = [
+      ...props.devices.filter(device => this.sanatiseDevice(device)).map(device => {
+        device.lat = this.sanitiseCoordinates(device.lat);
+        device.lon = this.sanitiseCoordinates(device.lon);
+        return device;
+      }),
+    ];
     this.setState({ devices });
   }
 
@@ -38,15 +39,15 @@ export default class extends React.Component {
   };
 
   render() {
-    const { devices } = this.state;
     return (
       <div>
-        {devices &&
-          devices.map((device, i) => (
-            <Marker latitude={device.lat} longitude={device.lon} key={`marker-${i}`}>
+        {
+          this.state.devices.map((device, i) => (
+            <Marker latitude={Number(device.lat)} longitude={Number(device.lon)} key={`marker-${i}`}>
               <Pin onClick={() => this.props.openPopup(device)} />
             </Marker>
-          ))}
+          ))
+        }
       </div>
     );
   }
