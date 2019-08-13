@@ -118,8 +118,8 @@ exports.getDevices = async () => {
             .then(deviceData => {
               if (deviceData.size !== 0) {
                 result.hasData = true;
+                results.push(result);
               };
-              results.push(result);
               resolve(result);
             })
             .catch(error => {
