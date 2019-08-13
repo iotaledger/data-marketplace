@@ -3,8 +3,6 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp(functions.config().firebase);
 
-const firestore = admin.firestore();
-
 exports.getKey = async (key: string) => {
   // Get API key
   const doc = await admin
@@ -70,7 +68,7 @@ exports.getData = async (device: string, timestamp?: number) => {
   });
 };
 
-exports.getDevice = async (device: string) => {
+exports.getDevice = async (device: string, internal: boolean = false) => {
   // Get User's purchase
   const doc = await admin
     .firestore()
@@ -80,8 +78,10 @@ exports.getDevice = async (device: string) => {
   // Check user's profile for purchase
   if (doc.exists) {
     const result = doc.data();
-    delete result.sk;
-    delete result.owner;
+    if (!internal) {
+      delete result.sk;
+      delete result.owner;
+    }
     return result;
   }
   console.log('getDevice failed.', device, doc);

@@ -97,7 +97,7 @@ exports.newDevice = functions.https.onRequest((req, res) => {
         user.numberOfDevices = await getNumberOfDevices();
       }
       if (userDevices.length < user.numberOfDevices) {
-        const device = await getDevice(<String>packet.id);
+        const device = await getDevice(<String>packet.id, true);
         if (device && device.owner !== key.uid) {
           return res.json({ error: `Device with ID ${packet.id} already exists. Please specify new unique ID` });
         }
@@ -129,7 +129,8 @@ exports.delete = functions.https.onRequest((req, res) => {
     try {
       const { apiKey, deviceId } = packet;
       const key = await getKey(<String>apiKey);
-      const device = await getDevice(<String>deviceId);
+      const device = await getDevice(<String>deviceId, true);
+
       if (!device) {
         throw Error(`Device doesn't exist`);
       }
