@@ -22,7 +22,7 @@ const content2 = {
 
 const content3 = {
   text: (<React.Fragment>
-    The <Link to={{ pathname: '/', state: { anchor: 'participants' }}}>Participants</Link> to the initiative, 70+ as of july 2018, come from many different sectors including Mobility, Energy, Agriculture, Real Estate, eHealth, Smart Manufacturing, Supply Chain, Financial Services, Semiconductors, IT integrators, Consulting, Universities, Industry clusters.
+    The <Link to={{ pathname: '/', state: { anchor: 'participants' }}}>Participants</Link> to the initiative, 70+ as of 2019, come from many different sectors including Mobility, Energy, Agriculture, Real Estate, eHealth, Smart Manufacturing, Supply Chain, Financial Services, Semiconductors, IT integrators, Consulting, Universities, Industry clusters.
   </React.Fragment>)
 };
 
