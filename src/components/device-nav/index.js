@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import isEmpty from 'lodash-es/isEmpty';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
-export default ({ logout, user }) => (
+const DeviceNav = ({ history, logout, user }) => (
   <Main>
-    <Back to={'/'}>
+    <Back to={'/'} onClick={history.goBack}>
       <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
     </Back>
 
@@ -22,6 +22,8 @@ export default ({ logout, user }) => (
     </RightHeader>
   </Main>
 );
+
+export default withRouter(DeviceNav);
 
 const Main = styled.nav`
   display: flex;

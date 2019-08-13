@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Wallet from '../wallet';
 
-const SensorNav = ({ sensor }) => (
+const SensorNav = ({ history, sensor }) => (
   <Main>
-    <Back to={'/demo'}>
+    <Back to={'/'} onClick={history.goBack}>
       <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
     </Back>
 
@@ -23,7 +23,7 @@ const SensorNav = ({ sensor }) => (
 );
 
 const mapStateToProps = state => ({ sensor: state.sensor });
-export default connect(mapStateToProps)(SensorNav);
+export default connect(mapStateToProps)(withRouter(SensorNav));
 
 const Main = styled.nav`
   display: flex;
