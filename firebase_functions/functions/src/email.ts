@@ -83,10 +83,6 @@ const mailgunSendEmail = (packet, emailSettings) => {
         <br/>
         <br/>
 
-        Should your submission doesn't result in any follow up, please note that we will include your email in follow-up newsletter early Q3 2018 which will include further info about the final report and next step activities.
-        <br/>
-        <br/>
-
         The whole IOTA team thank you again for your interest and look forward to collaborating with you.
         <br/>
         <br/>
