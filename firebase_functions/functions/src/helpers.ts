@@ -188,6 +188,21 @@ const initWallet = async (userId = null) => {
   };
 };
 
+const initSemarketWallet = async (receiveAddress, desiredBalance = null) => {
+  const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
+  const balance = desiredBalance ? Number(desiredBalance) : defaultBalance;
+  const transactions = await transferFunds(
+    receiveAddress,
+    address,
+    keyIndex,
+    seed,
+    balance,
+    updateWalletAddressKeyIndex,
+    null
+  );
+  return transactions;
+};
+
 const purchaseData = async (userId, receiveAddress, value) => {
   const { address, keyIndex, seed } = await getUserWallet(userId);
   const transactions = await transferFunds(
@@ -267,5 +282,6 @@ module.exports = {
   iacToAddress,
   gpsToAddress,
   addressToIac,
-  gpsToIac
+  gpsToIac,
+  initSemarketWallet
 }

@@ -41,6 +41,7 @@ const {
   iacToAddress,
   addressToIac,
   gpsToIac,
+  initSemarketWallet,
 } = require('./helpers');
 
 // Take in data from device
@@ -474,9 +475,13 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
 exports.semarket = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
     try {
-      const result = await initWallet();
-      console.log('semarket wallet:', result.wallet);
-      return res.json({ success: result.transactions.length > 0, wallet: result.wallet });
+      const params = req.query;
+      if (params.address) {
+        const transactions = await initSemarketWallet(params.address, params.amount || null);
+        console.log('semarket wallet transactions:', transactions.length);
+        return res.json({ success: transactions.length > 0 });
+      }
+      return res.json({ success: false, error: 'no address' });
     } catch (e) {
       console.error('semarket wallet failed. Error: ', e);
       return res.status(403).json({ error: e.message });
