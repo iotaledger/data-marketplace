@@ -105,6 +105,7 @@ exports.newDevice = functions.https.onRequest((req, res) => {
 
         return res.json({
           success: await setDevice(packet.id, secretKey, address, seed, packet.device),
+          sk: secretKey
         });
       } else {
         console.error('newDevice failed. You have too many devices', userDevices.length);
