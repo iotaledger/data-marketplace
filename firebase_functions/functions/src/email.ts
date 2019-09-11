@@ -8,11 +8,11 @@ const mailgunSendEmail = (packet, emailSettings) => {
   const mg = require('mailgun-js')({ apiKey, domain });
   mg.messages().send(
     {
-      from: `Data Market <${emailSender}>`,
+      from: `Data Marketplace <${emailSender}>`,
       to: emailRecepient,
       bcc: emailBcc,
       'h:Reply-To': packet.email,
-      subject: 'Marketplace Form Inquiry',
+      subject: 'Data Marketplace Form Inquiry',
       html: `<div>
           <p><strong>Name: </strong>   ${packet.name}</p>
         </div>
@@ -68,10 +68,10 @@ const mailgunSendEmail = (packet, emailSettings) => {
 
   mg.messages().send(
     {
-      from: `Data Market <${emailSender}>`,
+      from: `Data Marketplace <${emailSender}>`,
       to: packet.email,
       'h:Reply-To': emailReplyTo,
-      subject: 'Submission Recieved - Data Marketplace',
+      subject: 'Message Received - Data Marketplace',
       html: `Hi
         <br/>
         <br/>
@@ -79,7 +79,7 @@ const mailgunSendEmail = (packet, emailSettings) => {
         <br/>
         <br/>
 
-        We do our best to review all submissions and get in touch with prioritized use cases and organisations based on their ability to contribute and impact the development of this proof of concept.
+        We do our best to review all messages and get in touch with prioritized use cases and organizations based on their ability to contribute and impact the development of this proof of concept.
         <br/>
         <br/>
 
