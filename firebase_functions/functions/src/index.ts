@@ -25,7 +25,7 @@ const {
   toggleWhitelistDevice,
   updateBalance,
   updateUserWalletAddressKeyIndex,
-  getEmailSettings
+  getEmailSettings,
 } = require('./firebase');
 const { sendEmail } = require('./email');
 const {
