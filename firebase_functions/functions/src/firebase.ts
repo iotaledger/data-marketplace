@@ -422,6 +422,7 @@ exports.updateUserWalletAddressKeyIndex = async (address: string, keyIndex: numb
   return true;
 };
 
+
 exports.getIotaWallet = async () => {
   const doc = await admin
     .firestore()

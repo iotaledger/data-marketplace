@@ -24,8 +24,8 @@ const {
   deleteDevice,
   toggleWhitelistDevice,
   updateBalance,
-  updateUserWalletAddressKeyIndex,
-  getEmailSettings,
+  updateWalletAddressKeyIndex,
+  getEmailSettings
 } = require('./firebase');
 const { sendEmail } = require('./email');
 const {
@@ -41,7 +41,7 @@ const {
   iacToAddress,
   addressToIac,
   gpsToIac,
-  initSemarketWallet,
+  initSemarketWallet
 } = require('./helpers');
 
 // Take in data from device
@@ -513,3 +513,4 @@ exports.location = functions.https.onRequest((req, res) => {
     }
   });
 });
+
