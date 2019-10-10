@@ -34,7 +34,7 @@ const generateSeed = (length = 81) => {
 
 const generateUUID = () => {
   let d = new Date().getTime();
-  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     const r = (d + Math.random() * 16) % 16 | 0;
     d = Math.floor(d / 16);
     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
@@ -83,13 +83,12 @@ const findTx = (hashes, provider, iotaApiVersion) => {
   });
 };
 
-
 const transferFunds = async (receiveAddress, address, keyIndex, seed, value, updateFn, userId = null) => {
   try {
     const { provider } = await getSettings();
     const { getBalances, sendTrytes, getLatestInclusion } = composeAPI({ provider });
     const prepareTransfers = createPrepareTransfers();
-    const { balances } = await getBalances([address], 100);
+    const { balances } = await getBalances([ address ], 100);
     const security = 2;
     const balance = balances && balances.length > 0 ? balances[0] : 0;
 
@@ -154,7 +153,6 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
 
 const faucet = async receiveAddress => {
   const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
-
   return await transferFunds(
     receiveAddress,
     address,
@@ -189,7 +187,6 @@ const repairWallet = async (seed, keyIndex) => {
   
     if (balance === 0){
     const iterable = [-2, -1, 0, 1, 2, 3, 4, -3, -4,-5,-6-7,5,6,7];
-
 
     for (let value of iterable) {
 
