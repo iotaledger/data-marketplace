@@ -182,32 +182,20 @@ const getBalance = async address => {
 
 const repairWallet = async (seed, keyIndex) => {
   try {
-    const address = await generateAddress(seed, keyIndex)
-    const balance = await getBalance(address)
-  
-    if (balance === 0){
-    const iterable = [-2, -1, 0, 1, 2, 3, 4, -3, -4,-5,-6-7,5,6,7];
-
-    for (let value of iterable) {
-
-      if ((value < 0 && Math.abs(value) <= keyIndex) || value >= 0) {
-        const newIndex = Number(keyIndex) + Number(value)
+    //Iterating through keyIndex ordered by likelyhood
+    for (let value of [-2, -1, 1, 2, 3, 4, -3, -4, -5, -6, -7, 5, 6, 7]) {
+      const newIndex = Number(keyIndex) + Number(value)
+      if (newIndex >= 0) {
         const newAddress = await generateAddress(seed, newIndex)
         const newBalance = await getBalance(newAddress);
-
         if (newBalance > 0) {
-          return { address: newAddress, keyIndex: newIndex, seed };
+          return { address: newAddress, keyIndex: newIndex };
         }
       }
-      value += 1;
     }
-    return 0;
-  } else {
-    return {address,keyIndex}; 
-  }
   } catch (error) {
     console.log("Repair wallet Error", error)
-    return 0;
+    return error;
   }
 }
 
@@ -223,9 +211,9 @@ const initWallet = async (userId = null) => {
   const IotaWalletBalance = await getBalance(address)
 
   if (IotaWalletBalance === 0){
-   const newIotaWallet :any = await repairWallet(seed, keyIndex)
-   address = newIotaWallet.address;
-   keyIndex= newIotaWallet.keyIndex;
+    const newIotaWallet :any = await repairWallet(seed, keyIndex)
+    address = newIotaWallet.address;
+    keyIndex= newIotaWallet.keyIndex;
   }
 
 
@@ -255,13 +243,13 @@ const initSemarketWallet = async (receiveAddress, desiredBalance = null) => {
   const IotaWalletBalance = await getBalance(address)
 
   if (IotaWalletBalance === 0){
-   const newIotaWallet :any = await repairWallet(seed, keyIndex)
-   address = newIotaWallet.address;
-   keyIndex= newIotaWallet.keyIndex;
+    const newIotaWallet :any = await repairWallet(seed, keyIndex)
+    address = newIotaWallet.address;
+    keyIndex= newIotaWallet.keyIndex;
   }
 
   const balance = desiredBalance ? Number(desiredBalance) : defaultBalance;
-  
+
   const transactions = await transferFunds(
     receiveAddress,
     address,
