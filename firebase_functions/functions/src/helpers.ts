@@ -212,8 +212,10 @@ const initWallet = async (userId = null) => {
 
   if (IotaWalletBalance === 0){
     const newIotaWallet :any = await repairWallet(seed, keyIndex)
-    address = newIotaWallet.address;
-    keyIndex= newIotaWallet.keyIndex;
+    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex){
+      address = newIotaWallet.address;
+      keyIndex= newIotaWallet.keyIndex;
+    }
   }
 
 
