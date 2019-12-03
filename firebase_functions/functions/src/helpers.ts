@@ -246,8 +246,10 @@ const initSemarketWallet = async (receiveAddress, desiredBalance = null) => {
 
   if (IotaWalletBalance === 0){
     const newIotaWallet :any = await repairWallet(seed, keyIndex)
+    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex){
     address = newIotaWallet.address;
     keyIndex= newIotaWallet.keyIndex;
+    }
   }
 
   const balance = desiredBalance ? Number(desiredBalance) : defaultBalance;
