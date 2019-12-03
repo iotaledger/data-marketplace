@@ -163,11 +163,62 @@ const faucet = async receiveAddress => {
   );
 };
 
+
+const getBalance = async address => {
+  try {
+    if (!address) {
+      return 0;
+    }
+    const { provider } = await getSettings();
+    const { getBalances } = composeAPI({ provider });
+    const { balances } = await getBalances([address], 100);
+    return balances && balances.length > 0 ? balances[0] : 0;
+  } catch (error) {
+    console.error('getBalance error', error);
+    return 0;
+  }
+};
+
+
+const repairWallet = async (seed, keyIndex) => {
+  try {
+    //Iterating through keyIndex ordered by likelyhood
+    for (let value of [-2, -1, 1, 2, 3, 4, -3, -4, -5, -6, -7, 5, 6, 7]) {
+      const newIndex = Number(keyIndex) + Number(value)
+      if (newIndex >= 0) {
+        const newAddress = await generateAddress(seed, newIndex)
+        const newBalance = await getBalance(newAddress);
+        if (newBalance > 0) {
+          return { address: newAddress, keyIndex: newIndex };
+        }
+      }
+    }
+  } catch (error) {
+    console.log("Repair wallet Error", error)
+    return error;
+  }
+}
+
+
+
 const initWallet = async (userId = null) => {
   const receiveSeed = generateSeed();
   const receiveKeyIndex = 0;
   const receiveAddress = generateNewAddress(receiveSeed, true);
-  const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
+
+  let { keyIndex, seed, defaultBalance } = await getIotaWallet();
+  let address = await generateAddress(seed, keyIndex)
+  const IotaWalletBalance = await getBalance(address)
+
+  if (IotaWalletBalance === 0){
+    const newIotaWallet :any = await repairWallet(seed, keyIndex)
+    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex){
+      address = newIotaWallet.address;
+      keyIndex= newIotaWallet.keyIndex;
+    }
+  }
+
+
   const transactions = await transferFunds(
     receiveAddress,
     address,
@@ -189,8 +240,20 @@ const initWallet = async (userId = null) => {
 };
 
 const initSemarketWallet = async (receiveAddress, desiredBalance = null) => {
-  const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
+  let { keyIndex, seed, defaultBalance } = await getIotaWallet();
+  let address = await generateAddress(seed, keyIndex)
+  const IotaWalletBalance = await getBalance(address)
+
+  if (IotaWalletBalance === 0){
+    const newIotaWallet :any = await repairWallet(seed, keyIndex)
+    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex){
+    address = newIotaWallet.address;
+    keyIndex= newIotaWallet.keyIndex;
+    }
+  }
+
   const balance = desiredBalance ? Number(desiredBalance) : defaultBalance;
+
   const transactions = await transferFunds(
     receiveAddress,
     address,
@@ -283,5 +346,7 @@ module.exports = {
   gpsToAddress,
   addressToIac,
   gpsToIac,
-  initSemarketWallet
+  initSemarketWallet,
+  repairWallet,
+  getBalance,
 }
