@@ -182,13 +182,14 @@ const getBalance = async address => {
 
 const repairWallet = async (seed, keyIndex) => {
   try {
-    //Iterating through keyIndex ordered by likelyhood
-    for (let value of [-2, -1, 1, 2, 3, 4, -3, -4, -5, -6, -7, 5, 6, 7]) {
+    // Iterating through keyIndex ordered by likelyhood
+    for (const value of [-2, -1, 1, 2, 3, 4, -3, -4, -5, -6, -7, 5, 6, 7]) {
       const newIndex = Number(keyIndex) + Number(value)
       if (newIndex >= 0) {
         const newAddress = await generateAddress(seed, newIndex)
         const newBalance = await getBalance(newAddress);
         if (newBalance > 0) {
+          console.log(`Repair wallet executed. Old keyIndex: ${keyIndex}, new keyIndex: ${newIndex}. New wallet balance: ${newBalance}. New address: ${newAddress}`)
           return { address: newAddress, keyIndex: newIndex };
         }
       }
@@ -199,8 +200,6 @@ const repairWallet = async (seed, keyIndex) => {
   }
 }
 
-
-
 const initWallet = async (userId = null) => {
   const receiveSeed = generateSeed();
   const receiveKeyIndex = 0;
@@ -210,14 +209,13 @@ const initWallet = async (userId = null) => {
   let address = await generateAddress(seed, keyIndex)
   const IotaWalletBalance = await getBalance(address)
 
-  if (IotaWalletBalance === 0){
-    const newIotaWallet :any = await repairWallet(seed, keyIndex)
-    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex){
+  if (IotaWalletBalance === 0) {
+    const newIotaWallet = await repairWallet(seed, keyIndex)
+    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex) {
       address = newIotaWallet.address;
-      keyIndex= newIotaWallet.keyIndex;
+      keyIndex = newIotaWallet.keyIndex;
     }
   }
-
 
   const transactions = await transferFunds(
     receiveAddress,
@@ -244,11 +242,11 @@ const initSemarketWallet = async (receiveAddress, desiredBalance = null) => {
   let address = await generateAddress(seed, keyIndex)
   const IotaWalletBalance = await getBalance(address)
 
-  if (IotaWalletBalance === 0){
-    const newIotaWallet :any = await repairWallet(seed, keyIndex)
-    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex){
-    address = newIotaWallet.address;
-    keyIndex= newIotaWallet.keyIndex;
+  if (IotaWalletBalance === 0) {
+    const newIotaWallet = await repairWallet(seed, keyIndex)
+    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex) {
+      address = newIotaWallet.address;
+      keyIndex = newIotaWallet.keyIndex;
     }
   }
 
