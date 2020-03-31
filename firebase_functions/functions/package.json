@@ -26,22 +26,25 @@
     "@iota/area-codes": "^0.1.1",
     "@iota/bundle-validator": "^1.0.0-beta.23",
     "@iota/converter": "^1.0.0-beta.23",
-    "@iota/core": "^1.0.0-beta.27",
+    "@iota/core": "^1.0.0-beta.29",
     "@iota/mam": "^0.7.3",
     "@iota/transaction-converter": "^1.0.0-beta.23",
-    "axios": "^0.19.0",
+    "axios": "^0.19.2",
     "bluebird": "^3.7.2",
     "cors": "^2.8.5",
-    "firebase-admin": "^8.9.0",
-    "firebase-functions": "^3.3.0",
+    "firebase-admin": "^8.10.0",
+    "firebase-functions": "^3.5.0",
     "mailgun-js": "^0.22.0"
   },
   "devDependencies": {
-    "@firebase/app-types": "^0.5.0",
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.4"
+    "@firebase/app-types": "^0.6.0",
+    "tslint": "^6.1.0",
+    "typescript": "^3.8.3"
   },
   "engines": {
     "node": "8"
+  },
+  "resolutions": {
+    "minimist": "^1.2.3"
   }
 }

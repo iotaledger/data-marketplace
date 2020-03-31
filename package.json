@@ -33,38 +33,38 @@
   "private": true,
   "dependencies": {
     "@iota/converter": "^1.0.0-beta.23",
-    "@iota/core": "^1.0.0-beta.27",
+    "@iota/core": "^1.0.0-beta.29",
     "@iota/http-client": "^1.0.0-beta.23",
     "@iota/mam": "^0.7.3",
     "date-fns": "^1.30.1",
     "file-saver": "^2.0.2",
-    "firebase": "^7.6.1",
+    "firebase": "^7.13.1",
     "in-view": "^0.6.1",
     "jszip": "^3.2.2",
     "lodash-es": "^4.17.15",
-    "query-string": "^6.9.0",
-    "react": "^16.12.0",
+    "query-string": "^6.11.1",
+    "react": "^16.13.1",
     "react-burger-menu": "^2.6.13",
     "react-clipboard.js": "^2.0.16",
-    "react-cookie": "^3.1.1",
-    "react-dom": "^16.12.0",
+    "react-cookie": "^4.0.3",
+    "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
-    "react-map-gl": "^4.1.1",
+    "react-map-gl": "^5.2.3",
     "react-recaptcha": "^2.3.10",
-    "react-redux": "^6.0.1",
+    "react-redux": "^7.2.0",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-pack": "^0.1.5",
-    "styled-components": "4.4.1",
+    "styled-components": "5.0.1",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@firebase/app-types": "^0.5.0",
-    "node-sass": "^4.13.0",
-    "react-scripts": "^3.3.0",
-    "webpack-bundle-analyzer": "^3.6.0"
+    "@firebase/app-types": "^0.6.0",
+    "node-sass": "^4.13.1",
+    "react-scripts": "^3.4.1",
+    "webpack-bundle-analyzer": "^3.6.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -86,5 +86,9 @@
     "> 2%",
     "last 2 versions",
     "edge >= 16"
-  ]
+  ],
+  "resolutions": {
+    "acorn": "^7.1.1",
+    "minimist": "^1.2.3"
+  }
 }
