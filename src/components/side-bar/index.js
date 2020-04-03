@@ -24,7 +24,7 @@ const SideBar = ({ sensor, settings, isLoading, downloadSensorStreamJSON, purcha
         <div>
           {!isEmpty(settings) ? (
             <a
-              href={`${settings.tangleExplorer}/${sensor.address}`}
+              href={`${settings.tangleExplorer}/${sensor.address}/devnet`}
               target="_blank"
               rel="noopener noreferrer"
             >
