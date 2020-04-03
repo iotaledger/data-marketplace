@@ -33,18 +33,18 @@
     "bluebird": "^3.7.2",
     "cors": "^2.8.5",
     "firebase-admin": "^8.10.0",
-    "firebase-functions": "^3.5.0",
+    "firebase-functions": "^3.6.0",
     "mailgun-js": "^0.22.0"
   },
   "devDependencies": {
     "@firebase/app-types": "^0.6.0",
-    "tslint": "^6.1.0",
+    "tslint": "^6.1.1",
     "typescript": "^3.8.3"
   },
   "engines": {
     "node": "8"
   },
   "resolutions": {
-    "minimist": "^1.2.3"
+    "minimist": "^1.2.5"
   }
 }
