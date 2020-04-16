@@ -1,5 +1,24 @@
+const { axios } = require('axios');
 const { getEmailSettings } = require('./firebase');
 const { checkRecaptcha } = require('./helpers');
+
+const getDoubleOptIn = (packet, emailSettings) => {
+  const { emailRecepient } = emailSettings;
+  const { newsletter } = packet;
+  if (newsletter.toString() === 'true') {
+    //Add to pending list and send out confirmation email 
+    axios.post('https://newsletter-api.iota.org/api/signup',
+    {
+      email: emailRecepient,
+      projectID: 'DMP'
+    },
+    (error) => {
+      if (error) {
+        console.log('DoubleOptIn error', error);
+      }
+  });
+}
+};
 
 const mailgunSendEmail = (packet, emailSettings) => {
   const {
@@ -49,6 +68,10 @@ const mailgunSendEmail = (packet, emailSettings) => {
   );
 
   if (packet.newsletter.toString() === 'true') {
+
+    //Get opt-in 
+    getDoubleOptIn(packet, emailSettings)
+
     const list = mg.lists(emailList);
     const user = {
       subscribed: true,
