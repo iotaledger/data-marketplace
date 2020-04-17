@@ -8,16 +8,16 @@ const getDoubleOptIn = (packet, emailSettings) => {
   if (newsletter.toString() === 'true') {
     //Add to pending list and send out confirmation email 
     axios.post('https://newsletter-api.iota.org/api/signup',
-    {
-      email: emailRecepient,
-      projectID: 'DMP'
-    },
-    (error) => {
-      if (error) {
-        console.log('DoubleOptIn error', error);
-      }
-  });
-}
+      {
+        email: emailRecepient,
+        projectID: 'DMP'
+      },
+      (error) => {
+        if (error) {
+          console.log('DoubleOptIn error', error);
+        }
+      });
+  }
 };
 
 const mailgunSendEmail = (packet, emailSettings) => {
@@ -89,13 +89,14 @@ const mailgunSendEmail = (packet, emailSettings) => {
     });
   }
 
-  mg.messages().send(
-    {
-      from: `Data Marketplace <${emailSender}>`,
-      to: packet.email,
-      'h:Reply-To': emailReplyTo,
-      subject: 'Message Received - Data Marketplace',
-      html: `Hi
+  else {
+    mg.messages().send(
+      {
+        from: `Data Marketplace <${emailSender}>`,
+        to: packet.email,
+        'h:Reply-To': emailReplyTo,
+        subject: 'Message Received - Data Marketplace',
+        html: `Hi
         <br/>
         <br/>
         Many thanks for your interest in IOTA and inquiry to join the Data Marketplace. The Proof of Concept initiative receives an overwhelming amount of interest and the list of candidates is exceeding our internal capacity to support the integration of all suggested devices.
@@ -113,13 +114,14 @@ const mailgunSendEmail = (packet, emailSettings) => {
         IOTA Foundation
         <br/>
         www.iota.org`,
-    },
-    (error, body) => {
-      if (error) {
-        console.log('Email automatic reply error', error);
+      },
+      (error, body) => {
+        if (error) {
+          console.log('Email automatic reply error', error);
+        }
       }
-    }
-  );
+    );
+  }
 };
 
 exports.sendEmail = async (packet: any) => {
