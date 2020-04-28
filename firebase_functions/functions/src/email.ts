@@ -3,6 +3,7 @@ const { getEmailSettings } = require('./firebase');
 const { checkRecaptcha } = require('./helpers');
 
 const getDoubleOptIn = (packet, emailSettings) => {
+  return new Promise((resolve, reject) => {
   const { emailRecepient } = emailSettings;
   const { newsletter } = packet;
   if (newsletter.toString() === 'true') {
@@ -11,16 +12,19 @@ const getDoubleOptIn = (packet, emailSettings) => {
       {
         email: emailRecepient,
         projectID: 'DMP'
-      },
-      (error) => {
-        if (error) {
-          console.log('DoubleOptIn error', error);
+      })
+      .then( response => {
+          resolve(response)
+      },(error) => {
+      reject(error)
         }
-      });
-  }
-};
+        );
+      }
+  });
+}
 
-const mailgunSendEmail = (packet, emailSettings) => {
+
+const mailgunSendEmail = async (packet, emailSettings) => {
   const {
     apiKey, domain, emailRecepient, emailBcc, emailReplyTo, emailSender, emailList,
   } = emailSettings;
@@ -70,7 +74,7 @@ const mailgunSendEmail = (packet, emailSettings) => {
   if (packet.newsletter.toString() === 'true') {
 
     //Get opt-in 
-    getDoubleOptIn(packet, emailSettings)
+    await getDoubleOptIn(packet, emailSettings)
 
     const list = mg.lists(emailList);
     const user = {
