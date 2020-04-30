@@ -496,13 +496,13 @@ exports.location = functions.https.onRequest((req, res) => {
       const params = req.query;
       let result = null;
       if (params.address) {
-        result = await addressToIac(decodeURI(params.address));
-        console.log(`Converted address "${decodeURI(params.address)}" to "${result}"`);
+        result = await addressToIac(decodeURI(params.address.toString()));
+        console.log(`Converted address "${decodeURI(params.address.toString())}" to "${result}"`);
       } else if (params.iac) {
         result = await iacToAddress(params.iac);
         console.log(`Converted area code "${params.iac}" to "${result}"`);
       } else if (params.gps) {
-        const coordinates = params.gps.split(',').map(coord => Number(coord));
+        const coordinates = params.gps.toString().split(',').map(coord => Number(coord));
         result = await gpsToIac(...coordinates);
         console.log(`Converted GPS coordinates "${params.gps}" to "${result}"`);
       }
