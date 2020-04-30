@@ -64,7 +64,7 @@ const mailgunSendEmail = async (packet, emailSettings) => {
           <p><strong>Newsletter: </strong>   ${packet.newsletter}</p>
         </div>`,
     },
-    (error, body) => {
+    (error) => {
       if (error) {
         console.log('Email callback error', error);
       }
@@ -119,7 +119,7 @@ const mailgunSendEmail = async (packet, emailSettings) => {
         <br/>
         www.iota.org`,
       },
-      (error, body) => {
+      (error) => {
         if (error) {
           console.log('Email automatic reply error', error);
         }
