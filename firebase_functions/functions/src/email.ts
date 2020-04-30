@@ -138,6 +138,6 @@ exports.sendEmail = async (packet: any) => {
   }
 
   // Send message
-  mailgunSendEmail(packet, emailSettings);
+  await mailgunSendEmail(packet, emailSettings);
   return true;
 };
