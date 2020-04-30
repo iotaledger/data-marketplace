@@ -2,28 +2,6 @@ const axios = require('axios');
 const { getEmailSettings } = require('./firebase');
 const { checkRecaptcha } = require('./helpers');
 
-const getDoubleOptIn = (packet, emailSettings) => {
-  return new Promise((resolve, reject) => {
-  const { emailRecepient } = emailSettings;
-  const { newsletter } = packet;
-  if (newsletter.toString() === 'true') {
-    //Add to pending list and send out confirmation email 
-    axios.post('https://newsletter-api.iota.org/api/signup',
-      {
-        email: emailRecepient,
-        projectID: 'DMP'
-      })
-      .then( response => {
-          resolve(response)
-      },(error) => {
-      reject(error)
-        }
-        );
-      }
-  });
-}
-
-
 const mailgunSendEmail = async (packet, emailSettings) => {
   const {
     apiKey, domain, emailRecepient, emailBcc, emailReplyTo, emailSender, emailList,
@@ -72,28 +50,33 @@ const mailgunSendEmail = async (packet, emailSettings) => {
   );
 
   if (packet.newsletter.toString() === 'true') {
-
-    //Get opt-in 
-    await getDoubleOptIn(packet, emailSettings)
-
-    const list = mg.lists(emailList);
-    const user = {
-      subscribed: true,
-      address: packet.email,
-      name: packet.name,
-      vars: {
-        company: packet.company,
-      },
-    };
-
-    list.members().create(user, (error, data) => {
-      if (error) {
-        console.log('Email members callback error', error);
-      }
+    //Add to pending list and send out confirmation email 
+    axios.post('https://newsletter-api.iota.org/api/signup',
+    {
+      email: emailRecepient,
+      projectID: 'DMP'
+    })
+    .then(() => {
+      const list = mg.lists(emailList);
+      const user = {
+        subscribed: true,
+        address: packet.email,
+        name: packet.name,
+        vars: {
+          company: packet.company,
+        },
+      };
+  
+      list.members().create(user, (error) => {
+        if (error) {
+          console.error('Email members callback error', error);
+        }
+      });
+    }, (error) => {
+      console.error(error);
     });
-  }
 
-  else {
+  } else {
     mg.messages().send(
       {
         from: `Data Marketplace <${emailSender}>`,
