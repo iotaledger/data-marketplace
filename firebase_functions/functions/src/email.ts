@@ -55,7 +55,7 @@ const mailgunSendEmail = async (packet, emailSettings) => {
       //Add to pending list and send out confirmation email 
       axios.post('https://newsletter-api.iota.org/api/signup',
       {
-        email: emailRecepient,
+        email: packet.email,
         projectID: 'DMP'
       })
       .then(() => {
