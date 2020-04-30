@@ -66,7 +66,7 @@ const mailgunSendEmail = async (packet, emailSettings) => {
     },
     (error) => {
       if (error) {
-        console.log('Email callback error', error);
+        console.error('Email callback error', error);
       }
     }
   );
@@ -121,7 +121,7 @@ const mailgunSendEmail = async (packet, emailSettings) => {
       },
       (error) => {
         if (error) {
-          console.log('Email automatic reply error', error);
+          console.error('Email automatic reply error', error);
         }
       }
     );
@@ -133,7 +133,7 @@ exports.sendEmail = async (packet: any) => {
   // Check Recaptcha
   const recaptcha = await checkRecaptcha(packet.captcha, emailSettings);
   if (!recaptcha || !recaptcha.success) {
-    console.log('sendEmail failed. Recaptcha is incorrect. ', recaptcha['error-codes']);
+    console.error('sendEmail failed. Recaptcha is incorrect. ', recaptcha['error-codes']);
     return 'Malformed Request';
   }
 
