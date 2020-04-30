@@ -1,4 +1,4 @@
-const { axios } = require('axios');
+const axios = require('axios');
 const { getEmailSettings } = require('./firebase');
 const { checkRecaptcha } = require('./helpers');
 
