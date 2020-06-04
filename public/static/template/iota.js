@@ -10,8 +10,14 @@ let mamState = Mam.init(provider);
 // Random Key Generator
 const generateRandomKey = length => {
   const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
-  const values = crypto.randomBytes(length);
-  return Array.from(new Array(length), (x, i) => charset[values[i] % charset.length]).join('');
+  let key = '';
+  while (key.length < length) {
+    const byte = crypto.randomBytes(1);
+    if (byte[0] < 243) {
+        key += charset.charAt(byte[0] % 27);
+    }
+  }
+  return key;
 };
 
 // Publish to Tangle
