@@ -75,7 +75,7 @@ const findTx = (hashes, provider, iotaApiVersion) => {
         const txBundle = response.data.trytes.map(trytes => asTransactionObject(trytes));
         resolve(txBundle);
       })
-      .catch(error => {
+      .catch(() => {
         console.error(`findTx failed. Couldn't find your transaction`);
         throw Error(`Couldn't find your transaction!`);
         reject();
@@ -103,9 +103,8 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
     const { provider } = await getSettings();
     const { getBalances, sendTrytes, getLatestInclusion } = composeAPI({ provider });
     const prepareTransfers = createPrepareTransfers();
-    const { balances } = await getBalances([ address ], 100);
     const security = 2;
-    const balance = balances && balances.length > 0 ? balances[0] : 0;
+    const balance = await getBalance(address);
 
     // Depth or how far to go for tip selection entry point
     const depth = 5
@@ -115,7 +114,7 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
     const minWeightMagnitude = 9
 
     if (balance === 0) {
-      console.error('transferFunds. Insufficient balance', address, balances, userId);
+      console.error('transferFunds. Insufficient balance', address, balance, userId);
       return null;
     }
 
@@ -215,11 +214,11 @@ const initWallet = async (userId = null) => {
   const receiveAddress = generateNewAddress(receiveSeed, true);
 
   let { keyIndex, seed, defaultBalance } = await getIotaWallet();
-  let address = await generateAddress(seed, keyIndex)
-  const IotaWalletBalance = await getBalance(address)
+  let address = await generateAddress(seed, keyIndex);
+  const iotaWalletBalance = await getBalance(address);
 
-  if (IotaWalletBalance === 0) {
-    const newIotaWallet = await repairWallet(seed, keyIndex)
+  if (iotaWalletBalance === 0) {
+    const newIotaWallet = await repairWallet(seed, keyIndex);
     if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex) {
       address = newIotaWallet.address;
       keyIndex = newIotaWallet.keyIndex;
@@ -248,11 +247,11 @@ const initWallet = async (userId = null) => {
 
 const initSemarketWallet = async (receiveAddress, desiredBalance = null) => {
   let { keyIndex, seed, defaultBalance } = await getIotaWallet();
-  let address = await generateAddress(seed, keyIndex)
-  const IotaWalletBalance = await getBalance(address)
+  let address = await generateAddress(seed, keyIndex);
+  const iotaWalletBalance = await getBalance(address);
 
-  if (IotaWalletBalance === 0) {
-    const newIotaWallet = await repairWallet(seed, keyIndex)
+  if (iotaWalletBalance === 0) {
+    const newIotaWallet = await repairWallet(seed, keyIndex);
     if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex) {
       address = newIotaWallet.address;
       keyIndex = newIotaWallet.keyIndex;
