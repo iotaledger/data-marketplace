@@ -42,7 +42,7 @@
     "typescript": "^3.8.3"
   },
   "engines": {
-    "node": "8"
+    "node": "10"
   },
   "resolutions": {
     "acorn": "^7.1.1",
