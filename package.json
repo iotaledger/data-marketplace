@@ -1,6 +1,6 @@
 {
   "name": "data-marketplace",
-  "version": "2.5.5",
+  "version": "2.5.7",
   "description": "IOTA Data Marketplace",
   "contributors": [
     {
@@ -32,39 +32,39 @@
   },
   "private": true,
   "dependencies": {
-    "@iota/converter": "^1.0.0-beta.23",
-    "@iota/core": "^1.0.0-beta.29",
-    "@iota/http-client": "^1.0.0-beta.23",
+    "@iota/converter": "1.0.0-beta.30",
+    "@iota/core": "1.0.0-beta.30",
+    "@iota/http-client": "1.0.0-beta.30",
     "@iota/mam": "^0.7.3",
     "date-fns": "^1.30.1",
     "file-saver": "^2.0.2",
-    "firebase": "^7.14.6",
+    "firebase": "^7.15.5",
     "in-view": "^0.6.1",
-    "jszip": "^3.3.0",
+    "jszip": "^3.5.0",
     "lodash-es": "^4.17.15",
-    "query-string": "^6.11.1",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
-    "react-burger-menu": "^2.6.13",
+    "react-burger-menu": "^2.6.17",
     "react-clipboard.js": "^2.0.16",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
-    "react-map-gl": "^5.2.3",
+    "react-map-gl": "^5.2.7",
     "react-recaptcha": "^2.3.10",
     "react-redux": "^7.2.0",
-    "react-router": "^5.1.2",
-    "react-router-dom": "^5.1.2",
+    "react-router": "^5.2.0",
+    "react-router-dom": "^5.2.0",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-pack": "^0.1.5",
-    "styled-components": "5.0.1",
+    "styled-components": "5.1.1",
     "webfontloader": "^1.6.28"
   },
   "devDependencies": {
-    "@firebase/app-types": "^0.6.0",
+    "@firebase/app-types": "^0.6.1",
     "node-sass": "^4.14.1",
     "react-scripts": "^3.4.1",
-    "webpack-bundle-analyzer": "^3.6.1"
+    "webpack-bundle-analyzer": "^3.8.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -80,7 +80,7 @@
     "extends": "react-app"
   },
   "engines": {
-    "node": ">=8.0"
+    "node": ">=10.0"
   },
   "browserslist": [
     "> 2%",
@@ -91,6 +91,7 @@
     "acorn": "^7.1.1",
     "kind-of": "^6.0.3",
     "minimist": "^1.2.5",
+    "websocket-extensions": "^0.1.4",
     "yargs-parser": "^18.1.3"
   }
 }

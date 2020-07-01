@@ -422,7 +422,7 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
     try {
       const device = await getDevice(packet.deviceId);
       const wallet = await getUserWallet(packet.userId);
-      const { iotaApiVersion, provider, defaultPrice } = await getSettings();
+      const { iotaApiVersion, nodes, defaultPrice } = await getSettings();
       let price = defaultPrice;
       if (device) {
         if (device.price) {
@@ -453,7 +453,7 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
         const hashes = transactions && transactions.map(transaction => transaction.hash);
 
         // Find TX on network and parse
-        const bundle = await findTx(hashes, provider, iotaApiVersion);
+        const bundle = await findTx(hashes, nodes[0], iotaApiVersion);
 
         // Make sure TX is valid
         if (!validateBundleSignatures(bundle)) {
@@ -479,7 +479,6 @@ exports.semarket = functions.https.onRequest((req, res) => {
       const params = req.query;
       if (params.address) {
         const transactions = await initSemarketWallet(params.address, params.amount || null);
-        console.log('semarket wallet transactions:', transactions.length);
         return res.json({ success: transactions.length > 0 });
       }
       return res.json({ success: false, error: 'no address' });
