@@ -479,7 +479,6 @@ exports.semarket = functions.https.onRequest((req, res) => {
       const params = req.query;
       if (params.address) {
         const transactions = await initSemarketWallet(params.address, params.amount || null);
-        console.log('semarket wallet transactions:', transactions.length);
         return res.json({ success: transactions.length > 0 });
       }
       return res.json({ success: false, error: 'no address' });
