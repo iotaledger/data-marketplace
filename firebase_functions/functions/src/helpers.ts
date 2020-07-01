@@ -83,6 +83,21 @@ const findTx = (hashes, provider, iotaApiVersion) => {
   });
 };
 
+const getBalance = async address => {
+  try {
+    if (!address) {
+      return 0;
+    }
+    const settings = await getSettings();
+    const api = await getApi(settings);
+    const { balances } = await api.getBalances([address]);
+    return balances && balances.length > 0 ? balances[0] : 0;
+  } catch (error) {
+    console.error('getBalance error', error);
+    return 0;
+  }
+};
+
 const transferFunds = async (receiveAddress, address, keyIndex, seed, value, updateFn, userId = null) => {
   try {
     const { provider } = await getSettings();
@@ -161,22 +176,6 @@ const faucet = async receiveAddress => {
     defaultBalance,
     updateWalletAddressKeyIndex,
   );
-};
-
-
-const getBalance = async address => {
-  try {
-    if (!address) {
-      return 0;
-    }
-    const { provider } = await getSettings();
-    const { getBalances } = composeAPI({ provider });
-    const { balances } = await getBalances([address], 100);
-    return balances && balances.length > 0 ? balances[0] : 0;
-  } catch (error) {
-    console.error('getBalance error', error);
-    return 0;
-  }
 };
 
 
