@@ -166,19 +166,6 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
   }
 }
 
-const faucet = async receiveAddress => {
-  const { address, keyIndex, seed, defaultBalance } = await getIotaWallet();
-  return await transferFunds(
-    receiveAddress,
-    address,
-    keyIndex,
-    seed,
-    defaultBalance,
-    updateWalletAddressKeyIndex,
-  );
-};
-
-
 const repairWallet = async (seed, keyIndex) => {
   try {
     // Iterating through keyIndex ordered by likelyhood
@@ -198,6 +185,29 @@ const repairWallet = async (seed, keyIndex) => {
     return error;
   }
 }
+
+const faucet = async receiveAddress => {
+  let { keyIndex, seed, defaultBalance } = await getIotaWallet();
+  let address = await generateAddress(seed, keyIndex);
+  const iotaWalletBalance = await getBalance(address);
+
+  if (iotaWalletBalance === 0) {
+    const newIotaWallet = await repairWallet(seed, keyIndex);
+    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex) {
+      address = newIotaWallet.address;
+      keyIndex = newIotaWallet.keyIndex;
+    }
+  }
+
+  return await transferFunds(
+    receiveAddress,
+    address,
+    keyIndex,
+    seed,
+    defaultBalance,
+    updateWalletAddressKeyIndex,
+  );
+};
 
 const initWallet = async (userId = null) => {
   const receiveSeed = generateSeed();
