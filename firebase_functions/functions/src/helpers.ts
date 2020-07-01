@@ -107,11 +107,11 @@ const transferFunds = async (receiveAddress, address, keyIndex, seed, value, upd
     const balance = await getBalance(address);
 
     // Depth or how far to go for tip selection entry point
-    const depth = 5
+    const depth = settings.tangle.depth;
 
     // Difficulty of Proof-of-Work required to attach transaction to tangle.
     // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
-    const minWeightMagnitude = 9
+    const minWeightMagnitude = settings.tangle.mwm;
 
     if (balance === 0) {
       console.error('transferFunds. Insufficient balance', address, balance, userId);
