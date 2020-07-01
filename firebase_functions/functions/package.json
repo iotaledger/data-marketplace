@@ -23,6 +23,7 @@
     }
   ],
   "dependencies": {
+    "@iota/client-load-balancer": "github:iotaledger/client-load-balancer",
     "@iota/area-codes": "^0.1.1",
     "@iota/bundle-validator": "1.0.0-beta.30",
     "@iota/converter": "1.0.0-beta.30",
