@@ -1,6 +1,7 @@
 import * as crypto from 'crypto';
 const axios = require('axios');
-const { composeAPI, createPrepareTransfers, generateAddress } = require('@iota/core');
+const { composeAPI, FailMode, LinearWalkStrategy, SuccessMode } = require('@iota/client-load-balancer');
+const { createPrepareTransfers, generateAddress } = require('@iota/core');
 const { asTransactionObject } = require('@iota/transaction-converter');
 const iotaAreaCodes = require('@iota/area-codes');
 const {
@@ -18,6 +19,27 @@ const checkRecaptcha = async (captcha, emailSettings) => {
     url: `https://www.google.com/recaptcha/api/siteverify?secret=${emailSettings.googleSecretKey}&response=${captcha}`,
   });
   return response ? response.data : null;
+};
+
+const getApi = async settings => {
+  const api = await composeAPI({
+    nodeWalkStrategy: new LinearWalkStrategy(
+      settings.nodes.map(provider => ({ provider }))
+    ),
+    depth: settings.tangle.depth,
+    mwm: settings.tangle.mwm,
+    successMode: SuccessMode[settings.tangle.loadBalancerSuccessMode],
+    failMode: FailMode.all,
+    timeoutMs: settings.tangle.loadBalancerTimeout,
+    // tryNodeCallback: (node) => {
+    //   console.log(`Trying node ${node.provider}`);
+    // },
+    failNodeCallback: (node, err) => {
+      console.error(`Failed node ${node.provider}, ${err.message}`);
+    }
+  });
+  
+  return api;
 };
 
 const generateSeed = (length = 81) => {
