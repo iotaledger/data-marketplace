@@ -273,7 +273,18 @@ const initSemarketWallet = async (receiveAddress, desiredBalance = null) => {
 };
 
 const purchaseData = async (userId, receiveAddress, value) => {
-  const { address, keyIndex, seed } = await getUserWallet(userId);
+  let { keyIndex, seed } = await getUserWallet(userId);
+  let address = await generateAddress(seed, keyIndex);
+  const walletBalance = await getBalance(address);
+
+  if (walletBalance === 0) {
+    const newWallet = await repairWallet(seed, keyIndex);
+    if (newWallet && newWallet.address && newWallet.keyIndex) {
+      address = newWallet.address;
+      keyIndex = newWallet.keyIndex;
+    }
+  }
+
   const transactions = await transferFunds(
     receiveAddress,
     address,
