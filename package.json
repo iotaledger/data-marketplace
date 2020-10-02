@@ -90,7 +90,10 @@
   "resolutions": {
     "acorn": "^7.1.1",
     "kind-of": "^6.0.3",
+    "lodash": "^4.17.20",
     "minimist": "^1.2.5",
+    "node-fetch": "^2.6.1",
+    "node-forge": "^0.10.0",
     "websocket-extensions": "^0.1.4",
     "yargs-parser": "^18.1.3"
   }
