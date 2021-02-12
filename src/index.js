@@ -11,7 +11,7 @@ import * as serviceWorker from './serviceWorker';
 
 WebFontLoader.load({
   google: {
-    families: ['Nunito Sans:300,400,600,700', 'Material Icons'],
+    families: ['Nunito Sans:200,300,400,600,700,800', 'Material Icons'],
   },
 });
 
