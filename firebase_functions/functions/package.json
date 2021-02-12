@@ -29,11 +29,11 @@
     "@iota/converter": "1.0.0-beta.30",
     "@iota/core": "1.0.0-beta.30",
     "@iota/transaction-converter": "1.0.0-beta.30",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "cors": "^2.8.5",
-    "firebase-admin": "^9.2.0",
-    "firebase-functions": "^3.11.0",
+    "firebase-admin": "^9.5.0",
+    "firebase-functions": "^3.13.1",
     "mailgun-js": "^0.22.0"
   },
   "devDependencies": {
@@ -42,10 +42,11 @@
     "typescript": "^3.8.3"
   },
   "engines": {
-    "node": "10"
+    "node": "12"
   },
   "resolutions": {
     "acorn": "^7.1.1",
+    "date-and-time": "^0.14.2",
     "lodash": "^4.17.19",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
