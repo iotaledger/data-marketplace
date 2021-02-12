@@ -1,15 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Loading from '../loading';
 
 export default ({ notification, show, error = null, purchasePrice = null, callback = null }) => {
+  const [isVisible, setVisible] = useState(show);
+  
   const backButton = (
     <Link to={'/demo'}>
       <Button type="button" className="btn btn-accent txt-bold modal-trigger">
         Go back
       </Button>
     </Link>
+  );
+
+  const closeButton = (
+    <Button 
+      type="button" 
+      className="btn btn-accent txt-bold modal-trigger"
+      onClick={() => setVisible(false)}  
+    >
+      Close
+    </Button>
   );
 
   const purchaseButton = (
@@ -61,7 +73,7 @@ export default ({ notification, show, error = null, purchasePrice = null, callba
     dataReadingFailure: {
       heading: 'Data reading error',
       body: 'Sensor data can not be fully retrieved.',
-      button: backButton
+      button: closeButton
     },
     purchaseFailed: {
       heading: 'Purchase Failed',
@@ -77,7 +89,7 @@ export default ({ notification, show, error = null, purchasePrice = null, callba
   const content = notifications[notification];
 
   return (
-    <Modal className="access-modal-wrapper" show={show}>
+    <Modal className="access-modal-wrapper" show={isVisible}>
       <AccessBox className="access-modal">
         <Internal>
           { content.icon || null }
