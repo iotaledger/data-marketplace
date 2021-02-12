@@ -7,7 +7,7 @@ import Wallet from '../wallet';
 const SensorNav = ({ history, sensor }) => (
   <Main>
     <Back to={'/'} onClick={history.goBack}>
-      <img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
+      <Img src="/static/icons/icon-arrow-back-dark.svg" alt="Icon arrow" />
     </Back>
 
     <Header>
@@ -44,6 +44,10 @@ const Main = styled.nav`
 const Header = styled.header`
   margin: 10px auto 0 30px;
   display: flex;
+`;
+
+const Img = styled.img`
+  width: 18px;
 `;
 
 const Back = styled(Link)`
