@@ -29,5 +29,9 @@
     "marked": "^2.0.0",
     "node-sass": "^5.0.0",
     "rimraf": "^3.0.2"
+  },
+  "resolutions": {
+    "lodash.template": "^4.5.0",
+    "yargs-parser": "^20.2.5"
   }
 }
