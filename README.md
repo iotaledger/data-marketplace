@@ -1,5 +1,10 @@
 # Data Marketplace
 
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+⚠️ This repository is DEPRECATED - 
+MAM ( renamed to [IOTA Streams](https://github.com/iotaledger/streams) ) and IOTA Legacy network are not supported anymore. 
+
 The Proof of Concept Data Marketplace built using MAM and IOTA Tangle.
 
 Please read the series of technical blog posts to learn how to create new sensors, publish sensor data, and deploy your own instance of the Data Marketplace application.
