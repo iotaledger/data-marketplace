@@ -1,62 +1,56 @@
 import * as crypto from 'crypto';
 const axios = require('axios');
-const { composeAPI, FailMode, LinearWalkStrategy, SuccessMode } = require('@iota/client-load-balancer');
-const { createPrepareTransfers, generateAddress } = require('@iota/core');
-const { asTransactionObject } = require('@iota/transaction-converter');
+import { Client, ClientBuilder } from '@iota/client';
+import { MessageMetadata } from '@iota/client/lib/types';
 const iotaAreaCodes = require('@iota/area-codes');
 const {
   getSettings,
-  updateWalletAddressKeyIndex,
-  updateUserWalletAddressKeyIndex,
   getIotaWallet,
   getUserWallet,
   getGoogleMapsApiKey,
 } = require('./firebase');
 
-const checkRecaptcha = async (captcha, emailSettings) => {
-  const response = await axios({
-    method: 'post',
-    url: `https://www.google.com/recaptcha/api/siteverify?secret=${emailSettings.googleSecretKey}&response=${captcha}`,
-  });
-  return response ? response.data : null;
+/**
+ * Initializes client with devnet node
+ * @returns Client: https://client-lib.docs.iota.org/libraries/nodejs/api_reference.html#clientbuilder
+ */
+const getClient = async (): Promise<Client> => {
+  const settings = await getSettings();
+  const client = new ClientBuilder()
+    .node(settings.provider)
+    .localPow(true)
+    .build();
+  return client
+}
+
+/**
+ * Generates a new 32-byte (256-bit) uniformly randomly generated seed
+ * @returns Hex seed of 64 char length (32 bytes encoded in hexadecimal)
+ */
+const generateSeed = (): string => {
+  return crypto.createHash('sha256').update(crypto.randomBytes(256)).digest('hex');
 };
 
-const getApi = async settings => {
-  const api = await composeAPI({
-    nodeWalkStrategy: new LinearWalkStrategy(
-      settings.nodes.map(provider => ({ provider }))
-    ),
-    depth: settings.tangle.depth,
-    mwm: settings.tangle.mwm,
-    successMode: SuccessMode[settings.tangle.loadBalancerSuccessMode],
-    failMode: FailMode.all,
-    timeoutMs: settings.tangle.loadBalancerTimeout,
-    // tryNodeCallback: (node) => {
-    //   console.log(`Trying node ${node.provider}`);
-    // },
-    failNodeCallback: (node, err) => {
-      console.error(`Failed node ${node.provider}, ${err.message}`);
-    }
-  });
-  
-  return api;
-};
-
-const generateSeed = (length = 81) => {
-  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ9';
-  let seed = '';
-  while (seed.length < length) {
-    const byte = crypto.randomBytes(1)
-    if (byte[0] < 243) {
-      seed += charset.charAt(byte[0] % 27);
-    }
-  }
-  return seed;
-};
+/**
+ * Generates an address with a given seed
+ * @param seed to use when generating the address
+ * @param accountIndex defaults to 0, not needed in most cases
+ * @returns address
+ */
+const generateAddress = async (seed: string, accountIndex = 0): Promise<string> => {
+  const client = await getClient()
+  const addresses = await client.getAddresses(seed)
+    .accountIndex(accountIndex)
+    .range(0, 1)
+    .get()
+  // safe assertion since includeInternal() is not used and thus addresses is a string[]
+  const address = addresses[0] as string
+  return address
+}
 
 const generateUUID = () => {
   let d = new Date().getTime();
-  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
     const r = (d + Math.random() * 16) % 16 | 0;
     d = Math.floor(d / 16);
     return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
@@ -64,9 +58,6 @@ const generateUUID = () => {
   return uuid;
 };
 
-const generateNewAddress = (seed, checksum = false) => {
-  return generateAddress(seed, 0, 2, checksum);
-};
 
 const sanatiseObject = (device: any) => {
   if (!device.sensorId) return 'Please enter a device ID. eg. company-32';
@@ -79,246 +70,153 @@ const sanatiseObject = (device: any) => {
   return false;
 };
 
-const findTx = (hashes, provider, iotaApiVersion) => {
-  return new Promise((resolve, reject) => {
-    axios({
-      method: 'POST',
-      url: provider,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-IOTA-API-Version': iotaApiVersion,
-      },
-      data: {
-        command: 'getTrytes',
-        hashes,
-      },
-    })
-      .then(response => {
-        const txBundle = response.data.trytes.map(trytes => asTransactionObject(trytes));
-        resolve(txBundle);
-      })
-      .catch(() => {
-        console.error(`findTx failed. Couldn't find your transaction`);
-        throw Error(`Couldn't find your transaction!`);
-        reject();
-      });
-  });
+/**
+ * Find message on tangle by messageId
+ * @param messageId of the message to find
+ * @returns message_metadata: https://client-lib.docs.iota.org/libraries/nodejs/api_reference.html#messagemetadata
+ */
+const findMessage = async (messageId: string): Promise<MessageMetadata> => {
+  const client = await getClient();
+  const message_metadata = await client.getMessage().metadata(messageId)
+  return message_metadata
 };
 
-const getBalance = async address => {
-  try {
-    if (!address) {
-      return 0;
-    }
-    const settings = await getSettings();
-    const api = await getApi(settings);
-    const { balances } = await api.getBalances([address]);
-    return balances && balances.length > 0 ? balances[0] : 0;
-  } catch (error) {
-    console.error('getBalance error', error);
-    return 0;
+/**
+ * Transfers token from one address to another address
+ * @param receiveAddress address of token receiver
+ * @param address address of token sender
+ * @param seed seed of the sender
+ * @param tokens amount of tokens to transfer
+ * @returns messageId
+ */
+const transferFunds = async (receiveAddress: string, address: string, seed: string, tokens: number): Promise<string> | null => {
+  const client = await getClient();
+  const { balance } = await client.getAddressBalance(address)
+
+  if (balance < tokens) {
+    console.error('transferFunds. Insufficient balance', address, balance);
+    throw Error(`transferFunds. Insufficient balance on address: ${address}`)
   }
-};
-
-const transferFunds = async (receiveAddress, address, keyIndex, seed, value, updateFn, userId = null) => {
   try {
-    const settings = await getSettings();
-    const api = await getApi(settings);
-    const { getInclusionStates, sendTrytes } = api;
-    const prepareTransfers = createPrepareTransfers();
-    const security = 2;
-    const balance = await getBalance(address);
-
-    // Depth or how far to go for tip selection entry point
-    const depth = settings.tangle.depth;
-
-    // Difficulty of Proof-of-Work required to attach transaction to tangle.
-    // Minimum value on mainnet & spamnet is `14`, `9` on devnet and other testnets.
-    const minWeightMagnitude = settings.tangle.mwm;
-
-    if (balance === 0) {
-      console.error('transferFunds. Insufficient balance', address, balance, userId);
-      return null;
+    const message = await client.message()
+      .seed(seed)
+      .output(receiveAddress, tokens)
+      .submit()
+    const messageId = message.messageId
+    return messageId
+  } catch (e) {
+    if (e.message.includes("DustError")) {
+      throw Error(`No dust output allowed on address ${receiveAddress}`)
     }
-
-    const promise = new Promise((resolve, reject) => {
-      const transfers = [{ address: receiveAddress, value }];
-      const remainderAddress = generateAddress(seed, keyIndex + 1);
-      const options = {
-        inputs: [{
-          address,
-          keyIndex,
-          security,
-          balance
-        }],
-        security,
-        remainderAddress
-      };
-
-      prepareTransfers(seed, transfers, options)
-        .then(async trytes => {
-          sendTrytes(trytes, depth, minWeightMagnitude)
-            .then(async transactions => {
-              await updateFn(remainderAddress, keyIndex + 1, userId);
-
-              const hashes = transactions.map(transaction => transaction.hash);
-
-              let retries = 0;
-              while (retries++ < 20) {
-                const statuses = await getInclusionStates(hashes);
-                if (statuses.filter(status => status).length === 4) break;
-                await new Promise(resolved => setTimeout(resolved, 10000));
-              }
-
-              resolve(transactions)
-            })
-            .catch(error => {
-              console.error('transferFunds sendTrytes error', error);
-              reject(error);
-            })
-        })
-        .catch(error => {
-          console.error('transferFunds prepareTransfers error', error);
-          reject(error);
-        });
-    });
-    return promise;
-  } catch (error) {
-    console.error('transferFunds catch', error);
-    return error
+    console.error('Could not transfer funds: ', e)
+    throw Error('Could not transfer funds')
   }
 }
 
-const repairWallet = async (seed, keyIndex) => {
-  try {
-    // Iterating through keyIndex ordered by likelyhood
-    for (const value of [-2, -1, 1, 2, 3, 4, -3, -4, -5, -6, -7, 5, 6, 7]) {
-      const newIndex = Number(keyIndex) + Number(value)
-      if (newIndex >= 0) {
-        const newAddress = await generateAddress(seed, newIndex)
-        const newBalance = await getBalance(newAddress);
-        if (newBalance > 0) {
-          console.log(`Repair wallet executed. Old keyIndex: ${keyIndex}, new keyIndex: ${newIndex}. New wallet balance: ${newBalance}. New address: ${newAddress}`)
-          return { address: newAddress, keyIndex: newIndex };
-        }
-      }
-    }
-  } catch (error) {
-    console.log("Repair wallet Error", error)
-    return error;
-  }
-}
+/**
+ * Transfer default balance from iota wallet to address
+ * @param receiveAddress 
+ * @returns messageId
+ */
+const faucet = async (receiveAddress): Promise<string> => {
+  let { seed, defaultBalance } = await getIotaWallet();
 
-const faucet = async receiveAddress => {
-  let { keyIndex, seed, defaultBalance } = await getIotaWallet();
-  let address = await generateAddress(seed, keyIndex);
-  const iotaWalletBalance = await getBalance(address);
+  const client = await getClient();
+  const iotaWalletBalance = await client.getBalance(seed).get();
+  console.log("Iota wallet balance: ", iotaWalletBalance)
+  const address = await generateAddress(seed);
 
-  if (iotaWalletBalance === 0) {
-    const newIotaWallet = await repairWallet(seed, keyIndex);
-    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex) {
-      address = newIotaWallet.address;
-      keyIndex = newIotaWallet.keyIndex;
-    }
-  }
-
-  return await transferFunds(
+  const messageId = await transferFunds(
     receiveAddress,
     address,
-    keyIndex,
     seed,
-    defaultBalance,
-    updateWalletAddressKeyIndex,
+    defaultBalance
   );
+  return messageId;
 };
 
-const initWallet = async (userId = null) => {
+type InitializedWallet = { "messageId": string, "wallet": { address: string, seed: string, balance: number } }
+
+/**
+ * Creates a new wallet with default balance 
+ * @returns Initialized Wallet with seed, address and default balance 
+ */
+const initWallet = async (): Promise<InitializedWallet> => {
   const receiveSeed = generateSeed();
-  const receiveKeyIndex = 0;
-  const receiveAddress = generateNewAddress(receiveSeed, true);
+  const receiveAddress = await generateAddress(receiveSeed);
+  let { address, defaultBalance, seed } = await getIotaWallet();
 
-  let { keyIndex, seed, defaultBalance } = await getIotaWallet();
-  let address = await generateAddress(seed, keyIndex);
-  const iotaWalletBalance = await getBalance(address);
-
-  if (iotaWalletBalance === 0) {
-    const newIotaWallet = await repairWallet(seed, keyIndex);
-    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex) {
-      address = newIotaWallet.address;
-      keyIndex = newIotaWallet.keyIndex;
-    }
-  }
-
-  const transactions = await transferFunds(
+  //debug
+  console.log({
     receiveAddress,
     address,
-    keyIndex,
     seed,
-    defaultBalance,
-    updateWalletAddressKeyIndex,
-    userId
+    defaultBalance
+  });
+  const messageId = await transferFunds(
+    receiveAddress,
+    address,
+    seed,
+    defaultBalance
   );
-  return {
-    transactions,
+  const initializedWallet = {
+    messageId,
     wallet: {
       address: receiveAddress,
       seed: receiveSeed,
-      keyIndex: receiveKeyIndex,
       balance: defaultBalance,
     }
   };
+  return initializedWallet
 };
 
-const initSemarketWallet = async (receiveAddress, desiredBalance = null) => {
-  let { keyIndex, seed, defaultBalance } = await getIotaWallet();
-  let address = await generateAddress(seed, keyIndex);
-  const iotaWalletBalance = await getBalance(address);
-
-  if (iotaWalletBalance === 0) {
-    const newIotaWallet = await repairWallet(seed, keyIndex);
-    if (newIotaWallet && newIotaWallet.address && newIotaWallet.keyIndex) {
-      address = newIotaWallet.address;
-      keyIndex = newIotaWallet.keyIndex;
-    }
-  }
+/**
+ * Initializes semarkt wallet similar to initWallet but with the option to declare a desired balance
+ * @param receiveAddress address of receiver
+ * @param desiredBalance desired balance optional, else default blanace
+ * @returns messageId
+ */
+const initSemarketWallet = async (receiveAddress: string, desiredBalance: number = null): Promise<string> => {
+  let { seed, defaultBalance } = await getIotaWallet();
+  let address = await generateAddress(seed);
 
   const balance = desiredBalance ? Number(desiredBalance) : defaultBalance;
-
-  const transactions = await transferFunds(
+  const messageId = await transferFunds(
     receiveAddress,
     address,
-    keyIndex,
     seed,
-    balance,
-    updateWalletAddressKeyIndex,
-    null
+    balance
   );
-  return transactions;
+  return messageId;
 };
 
-const purchaseData = async (userId, receiveAddress, value) => {
-  let { keyIndex, seed } = await getUserWallet(userId);
-  let address = await generateAddress(seed, keyIndex);
-  const walletBalance = await getBalance(address);
+/**
+ * Transfers funds from a user to a devices address
+ * @param userId sender of tokens
+ * @param receiveAddress receiver of tokens (device)
+ * @param tokens amount of tokens to transfer
+ * @returns messageId
+ */
+const purchaseData = async (userId, receiveAddress, tokens): Promise<string> => {
+  let { seed } = await getUserWallet(userId);
+  console.log(seed)
+  let address = await generateAddress(seed);
 
-  if (walletBalance === 0) {
-    const newWallet = await repairWallet(seed, keyIndex);
-    if (newWallet && newWallet.address && newWallet.keyIndex) {
-      address = newWallet.address;
-      keyIndex = newWallet.keyIndex;
-    }
-  }
-
-  const transactions = await transferFunds(
+  const messageId = await transferFunds(
     receiveAddress,
     address,
-    keyIndex || 0,
     seed,
-    value,
-    updateUserWalletAddressKeyIndex,
-    userId,
+    tokens
   );
-  return transactions;
+  return messageId;
+};
+
+const checkRecaptcha = async (captcha, emailSettings) => {
+  const response = await axios({
+    method: 'post',
+    url: `https://www.google.com/recaptcha/api/siteverify?secret=${emailSettings.googleSecretKey}&response=${captcha}`,
+  });
+  return response ? response.data : null;
 };
 
 const gpsToAddress = async (latitude, longitude) => {
@@ -373,12 +271,12 @@ const addressToIac = async address => {
   return null;
 }
 
-module.exports = {
+export {
   generateUUID,
-  generateNewAddress,
+  generateAddress,
   generateSeed,
   sanatiseObject,
-  findTx,
+  findMessage,
   initWallet,
   faucet,
   purchaseData,
@@ -387,7 +285,5 @@ module.exports = {
   gpsToAddress,
   addressToIac,
   gpsToIac,
-  initSemarketWallet,
-  repairWallet,
-  getBalance,
+  initSemarketWallet
 }

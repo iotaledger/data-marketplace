@@ -24,11 +24,7 @@
   ],
   "dependencies": {
     "@iota/area-codes": "^0.1.1",
-    "@iota/bundle-validator": "1.0.0-beta.30",
-    "@iota/client-load-balancer": "github:iotaledger/client-load-balancer",
-    "@iota/converter": "1.0.0-beta.30",
-    "@iota/core": "1.0.0-beta.30",
-    "@iota/transaction-converter": "1.0.0-beta.30",
+    "@iota/client": "^0.6.0",
     "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "cors": "^2.8.5",
@@ -42,7 +38,7 @@
     "typescript": "^3.8.3"
   },
   "engines": {
-    "node": "12"
+    "node": "14"
   },
   "resolutions": {
     "acorn": "^7.1.1",

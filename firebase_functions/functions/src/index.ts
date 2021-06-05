@@ -1,8 +1,8 @@
+import { MessageMetadata } from '@iota/client/lib/types';
 import * as functions from 'firebase-functions';
 const cors = require('cors')({ origin: true });
-const { validateBundleSignatures } = require('@iota/bundle-validator');
 
-const {
+import {
   getKey,
   getSk,
   getPurchase,
@@ -26,14 +26,13 @@ const {
   updateBalance,
   updateUserWalletAddressKeyIndex,
   getEmailSettings,
-} = require('./firebase');
+} from './firebase';
 const { sendEmail } = require('./email');
-const {
+import {
   generateUUID,
   generateSeed,
-  generateNewAddress,
   sanatiseObject,
-  findTx,
+  findMessage,
   faucet,
   initWallet,
   checkRecaptcha,
@@ -42,7 +41,8 @@ const {
   addressToIac,
   gpsToIac,
   initSemarketWallet,
-} = require('./helpers');
+  generateAddress
+} from './helpers';
 
 // Take in data from device
 exports.newData = functions.https.onRequest((req, res) => {
@@ -86,19 +86,19 @@ exports.newDevice = functions.https.onRequest((req, res) => {
 
     try {
       const invalid = sanatiseObject(packet.device);
-      const secretKey = generateSeed(15);
+      const secretKey = generateSeed();
       const seed = generateSeed();
-      const address = generateNewAddress(seed);
+      const address = await generateAddress(seed);
       if (invalid) throw Error(invalid);
 
-      const key = await getKey(<String>packet.apiKey);
+      const key = await getKey(<string>packet.apiKey);
       const userDevices = await getUserDevices(key.uid);
       const user = await getUser(key.uid);
       if (!user.numberOfDevices) {
         user.numberOfDevices = await getNumberOfDevices();
       }
       if (userDevices.length < user.numberOfDevices) {
-        const device = await getDevice(<String>packet.id, true);
+        const device = await getDevice(<string>packet.id, true);
         if (device && device.owner !== key.uid) {
           return res.json({ error: `Device with ID ${packet.id} already exists. Please specify new unique ID` });
         }
@@ -130,15 +130,15 @@ exports.delete = functions.https.onRequest((req, res) => {
 
     try {
       const { apiKey, deviceId } = packet;
-      const key = await getKey(<String>apiKey);
-      const device = await getDevice(<String>deviceId, true);
+      const key = await getKey(<string>apiKey);
+      const device = await getDevice(<string>deviceId, true);
 
       if (!device) {
         throw Error(`Device doesn't exist`);
       }
       if (device.owner === key.uid) {
         return res.json({
-          success: await deleteDevice(<String>deviceId),
+          success: await deleteDevice(<string>deviceId),
         });
       } else {
         console.error(
@@ -163,9 +163,9 @@ exports.devices = functions.https.onRequest((req, res) => {
     try {
       const params = req.query;
       if (params && params.userId && params.apiKey) {
-        const { uid } = await getKey(<String>params.apiKey);
+        const { uid } = await getKey(<string>params.apiKey);
         if (params.userId === uid) {
-          const userDevices = await getUserDevices(params.userId);
+          const userDevices = await getUserDevices(params.userId as string);
           const promises = await userDevices.map(async device => {
             const promise = await new Promise(async (resolve, reject) => {
               try {
@@ -206,7 +206,7 @@ exports.device = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const device = await getDevice(params.deviceId);
+      const device = await getDevice(params.deviceId as string);
       if (!device) {
         throw Error(`Device doesn't exist`);
       }
@@ -233,12 +233,12 @@ exports.stream = functions.https.onRequest((req, res) => {
 
     try {
       // Make sure purchase exists
-      const purchase = await getPurchase(<String>params.userId, <String>params.deviceId);
+      const purchase = await getPurchase(<string>params.userId, <string>params.deviceId);
       if (!purchase) {
         return res.json({ success: false });
       }
       // Return data
-      return res.json(await getData(<String>params.deviceId, params.time));
+      return res.json(await getData(<string>params.deviceId, params.time as any));
     } catch (e) {
       console.error('stream failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -248,7 +248,7 @@ exports.stream = functions.https.onRequest((req, res) => {
 
 // // Setup User with an API Key
 exports.setupUser = functions.auth.user().onCreate(user => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve, reject): Promise<void> => {
     if (!user.email) {
       reject();
     } else {
@@ -261,7 +261,7 @@ exports.setupUser = functions.auth.user().onCreate(user => {
         await setApiKey(apiKey, user.uid, user.email);
 
         console.log('setupUser resolved for UID', user.uid);
-        resolve();
+        resolve(null);
       } catch (e) {
         console.error('setupUser rejected with ', e.message);
         reject(e.message);
@@ -281,7 +281,7 @@ exports.toggleWhitelist = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const data = await getKey(<String>packet.apiKey);
+      const data = await getKey(<string>packet.apiKey);
       if (data.email && data.email.indexOf('iota.org') !== -1 && packet.uid === data.uid) {
         // Toggle whitelist
         console.error('toggleWhitelist success', packet, data);
@@ -307,7 +307,7 @@ exports.user = functions.https.onRequest((req, res) => {
 
     try {
       // Retrieve user
-      const user = await getUser(params.userId);
+      const user = await getUser(params.userId as string);
       if (!user) {
         return res.json(null);
       }
@@ -373,9 +373,10 @@ exports.wallet = functions.https.onRequest((req, res) => {
     }
 
     try {
-      const result = await initWallet(packet.userId);
+      const result = await initWallet();
+      console.log("Result", result)
       await setWallet(packet.userId, result.wallet);
-      return res.json({ success: result.transactions.length > 0 });
+      return res.status(201).json({ messageId: result.messageId });
     } catch (e) {
       console.error('wallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -401,8 +402,8 @@ exports.faucet = functions.https.onRequest((req, res) => {
         return res.status(403).json({ error: recaptcha['error-codes'] });
       }
 
-      const transactions = await faucet(packet.address);
-      return res.json({ transactions });
+      const messageId = await faucet(packet.address);
+      return res.json({ messageId });
     } catch (e) {
       console.error('faucet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -422,7 +423,7 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
     try {
       const device = await getDevice(packet.deviceId);
       const wallet = await getUserWallet(packet.userId);
-      const { iotaApiVersion, nodes, defaultPrice } = await getSettings();
+      const { defaultPrice } = await getSettings();
       let price = defaultPrice;
       if (device) {
         if (device.price) {
@@ -434,38 +435,31 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
         return res.json({ error: `Device doesn't exist` });
       }
 
-      let newWalletBalance;
-      if (wallet && wallet.balance) {
-        newWalletBalance = Number(wallet.balance) - Number(price);
-        if (newWalletBalance < 0) {
-          console.error('purchaseStream failed. Not enough funds', packet);
-          return res.json({ error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.' });
-        }
-      } else {
-        console.error('purchaseStream failed. Wallet not set', packet);
-        return res.json({ error: 'Wallet not set' });
+      const newWalletBalance = Number(wallet.balance) - Number(price);
+      if (newWalletBalance < 0) {
+        console.error('purchaseStream failed. Not enough funds', packet);
+        return res.json({ error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.' });
       }
 
-      const transactions = await purchaseData(packet.userId, device.address, price);
-      console.log('purchaseStream', packet.userId, packet.deviceId, transactions);
-
-      if (transactions) {
-        const hashes = transactions && transactions.map(transaction => transaction.hash);
-
-        // Find TX on network and parse
-        const bundle = await findTx(hashes, nodes[0], iotaApiVersion);
-
-        // Make sure TX is valid
-        if (!validateBundleSignatures(bundle)) {
-          console.error('purchaseStream failed. Transaction is invalid for: ', bundle);
-          res.status(403).json({ error: 'Transaction is Invalid' });
-        }
-
-        await setPurchase(packet.userId, packet.deviceId);
-        await updateBalance(packet.userId, newWalletBalance);
-        return res.json({ success: true });
+      try {
+        var messageId = await purchaseData(packet.userId, device.address, price);
+        console.log('purchaseStream', packet.userId, packet.deviceId, messageId);
+      } catch (e) {
+        return res.status(403).json({ error: e.message });
       }
-      return res.json({ error: 'Purchase failed. Insufficient balance of out of sync' });
+      // Find message on network and parse
+      const message_metadata = await findMessage(messageId) as MessageMetadata;
+
+      // Make sure message is valid
+      // console.log(message_metadata)
+      // if (!message_metadata.ledgerInclusionState) {
+      //   console.error('purchaseStream failed. Message is invalid for: ', message_metadata);
+      //   res.status(403).json({ error: 'Transaction is Invalid' });
+      // }
+
+      await setPurchase(packet.userId, packet.deviceId);
+      await updateBalance(packet.userId, newWalletBalance);
+      return res.json({ success: true });
     } catch (e) {
       console.error('purchaseData failed. Error: ', e, packet);
       return res.status(403).json({ error: e.message });
@@ -478,8 +472,8 @@ exports.semarket = functions.https.onRequest((req, res) => {
     try {
       const params = req.query;
       if (params.address) {
-        const transactions = await initSemarketWallet(params.address, params.amount || null);
-        return res.json({ success: transactions.length > 0 });
+        const messageId = await initSemarketWallet(<string>params.address, parseInt(<string>params.amount) || null);
+        return res.json({ messageId: messageId });
       }
       return res.json({ success: false, error: 'no address' });
     } catch (e) {
@@ -502,7 +496,7 @@ exports.location = functions.https.onRequest((req, res) => {
         console.log(`Converted area code "${params.iac}" to "${result}"`);
       } else if (params.gps) {
         const coordinates = params.gps.toString().split(',').map(coord => Number(coord));
-        result = await gpsToIac(...coordinates);
+        result = await gpsToIac(...coordinates as [number, number]);
         console.log(`Converted GPS coordinates "${params.gps}" to "${result}"`);
       }
       return res.json(result);

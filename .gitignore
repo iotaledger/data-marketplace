@@ -13,3 +13,6 @@
 *.log
 
 webpack-build-log.json
+
+# VS Code
+.vscode

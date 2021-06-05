@@ -3,7 +3,7 @@ import * as admin from 'firebase-admin';
 
 admin.initializeApp(functions.config().firebase);
 
-exports.getKey = async (key: string) => {
+const getKey = async (key: string) => {
   // Get API key
   const doc = await admin
     .firestore()
@@ -15,7 +15,7 @@ exports.getKey = async (key: string) => {
   throw Error('Your API key is incorrect.');
 };
 
-exports.getSk = async (deviceId: string) => {
+const getSk = async (deviceId: string) => {
   // Get API key
   const doc = await admin
     .firestore()
@@ -27,7 +27,7 @@ exports.getSk = async (deviceId: string) => {
   throw Error(`The device doesn't exist.`);
 };
 
-exports.getPurchase = async (uid: string, device: string) => {
+const getPurchase = async (uid: string, device: string) => {
   // Get User's purchase
   const doc = await admin
     .firestore()
@@ -42,7 +42,7 @@ exports.getPurchase = async (uid: string, device: string) => {
   return false;
 };
 
-exports.getData = async (device: string, timestamp?: number) => {
+const getData = async (device: string, timestamp?: number) => {
   const time = timestamp ? Number(timestamp) : Date.now();
   // Get data
   const querySnapshot = await admin
@@ -68,7 +68,7 @@ exports.getData = async (device: string, timestamp?: number) => {
   });
 };
 
-exports.getDevice = async (device: string, internal: boolean = false) => {
+const getDevice = async (device: string, internal: boolean = false) => {
   // Get User's purchase
   const doc = await admin
     .firestore()
@@ -88,7 +88,7 @@ exports.getDevice = async (device: string, internal: boolean = false) => {
   return null;
 };
 
-exports.getDevices = async () => {
+const getDevices = async () => {
   // Get data
   const querySnapshot = await admin
     .firestore()
@@ -144,7 +144,7 @@ exports.getDevices = async () => {
     });
 };
 
-exports.getUserDevices = async (user: string) => {
+const getUserDevices = async (user: string) => {
   // Get data
   const querySnapshot = await admin
     .firestore()
@@ -167,7 +167,7 @@ exports.getUserDevices = async (user: string) => {
   });
 };
 
-exports.setPacket = async (device: string, packet: any) => {
+const setPacket = async (device: string, packet: any) => {
   // Save users API key and Seed
   await admin
     .firestore()
@@ -180,7 +180,7 @@ exports.setPacket = async (device: string, packet: any) => {
   return true;
 };
 
-exports.setUser = async (uid: string, obj: any) => {
+const setUser = async (uid: string, obj: any) => {
   // Save users API key and Seed
   await admin
     .firestore()
@@ -191,7 +191,7 @@ exports.setUser = async (uid: string, obj: any) => {
   return true;
 };
 
-exports.setDevice = async (deviceId: string, sk: string, address: string, seed: string, device: any) => {
+const setDevice = async (deviceId: string, sk: string, address: string, seed: string, device: any) => {
   // Save users API key and Seed
   await admin
     .firestore()
@@ -221,7 +221,7 @@ exports.setDevice = async (deviceId: string, sk: string, address: string, seed: 
   return true;
 };
 
-exports.setApiKey = async (apiKey: string, uid: string, email: string) => {
+const setApiKey = async (apiKey: string, uid: string, email: string) => {
   // Set API key in separate table
   await admin
     .firestore()
@@ -234,7 +234,7 @@ exports.setApiKey = async (apiKey: string, uid: string, email: string) => {
   return true;
 };
 
-exports.setOwner = async (deviceId: string, owner: string) => {
+const setOwner = async (deviceId: string, owner: string) => {
   // Save new owner
   await admin
     .firestore()
@@ -244,7 +244,7 @@ exports.setOwner = async (deviceId: string, owner: string) => {
   return true;
 };
 
-exports.setPurchase = async (userId: string, deviceId: string) => {
+const setPurchase = async (userId: string, deviceId: string) => {
   // Save new owner
   await admin
     .firestore()
@@ -259,7 +259,7 @@ exports.setPurchase = async (userId: string, deviceId: string) => {
   return true;
 };
 
-exports.deleteDevice = async (device: any) => {
+const deleteDevice = async (device: any) => {
   // Remove Device
   await admin
     .firestore()
@@ -294,7 +294,7 @@ exports.deleteDevice = async (device: any) => {
   return true;
 };
 
-exports.toggleWhitelistDevice = async (sensorId: string, inactive: string) => {
+const toggleWhitelistDevice = async (sensorId: string, inactive: string) => {
   // Whitelist device
   await admin
     .firestore()
@@ -304,7 +304,7 @@ exports.toggleWhitelistDevice = async (sensorId: string, inactive: string) => {
   return true;
 };
 
-exports.getUser = async (userId: string) => {
+const getUser = async (userId: string) => {
   // Get user
   const doc = await admin
     .firestore()
@@ -329,7 +329,7 @@ exports.getUser = async (userId: string) => {
   return null;
 };
 
-exports.getNumberOfDevices = async () => {
+const getNumberOfDevices = async () => {
   const doc = await admin
     .firestore()
     .collection('settings')
@@ -345,7 +345,7 @@ exports.getNumberOfDevices = async () => {
   throw Error(`The getNumberOfDevices setting doesn't exist.`);
 };
 
-exports.getSettings = async () => {
+const getSettings = async () => {
   // Get data
   const doc = await admin
     .firestore()
@@ -382,7 +382,7 @@ exports.getSettings = async () => {
   throw Error(`The getSettings setting doesn't exist.`);
 };
 
-exports.getUserWallet = async (uid: string) => {
+const getUserWallet = async (uid: string) => {
   // Get User's wallet
   const doc = await admin
     .firestore()
@@ -398,7 +398,7 @@ exports.getUserWallet = async (uid: string) => {
   throw Error(`The wallet doesn't exist.`);
 };
 
-exports.setWallet = async (uid: string, wallet: any) => {
+const setWallet = async (uid: string, wallet: any) => {
   // Create wallet
   await admin
     .firestore()
@@ -408,7 +408,7 @@ exports.setWallet = async (uid: string, wallet: any) => {
   return true;
 };
 
-exports.updateBalance = async (uid: string, balance: any) => {
+const updateBalance = async (uid: string, balance: any) => {
   await admin
     .firestore()
     .collection('users')
@@ -417,7 +417,7 @@ exports.updateBalance = async (uid: string, balance: any) => {
   return true;
 };
 
-exports.updateUserWalletAddressKeyIndex = async (address: string, keyIndex: number, uid: string) => {
+const updateUserWalletAddressKeyIndex = async (address: string, keyIndex: number, uid: string) => {
   await admin
     .firestore()
     .collection('users')
@@ -426,7 +426,7 @@ exports.updateUserWalletAddressKeyIndex = async (address: string, keyIndex: numb
   return true;
 };
 
-exports.getIotaWallet = async () => {
+const getIotaWallet = async () => {
   const doc = await admin
     .firestore()
     .collection('settings')
@@ -442,16 +442,8 @@ exports.getIotaWallet = async () => {
   throw Error(`The getIotaWallet setting doesn't exist.`);
 };
 
-exports.updateWalletAddressKeyIndex = async (address: string, keyIndex: number, userId: string) => {
-  await admin
-    .firestore()
-    .collection('settings')
-    .doc('settings')
-    .set({ wallet: { address, keyIndex } }, { merge: true });
-  return true;
-};
 
-exports.getEmailSettings = async () => {
+const getEmailSettings = async () => {
   const doc = await admin
     .firestore()
     .collection('settings')
@@ -465,7 +457,7 @@ exports.getEmailSettings = async () => {
   throw Error(`The getEmailSettings setting doesn't exist.`);
 };
 
-exports.getGoogleMapsApiKey = async () => {
+const getGoogleMapsApiKey = async () => {
   const doc = await admin
     .firestore()
     .collection('settings')
@@ -480,3 +472,31 @@ exports.getGoogleMapsApiKey = async () => {
   console.log('getGoogleMapsApiKey failed. Setting does not exist', doc);
   throw Error(`The getGoogleMapsApiKey setting doesn't exist.`);
 };
+
+export { 
+  getKey,
+  getSk,
+  getPurchase,
+  getData,
+  getDevice,
+  getDevices,
+  getUserDevices,
+  setPacket,
+  setUser,
+  setDevice,
+  setApiKey,
+  setOwner,
+  setPurchase,
+  deleteDevice,
+  toggleWhitelistDevice,
+  getUser,
+  getNumberOfDevices,
+  getSettings,
+  getUserWallet,
+  setWallet,
+  updateBalance,
+  updateUserWalletAddressKeyIndex,
+  getIotaWallet,
+  getEmailSettings,
+  getGoogleMapsApiKey
+ }
