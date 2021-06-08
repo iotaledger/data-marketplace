@@ -440,15 +440,15 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
         console.error('purchaseStream failed. Not enough funds', packet);
         return res.json({ error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.' });
       }
-
+      let messageId;
       try {
-        var messageId = await purchaseData(packet.userId, device.address, price);
+        messageId = await purchaseData(packet.userId, device.address, price);
         console.log('purchaseStream', packet.userId, packet.deviceId, messageId);
       } catch (e) {
         return res.status(403).json({ error: e.message });
       }
       // Find message on network and parse
-      const message_metadata = await findMessage(messageId) as MessageMetadata;
+      const message_metadata = await findMessage(messageId);
 
       // Make sure message is valid
       // console.log(message_metadata)

@@ -1,8 +1,11 @@
 import * as crypto from 'crypto';
 const axios = require('axios');
+import { v4 as uuidv4 } from 'uuid';
+
 import { Client, ClientBuilder } from '@iota/client';
 import { MessageMetadata } from '@iota/client/lib/types';
 const iotaAreaCodes = require('@iota/area-codes');
+
 const {
   getSettings,
   getIotaWallet,
@@ -18,7 +21,7 @@ const getClient = async (): Promise<Client> => {
   const settings = await getSettings();
   const client = new ClientBuilder()
     .node(settings.provider)
-    .localPow(true)
+    .localPow(false)
     .build();
   return client
 }
@@ -48,13 +51,12 @@ const generateAddress = async (seed: string, accountIndex = 0): Promise<string> 
   return address
 }
 
-const generateUUID = () => {
-  let d = new Date().getTime();
-  const uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-    const r = (d + Math.random() * 16) % 16 | 0;
-    d = Math.floor(d / 16);
-    return (c === 'x' ? r : (r & 0x3) | 0x8).toString(16);
-  });
+/**
+ * Create an RFC version 4 (random) UUID
+ * @returns UUID String e.g. 'a70647d1-3f56-43f5-8382-ca8cb06659a7
+ */
+const generateUUID = (): string => {
+  const uuid = uuidv4();
   return uuid;
 };
 
@@ -119,11 +121,7 @@ const transferFunds = async (receiveAddress: string, address: string, seed: stri
  * @returns messageId
  */
 const faucet = async (receiveAddress): Promise<string> => {
-  let { seed, defaultBalance } = await getIotaWallet();
-
-  const client = await getClient();
-  const iotaWalletBalance = await client.getBalance(seed).get();
-  console.log("Iota wallet balance: ", iotaWalletBalance)
+  const { seed, defaultBalance } = await getIotaWallet();
   const address = await generateAddress(seed);
 
   const messageId = await transferFunds(
@@ -144,7 +142,7 @@ type InitializedWallet = { "messageId": string, "wallet": { address: string, see
 const initWallet = async (): Promise<InitializedWallet> => {
   const receiveSeed = generateSeed();
   const receiveAddress = await generateAddress(receiveSeed);
-  let { address, defaultBalance, seed } = await getIotaWallet();
+  const { address, defaultBalance, seed } = await getIotaWallet();
 
   //debug
   console.log({
@@ -177,8 +175,8 @@ const initWallet = async (): Promise<InitializedWallet> => {
  * @returns messageId
  */
 const initSemarketWallet = async (receiveAddress: string, desiredBalance: number = null): Promise<string> => {
-  let { seed, defaultBalance } = await getIotaWallet();
-  let address = await generateAddress(seed);
+  const { seed, defaultBalance } = await getIotaWallet();
+  const address = await generateAddress(seed);
 
   const balance = desiredBalance ? Number(desiredBalance) : defaultBalance;
   const messageId = await transferFunds(
@@ -198,9 +196,9 @@ const initSemarketWallet = async (receiveAddress: string, desiredBalance: number
  * @returns messageId
  */
 const purchaseData = async (userId, receiveAddress, tokens): Promise<string> => {
-  let { seed } = await getUserWallet(userId);
+  const { seed } = await getUserWallet(userId);
   console.log(seed)
-  let address = await generateAddress(seed);
+  const address = await generateAddress(seed);
 
   const messageId = await transferFunds(
     receiveAddress,
