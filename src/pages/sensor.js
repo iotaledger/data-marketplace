@@ -41,7 +41,7 @@ class Sensor extends React.Component {
     ReactGA.pageview('/sensor');
     const userId = (await userAuth()).uid;
     const { match: { params: { deviceId } }, settings: { provider } } = this.props;
-
+    console.log(provider)
     await this.props.loadSensor(deviceId);
 
     if (typeof this.props.sensor === 'string') {
@@ -122,7 +122,7 @@ class Sensor extends React.Component {
       packets,
       purchase: true,
       fetching: false
-    });
+    }, () => console.log("New state", this.state));
   }
 
   setNotification = (notification, error) => this.setState({ notification, error });

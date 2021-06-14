@@ -4,6 +4,7 @@ import { Reader, Mode } from '@iota/mam/lib/mam';
 import get from 'lodash-es/get';
 import ReactGA from 'react-ga';
 import { getData } from '../../utils/iota';
+import { mamFetch } from '@iota/mam.js'
 
 const Fetcher = ({
   ctx, client, packets, lastFetchedTimestamp, deviceId, userId,
@@ -15,7 +16,6 @@ const Fetcher = ({
     (async () => {
       try {
         const data = await getData(userId, deviceId, lastFetchedTimestamp);
-
         if (data.success === false) {
           setPurchase(false);
           setFetching(false);
@@ -39,15 +39,21 @@ const Fetcher = ({
 
         let fetchErrorCounter = 0;
         let emptyDataCounter = 0;
-
+        console.log("FUNCTION CALL +++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         data && data.map(async ({ root, sidekey, time = null }) => {
           try {
-            const mode = sidekey ? Mode.Old : Mode.Public;
-            const reader = new Reader(ctx, client, mode, root, sidekey || '9'.repeat(81));
-            const message = await reader.next();
-            const payload = get(message, 'value[0].message.payload');
-            if (payload) {
-                saveData(JSON.parse(trytesToAscii(payload)), time);
+
+            const message  = await mamFetch('https://api.lb-0.testnet.chrysalis2.com', root, 'restricted', sidekey)
+            // console.log('message', message.)
+            // const decodedMessage = parseMessage(message, root, sidekey)
+            
+            // console.log("Decoded message", decodedMessage)
+            const trytes = trytesToAscii(message.message)
+            console.log("Trytes: ", trytes)
+            const decoded = decodeURIComponent(trytes)
+            console.log("decoded:", decoded)
+            if (decoded) {
+                saveData(JSON.parse(decoded), time);
             } else {
               emptyDataCounter++;
               if (emptyDataCounter > data.length * 0.5) {
@@ -62,14 +68,14 @@ const Fetcher = ({
             }
           } catch (error) {
             fetchErrorCounter++;
-            console.error('fetchMam error 1', fetchErrorCounter, data.length, error);
+            console.error('fetchMam error 1', fetchErrorCounter, error );
             if (fetchErrorCounter > data.length * 0.8) {
               ReactGA.event({
                 category: 'MAM fetch failure 1',
                 action: 'MAM fetch failure 1 + reload',
                 label: `Sensor ID ${deviceId}, error: ${error}`
               });
-              window.location.reload(true);
+              // window.location.reload(true);
             }
           }
         });
@@ -83,7 +89,7 @@ const Fetcher = ({
         });
       }
     })();
-  }, [packets]);
+  }, []);
 
   return null;
 }

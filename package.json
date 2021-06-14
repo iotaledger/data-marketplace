@@ -36,6 +36,7 @@
     "@iota/core": "1.0.0-beta.30",
     "@iota/http-client": "1.0.0-beta.30",
     "@iota/mam": "^0.7.3",
+    "@iota/mam.js": "github:iotaledger/mam.js",
     "date-fns": "^1.30.1",
     "file-saver": "^2.0.5",
     "firebase": "^8.2.7",
