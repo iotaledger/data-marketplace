@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import { trytesToAscii } from '@iota/converter';
-import { Reader, Mode } from '@iota/mam/lib/mam';
-import get from 'lodash-es/get';
 import ReactGA from 'react-ga';
 import { getData } from '../../utils/iota';
-import { mamFetch } from '@iota/mam.js'
+import { mamFetch } from '@iota/mam.js';
+import { nodeURL } from '../../config.json';
 
 const Fetcher = ({
-  ctx, client, packets, lastFetchedTimestamp, deviceId, userId,
+  packets, lastFetchedTimestamp, deviceId, userId,
   setNotification, setPurchase, setStreamLength, setFetching, setDataEnd, saveData
 }) => {
   const [fetchedData, setFetchedData] = useState(packets);
@@ -43,7 +42,7 @@ const Fetcher = ({
         data && data.map(async ({ root, sidekey, time = null }) => {
           try {
 
-            const message  = await mamFetch('https://api.lb-0.testnet.chrysalis2.com', root, 'restricted', sidekey)
+            const message  = await mamFetch(nodeURL, root, 'restricted', sidekey)
             // console.log('message', message.)
             // const decodedMessage = parseMessage(message, root, sidekey)
             

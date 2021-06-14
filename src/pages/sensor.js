@@ -3,8 +3,6 @@ import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import isEmpty from 'lodash-es/isEmpty';
 import { connect } from 'react-redux';
-import { createHttpClient } from '@iota/http-client';
-import { createContext } from '@iota/mam/lib/mam';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
@@ -52,9 +50,6 @@ class Sensor extends React.Component {
       });
       return this.setNotification('noDevice');
     }
-
-    this.ctx = await createContext();
-    this.client = createHttpClient({ provider });
     this.setState({ userId, fetching: true });
   }
 
@@ -172,8 +167,6 @@ class Sensor extends React.Component {
               deviceId={deviceId}
               userId={userId}
               packets={packets.length}
-              ctx={this.ctx}
-              client={this.client}
             />
           )
         }
