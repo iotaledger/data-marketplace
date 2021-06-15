@@ -65,7 +65,7 @@ class Sensor extends React.Component {
   }
 
   async purchase() {
-    const { loadUser, user, sensor,  match: { params: { deviceId } } } = this.props;
+    const { loadUser, user, sensor, match: { params: { deviceId } } } = this.props;
     const { userId } = this.state;
 
     if (!user) {
@@ -109,14 +109,13 @@ class Sensor extends React.Component {
       });
   }
 
-  saveData(packet, time) {
-    const packets = [...this.state.packets, packet];
+  saveData(packets) {
+    const time = packets[packets.length - 1].time
+    console.log(packets)
     const lastFetchedTimestamp = !this.state.lastFetchedTimestamp || time < this.state.lastFetchedTimestamp ? time : this.state.lastFetchedTimestamp;
     this.setState({
       lastFetchedTimestamp,
-      packets,
-      purchase: true,
-      fetching: false
+      packets
     }, () => console.log("New state", this.state));
   }
 
@@ -140,20 +139,24 @@ class Sensor extends React.Component {
         <Data>
           <Sidebar
             downloadSensorStreamJSON={this.downloadSensorStreamJSON}
-            isLoading={fetching && packets[0] && !this.state.dataEnd && packets.length !== streamLength}
+            isLoading={fetching && packets[0]}
             purchase={purchase && packets.length > 0}
           />
           <SensorContext.Provider value={{ func: this.loadMore }}>
             <DataStream packets={packets} streamLength={streamLength} />
           </SensorContext.Provider>
         </Data>
-        <Modal
-          purchasePrice={this.props.sensor.price}
-          callback={this.purchase}
-          show={!this.state.purchase || !isEmpty(error)}
-          notification={this.state.notification}
-          error={error}
-        />
+
+        {
+          (!this.state.purchase || !isEmpty(error)) && (
+            <Modal
+              purchasePrice={this.props.sensor.price}
+              callback={this.purchase}
+              show={!this.state.purchase || !isEmpty(error)}
+              notification={this.state.notification}
+              error={error}
+            />)
+        }
         {
           fetching && (
             <Fetcher
