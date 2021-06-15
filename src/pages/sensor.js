@@ -3,8 +3,6 @@ import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import isEmpty from 'lodash-es/isEmpty';
 import { connect } from 'react-redux';
-import { createHttpClient } from '@iota/http-client';
-import { createContext } from '@iota/mam/lib/mam';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
@@ -41,7 +39,7 @@ class Sensor extends React.Component {
     ReactGA.pageview('/sensor');
     const userId = (await userAuth()).uid;
     const { match: { params: { deviceId } }, settings: { provider } } = this.props;
-
+    console.log(provider)
     await this.props.loadSensor(deviceId);
 
     if (typeof this.props.sensor === 'string') {
@@ -52,9 +50,6 @@ class Sensor extends React.Component {
       });
       return this.setNotification('noDevice');
     }
-
-    this.ctx = await createContext();
-    this.client = createHttpClient({ provider });
     this.setState({ userId, fetching: true });
   }
 
@@ -70,7 +65,7 @@ class Sensor extends React.Component {
   }
 
   async purchase() {
-    const { loadUser, user, sensor,  match: { params: { deviceId } } } = this.props;
+    const { loadUser, user, sensor, match: { params: { deviceId } } } = this.props;
     const { userId } = this.state;
 
     if (!user) {
@@ -114,15 +109,14 @@ class Sensor extends React.Component {
       });
   }
 
-  saveData(packet, time) {
-    const packets = [...this.state.packets, packet];
+  saveData(packets) {
+    const time = packets[packets.length - 1].time
+    console.log(packets)
     const lastFetchedTimestamp = !this.state.lastFetchedTimestamp || time < this.state.lastFetchedTimestamp ? time : this.state.lastFetchedTimestamp;
     this.setState({
       lastFetchedTimestamp,
-      packets,
-      purchase: true,
-      fetching: false
-    });
+      packets
+    }, () => console.log("New state", this.state));
   }
 
   setNotification = (notification, error) => this.setState({ notification, error });
@@ -145,20 +139,24 @@ class Sensor extends React.Component {
         <Data>
           <Sidebar
             downloadSensorStreamJSON={this.downloadSensorStreamJSON}
-            isLoading={fetching && packets[0] && !this.state.dataEnd && packets.length !== streamLength}
+            isLoading={fetching && packets[0]}
             purchase={purchase && packets.length > 0}
           />
           <SensorContext.Provider value={{ func: this.loadMore }}>
             <DataStream packets={packets} streamLength={streamLength} />
           </SensorContext.Provider>
         </Data>
-        <Modal
-          purchasePrice={this.props.sensor.price}
-          callback={this.purchase}
-          show={!this.state.purchase || !isEmpty(error)}
-          notification={this.state.notification}
-          error={error}
-        />
+
+        {
+          (!this.state.purchase || !isEmpty(error)) && (
+            <Modal
+              purchasePrice={this.props.sensor.price}
+              callback={this.purchase}
+              show={!this.state.purchase || !isEmpty(error)}
+              notification={this.state.notification}
+              error={error}
+            />)
+        }
         {
           fetching && (
             <Fetcher
@@ -172,8 +170,6 @@ class Sensor extends React.Component {
               deviceId={deviceId}
               userId={userId}
               packets={packets.length}
-              ctx={this.ctx}
-              client={this.client}
             />
           )
         }
