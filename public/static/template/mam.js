@@ -8,9 +8,7 @@ const crypto = require('crypto');
 const { storeKey } = require('./keyStorage');
 const { provider } = require('./config.json');
 
-// Initialise MAM State
-// let mamState;
-// let secretKey;
+// Channel seed
 let seed;
 
 // Random Key Generator
@@ -50,11 +48,7 @@ exports.publish = async (payload, mode = 'restricted', tag = 'SENSORDATA') => {
     const trytes = asciiToTrytes(encodeURI(JSON.stringify(packet)));
     message = createMessage(mamState, trytes);
     // Attach the payload
-    console.log("Message", message.root, message.address)
-    console.log("Provider", provider)
-    console.log("Mam state", mamState)
-    const bundle = await mamAttach(provider, message, tag);
-    console.log("Bundle", bundle.messageId)
+    await mamAttach(provider, message, tag);
   } catch (e) {
     console.error("Could not attach message to mam stream", e)
   }
@@ -67,7 +61,7 @@ exports.publish = async (payload, mode = 'restricted', tag = 'SENSORDATA') => {
     console.log("Could not store key", e)
   }
 
-  console.log('Payload:', packet);
+  console.log('Saving data: :', packet);
   console.log(callbackResponse);
   console.log('==============================================================');
 };

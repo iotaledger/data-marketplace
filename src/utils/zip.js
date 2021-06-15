@@ -26,7 +26,7 @@ const getConfigFileContent = (device, provider) => `{
   "debug": true,
   "provider": "${provider}",
   "endpoint": "${domain}/newData",
-  "serverUrl": "https://swapi.co/api/vehicles/"
+  "serverUrl": "https://swapi.dev/api/vehicles/"
 }`;
 
 export const getZip = async (device, provider) => {
@@ -35,7 +35,7 @@ export const getZip = async (device, provider) => {
   zip.file('package.json', await getFileContent('/static/template/package.json'));
   zip.file('README.md', await getFileContent('/static/template/README.md'));
   zip.file('keyStorage.js', await getFileContent('/static/template/keyStorage.js'));
-  zip.file('iota.js', await getFileContent('/static/template/iota.js'));
+  zip.file('mam.js', await getFileContent('/static/template/mam.js'));
   zip.file('index.js', await getFileContent('/static/template/index.js'));
   zip.file('data.json', await getFileContent('/static/template/data.json'));
 
