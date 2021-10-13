@@ -10,9 +10,11 @@ const SideBar = ({ sensor, settings, isLoading, downloadSensorStreamJSON, purcha
   const [balance, setBalance] = useState(null);
 
   useEffect(() => {
+    
     (async () => {
+      console.log('Settings', )
       if (sensor.address) {
-        setBalance(await getBalance(sensor.address, settings.provider));
+        setBalance(await getBalance(sensor.address));
       }
     })();
   }, [!isEmpty(sensor) && sensor.address]);
@@ -24,7 +26,7 @@ const SideBar = ({ sensor, settings, isLoading, downloadSensorStreamJSON, purcha
         <div>
           {!isEmpty(settings) ? (
             <a
-              href={`${settings.tangleExplorer}/${sensor.address}/devnet`}
+              href={`${settings.tangleExplorer}/addr/${sensor.address}`}
               target="_blank"
               rel="noopener noreferrer"
             >

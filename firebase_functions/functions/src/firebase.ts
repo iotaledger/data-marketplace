@@ -234,16 +234,6 @@ const setApiKey = async (apiKey: string, uid: string, email: string) => {
   return true;
 };
 
-const setOwner = async (deviceId: string, owner: string) => {
-  // Save new owner
-  await admin
-    .firestore()
-    .collection('devices')
-    .doc(deviceId)
-    .set({ owner }, { merge: true });
-  return true;
-};
-
 const setPurchase = async (userId: string, deviceId: string) => {
   // Save new owner
   await admin
@@ -304,6 +294,22 @@ const toggleWhitelistDevice = async (sensorId: string, inactive: string) => {
   return true;
 };
 
+const getDustProtectionThreshold = async () => {
+  const doc = await admin
+  .firestore()
+  .collection('settings')
+  .doc('settings')
+  .get();
+if (doc.exists) {
+  const data = doc.data();
+  if (data.dustProtectionThreshold) {
+    return data.dustProtectionThreshold;
+  }
+}
+console.log('getDustProtectionThreshold failed. Setting does not exist', doc);
+throw Error(`The getDustProtectionThreshold setting doesn't exist.`);
+}
+
 const getUser = async (userId: string) => {
   // Get user
   const doc = await admin
@@ -363,7 +369,8 @@ const getSettings = async () => {
       recaptchaSiteKey,
       tangleExplorer,
       nodes,
-      tangle
+      tangle,
+      dustProtectionThreshold
     } = doc.data();
     return {
       defaultPrice,
@@ -375,7 +382,8 @@ const getSettings = async () => {
       recaptchaSiteKey,
       tangleExplorer,
       nodes,
-      tangle
+      tangle,
+      dustProtectionThreshold
     };
   }
   console.error('getSettings failed. Setting does not exist', doc);
@@ -414,15 +422,6 @@ const updateBalance = async (uid: string, balance: any) => {
     .collection('users')
     .doc(uid)
     .set({ wallet: { balance } }, { merge: true });
-  return true;
-};
-
-const updateUserWalletAddressKeyIndex = async (address: string, keyIndex: number, uid: string) => {
-  await admin
-    .firestore()
-    .collection('users')
-    .doc(uid)
-    .set({ wallet: { address, keyIndex } }, { merge: true });
   return true;
 };
 
@@ -485,7 +484,6 @@ export {
   setUser,
   setDevice,
   setApiKey,
-  setOwner,
   setPurchase,
   deleteDevice,
   toggleWhitelistDevice,
@@ -495,8 +493,8 @@ export {
   getUserWallet,
   setWallet,
   updateBalance,
-  updateUserWalletAddressKeyIndex,
   getIotaWallet,
   getEmailSettings,
-  getGoogleMapsApiKey
+  getGoogleMapsApiKey,
+  getDustProtectionThreshold
  }

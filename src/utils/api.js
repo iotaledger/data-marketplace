@@ -39,8 +39,5 @@ export default {
   },
   delete: async (endpoint, data = {}) => {
     return await request(`${domain}/${endpoint}`, { method: 'delete', data });
-  },
-  requestBalance: async (endpoint, data = {}) => {
-    return await request(endpoint, { method: 'post', data });
   }
 };

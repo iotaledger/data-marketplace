@@ -14,6 +14,7 @@ import Sidebar from '../components/side-bar';
 import DataStream from '../components/data-stream';
 import Fetcher from '../components/fetcher';
 import Cookie from '../components/cookie';
+import api from '../utils/api';
 
 export const SensorContext = React.createContext({});
 
@@ -38,8 +39,7 @@ class Sensor extends React.Component {
   async componentDidMount() {
     ReactGA.pageview('/sensor');
     const userId = (await userAuth()).uid;
-    const { match: { params: { deviceId } }, settings: { provider } } = this.props;
-    console.log(provider)
+    const { match: { params: { deviceId } }} = this.props;
     await this.props.loadSensor(deviceId);
 
     if (typeof this.props.sensor === 'string') {
@@ -65,7 +65,7 @@ class Sensor extends React.Component {
   }
 
   async purchase() {
-    const { loadUser, user, sensor, match: { params: { deviceId } } } = this.props;
+    const { loadUser, user, sensor, match: { params: { deviceId } }, settings } = this.props;
     const { userId } = this.state;
 
     if (!user) {
@@ -76,8 +76,8 @@ class Sensor extends React.Component {
     const wallet = user.wallet;
     if (!wallet || isEmpty(wallet) || wallet.error) {
       return this.setNotification('noWallet');
-    }
-    if (Number(wallet.balance) < Number(sensor.price)) {
+    } 
+    if ((Number(wallet.balance) - settings.dustProtectionThreshold) < Number(sensor.price)) {
       ReactGA.event({
         category: 'Purchase failure, No balance',
         action: 'Purchase failure, No balance',
@@ -105,13 +105,14 @@ class Sensor extends React.Component {
           action: 'Purchase failure, purchase stream',
           label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
         });
+        console.log('Purchase error', error)
         this.setNotification('purchaseFailed', error);
       });
   }
 
   saveData(packets) {
     const time = packets[packets.length - 1].time
-    console.log(packets)
+    console.log('saveData', packets)
     const lastFetchedTimestamp = !this.state.lastFetchedTimestamp || time < this.state.lastFetchedTimestamp ? time : this.state.lastFetchedTimestamp;
     this.setState({
       lastFetchedTimestamp,
@@ -119,7 +120,10 @@ class Sensor extends React.Component {
     }, () => console.log("New state", this.state));
   }
 
-  setNotification = (notification, error) => this.setState({ notification, error });
+  setNotification = (notification, error) => {
+    console.log('Notification', {notification, error})
+    this.setState({ notification, error })
+  };
   setFetching = flag => this.setState({ fetching: flag });
   setPurchase = flag => this.setState({ purchase: flag });
   setErrorState = flag => this.setState({ error: flag });
@@ -133,7 +137,7 @@ class Sensor extends React.Component {
     return (
       <Main>
         <Cookie />
-        <SensorContext.Provider value={{ userId, setErrorState: this.setErrorState, setNotification: this.setNotification }}>
+        <SensorContext.Provider value={{ userId, setErrorState: this.setErrorState, setNotification: this.setNotification, notification: this.state.notification }}>
           <SensorNav />
         </SensorContext.Provider>
         <Data>
@@ -180,8 +184,8 @@ class Sensor extends React.Component {
 
 const mapStateToProps = state => ({
   sensor: state.sensor,
-  settings: state.settings,
   user: state.user,
+  settings: state.settings
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -56,7 +56,6 @@ const Fetcher = ({
         const message = await mamFetch(nodeURL, root, mode, sidekey)
         const trytes = trytesToAscii(message.message)
         const decoded = decodeURIComponent(trytes)
-        console.log(decoded)
         resolve(JSON.parse(decoded));
       } catch (e) {
         console.error('Could not fetch mam stream:', e);

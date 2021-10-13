@@ -18,21 +18,19 @@ import {
   setDevice,
   setPacket,
   setPurchase,
-  setOwner,
   setApiKey,
   setWallet,
   deleteDevice,
   toggleWhitelistDevice,
   updateBalance,
-  updateUserWalletAddressKeyIndex,
   getEmailSettings,
+  getDustProtectionThreshold
 } from './firebase';
 const { sendEmail } = require('./email');
 import {
   generateUUID,
   generateSeed,
   sanatiseObject,
-  findMessage,
   faucet,
   initWallet,
   checkRecaptcha,
@@ -41,8 +39,32 @@ import {
   addressToIac,
   gpsToIac,
   initSemarketWallet,
-  generateAddress
+  getBalance
 } from './helpers';
+
+exports.balance = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    const params = req.query;
+    if (!params && !params.address) {
+      console.error('balance failed: ', params);
+      return res.status(400).json({ error: 'Ensure all fields are included' });
+    }
+    try {
+      const address = <string>params.address;
+      const balanceWithDustProtection = await getBalance(address);
+      const dustProtectionThreshold = await getDustProtectionThreshold();
+      const balance =
+        balanceWithDustProtection - dustProtectionThreshold >= 0
+          ? balanceWithDustProtection - dustProtectionThreshold
+          : 0;
+      return res.status(200).json(balance);
+    } catch (error) {
+      console.error('Could not get balance', error);
+      return res.status(500).json({ error: 'Could not get balance' });
+    }
+  });
+});
+
 
 // Take in data from device
 exports.newData = functions.https.onRequest((req, res) => {
@@ -58,7 +80,7 @@ exports.newData = functions.https.onRequest((req, res) => {
       const device = await getSk(packet.id);
       if (device.sk === packet.sk) {
         return res.json({
-          success: await setPacket(packet.id, packet.packet),
+          success: await setPacket(packet.id, packet.packet)
         });
       } else {
         console.error('newData failed. Key is incorrect', device.sk, packet.sk);
@@ -87,8 +109,6 @@ exports.newDevice = functions.https.onRequest((req, res) => {
     try {
       const invalid = sanatiseObject(packet.device);
       const secretKey = generateSeed();
-      const seed = generateSeed();
-      const address = await generateAddress(seed);
       if (invalid) throw Error(invalid);
 
       const key = await getKey(<string>packet.apiKey);
@@ -100,8 +120,13 @@ exports.newDevice = functions.https.onRequest((req, res) => {
       if (userDevices.length < user.numberOfDevices) {
         const device = await getDevice(<string>packet.id, true);
         if (device && device.owner !== key.uid) {
-          return res.json({ error: `Device with ID ${packet.id} already exists. Please specify new unique ID` });
+          return res.json({
+            error: `Device with ID ${packet.id} already exists. Please specify new unique ID`
+          });
         }
+        const {
+          wallet: { address, seed }
+        } = await initWallet();
 
         return res.json({
           success: await setDevice(packet.id, secretKey, address, seed, packet.device),
@@ -109,7 +134,9 @@ exports.newDevice = functions.https.onRequest((req, res) => {
         });
       } else {
         console.error('newDevice failed. You have too many devices', userDevices.length);
-        return res.json({ error: 'You have too many devices. Please delete one to clear space' });
+        return res.json({
+          error: 'You have too many devices. Please delete one to clear space'
+        });
       }
     } catch (e) {
       console.error('newDevice failed. Error: ', e.message);
@@ -138,20 +165,16 @@ exports.delete = functions.https.onRequest((req, res) => {
       }
       if (device.owner === key.uid) {
         return res.json({
-          success: await deleteDevice(<string>deviceId),
+          success: await deleteDevice(<string>deviceId)
         });
       } else {
-        console.error(
-          "removeDevice failed. You don't have permission to delete this device",
-          device.owner,
-          key.uid
-        );
+        console.error("removeDevice failed. You don't have permission to delete this device", device.owner, key.uid);
         throw Error(`You don't have permission to delete this device`);
       }
     } catch (e) {
       console.error('removeDevice failed. Error: ', e.message);
       return res.status(403).json({
-        error: e.message,
+        error: e.message
       });
     }
   });
@@ -166,7 +189,7 @@ exports.devices = functions.https.onRequest((req, res) => {
         const { uid } = await getKey(<string>params.apiKey);
         if (params.userId === uid) {
           const userDevices = await getUserDevices(params.userId as string);
-          const promises = await userDevices.map(async device => {
+          const promises = await userDevices.map(async (device) => {
             const promise = await new Promise(async (resolve, reject) => {
               try {
                 const keyObj = await getSk(device.sensorId);
@@ -247,7 +270,7 @@ exports.stream = functions.https.onRequest((req, res) => {
 });
 
 // // Setup User with an API Key
-exports.setupUser = functions.auth.user().onCreate(user => {
+exports.setupUser = functions.auth.user().onCreate((user) => {
   return new Promise(async (resolve, reject): Promise<void> => {
     if (!user.email) {
       reject();
@@ -374,7 +397,7 @@ exports.wallet = functions.https.onRequest((req, res) => {
 
     try {
       const result = await initWallet();
-      console.log("Result", result)
+      console.log('Result', result);
       await setWallet(packet.userId, result.wallet);
       return res.status(201).json({ messageId: result.messageId });
     } catch (e) {
@@ -438,7 +461,9 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
       const newWalletBalance = Number(wallet.balance) - Number(price);
       if (newWalletBalance < 0) {
         console.error('purchaseStream failed. Not enough funds', packet);
-        return res.json({ error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.' });
+        return res.json({
+          error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.'
+        });
       }
       let messageId;
       try {
@@ -447,15 +472,6 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
       } catch (e) {
         return res.status(403).json({ error: e.message });
       }
-      // Find message on network and parse
-      const message_metadata = await findMessage(messageId);
-
-      // Make sure message is valid
-      // console.log(message_metadata)
-      // if (!message_metadata.ledgerInclusionState) {
-      //   console.error('purchaseStream failed. Message is invalid for: ', message_metadata);
-      //   res.status(403).json({ error: 'Transaction is Invalid' });
-      // }
 
       await setPurchase(packet.userId, packet.deviceId);
       await updateBalance(packet.userId, newWalletBalance);
@@ -495,8 +511,11 @@ exports.location = functions.https.onRequest((req, res) => {
         result = await iacToAddress(params.iac);
         console.log(`Converted area code "${params.iac}" to "${result}"`);
       } else if (params.gps) {
-        const coordinates = params.gps.toString().split(',').map(coord => Number(coord));
-        result = await gpsToIac(...coordinates as [number, number]);
+        const coordinates = params.gps
+          .toString()
+          .split(',')
+          .map((coord) => Number(coord));
+        result = await gpsToIac(...(coordinates as [number, number]));
         console.log(`Converted GPS coordinates "${params.gps}" to "${result}"`);
       }
       return res.json(result);

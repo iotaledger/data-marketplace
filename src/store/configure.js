@@ -3,20 +3,20 @@ import { middleware as reduxPackMiddleware } from 'redux-pack';
 import reducer from './reducer';
 
 let devtools = () => fn => fn;
-// let log = () => fn => fn;
-if (process.env.NODE_ENV === 'local') {
+let log = () => fn => fn;
+if (process.env.NODE_ENV === 'development') {
   if (window.devToolsExtension) {
     devtools = window.devToolsExtension;
   }
 }
 
-// if (process.env.NODE_ENV === 'local') {
-// log = require('redux-logger').default;
-// }
+if (process.env.NODE_ENV === 'development') {
+log = require('redux-logger').default;
+}
 
 const configureStore = initialState => {
   // const enhancers = [applyMiddleware(reduxPackMiddleware, log), devtools()];
-  const enhancers = [applyMiddleware(reduxPackMiddleware), devtools()];
+  const enhancers = [applyMiddleware(reduxPackMiddleware, log), devtools()];
 
   const store = createStore(reducer, initialState, compose(...enhancers));
 

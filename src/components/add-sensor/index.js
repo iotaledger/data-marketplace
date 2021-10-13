@@ -74,7 +74,6 @@ export default class extends React.Component {
       return alert('Please enter a device coordinates');
     if (!this.state.dataTypes || this.state.dataTypes.length < 1)
       return alert('You must have a valid data field');
-    if (this.state.devicePrice < 1000000) return alert('The price of data stream must be at least 1.000.000 Iota')
 
     this.setState({ loading: true });
 
@@ -240,7 +239,7 @@ export default class extends React.Component {
             <Column>
               <label>Price of the data stream:</label>
               <Input
-                placeholder={1000000}
+                placeholder={1000}
                 type="number"
                 name="devicePrice"
                 value={this.state.devicePrice}

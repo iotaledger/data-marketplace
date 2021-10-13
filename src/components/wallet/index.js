@@ -8,23 +8,27 @@ import { loadUser } from '../../store/user/actions';
 import { SensorContext } from '../../pages/sensor';
 import api from '../../utils/api';
 
-const Wallet = ({ loadUser, sensor, wallet }) => {
-  const { userId, setErrorState, setNotification } = useContext(SensorContext);
+const Wallet = ({ loadUser, sensor, wallet, settings }) => {
+  const { userId, setErrorState, setNotification, notification } = useContext(SensorContext);
   const [desc, setDesc] = useState('Loading wallet');
   const [walletLoading, setWalletLoading] = useState(false);
 
-  useEffect(() => { fetchWallet() }, [wallet && wallet.balance]);
-  useEffect(() => { loadUser(userId) }, [userId]);
+  useEffect(() => {
+    fetchWallet();
+  }, [wallet && wallet.balance, notification]);
+  useEffect(() => {
+    loadUser(userId);
+  }, [userId]);
 
   async function fetchWallet() {
-    if (isEmpty(wallet) || !wallet.balance) {
+    console.log('Fetching wallet');
+    console.log({ wallet, notification });
+    if (isEmpty(wallet) || !wallet.balance || notification === 'noBalance') {
       setDesc('Wallet not funded');
       setWalletLoading(false);
     } else {
       setDesc('IOTA wallet balance:');
       setWalletLoading(false);
-      setErrorState(false);
-      setNotification('purchase');
     }
   }
 
@@ -40,6 +44,8 @@ const Wallet = ({ loadUser, sensor, wallet }) => {
 
     await api.post('wallet', { userId });
     await loadUser(userId);
+    setErrorState(false);
+    setNotification('purchase');
   }
 
   return (
@@ -49,26 +55,28 @@ const Wallet = ({ loadUser, sensor, wallet }) => {
         <div style={{ margin: '8px 0 0 ' }}>
           <Loading size="26" color="#0d3497" />
         </div>
-      ) : wallet.balance ? (
-        <Balance>{wallet.balance.toLocaleString(navigator.language || {})} IOTA</Balance>
+      ) : wallet.balance && notification !== 'noBalance' ? (
+        <Balance>
+          {(wallet.balance - settings.dustProtectionThreshold).toLocaleString(navigator.language || {})} IOTA
+        </Balance>
       ) : (
         <Button onClick={fund}>Fund Wallet</Button>
       )}
     </Block>
-  )
-}
+  );
+};
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   sensor: state.sensor,
-  wallet: (state.user && state.user.wallet) || {}
+  wallet: (state.user && state.user.wallet) || {},
+  settings: state.settings
 });
 
-const mapDispatchToProps = dispatch => ({
-  loadUser: userId => dispatch(loadUser(userId)),
+const mapDispatchToProps = (dispatch) => ({
+  loadUser: (userId) => dispatch(loadUser(userId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);
-
 
 const Desc = styled.span`
   font: 12px/16px 'Nunito Sans', sans-serif;
