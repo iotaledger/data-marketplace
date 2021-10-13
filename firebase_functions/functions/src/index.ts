@@ -65,7 +65,6 @@ exports.balance = functions.https.onRequest((req, res) => {
   });
 });
 
-
 // Take in data from device
 exports.newData = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
@@ -394,12 +393,21 @@ exports.wallet = functions.https.onRequest((req, res) => {
       console.error('wallet failed. Packet: ', packet);
       return res.status(400).json({ error: 'Malformed Request' });
     }
-
+    const userId = packet.userId;
     try {
-      const result = await initWallet();
-      console.log('Result', result);
-      await setWallet(packet.userId, result.wallet);
-      return res.status(201).json({ messageId: result.messageId });
+      const wallet = await getUserWallet(userId);
+      // If wallet already exits, refill wallet
+      if (wallet) {
+        const initializedWallet = await faucet(wallet.address);
+        console.log('Result', initializedWallet);
+        await setWallet(packet.userId, initializedWallet.wallet);
+        return res.status(200).json({ messageId: initializedWallet.messageId });
+      } else {
+        const initializedWallet = await initWallet();
+        console.log('Result', initializedWallet);
+        await setWallet(packet.userId, initializedWallet.wallet);
+        return res.status(201).json({ messageId: initializedWallet.messageId });
+      }
     } catch (e) {
       console.error('wallet failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
@@ -425,7 +433,7 @@ exports.faucet = functions.https.onRequest((req, res) => {
         return res.status(403).json({ error: recaptcha['error-codes'] });
       }
 
-      const messageId = await faucet(packet.address);
+      const { messageId } = await faucet(packet.address);
       return res.json({ messageId });
     } catch (e) {
       console.error('faucet failed. Error: ', e.message);
@@ -457,12 +465,12 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
       } else {
         return res.json({ error: `Device doesn't exist` });
       }
-
+      const dustProtectionThreshold = await getDustProtectionThreshold();
       const newWalletBalance = Number(wallet.balance) - Number(price);
-      if (newWalletBalance < 0) {
+      if (newWalletBalance < dustProtectionThreshold) {
         console.error('purchaseStream failed. Not enough funds', packet);
         return res.json({
-          error: 'Not enough funds or your new wallet is awaiting confirmation. Please try again in 5 min.'
+          error: 'Not enough funds in your wallet.'
         });
       }
       let messageId;

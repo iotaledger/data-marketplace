@@ -119,12 +119,18 @@ const transferFunds = async (
  * @param receiveAddress
  * @returns messageId
  */
-const faucet = async (receiveAddress): Promise<string> => {
-  const { seed, defaultBalance } = await getIotaWallet();
-  const address = await generateAddress(seed);
-
-  const messageId = await transferFunds(receiveAddress, address, seed, defaultBalance, true);
-  return messageId;
+const faucet = async (receiveAddress): Promise<InitializedWallet> => {
+  const { seed, defaultBalance, address  } = await getIotaWallet();
+  const userBalance = await getBalance(receiveAddress);
+  const messageId = await transferFunds(receiveAddress, address, seed, defaultBalance, false);
+  return {
+    messageId,
+    wallet: {
+      address,
+      seed,
+      balance: userBalance + defaultBalance
+    }
+  }
 };
 
 type InitializedWallet = {
