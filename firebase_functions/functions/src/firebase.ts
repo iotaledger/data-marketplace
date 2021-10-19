@@ -1,5 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
+import { Wallet } from './models/wallet';
+import { DeviceListItem } from './models/deviceListItem';
 
 admin.initializeApp(functions.config().firebase);
 
@@ -11,10 +13,10 @@ const getKey = async (key: string) => {
   throw Error('Your API key is incorrect.');
 };
 
-const getSk = async (deviceId: string) => {
+const getSk = async (deviceId: string): Promise<DeviceListItem> => {
   // Get API key
   const doc = await admin.firestore().collection('deviceList').doc(deviceId).get();
-  if (doc.exists) return doc.data();
+  if (doc.exists) return <DeviceListItem>doc.data();
   console.error('getSk failed. device does not exist', deviceId, doc);
   throw Error(`The device doesn't exist.`);
 };
@@ -300,7 +302,7 @@ const getSettings = async () => {
   throw Error(`The getSettings setting doesn't exist.`);
 };
 
-const getUserWallet = async (uid: string) => {
+const getUserWallet = async (uid: string): Promise<Wallet> => {
   // Get User's wallet
   const doc = await admin.firestore().collection('users').doc(uid).get();
 

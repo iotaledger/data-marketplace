@@ -1,4 +1,3 @@
-import { MessageMetadata } from '@iota/client/lib/types';
 import * as functions from 'firebase-functions';
 const cors = require('cors')({ origin: true });
 
@@ -39,7 +38,8 @@ import {
   addressToIac,
   gpsToIac,
   initSemarketWallet,
-  getBalance
+  getBalance,
+  fundWallet
 } from './helpers';
 
 exports.balance = functions.https.onRequest((req, res) => {
@@ -398,10 +398,9 @@ exports.wallet = functions.https.onRequest((req, res) => {
       const wallet = await getUserWallet(userId);
       // If wallet already exits, refill wallet
       if (wallet) {
-        const initializedWallet = await faucet(wallet.address);
-        console.log('Result', initializedWallet);
-        await setWallet(packet.userId, initializedWallet.wallet);
-        return res.status(200).json({ messageId: initializedWallet.messageId });
+        const filledWallet = await fundWallet(wallet.address, wallet.seed);
+        await setWallet(packet.userId, filledWallet.wallet);
+        return res.status(200).json({ messageId: filledWallet.messageId });
       } else {
         const initializedWallet = await initWallet();
         console.log('Result', initializedWallet);
@@ -475,7 +474,7 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
       }
       let messageId;
       try {
-        messageId = await purchaseData(packet.userId, device.address, price);
+        messageId = await purchaseData(packet.userId, packet.deviceId, device.address, price);
         console.log('purchaseStream', packet.userId, packet.deviceId, messageId);
       } catch (e) {
         return res.status(403).json({ error: e.message });
