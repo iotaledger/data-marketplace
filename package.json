@@ -41,6 +41,7 @@
     "in-view": "^0.6.1",
     "jszip": "^3.6.0",
     "lodash-es": "^4.17.20",
+    "mapbox-gl": "^2.5.1",
     "query-string": "^6.14.0",
     "react": "^17.0.1",
     "react-burger-menu": "^3.0.3",
@@ -48,7 +49,7 @@
     "react-cookie": "^4.0.3",
     "react-dom": "^17.0.1",
     "react-ga": "^3.3.0",
-    "react-map-gl": "^6.1.7",
+    "react-map-gl": "^6.1.17",
     "react-recaptcha": "^2.3.10",
     "react-redux": "^7.2.2",
     "react-router": "^5.2.0",
@@ -63,7 +64,8 @@
     "@firebase/app-types": "^0.6.1",
     "node-sass": "^5.0.0",
     "react-scripts": "^4.0.2",
-    "webpack-bundle-analyzer": "^4.4.0"
+    "webpack-bundle-analyzer": "^4.4.0",
+    "worker-loader": "^3.0.8"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -82,9 +84,8 @@
     "node": ">=10.0"
   },
   "browserslist": [
-    "> 2%",
-    "last 2 versions",
-    "edge >= 16"
+    "defaults",
+    "not ie 11"
   ],
   "resolutions": {
     "acorn": "^7.1.1",

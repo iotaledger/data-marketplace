@@ -11,7 +11,7 @@ import api from '../../utils/api';
 const Wallet = ({ loadUser, sensor, wallet, settings }) => {
   const { userId, setErrorState, setNotification, notification } = useContext(SensorContext);
   const [desc, setDesc] = useState('Loading wallet');
-  const [walletLoading, setWalletLoading] = useState(false);
+  const [walletLoading, setWalletLoading] = useState(true);
 
   useEffect(() => {
     fetchWallet();
@@ -55,9 +55,9 @@ const Wallet = ({ loadUser, sensor, wallet, settings }) => {
         <div style={{ margin: '8px 0 0 ' }}>
           <Loading size="26" color="#0d3497" />
         </div>
-      ) : wallet.balance && notification !== 'noBalance' ? (
+      ) :  !isEmpty(wallet) && notification !== 'noBalance' ? (
         <Balance>
-          {(wallet.balance - settings.dustProtectionThreshold).toLocaleString(navigator.language || {})} IOTA
+          {Math.max(wallet.balance - settings.dustProtectionThreshold, 0).toLocaleString(navigator.language || {})} IOTA
         </Balance>
       ) : (
         <Button onClick={fund}>Fund Wallet</Button>
