@@ -27,7 +27,7 @@
   ],
   "dependencies": {
     "@iota/area-codes": "^0.1.1",
-    "@iota/client": "^0.6.0",
+    "@iota/client": "^2.1.1",
     "axios": "^0.21.1",
     "bluebird": "^3.7.2",
     "cors": "^2.8.5",

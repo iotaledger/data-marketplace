@@ -4,36 +4,25 @@ import SensorCard from '../sensor-card';
 import Inview from '../inview';
 import Loading from '../loading';
 
-export default ({ packets, streamLength }) => (
+const DataStream = ({ packets, newPacketsLength }) => (
   <InfoCol>
     <CardWrapper>
       {packets &&
-        packets
-          .sort((a, b) => b.time - a.time)
-          .map((packet, i) => (
-            <SensorCard index={i} key={i} packet={packet} />
-          ))}
-      {streamLength && packets.length > 0 && (
+        packets.sort((a, b) => b.time - a.time).map((packet, i) => <SensorCard index={i} key={i} packet={packet} />)}
+      
+    </CardWrapper>
+    {packets.length > 0 && (
         <Fetcher>
-          <span>
-            {
-              packets.length !== streamLength && (
-                <React.Fragment>
-                  <p>Fetching packet {packets.length} of {streamLength}</p>
-                </React.Fragment>
-              )
-            }
-            <Inview />
-          </span>
+          {newPacketsLength === 0 && <p>No new data to fetch. Scroll down to try again.</p>}
+          <Inview />
           <Block />
         </Fetcher>
       )}
-      {streamLength > 0 && packets.length === 0 && (
-        <Loading color="#e2e2e2" size="80" />
-      )}
-    </CardWrapper>
+      {newPacketsLength > 0 && packets.length === 0 && <Loading color="#e2e2e2" size="80" />}
   </InfoCol>
 );
+
+export default DataStream;
 
 const InfoCol = styled.main`
   position: relative;
@@ -85,7 +74,7 @@ const Block = styled.div`
 `;
 
 const Fetcher = styled.div`
-  position: absolute;
+  position: relative;
   bottom: 10px;
   color: white;
   padding: 20px 10px;

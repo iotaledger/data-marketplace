@@ -110,12 +110,13 @@ class Sensor extends React.Component {
   }
 
   saveData(packets) {
+    const oldPackets = this.state.packets;
     const time = packets[packets.length - 1].time
     console.log('saveData', packets)
     const lastFetchedTimestamp = !this.state.lastFetchedTimestamp || time < this.state.lastFetchedTimestamp ? time : this.state.lastFetchedTimestamp;
     this.setState({
       lastFetchedTimestamp,
-      packets
+      packets: [...oldPackets, ...packets]
     }, () => console.log("New state", this.state));
   }
 
@@ -126,11 +127,11 @@ class Sensor extends React.Component {
   setFetching = flag => this.setState({ fetching: flag });
   setPurchase = flag => this.setState({ purchase: flag });
   setErrorState = flag => this.setState({ error: flag });
-  setStreamLength = value => this.setState({ streamLength: value });
+  setNewPacketsLength = value => this.setState({ newPacketsLength: value });
   setDataEnd = flag => this.setState({ dataEnd: flag });
 
   render() {
-    const { userId, error, fetching, packets, streamLength, purchase } = this.state;
+    const { userId, error, fetching, packets, newPacketsLength, purchase } = this.state;
     const { match: { params: { deviceId } } } = this.props;
 
     return (
@@ -146,7 +147,7 @@ class Sensor extends React.Component {
             purchase={purchase && packets.length > 0}
           />
           <SensorContext.Provider value={{ func: this.loadMore }}>
-            <DataStream packets={packets} streamLength={streamLength} />
+            <DataStream packets={packets} newPacketsLength={newPacketsLength} />
           </SensorContext.Provider>
         </Data>
 
@@ -165,7 +166,7 @@ class Sensor extends React.Component {
             <Fetcher
               setNotification={this.setNotification}
               setPurchase={this.setPurchase}
-              setStreamLength={this.setStreamLength}
+              setStreamLength={this.setNewPacketsLength}
               setFetching={this.setFetching}
               setDataEnd={this.setDataEnd}
               saveData={this.saveData}

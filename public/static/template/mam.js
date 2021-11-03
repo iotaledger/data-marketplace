@@ -43,12 +43,13 @@ exports.publish = async (payload, mode = 'restricted', tag = 'SENSORDATA') => {
   }
 
   let message;
+  let transaction;
   try {
     // Create MAM Payload - STRING OF TRYTES
     const trytes = asciiToTrytes(encodeURI(JSON.stringify(packet)));
     message = createMessage(mamState, trytes);
     // Attach the payload
-    await mamAttach(provider, message, tag);
+    transaction = await mamAttach(provider, message, tag);
   } catch (e) {
     console.error("Could not attach message to mam stream", e)
   }
@@ -56,7 +57,7 @@ exports.publish = async (payload, mode = 'restricted', tag = 'SENSORDATA') => {
   // Store encryption key in Firebase
   let callbackResponse;
   try {
-    callbackResponse = await storeKey(secretKey, message.root, time);
+    callbackResponse = await storeKey(secretKey, message.root, transaction.messageId, time);
   } catch (e) {
     console.log("Could not store key", e)
   }

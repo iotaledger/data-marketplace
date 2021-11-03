@@ -239,7 +239,6 @@ const purchaseData = async (
  */
 const waitForLedgerInclusion = async (messageIds: string[]): Promise<void> => {
   const client = await getClient();
-  console.log(client);
   return new Promise(async (resolve, reject) => {
     const topics = [];
     messageIds.forEach((messageId) => {
@@ -263,24 +262,28 @@ const subscribeToMqttTopics = async (topics: string[]): Promise<void> => {
   let includedMessages = 0;
   const client = await getClient();
   return new Promise((resolve, reject) => {
-    client
-      .subscriber()
-      .topics(topics)
-      .subscribe(async (error, data) => {
-        const topic = data?.topic;
-        const payload = JSON.parse(data?.payload);
-        if (payload.ledgerInclusionState === 'conflicting' || error) {
-          console.error('subscribeToMqttTopics error', { payload, error });
-          reject();
-        }
-        if (payload.ledgerInclusionState === 'included') {
-          await unsubscribeToMqttTopics(topic);
-          includedMessages++;
-        }
-        if (includedMessages === topics.length) {
-          resolve();
-        }
-      });
+    try {
+      client
+        .subscriber()
+        .topics(topics)
+        .subscribe(async (error, data) => {
+          const topic = data?.topic;
+          const payload = JSON.parse(data?.payload);
+          if (payload.ledgerInclusionState === 'conflicting' || error) {
+            console.error('subscribeToMqttTopics error', { payload, error });
+            reject();
+          }
+          if (payload.ledgerInclusionState === 'included') {
+            await unsubscribeToMqttTopics(topic);
+            includedMessages++;
+          }
+          if (includedMessages === topics.length) {
+            resolve();
+          }
+        });
+    } catch (error) {
+      console.error('Could not subscribe to MQTT topic ', error);
+    }
   });
 };
 
@@ -291,16 +294,20 @@ const subscribeToMqttTopics = async (topics: string[]): Promise<void> => {
 const unsubscribeToMqttTopics = async (topic: string): Promise<void> => {
   const client = await getClient();
   return new Promise((resolve, reject) => {
-    client
-      .subscriber()
-      .topics([topic])
-      .unsubscribe((error, _data) => {
-        if (error !== null) {
-          console.error('unsubscribeToMqttTopics error', error);
-          reject();
-        }
-        resolve();
-      });
+    try {
+      client
+        .subscriber()
+        .topics([topic])
+        .unsubscribe((error, _data) => {
+          if (error !== null) {
+            console.error('unsubscribeToMqttTopics error', error);
+            reject();
+          }
+          resolve();
+        });
+    } catch (error) {
+      console.error('Could not unsubscribe from MQTT topic ', error);
+    }
   });
 };
 

@@ -24,13 +24,14 @@ export default () => (
 const S = styled.section`
   position: relative;
   top: 35px;
-  left: 35px;
+  margin: 20px;
   height: 0;
   z-index: 1000;
-  width: 420px;
+  max-width: 420px;
 
   @media (max-width: 768px) {
-    height: 165px;
+    height: unset;
+    top: 0px;
   }
 `;
 
@@ -67,7 +68,6 @@ const P = styled.p`
 `;
 
 const New = styled(P)`
-  width: 18%;
   max-width: 100px;
   background-color: #173a9a;
   color: #fff;
