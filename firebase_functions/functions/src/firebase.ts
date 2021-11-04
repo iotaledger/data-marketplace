@@ -237,7 +237,6 @@ const getDustProtectionThreshold = async (): Promise<number> => {
 const getUser = async (userId: string) => {
   // Get user
   const doc = await admin.firestore().collection('users').doc(userId).get();
-  console.log(doc)
   // Check and return user
   if (doc.exists) {
     const result = doc.data();
