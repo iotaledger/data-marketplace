@@ -470,10 +470,8 @@ exports.purchaseStream = functions.https.onRequest((req, res) => {
           error: 'Not enough funds in your wallet.'
         });
       }
-      let messageId;
       try {
-        messageId = await purchaseData(packet.userId, packet.deviceId, device.address, price);
-        console.log('purchaseStream', packet.userId, packet.deviceId, messageId);
+        await purchaseData(packet.userId, packet.deviceId, device.address, price);
       } catch (e) {
         return res.status(403).json({ error: e.message });
       }

@@ -41,7 +41,6 @@ const Fetcher = ({
         return setNotification('streamReadFailure', deviceId);
       }
       let sensor_data_packets = await getSensorData(mamStreamData);
-      console.log(sensor_data_packets);
       setFetching(false);
       setPurchase(true);
       setStreamLength(sensor_data_packets.length);

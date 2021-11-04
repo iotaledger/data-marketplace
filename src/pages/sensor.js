@@ -116,7 +116,7 @@ class Sensor extends React.Component {
     this.setState({
       lastFetchedTimestamp,
       packets: [...oldPackets, ...packets]
-    }, () => console.log("New state", this.state));
+    });
   }
 
   setNotification = (notification, error) => {

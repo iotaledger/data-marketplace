@@ -85,8 +85,9 @@
     "node": ">=10.0"
   },
   "browserslist": [
-    "defaults",
-    "not ie 11"
+    "> 2%",
+    "last 2 versions",
+    "edge >= 16"
   ],
   "resolutions": {
     "acorn": "^7.1.1",

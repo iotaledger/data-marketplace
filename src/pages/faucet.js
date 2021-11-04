@@ -28,7 +28,7 @@ class Faucet extends React.Component {
   }
 
   handleInputChange({ target: { name, value } }) {
-    this.setState({ [name]: value }, () => console.log(this.state));
+    this.setState({ [name]: value });
   }
 
   verify(data) {
