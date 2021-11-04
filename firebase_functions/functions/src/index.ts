@@ -278,11 +278,8 @@ exports.setupUser = functions.auth.user().onCreate((user) => {
       try {
         const apiKey = generateUUID();
         const numberOfDevices = (await getNumberOfDevices()) || 5;
-
         await setUser(user.uid, { apiKey, numberOfDevices });
         await setApiKey(apiKey, user.uid, user.email);
-
-        console.log('setupUser resolved for UID', user.uid);
         resolve(null);
       } catch (e) {
         console.error('setupUser rejected with ', e.message);
@@ -403,7 +400,6 @@ exports.wallet = functions.https.onRequest((req, res) => {
         return res.status(200).json({ messageId: filledWallet.messageId });
       } else {
         const initializedWallet = await initWallet();
-        console.log('Result', initializedWallet);
         await setWallet(packet.userId, initializedWallet.wallet);
         return res.status(201).json({ messageId: initializedWallet.messageId });
       }
@@ -513,17 +509,14 @@ exports.location = functions.https.onRequest((req, res) => {
       let result = null;
       if (params.address) {
         result = await addressToIac(decodeURI(params.address.toString()));
-        console.log(`Converted address "${decodeURI(params.address.toString())}" to "${result}"`);
       } else if (params.iac) {
         result = await iacToAddress(params.iac);
-        console.log(`Converted area code "${params.iac}" to "${result}"`);
       } else if (params.gps) {
         const coordinates = params.gps
           .toString()
           .split(',')
           .map((coord) => Number(coord));
         result = await gpsToIac(...(coordinates as [number, number]));
-        console.log(`Converted GPS coordinates "${params.gps}" to "${result}"`);
       }
       return res.json(result);
     } catch (e) {

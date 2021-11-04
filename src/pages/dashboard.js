@@ -19,7 +19,7 @@ class Dashboard extends React.Component {
     this.state = {
       devices: [],
       user: {},
-      loading: false,
+      loading: false
     };
 
     this.checkLogin = this.checkLogin.bind(this);
@@ -38,7 +38,7 @@ class Dashboard extends React.Component {
   }
 
   checkLogin() {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user && !user.isAnonymous) {
         // User is signed in.
         this.setState({ user });
@@ -48,7 +48,7 @@ class Dashboard extends React.Component {
         this.setState({ loading: false });
       }
     });
-  };
+  }
 
   auth() {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -58,7 +58,7 @@ class Dashboard extends React.Component {
     firebase
       .auth()
       .signInWithPopup(provider)
-      .then(result => {
+      .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         // const token = result.credential.accessToken;
         // The signed-in user info.
@@ -71,21 +71,26 @@ class Dashboard extends React.Component {
           label: `User UID ${user.uid}`
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('auth error', error);
       });
-  };
+  }
 
   async getUser() {
     await this.props.loadUser(this.state.user.uid);
     await this.findDevices();
-  };
+  }
 
   async findDevices() {
     this.setState({ loading: true });
-    const devices = await api.get('devices', { userId: this.state.user.uid, apiKey: this.props.userData.apiKey }) || [];
-    return this.setState({ devices, loading: false });
-  };
+    try {
+      const devices =
+        (await api.get('devices', { userId: this.state.user.uid, apiKey: this.props.userData.apiKey })) || [];
+      return this.setState({ devices, loading: false });
+    } catch (error) {
+      this.setState({ devices: [], loading: false });
+    }
+  }
 
   createDevice(device) {
     const { userData } = this.props;
@@ -98,7 +103,7 @@ class Dashboard extends React.Component {
       const packet = {
         apiKey: userData.apiKey,
         id: device.sensorId,
-        device,
+        device
       };
 
       // Call server
@@ -114,7 +119,7 @@ class Dashboard extends React.Component {
         label: `Device ID ${device.sensorId}`
       });
     });
-  };
+  }
 
   async deleteDevice(deviceId) {
     ReactGA.event({
@@ -128,14 +133,14 @@ class Dashboard extends React.Component {
     if (data.success) {
       this.setState({
         loading: false,
-        devices: [...this.state.devices.filter(device => device.sensorId !== deviceId)],
+        devices: [...this.state.devices.filter((device) => device.sensorId !== deviceId)]
       });
     } else {
       this.setState({
-        loading: false,
+        loading: false
       });
     }
-  };
+  }
 
   logout() {
     this.props.logout();
@@ -146,10 +151,10 @@ class Dashboard extends React.Component {
         // Sign-out successful.
         this.setState({ user: {}, devices: [] });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('logout error', error);
       });
-  };
+  }
 
   render() {
     const { devices, user, loading } = this.state;
@@ -161,44 +166,35 @@ class Dashboard extends React.Component {
         <DeviceNav user={user} logout={this.logout} />
         <Data>
           <Sidebar devices={devices} user={user} userData={userData} />
-          {
-            loading ? (
-              <LoadingBox>
-                <Loading />
-              </LoadingBox>
-            ) : (
-              <DeviceList
-                devices={devices}
-                maxDevices={userData.numberOfDevices}
-                create={this.createDevice}
-                delete={this.deleteDevice}
-              />
-            )
-          }
+          {loading ? (
+            <LoadingBox>
+              <Loading />
+            </LoadingBox>
+          ) : (
+            <DeviceList
+              devices={devices}
+              maxDevices={userData.numberOfDevices}
+              create={this.createDevice}
+              delete={this.deleteDevice}
+            />
+          )}
         </Data>
-        <LoginModal
-          auth={this.auth}
-          show={isEmpty(user)}
-          loading={loading}
-        />
+        <LoginModal auth={this.auth} show={isEmpty(user)} loading={loading} />
       </Main>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  userData: state.user,
+const mapStateToProps = (state) => ({
+  userData: state.user
 });
 
-const mapDispatchToProps = dispatch => ({
-  loadUser: userId => dispatch(loadUser(userId)),
-  logout: () => dispatch(logout()),
+const mapDispatchToProps = (dispatch) => ({
+  loadUser: (userId) => dispatch(loadUser(userId)),
+  logout: () => dispatch(logout())
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
 
 const Main = styled.main`
   width: 100vw;

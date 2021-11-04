@@ -104,7 +104,7 @@ class Sensor extends React.Component {
           action: 'Purchase failure, purchase stream',
           label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
         });
-        console.log('Purchase error', error)
+        console.error('Purchase error', error)
         this.setNotification('purchaseFailed', error);
       });
   }
@@ -112,7 +112,6 @@ class Sensor extends React.Component {
   saveData(packets) {
     const oldPackets = this.state.packets;
     const time = packets[packets.length - 1].time
-    console.log('saveData', packets)
     const lastFetchedTimestamp = !this.state.lastFetchedTimestamp || time < this.state.lastFetchedTimestamp ? time : this.state.lastFetchedTimestamp;
     this.setState({
       lastFetchedTimestamp,
@@ -121,7 +120,6 @@ class Sensor extends React.Component {
   }
 
   setNotification = (notification, error) => {
-    console.log('Notification', {notification, error})
     this.setState({ notification, error })
   };
   setFetching = flag => this.setState({ fetching: flag });

@@ -8,7 +8,7 @@ export const purchaseStream = (userId, deviceId) => {
       if (purchaseStreamResponse && purchaseStreamResponse.success) {
         resolve();
       }
-      console.log('Purchase error', purchaseStreamResponse.error);
+      console.error('Purchase error', purchaseStreamResponse.error);
       reject(purchaseStreamResponse && purchaseStreamResponse.error);
     } catch (error) {
       console.error('getBundleHashes error', error);

@@ -159,15 +159,6 @@ const initWallet = async (): Promise<InitializedWallet> => {
   const receiveAddress = await generateAddress(receiveSeed);
   const { address, defaultBalance, seed } = await getIotaWallet();
   const { dustProtectionThreshold } = await getSettings();
-
-  //debug
-  console.log('Transfer funds', {
-    receiveAddress,
-    address,
-    seed,
-    defaultBalance,
-    dustProtectionThreshold
-  });
   const tokens = defaultBalance + dustProtectionThreshold;
   const messageId = await transferFunds(receiveAddress, address, seed, tokens, true);
   const initializedWallet = {
@@ -330,7 +321,7 @@ const gpsToAddress = async (latitude, longitude) => {
     const result = await axios(options);
     return result.data.results[0].formatted_address;
   } catch (error) {
-    console.log('iacToAddress error:', error);
+    console.error('iacToAddress error:', error);
   }
   return null;
 };
@@ -340,7 +331,7 @@ const iacToAddress = async (iac) => {
     const { latitude, longitude } = iotaAreaCodes.decode(iac);
     return await gpsToAddress(latitude, longitude);
   } catch (error) {
-    console.log('iacToAddress error:', error);
+    console.error('iacToAddress error:', error);
   }
   return null;
 };

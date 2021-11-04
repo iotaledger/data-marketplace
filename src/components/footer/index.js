@@ -20,15 +20,15 @@ export default props => (
                 alt="IOTA logotype"
               />
             </AIMG>
-            <A order={4} href="https://ecosystem.iota.org/">
-              ecosystem.iota.org
+            <A order={4} href="https://explorer.iota.org/devnet">
+              explorer.iota.org
             </A>
-            <A order={5} href="https://docs.iota.org/">
-              docs.iota.org
+            <A order={5} href="https://wiki.iota.org/">
+              wiki.iota.org
             </A>
           </LinksInnerWrapper>
           <Nav>
-            <Copy>© 2018-2019 IOTA Foundation. All rights reserved.</Copy>
+            <Copy>© 2018-2021 IOTA Foundation. All rights reserved.</Copy>
           </Nav>
         </LinksOuterWrapper>
         <Wrapper>

@@ -31,8 +31,6 @@ const Fetcher = ({
         console.error('Could not get mamStreamData', e);
         setDataEnd(true);
       }
-      console.log('Packets: ', packets);
-      console.log(packets === 0);
       if ((!mamStreamData.length || !mamStreamData[0]) && packets === 0) {
         ReactGA.event({
           category: 'Stream read failure',

@@ -21,8 +21,6 @@ const Wallet = ({ loadUser, sensor, wallet, settings }) => {
   }, [userId]);
 
   async function fetchWallet() {
-    console.log('Fetching wallet');
-    console.log({ wallet, notification });
     if (isEmpty(wallet) || !wallet.balance || notification === 'noBalance') {
       setDesc('Wallet not funded');
       setWalletLoading(false);

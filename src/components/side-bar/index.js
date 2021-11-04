@@ -12,7 +12,6 @@ const SideBar = ({ sensor, settings, isLoading, downloadSensorStreamJSON, purcha
   useEffect(() => {
     
     (async () => {
-      console.log('Settings', )
       if (sensor.address) {
         setBalance(await getBalance(sensor.address));
       }
