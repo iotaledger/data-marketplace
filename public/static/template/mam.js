@@ -35,6 +35,7 @@ exports.publish = async (payload, mode = 'restricted', tag = 'SENSORDATA') => {
   try {
     // Change MAM encryption key on each loop
     secretKey = generateRandomKey(81);
+    
     // Create channel with stored seed & update secretKey
     const security = 2;
     mamState = createChannel(seed, security, mode, secretKey);
