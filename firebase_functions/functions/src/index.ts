@@ -189,6 +189,7 @@ exports.devices = functions.https.onRequest((req, res) => {
         if (params.userId === uid) {
           const userDevices = await getUserDevices(params.userId as string);
           const promises = await userDevices.map(async (device) => {
+            // eslint-disable-next-line no-async-promise-executor
             const promise = await new Promise(async (resolve, reject) => {
               try {
                 const keyObj = await getSk(device.sensorId);
@@ -270,6 +271,7 @@ exports.stream = functions.https.onRequest((req, res) => {
 
 // // Setup User with an API Key
 exports.setupUser = functions.auth.user().onCreate((user) => {
+  // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject): Promise<void> => {
     if (!user.email) {
       reject();

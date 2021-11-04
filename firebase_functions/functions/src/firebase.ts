@@ -56,7 +56,7 @@ const getData = async (device: string, timestamp?: number) => {
   });
 };
 
-const getDevice = async (device: string, internal: boolean = false) => {
+const getDevice = async (device: string, internal = false) => {
   // Get User's purchase
   const doc = await admin.firestore().collection('devices').doc(device).get();
   // Check user's profile for purchase

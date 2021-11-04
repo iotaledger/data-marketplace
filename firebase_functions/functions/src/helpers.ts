@@ -1,5 +1,5 @@
 import * as crypto from 'crypto';
-const axios = require('axios');
+import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { Client, ClientBuilder } from '@iota/client';
 import { getUserWallet, getSettings, getIotaWallet, getGoogleMapsApiKey, getSk } from './firebase';
@@ -229,20 +229,15 @@ const purchaseData = async (
  * @param messageIds of messages to be included
  */
 const waitForLedgerInclusion = async (messageIds: string[]): Promise<void> => {
-  const client = await getClient();
-  return new Promise(async (resolve, reject) => {
-    const topics = [];
-    messageIds.forEach((messageId) => {
-      topics.push(`messages/${messageId}/metadata`);
-    });
-    try {
-      await subscribeToMqttTopics(topics);
-      resolve();
-    } catch (error) {
-      console.error('waitForLedgerInclusion error', error);
-      reject();
-    }
+  const topics = [];
+  messageIds.forEach((messageId) => {
+    topics.push(`messages/${messageId}/metadata`);
   });
+  try {
+    await subscribeToMqttTopics(topics);
+  } catch (error) {
+    console.error('waitForLedgerInclusion error', error);
+  }
 };
 
 /**
@@ -289,6 +284,7 @@ const unsubscribeToMqttTopics = async (topic: string): Promise<void> => {
       client
         .subscriber()
         .topics([topic])
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         .unsubscribe((error, _data) => {
           if (error !== null) {
             console.error('unsubscribeToMqttTopics error', error);
@@ -313,12 +309,7 @@ const checkRecaptcha = async (captcha, emailSettings) => {
 const gpsToAddress = async (latitude, longitude) => {
   try {
     const apiKey = await getGoogleMapsApiKey();
-    const options = {
-      method: 'GET',
-      headers: { 'content-type': 'application/json; charset=UTF-8' },
-      url: `https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`
-    };
-    const result = await axios(options);
+    const result = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=${apiKey}`);
     return result.data.results[0].formatted_address;
   } catch (error) {
     console.error('iacToAddress error:', error);
@@ -348,12 +339,7 @@ const gpsToIac = async (latitude, longitude) => {
 const addressToIac = async (address) => {
   try {
     const apiKey = await getGoogleMapsApiKey();
-    const options = {
-      method: 'GET',
-      headers: { 'content-type': 'application/json; charset=UTF-8' },
-      url: `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`
-    };
-    const result = await axios(options);
+    const result = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${apiKey}`);
     const { lat, lng } = result.data.results[0].geometry.location;
     return iotaAreaCodes.encode(lat, lng);
   } catch (error) {

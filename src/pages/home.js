@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactGA from 'react-ga';
 import styled from 'styled-components';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import BurgerMenu from '../components/header/burger';
 import MiniHeader from '../components/header/mini-header';
 import Header from '../components/header';

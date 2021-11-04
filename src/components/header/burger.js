@@ -1,5 +1,5 @@
 import React from 'react';
-import { withRouter } from 'react-router';
+import { withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import BurgerMenu from 'react-burger-menu';
