@@ -29,10 +29,12 @@ cd functions && yarn build
 ## Testing
 
 To test this locally, run
-`firebase functions:shell`
+`firebase emulators:start --only functions`
 
-Then call a function with parameters
-`getDevices.post('/getDevices').form({})`
+Then call a function with parameters in request body / query params
+`http://localhost:<PORT>/<PROJECT NAME>/<SERVER LOCATION>/<FUNCTION NAME>`  
+e.g.  
+`http://localhost:5001/marketplacev2/us-central1/wallet`
 
 #### Deploy fo Firebase
 

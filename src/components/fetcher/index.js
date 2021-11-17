@@ -1,91 +1,79 @@
-import { useEffect, useState } from 'react';
-import { trytesToAscii } from '@iota/converter';
-import { Reader, Mode } from '@iota/mam/lib/mam';
-import get from 'lodash-es/get';
+import { useEffect } from 'react';
 import ReactGA from 'react-ga';
+import { mamFetch, TrytesHelper } from '@iota/mam.js';
+import { SingleNodeClient }from '@iota/iota.js';
 import { getData } from '../../utils/iota';
+import { nodeURL } from '../../config.json';
 
 const Fetcher = ({
-  ctx, client, packets, lastFetchedTimestamp, deviceId, userId,
-  setNotification, setPurchase, setStreamLength, setFetching, setDataEnd, saveData
+  packets,
+  lastFetchedTimestamp,
+  deviceId,
+  userId,
+  setNotification,
+  setPurchase,
+  setStreamLength,
+  setFetching,
+  setDataEnd,
+  saveData
 }) => {
-  const [fetchedData, setFetchedData] = useState(packets);
-
   useEffect(() => {
     (async () => {
+      let mamStreamData;
       try {
-        const data = await getData(userId, deviceId, lastFetchedTimestamp);
-
-        if (data.success === false) {
+        mamStreamData = await getData(userId, deviceId, lastFetchedTimestamp);
+        if (mamStreamData.success === false) {
           setPurchase(false);
           setFetching(false);
           return setNotification('purchase');
         }
-
-        if (!fetchedData && (!data.length || !data[0])) {
-          ReactGA.event({
-            category: 'Stream read failure',
-            action: 'Stream read failure',
-            label: `Sensor ID ${deviceId}`
-          });
-
-          setFetching(false);
-          return setNotification('streamReadFailure', deviceId);
-        }
-
-        setFetchedData(!!data.length);
-        setPurchase(true);
-        setStreamLength(packets + data.length);
-
-        let fetchErrorCounter = 0;
-        let emptyDataCounter = 0;
-
-        data && data.map(async ({ root, sidekey, time = null }) => {
-          try {
-            const mode = sidekey ? Mode.Old : Mode.Public;
-            const reader = new Reader(ctx, client, mode, root, sidekey || '9'.repeat(81));
-            const message = await reader.next();
-            const payload = get(message, 'value[0].message.payload');
-            if (payload) {
-                saveData(JSON.parse(trytesToAscii(payload)), time);
-            } else {
-              emptyDataCounter++;
-              if (emptyDataCounter > data.length * 0.5) {
-                ReactGA.event({
-                  category: 'Data read failure',
-                  action: 'Data read failure',
-                  label: `Sensor ID ${deviceId}`
-                });
-
-                setNotification('dataReadingFailure', deviceId);
-              }
-            }
-          } catch (error) {
-            fetchErrorCounter++;
-            console.error('fetchMam error 1', fetchErrorCounter, data.length, error);
-            if (fetchErrorCounter > data.length * 0.8) {
-              ReactGA.event({
-                category: 'MAM fetch failure 1',
-                action: 'MAM fetch failure 1 + reload',
-                label: `Sensor ID ${deviceId}, error: ${error}`
-              });
-              window.location.reload(true);
-            }
-          }
-        });
-      } catch (error) {
-        console.error('fetchMam error 2', error);
+      } catch (e) {
+        console.error('Could not get mamStreamData', e);
         setDataEnd(true);
-        ReactGA.event({
-          category: 'MAM fetch failure 2',
-          action: 'MAM fetch failure 2',
-          label: `Sensor ID ${deviceId}, error: ${error}`
-        });
       }
+      if ((!mamStreamData.length || !mamStreamData[0]) && packets === 0) {
+        ReactGA.event({
+          category: 'Stream read failure',
+          action: 'Stream read failure',
+          label: `Sensor ID ${deviceId}`
+        });
+        setFetching(false);
+        return setNotification('streamReadFailure', deviceId);
+      }
+      let sensor_data_packets = await getSensorData(mamStreamData);
+      setFetching(false);
+      setPurchase(true);
+      setStreamLength(sensor_data_packets.length);
+      sensor_data_packets.length && saveData(sensor_data_packets);
     })();
-  }, [packets]);
+  }, []);
+
+  const getSensorData = async (mamStreamData) => {
+    return Promise.all(
+      mamStreamData.map(async ({ root, sidekey }) => {
+        return fetchMamStream(root, sidekey);
+      })
+    );
+  };
+
+  const fetchMamStream = (root, sidekey, mode = 'restricted') => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const message = await mamFetch(new SingleNodeClient(nodeURL), root, mode, sidekey);
+        if (message === undefined) {
+          console.error('Could not fetch mam stream')
+          throw new Error('Could not fetch mam stream')
+        }
+        const decoded = decodeURIComponent(TrytesHelper.toAscii(message.message));
+        resolve(JSON.parse(decoded));
+      } catch (e) {
+        console.error('Could not fetch mam stream:', e);
+        reject();
+      }
+    });
+  };
 
   return null;
-}
+};
 
 export default Fetcher;

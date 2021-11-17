@@ -3,8 +3,6 @@ import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import isEmpty from 'lodash-es/isEmpty';
 import { connect } from 'react-redux';
-import { createHttpClient } from '@iota/http-client';
-import { createContext } from '@iota/mam/lib/mam';
 import { loadUser } from '../store/user/actions';
 import { loadSensor } from '../store/sensor/actions';
 import { userAuth } from '../utils/firebase';
@@ -40,8 +38,7 @@ class Sensor extends React.Component {
   async componentDidMount() {
     ReactGA.pageview('/sensor');
     const userId = (await userAuth()).uid;
-    const { match: { params: { deviceId } }, settings: { provider } } = this.props;
-
+    const { match: { params: { deviceId } }} = this.props;
     await this.props.loadSensor(deviceId);
 
     if (typeof this.props.sensor === 'string') {
@@ -52,9 +49,6 @@ class Sensor extends React.Component {
       });
       return this.setNotification('noDevice');
     }
-
-    this.ctx = await createContext();
-    this.client = createHttpClient({ provider });
     this.setState({ userId, fetching: true });
   }
 
@@ -70,7 +64,7 @@ class Sensor extends React.Component {
   }
 
   async purchase() {
-    const { loadUser, user, sensor,  match: { params: { deviceId } } } = this.props;
+    const { loadUser, user, sensor, match: { params: { deviceId } }, settings } = this.props;
     const { userId } = this.state;
 
     if (!user) {
@@ -81,8 +75,8 @@ class Sensor extends React.Component {
     const wallet = user.wallet;
     if (!wallet || isEmpty(wallet) || wallet.error) {
       return this.setNotification('noWallet');
-    }
-    if (Number(wallet.balance) < Number(sensor.price)) {
+    } 
+    if ((Number(wallet.balance) - settings.dustProtectionThreshold) < Number(sensor.price)) {
       ReactGA.event({
         category: 'Purchase failure, No balance',
         action: 'Purchase failure, No balance',
@@ -110,61 +104,67 @@ class Sensor extends React.Component {
           action: 'Purchase failure, purchase stream',
           label: `Sensor ID ${deviceId}, user ID ${userId}, error: ${error}`
         });
+        console.error('Purchase error', error)
         this.setNotification('purchaseFailed', error);
       });
   }
 
-  saveData(packet, time) {
-    const packets = [...this.state.packets, packet];
+  saveData(packets) {
+    const oldPackets = this.state.packets;
+    const time = packets[packets.length - 1].time
     const lastFetchedTimestamp = !this.state.lastFetchedTimestamp || time < this.state.lastFetchedTimestamp ? time : this.state.lastFetchedTimestamp;
     this.setState({
       lastFetchedTimestamp,
-      packets,
-      purchase: true,
-      fetching: false
+      packets: [...oldPackets, ...packets]
     });
   }
 
-  setNotification = (notification, error) => this.setState({ notification, error });
+  setNotification = (notification, error) => {
+    this.setState({ notification, error })
+  };
   setFetching = flag => this.setState({ fetching: flag });
   setPurchase = flag => this.setState({ purchase: flag });
   setErrorState = flag => this.setState({ error: flag });
-  setStreamLength = value => this.setState({ streamLength: value });
+  setNewPacketsLength = value => this.setState({ newPacketsLength: value });
   setDataEnd = flag => this.setState({ dataEnd: flag });
 
   render() {
-    const { userId, error, fetching, packets, streamLength, purchase } = this.state;
+    const { userId, error, fetching, packets, newPacketsLength, purchase } = this.state;
     const { match: { params: { deviceId } } } = this.props;
 
     return (
       <Main>
         <Cookie />
-        <SensorContext.Provider value={{ userId, setErrorState: this.setErrorState, setNotification: this.setNotification }}>
+        <SensorContext.Provider value={{ userId, setErrorState: this.setErrorState, setNotification: this.setNotification, notification: this.state.notification }}>
           <SensorNav />
         </SensorContext.Provider>
         <Data>
           <Sidebar
             downloadSensorStreamJSON={this.downloadSensorStreamJSON}
-            isLoading={fetching && packets[0] && !this.state.dataEnd && packets.length !== streamLength}
+            isLoading={fetching && packets[0]}
             purchase={purchase && packets.length > 0}
           />
           <SensorContext.Provider value={{ func: this.loadMore }}>
-            <DataStream packets={packets} streamLength={streamLength} />
+            <DataStream packets={packets} newPacketsLength={newPacketsLength} />
           </SensorContext.Provider>
         </Data>
-        <Modal
-          purchasePrice={this.props.sensor.price}
-          callback={this.purchase}
-          show={!this.state.purchase || !isEmpty(error)}
-          notification={this.state.notification}
-          error={error}
-        />
+
+        {
+          (!this.state.purchase || !isEmpty(error)) && (
+            <Modal
+              purchasePrice={this.props.sensor.price}
+              callback={this.purchase}
+              show={!this.state.purchase || !isEmpty(error)}
+              notification={this.state.notification}
+              error={error}
+            />)
+        }
         {
           fetching && (
             <Fetcher
               setNotification={this.setNotification}
               setPurchase={this.setPurchase}
-              setStreamLength={this.setStreamLength}
+              setStreamLength={this.setNewPacketsLength}
               setFetching={this.setFetching}
               setDataEnd={this.setDataEnd}
               saveData={this.saveData}
@@ -172,8 +172,6 @@ class Sensor extends React.Component {
               deviceId={deviceId}
               userId={userId}
               packets={packets.length}
-              ctx={this.ctx}
-              client={this.client}
             />
           )
         }
@@ -184,8 +182,8 @@ class Sensor extends React.Component {
 
 const mapStateToProps = state => ({
   sensor: state.sensor,
-  settings: state.settings,
   user: state.user,
+  settings: state.settings
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -30,7 +30,7 @@ renderer.code = function (code, language) {
 };
 
 var readIndexYml = function() {
-  return yaml.safeLoad(fs.readFileSync('./source/index.yml', 'utf8'));
+  return yaml.load(fs.readFileSync('./source/index.yml', 'utf8'));
 };
 
 var getPageData = function() {
@@ -125,13 +125,13 @@ gulp.task('html', function () {
   	.pipe(gulp.dest('./build'));
 });
 
-gulp.task('NO_COMPRESS', function() {
+gulp.task('NO_COMPRESS', async function() {
   COMPRESS = false;
 });
 
-gulp.task('default', ['clean', 'fonts', 'images', 'highlightjs', 'js', 'sass', 'html']);
+gulp.task('default', gulp.series('clean', 'fonts', 'images', 'highlightjs', 'js', 'sass', 'html'));
 
-gulp.task('serve', ['NO_COMPRESS', 'default'], function() {
+gulp.task('serve', gulp.series('NO_COMPRESS', 'default'), async function() {
 
   gulp.watch(['./source/*.html', './source/includes/**/*'], ['html']);
   gulp.watch('./source/javascripts/**/*', ['js']);

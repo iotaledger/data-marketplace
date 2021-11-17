@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactGA from 'react-ga';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { getZip } from '../../utils/zip';
 import Card from './index.js';
+import Clipboard from 'react-clipboard.js';
 
 const trackDownload = ({ sensorId }) => {
   ReactGA.event({
@@ -19,7 +20,7 @@ const Heading = ({ sensorId, type }, func) => (
     <SensorType>{type}</SensorType>
     {sensorId ? (
       <Link to={`/sensor/${sensorId}`}>
-      <SensorId>{sensorId.length > 20 ? `${sensorId.substr(0, 20)}...` : sensorId}</SensorId>
+        <SensorId>{sensorId.length > 20 ? `${sensorId.substr(0, 20)}...` : sensorId}</SensorId>
       </Link>
     ) : null}
     <Delete onClick={() => func(sensorId)}>
@@ -38,6 +39,15 @@ const Footer = (device, provider) => (
 
 const Device = props => {
   const { device, settings: { provider } } = props;
+
+  const [message, setMessage] = useState('')
+
+  const alert = (text) => {
+    setMessage(text);
+    setTimeout(() => {
+      setMessage('')
+    }, 1500)
+  };
   return (
     <Card header={Heading(device, props.delete)} footer={Footer(device, provider)}>
       <RowHalf>
@@ -57,7 +67,16 @@ const Device = props => {
       <RowHalf>
         <RowIcon src="/static/icons/icon-key.svg" alt="" />
         <RowDesc>Device secret key:</RowDesc>
-        <Data>{device.sk}</Data>
+        <Clipboard
+          style={{ background: 'none', display: 'block' }}
+          data-clipboard-text={device.sk}
+          onSuccess={() => alert("Successfully Copied")}
+        >
+          <CopyBox>
+            {device.sk ? `${device.sk.substr(0, 30)}...` : '--'}
+          </CopyBox>
+        </Clipboard>
+        <Alert message={message}>{message}</Alert>
       </RowHalf>
     </Card>
   );
@@ -161,3 +180,29 @@ const FooterButton = styled.button`
     margin-right: 0;
   }
 `;
+
+const DetailValue = styled.p`
+  font-size: 16px;
+  line-height: 32px;
+  color: #595959ff;
+`;
+
+const CopyBox = styled(DetailValue)`
+  cursor: pointer;
+  transition: all 0.3s ease;
+  &:hover {
+    opacity: 0.6;
+  }
+  font-size: 18px;
+  line-height: 30px;
+  margin-top: 4px;
+`;
+
+const Alert = styled.span`
+  font-size: 16px;
+  line-height: 32px;
+  color: #595959ff;
+  opacity: 1;
+  transition: all 0.5s ease;
+`;
+

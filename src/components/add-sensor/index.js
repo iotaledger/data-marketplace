@@ -239,7 +239,7 @@ export default class extends React.Component {
             <Column>
               <label>Price of the data stream:</label>
               <Input
-                placeholder={50000}
+                placeholder={1000}
                 type="number"
                 name="devicePrice"
                 value={this.state.devicePrice}

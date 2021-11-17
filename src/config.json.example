@@ -3,5 +3,6 @@
   "authDomain": "XXXXXXXXXXXXX.firebaseapp.com",
   "databaseURL": "https://XXXXXXXXXXXXX.firebaseio.com",
   "projectId": "XXXXXXXXXXXXX",
-  "domain": "https://us-central1-XXXXXXXXXXXXX.cloudfunctions.net"
+  "domain": "https://us-central1-XXXXXXXXXXXXX.cloudfunctions.net",
+  "nodeUrl": "https://api.lb-0.h.chrysalis-devnet.iota.cafe/"
 }

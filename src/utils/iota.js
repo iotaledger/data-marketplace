@@ -8,13 +8,14 @@ export const purchaseStream = (userId, deviceId) => {
       if (purchaseStreamResponse && purchaseStreamResponse.success) {
         resolve();
       }
+      console.error('Purchase error', purchaseStreamResponse.error);
       reject(purchaseStreamResponse && purchaseStreamResponse.error);
     } catch (error) {
       console.error('getBundleHashes error', error);
       reject(error);
     }
   });
-}
+};
 
 export const getData = async (userId, deviceId, time) => {
   try {
@@ -40,19 +41,15 @@ const getPackets = (userId, deviceId, time) => {
   });
 };
 
-export const getBalance = async (address, provider) => {
+/**
+ * Get the balance adjusted for dust protection
+ * @param {*} address
+ * @returns real balance - dust protection threshold (currently 1Mi)
+ */
+export const getBalance = async (address) => {
   try {
-    const packet = {
-      command: 'getBalances',
-      addresses: [address.substring(0, 81).toUpperCase()],
-      threshold: 100,
-    };
-
-    const result = await api.requestBalance(provider, packet);
-    if (result && result.balances && result.balances.length > 0) {
-      return result.balances[0];
-    }
-    return 0;
+    const balance = await api.get('balance', { address });
+    return balance;
   } catch (error) {
     console.error('getBalance error', error);
     return 0;

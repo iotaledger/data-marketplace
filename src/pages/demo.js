@@ -38,6 +38,7 @@ export default class extends React.Component {
       anchor: null,
       devices: [],
       loading: true,
+      error: false
     };
 
     this.onAnchorClick = this.onAnchorClick.bind(this);
@@ -45,12 +46,17 @@ export default class extends React.Component {
 
   async componentDidMount() {
     ReactGA.pageview('/demo');
-    const devices = await allDevices();
-    const activeDevices = devices.filter(device => !device.inactive);
-    this.setState({ devices: activeDevices, loading: false });
+    try {
+      const devices = await allDevices();
+      const activeDevices = devices.filter((device) => !device.inactive);
+      this.setState({ devices: activeDevices, loading: false });
+    } catch (error) {
+      this.setState({ devices: [], loading: false, error: true });
+    }
   }
 
   onAnchorClick(anchor) {
+    if (this.state.error || this.state.loading) return;
     this.setState({ anchor });
   }
 
@@ -66,21 +72,17 @@ export default class extends React.Component {
         <BurgerMenu />
         <MiniHeader />
         <Header onAnchorClick={this.onAnchorClick} />
-        {
-          this.state.loading ? (
-            <LoadingBox>
-              <Loading color="#009fff" size="130" />
-            </LoadingBox>
-          ) : (
-            <React.Fragment>
-              <Map {...this.state} />
-              <SensorList {...this.state} />
-              {
-                this.state.devices.length > 0 ? <ScrollToTop onClick={this.onScrollToTop} /> : null
-              }
-            </React.Fragment>
-          )
-        }
+        {this.state.loading ? (
+          <LoadingBox>
+            <Loading color="#009fff" size="130" />
+          </LoadingBox>
+        ) : (
+          <React.Fragment>
+            <Map {...this.state} />
+            <SensorList {...this.state} />
+            {this.state.devices.length > 0 ? <ScrollToTop onClick={this.onScrollToTop} /> : null}
+          </React.Fragment>
+        )}
         <Footer />
       </Main>
     );

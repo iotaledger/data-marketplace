@@ -1,5 +1,5 @@
 const fetch = require('node-fetch');
-const { publish } = require('./iota');
+const { publish } = require('./mam');
 const { debug, serverUrl } = require('./config.json');
 const data = require('./data.json');
 
@@ -43,4 +43,4 @@ const queryData = async delay => {
   }
 }
 
-queryData(60000) // query data every 60 seconds
+ queryData(60000) // query data every 60 seconds
