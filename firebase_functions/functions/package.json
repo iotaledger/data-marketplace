@@ -38,9 +38,9 @@
   },
   "devDependencies": {
     "@firebase/app-types": "^0.7.0",
-    "@typescript-eslint/eslint-plugin": "^5.3.0",
-    "@typescript-eslint/parser": "^5.3.0",
-    "eslint": "^8.1.0",
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.2.0",
     "typescript": "^4.4.4"
   },
   "engines": {
@@ -51,8 +51,10 @@
     "date-and-time": "^0.14.2",
     "lodash": "^4.17.19",
     "minimist": "^1.2.5",
+    "netmask": "^2.0.1",
     "node-fetch": "^2.6.1",
     "node-forge": "^0.10.0",
+    "pac-resolver": "^5.0.0",
     "websocket-extensions": "^0.1.4"
   }
 }
