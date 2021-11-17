@@ -1,9 +1,5 @@
-const { asciiToTrytes } = require('@iota/converter');
-const {
-  createChannel,
-  createMessage,
-  mamAttach
-} = require('@iota/mam.js');
+const { SingleNodeClient } = require("@iota/iota.js")
+const { createChannel, createMessage, mamAttach, TrytesHelper } = require('@iota/mam.js');
 const crypto = require('crypto');
 const { storeKey } = require('./keyStorage');
 const { provider } = require('./config.json');
@@ -47,10 +43,9 @@ exports.publish = async (payload, mode = 'restricted', tag = 'SENSORDATA') => {
   let transaction;
   try {
     // Create MAM Payload - STRING OF TRYTES
-    const trytes = asciiToTrytes(encodeURI(JSON.stringify(packet)));
-    message = createMessage(mamState, trytes);
+    message = createMessage(mamState, TrytesHelper.fromAscii(encodeURI(JSON.stringify(packet))));
     // Attach the payload
-    transaction = await mamAttach(provider, message, tag);
+    transaction = await mamAttach(new SingleNodeClient(provider), message, tag);
   } catch (e) {
     console.error("Could not attach message to mam stream", e)
   }

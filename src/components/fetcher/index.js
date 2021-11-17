@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { trytesToAscii } from '@iota/converter';
 import ReactGA from 'react-ga';
+import { mamFetch, TrytesHelper } from '@iota/mam.js';
+import { SingleNodeClient }from '@iota/iota.js';
 import { getData } from '../../utils/iota';
-import { mamFetch } from '@iota/mam.js';
 import { nodeURL } from '../../config.json';
 
 const Fetcher = ({
@@ -59,13 +59,12 @@ const Fetcher = ({
   const fetchMamStream = (root, sidekey, mode = 'restricted') => {
     return new Promise(async (resolve, reject) => {
       try {
-        const message = await mamFetch(nodeURL, root, mode, sidekey);
+        const message = await mamFetch(new SingleNodeClient(nodeURL), root, mode, sidekey);
         if (message === undefined) {
           console.error('Could not fetch mam stream')
           throw new Error('Could not fetch mam stream')
         }
-        const trytes = trytesToAscii(message.message);
-        const decoded = decodeURIComponent(trytes);
+        const decoded = decodeURIComponent(TrytesHelper.toAscii(message.message));
         resolve(JSON.parse(decoded));
       } catch (e) {
         console.error('Could not fetch mam stream:', e);
