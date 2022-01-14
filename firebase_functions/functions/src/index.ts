@@ -41,6 +41,7 @@ import {
   getBalance,
   fundWallet
 } from './helpers';
+import { migration } from './migration';
 
 exports.balance = functions.https.onRequest((req, res) => {
   cors(req, res, async () => {
@@ -521,6 +522,25 @@ exports.location = functions.https.onRequest((req, res) => {
       return res.json(result);
     } catch (e) {
       console.error('location failed. Error: ', e.message);
+      return res.status(403).json({ error: e.message });
+    }
+  });
+});
+
+exports.migration = functions.https.onRequest((req, res) => {
+  cors(req, res, async () => {
+    try {
+      const params = req.query;
+      console.log(params)
+      if (!params.from || !params.to) {
+        return res.status(400).json({ error: "params missing"});
+      }
+      
+      // await migration(parseInt(params.from as string), parseInt(params.to as string) );
+      console.log("Finished")
+      return res.status(200).json({ success: true});
+    } catch (e) {
+      console.error('migration failed. Error: ', e.message);
       return res.status(403).json({ error: e.message });
     }
   });
