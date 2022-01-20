@@ -1,25 +1,47 @@
 import { Client, ClientBuilder } from '@iota/client';
 import * as admin from 'firebase-admin';
 import * as crypto from 'crypto';
+import { getIotaWallet, getSettings } from './firebase';
+import { transferFunds } from './helpers';
 
 export const migration = async (from: number, to: number) => {
   await deleteUnusedDevices();
   await deleteUnusedUsers(from, to);
   await updateDevices(from, to);
   await updateUser(from, to);
+  await fundDevices(from, to);
+};
+
+const fundDevices = async (from: number, to: number) => {
+  const { address, defaultBalance, seed } = await getIotaWallet();
+  const { dustProtectionThreshold } = await getSettings();
+  const tokens = defaultBalance + dustProtectionThreshold;
+  const deviceRef = admin.firestore().collection('devices'); //.doc('heart-rate-sensor-tim');
+  await deviceRef.get().then(async (querySnapshot) => {
+    const docs = querySnapshot.docs;
+    console.log('Docs length: ', docs.length);
+    for (let docIndex = from; docIndex < to; docIndex++) {
+      console.log(`${docIndex}/${to}`);
+      const device = docs[docIndex];
+      const deviceAddress = device.data().address;
+      console.log('Device address: ', deviceAddress);
+      const messageId = await transferFunds(deviceAddress, address, seed, tokens, true);
+      console.log(messageId);
+    }
+  });
 };
 
 const deleteUnusedDevices = async () => {
   const deviceRef = admin.firestore().collection('devices');
   await deviceRef.get().then(async (querySnapshot) => {
     const docs = querySnapshot.docs;
-    console.log("Docs length: ", docs.length)
-    for (let docIndex = 50; docIndex < 174; docIndex++ ) {
+    console.log('Docs length: ', docs.length);
+    for (let docIndex = 50; docIndex < 174; docIndex++) {
       const device = docs[docIndex];
-      console.log("Device: ", device.id)
+      console.log('Device: ', device.id);
       const data = await admin.firestore().collection('devices').doc(device.id).collection('data').limit(1).get();
       if (data.size === 0) {
-        console.log("------> Deleting device: ", device.id)
+        console.log('------> Deleting device: ', device.id);
         await admin.firestore().collection('devices').doc(device.id).delete();
         await admin.firestore().collection('deviceList').doc(device.id).delete();
       }
@@ -28,25 +50,25 @@ const deleteUnusedDevices = async () => {
 };
 
 const deleteUnusedUsers = async (from: number, to: number) => {
-    const userRef = admin.firestore().collection('users');
-    await userRef.get().then(async (querySnapshot) => {
-      const docs = querySnapshot.docs;
-      console.log("Docs length: ", docs.length)
-      for (let docIndex = from; docIndex < to; docIndex++ ) {
-        const device = docs[docIndex];
-        if (!device) {
-            console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", docIndex)
-            continue
-        }
-        console.log("User: ", device?.id)
-        const data = await admin.firestore().collection('users').doc(device.id).collection('purchases').limit(1).get();
-        if (data.size === 0) {
-          console.log("------> Deleting user: ", device.id)
-          await admin.firestore().collection('users').doc(device.id).delete();
-        }
+  const userRef = admin.firestore().collection('users');
+  await userRef.get().then(async (querySnapshot) => {
+    const docs = querySnapshot.docs;
+    console.log('Docs length: ', docs.length);
+    for (let docIndex = from; docIndex < to; docIndex++) {
+      const device = docs[docIndex];
+      if (!device) {
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', docIndex);
+        continue;
       }
-    });
-  };
+      console.log('User: ', device?.id);
+      const data = await admin.firestore().collection('users').doc(device.id).collection('purchases').limit(1).get();
+      if (data.size === 0) {
+        console.log('------> Deleting user: ', device.id);
+        await admin.firestore().collection('users').doc(device.id).delete();
+      }
+    }
+  });
+};
 
 const updateDevices = async (from: number, to: number) => {
   const deviceListRef = admin.firestore().collection('deviceList');
@@ -55,7 +77,7 @@ const updateDevices = async (from: number, to: number) => {
   await deviceListRef.get().then(async (querySnapshot) => {
     const docs = querySnapshot.docs;
     for (let docIndex = from; docIndex < to; docIndex++) {
-        console.log(`Updating doc ${docIndex}/${docs.length}`)
+      console.log(`Updating doc ${docIndex}/${docs.length}`);
       const deviceListDoc = docs[docIndex];
       const seed = generateSeed();
       const address = await generateAddress(seed);
@@ -77,22 +99,22 @@ const updateUser = async (from: number, to: number) => {
     const docs = querySnapshot.docs;
     for (let docIndex = from; docIndex < to; docIndex++) {
       const userDoc = docs[docIndex];
-      const data = userDoc.data()
-      console.log(`Doc ${docIndex}/${docs.length}`)
-      if (data.wallet) {        
+      const data = userDoc.data();
+      console.log(`Doc ${docIndex}/${docs.length}`);
+      if (data.wallet) {
         const seed = generateSeed();
         const address = await generateAddress(seed);
         const wallet = {
-            seed,
-            address,
-            balance: 0
-          }
-        console.log(`Replacing: ${JSON.stringify(data.wallet, null, 2)} with ${JSON.stringify(wallet, null, 2)}`)
-        console.log("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+          seed,
+          address,
+          balance: 0
+        };
+        console.log(`Replacing: ${JSON.stringify(data.wallet, null, 2)} with ${JSON.stringify(wallet, null, 2)}`);
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~');
         await userListRef.doc(userDoc.id).update({
           wallet
         });
-      }     
+      }
     }
   });
 };
@@ -109,7 +131,7 @@ async function deleteQueryBatch(db, query, resolve) {
   const snapshot = await query.get();
 
   const batchSize = snapshot.size;
-  console.log("Batchsize: ", batchSize)
+  console.log('Batchsize: ', batchSize);
   if (batchSize === 0) {
     // When there are no documents left, we are done
     resolve();
