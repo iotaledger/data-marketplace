@@ -5,7 +5,7 @@ import { getIotaWallet, getSettings } from './firebase';
 import { transferFunds } from './helpers';
 
 export const migration = async (from: number, to: number) => {
-  await deleteUnusedDevices();
+  await deleteUnusedDevices(from, to);
   await deleteUnusedUsers(from, to);
   await updateDevices(from, to);
   await updateUser(from, to);
@@ -16,7 +16,7 @@ const fundDevices = async (from: number, to: number) => {
   const { address, defaultBalance, seed } = await getIotaWallet();
   const { dustProtectionThreshold } = await getSettings();
   const tokens = defaultBalance + dustProtectionThreshold;
-  const deviceRef = admin.firestore().collection('devices'); //.doc('heart-rate-sensor-tim');
+  const deviceRef = admin.firestore().collection('devices');
   await deviceRef.get().then(async (querySnapshot) => {
     const docs = querySnapshot.docs;
     console.log('Docs length: ', docs.length);
@@ -31,12 +31,12 @@ const fundDevices = async (from: number, to: number) => {
   });
 };
 
-const deleteUnusedDevices = async () => {
+const deleteUnusedDevices = async (from: number, to: number) => {
   const deviceRef = admin.firestore().collection('devices');
   await deviceRef.get().then(async (querySnapshot) => {
     const docs = querySnapshot.docs;
     console.log('Docs length: ', docs.length);
-    for (let docIndex = 50; docIndex < 174; docIndex++) {
+    for (let docIndex = from; docIndex < to; docIndex++) {
       const device = docs[docIndex];
       console.log('Device: ', device.id);
       const data = await admin.firestore().collection('devices').doc(device.id).collection('data').limit(1).get();
@@ -55,16 +55,16 @@ const deleteUnusedUsers = async (from: number, to: number) => {
     const docs = querySnapshot.docs;
     console.log('Docs length: ', docs.length);
     for (let docIndex = from; docIndex < to; docIndex++) {
-      const device = docs[docIndex];
-      if (!device) {
+      const user = docs[docIndex];
+      if (!user) {
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', docIndex);
         continue;
       }
-      console.log('User: ', device?.id);
-      const data = await admin.firestore().collection('users').doc(device.id).collection('purchases').limit(1).get();
+      console.log('User: ', user?.id);
+      const data = await admin.firestore().collection('users').doc(user.id).collection('purchases').limit(1).get();
       if (data.size === 0) {
-        console.log('------> Deleting user: ', device.id);
-        await admin.firestore().collection('users').doc(device.id).delete();
+        console.log('------> Deleting user: ', user.id);
+        await admin.firestore().collection('users').doc(user.id).delete();
       }
     }
   });
@@ -155,7 +155,8 @@ async function deleteQueryBatch(db, query, resolve) {
 let client;
 const getClient = async (): Promise<Client> => {
   if (client) return client;
-  client = new ClientBuilder().node('https://api.lb-0.h.chrysalis-devnet.iota.cafe').localPow(false).build();
+  const settings = await getSettings()
+  client = new ClientBuilder().node(settings.provider).localPow(false).build();
   return client;
 };
 
