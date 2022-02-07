@@ -68,7 +68,7 @@ export default ({ notification, show, error = null, purchasePrice = null, callba
     },
     streamReadFailure: {
       heading: 'Stream Read Failure',
-      body: 'No data found',
+      body: 'No recent data found. Old entries might have been removed.',
     },
     dataReadingFailure: {
       heading: 'Data reading error',
