@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import ReactGA from 'react-ga';
 import { mamFetch, TrytesHelper } from '@iota/mam.js';
-import { SingleNodeClient }from '@iota/iota.js';
+import { SingleNodeClient } from '@iota/iota.js';
 import { getData } from '../../utils/iota';
 import { nodeURL } from '../../config.json';
 
@@ -30,6 +30,8 @@ const Fetcher = ({
       } catch (e) {
         console.error('Could not get mamStreamData', e);
         setDataEnd(true);
+        setFetching(false);
+        return setNotification('streamReadFailure', deviceId);
       }
       if ((!mamStreamData.length || !mamStreamData[0]) && packets === 0) {
         ReactGA.event({
@@ -40,11 +42,21 @@ const Fetcher = ({
         setFetching(false);
         return setNotification('streamReadFailure', deviceId);
       }
-      let sensor_data_packets = await getSensorData(mamStreamData);
+      const sensorData = await getSensorData(mamStreamData);
+      // Remove pruned (undefined) data packages
+      const filteredSensorData = sensorData.filter(data =>  data);
       setFetching(false);
+
+      // Display error message if the whole data stream has been pruned
+      if (filteredSensorData.length === 0 && packets === 0) {
+        setPurchase(false);
+        setFetching(false);
+        console.error('Stream empty');
+        return setNotification('streamReadFailure', deviceId);
+      }
       setPurchase(true);
-      setStreamLength(sensor_data_packets.length);
-      sensor_data_packets.length && saveData(sensor_data_packets);
+      setStreamLength(filteredSensorData.length);
+      filteredSensorData.length && saveData(filteredSensorData);
     })();
   }, []);
 
@@ -58,18 +70,13 @@ const Fetcher = ({
 
   const fetchMamStream = (root, sidekey, mode = 'restricted') => {
     return new Promise(async (resolve, reject) => {
-      try {
-        const message = await mamFetch(new SingleNodeClient(nodeURL), root, mode, sidekey);
-        if (message === undefined) {
-          console.error('Could not fetch mam stream')
-          throw new Error('Could not fetch mam stream')
-        }
-        const decoded = decodeURIComponent(TrytesHelper.toAscii(message.message));
-        resolve(JSON.parse(decoded));
-      } catch (e) {
-        console.error('Could not fetch mam stream:', e);
-        reject();
+      const message = await mamFetch(new SingleNodeClient(nodeURL), root, mode, sidekey);
+      // Case when data has been pruned
+      if (message === undefined) {
+        return resolve(undefined);
       }
+      const decoded = decodeURIComponent(TrytesHelper.toAscii(message.message));
+      resolve(JSON.parse(decoded));
     });
   };
 
