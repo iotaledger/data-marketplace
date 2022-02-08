@@ -44,9 +44,7 @@ const Fetcher = ({
       }
       const sensorData = await getSensorData(mamStreamData);
       // Remove pruned (undefined) data packages
-      const filteredSensorData = sensorData.filter((data) => {
-        return data !== undefined;
-      });
+      const filteredSensorData = sensorData.filter(data =>  data);
       setFetching(false);
 
       // Display error message if the whole data stream has been pruned
