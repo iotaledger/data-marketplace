@@ -527,7 +527,7 @@ exports.location = functions.https.onRequest((req, res) => {
   });
 });
 
-exports.migration = functions.https.onRequest((req, res) => {
+exports.migration = functions.runWith({timeoutSeconds: 540}).https.onRequest((req, res) => {
   cors(req, res, async () => {
     try {
       const params = req.query;
