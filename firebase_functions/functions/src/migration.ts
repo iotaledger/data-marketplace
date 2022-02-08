@@ -50,21 +50,39 @@ const deleteUnusedDevices = async (from: number, to: number) => {
 };
 
 const deleteUnusedUsers = async (from: number, to: number) => {
-  const userRef = admin.firestore().collection('users');
-  await userRef.get().then(async (querySnapshot) => {
-    const docs = querySnapshot.docs;
-    console.log('Docs length: ', docs.length);
+  const userRef = admin.firestore().collection('users')
+  await userRef.listDocuments().then(async (documentRefs) => {
+    const docs = await admin.firestore().getAll(...documentRefs);
     for (let docIndex = from; docIndex < to; docIndex++) {
       const user = docs[docIndex];
+      console.log(`Doc ${docIndex}/${docs.length}`);
       if (!user) {
         console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~', docIndex);
         continue;
       }
       console.log('User: ', user?.id);
-      const data = await admin.firestore().collection('users').doc(user.id).collection('purchases').limit(1).get();
-      if (data.size === 0) {
-        console.log('------> Deleting user: ', user.id);
+      const userData = user.data();
+      console.log('User data: ', userData);
+
+      if (!userData || Object.keys(userData).length === 0) {
+        console.log('Deleting user');
         await admin.firestore().collection('users').doc(user.id).delete();
+        const userKey = await admin.firestore().collection('keys').where('uid', '==', user?.id).get();
+        if (userKey.size > 0) {
+          console.log('Deleting keys');
+          userKey.docs[0].ref.delete();
+        }
+        const purchasesRef = admin.firestore().collection('users').doc(user.id).collection('purchases');
+        const purchases = await purchasesRef.limit(1).get();
+        if (purchases.size > 0) {
+          console.log('Deleting purchases');
+          await deleteCollection(admin.firestore(), purchasesRef, 300);
+        }
+        try {
+          await admin.auth().deleteUser(user?.id);
+        } catch (e: any) {
+          console.log('No user auth with id:', user?.id);
+        }
       }
     }
   });
@@ -155,7 +173,7 @@ async function deleteQueryBatch(db, query, resolve) {
 let client;
 const getClient = async (): Promise<Client> => {
   if (client) return client;
-  const settings = await getSettings()
+  const settings = await getSettings();
   client = new ClientBuilder().node(settings.provider).localPow(false).build();
   return client;
 };
