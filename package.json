@@ -62,7 +62,7 @@
   },
   "devDependencies": {
     "@firebase/app-types": "^0.7.0",
-    "node-sass": "^5.0.0",
+    "node-sass": "^7.0.0",
     "react-scripts": "^4.0.3",
     "webpack-bundle-analyzer": "^4.5.0",
     "worker-loader": "^3.0.8"
