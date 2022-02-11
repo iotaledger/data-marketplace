@@ -27,7 +27,7 @@
     "highlight.js": "^10.6.0",
     "js-yaml": "^4.1.0",
     "marked": "^2.0.0",
-    "node-sass": "^5.0.0",
+    "node-sass": "^7.0.0",
     "rimraf": "^3.0.2"
   },
   "resolutions": {
